@@ -10,14 +10,13 @@ import javax.ws.rs.core.Response;
  */
 public class RequestUtil {
 
-    public static Object request(String url,Class clazz){
-        Object object=null;
+    public static String request(String url){
         Client client = ClientBuilder.newClient();
         Response response = client.target(url).request(MediaType.TEXT_PLAIN_TYPE).get();
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            object= JsonUtil.fromJson(response.readEntity(String.class), clazz);
+            return response.readEntity(String.class);
         }
-        return object;
+        return null;
     }
 
 }

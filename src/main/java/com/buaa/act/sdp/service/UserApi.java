@@ -5,11 +5,16 @@ import com.buaa.act.sdp.dao.DevelopmentDao;
 import com.buaa.act.sdp.dao.DevelopmentHistoryDao;
 import com.buaa.act.sdp.dao.RatingHistoryDao;
 import com.buaa.act.sdp.dao.UserDao;
+import com.buaa.act.sdp.util.JsonUtil;
 import com.buaa.act.sdp.util.RequestUtil;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yang on 2016/10/15.
@@ -30,56 +35,72 @@ public class UserApi {
     private RatingHistoryDao ratingHistoryDao;
 
     public void getUserByName(String userName) {
-        Object object = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName, User.class);
-        if (object != null && object instanceof User) {
-            User user = (User) object;
+        String json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName);
+        if (json != null) {
+            User user = JsonUtil.fromJson(json, User.class);
             userDao.insert(user);
         }
     }
 
-    public void handStatistics(String userName, Statistics statistics) {
-        if (statistics != null) {
-            Track track = statistics.getTrack();
-            CompetitionHistory competitionHistory = statistics.getCompetitionHistory();
-            if (track != null) {
-                List<Development> list = track.getAllTypeDevelopments(userName);
-                developmentDao.insert(list);
+    public void handUserDevelopmentInfo(String handle, String json) {
+        JsonElement jsonElement = JsonUtil.getJsonElement(json, "Tracks");
+        if (jsonElement != null) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            Map<String, Development> map = JsonUtil.jsonToMap(jsonObject, Development.class);
+            List<Development> lists = new ArrayList<>();
+            for (Map.Entry<String, Development> entry : map.entrySet()) {
+                Development development = entry.getValue();
+                development.setDevelopType(entry.getKey());
+                development.setHandle(handle);
+                lists.add(development);
             }
-            if (competitionHistory != null) {
-                List<DevelopmentHistory> developmentHistories = competitionHistory.getAllDevelopmentHistory(userName);
-                developmentHistoryDao.insert(developmentHistories);
+            if (lists.size() > 0) {
+                developmentDao.insert(lists);
+            }
+        }
+        jsonElement = JsonUtil.getJsonElement(json, "CompetitionHistory");
+        if (jsonElement != null) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            Map<String, DevelopmentHistory> map = JsonUtil.jsonToMap(jsonObject, DevelopmentHistory.class);
+            List<DevelopmentHistory> lists = new ArrayList<>();
+            for (Map.Entry<String, DevelopmentHistory> entry : map.entrySet()) {
+                DevelopmentHistory developmentHistory = entry.getValue();
+                developmentHistory.setDevelopType(entry.getKey());
+                developmentHistory.setHandle(handle);
+                lists.add(developmentHistory);
+            }
+            if (lists.size() > 0) {
+                developmentHistoryDao.insert(lists);
             }
         }
     }
 
     public void getUserStatistics(String userName) {
-        Object object = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/statistics/develop", Statistics.class);
-        if (object != null && object instanceof Statistics) {
-            Statistics statistics = (Statistics) object;
-            handStatistics(userName, statistics);
+        String string = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/statistics/develop");
+        if (string != null) {
+            handUserDevelopmentInfo(userName, string);
         }
     }
 
     //"challengeType should be an element of design,development,specification,architecture,bug_hunt,test_suites,assembly,ui_prototypes,conceptualization,ria_build,ria_component,test_scenarios,copilot_posting,content_creation,reporting,marathon_match,first2finish,code,algorithm."
     public void getUserChallengeHistory(String userName, String challengeType) {
-        Object object = RequestUtil.request("http://api.topcoder.com/v2/develop/statistics/" + userName + "/" + challengeType, UserRatingHistory.class);
-        if (object != null && object instanceof UserRatingHistory) {
-            UserRatingHistory userRatingHistory = (UserRatingHistory) object;
-            handUserRatingHistory(userName, challengeType, userRatingHistory);
+        String json = RequestUtil.request("http://api.topcoder.com/v2/develop/statistics/" + userName + "/" + challengeType);
+        if (json != null) {
+            handUserRatingHistory(userName, challengeType, json);
         }
     }
 
-    public void handUserRatingHistory(String userName, String challengeType, UserRatingHistory userRatingHistory) {
-        if (userRatingHistory != null) {
-            RatingHistory[] histories = userRatingHistory.getHistory();
-            if (histories == null) {
-                return;
+    public void handUserRatingHistory(String userName, String challengeType, String json) {
+        JsonElement jsonElement = JsonUtil.getJsonElement(json, "history");
+        if (jsonElement != null) {
+            RatingHistory[] ratingHistories = JsonUtil.fromJson(jsonElement, RatingHistory[].class);
+            if (ratingHistories != null && ratingHistories.length > 0) {
+                for (int i = 0; i < ratingHistories.length; i++) {
+                    ratingHistories[i].setHandle(userName);
+                    ratingHistories[i].setDevelopType(challengeType);
+                }
+                ratingHistoryDao.insert(ratingHistories);
             }
-            for (int i = 0; i < histories.length; i++) {
-                histories[i].setHandle(userName);
-                histories[i].setDevelopType(challengeType);
-            }
-            ratingHistoryDao.insert(histories);
         }
     }
 

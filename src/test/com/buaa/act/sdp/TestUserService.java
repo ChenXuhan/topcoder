@@ -18,15 +18,15 @@ public class TestUserService {
     private UserApi  userApi;
     @Test
     public void testInsertUser(){
-        userApi.getUserByName("lifdsadadeloner");
+        userApi.getUserByName("lifeloner");
     }
     @Test
     public void testInsertDevelopment(){
-        userApi.getUserStatistics("iRabbit");
+        userApi.getUserStatistics("lifeloner");
     }
     @Test
     public void testInsertRatingHistory(){
-        userApi.getUserChallengeHistory("iRabbit","development");
+        userApi.getUserChallengeHistory("lifeloner","development");
     }
 
 }
