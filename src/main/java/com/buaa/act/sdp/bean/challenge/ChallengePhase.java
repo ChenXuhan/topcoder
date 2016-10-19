@@ -4,7 +4,8 @@ package com.buaa.act.sdp.bean.challenge;
  * Created by YLT on 2016/10/18.
  */
 public class ChallengePhase {
-    private String challengeID;
+    private int id;
+    private int challengeID;
     private String type;
     private String status;
     private String scheduledStartTime;
@@ -12,21 +13,20 @@ public class ChallengePhase {
     private String scheduledEndTime;
     private String actualendTime;
 
-    public ChallengePhase(String challengeID, String type, String status, String scheduledStartTime, String actualStartTime, String scheduledEndTime, String actualendTime) {
-        this.challengeID = challengeID;
-        this.type = type;
-        this.status = status;
-        this.scheduledStartTime = scheduledStartTime;
-        this.actualStartTime = actualStartTime;
-        this.scheduledEndTime = scheduledEndTime;
-        this.actualendTime = actualendTime;
+
+    public int getId() {
+        return id;
     }
 
-    public String getChallengeID() {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getChallengeID() {
         return challengeID;
     }
 
-    public void setChallengeID(String challengeID) {
+    public void setChallengeID(int challengeID) {
         this.challengeID = challengeID;
     }
 

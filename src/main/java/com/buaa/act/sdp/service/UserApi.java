@@ -104,4 +104,23 @@ public class UserApi {
         }
     }
 
+    public void saveUser(String handle){
+        getUserByName(handle);
+        getUserStatistics(handle);
+        getUserChallengeHistory(handle,"design");
+        getUserChallengeHistory(handle,"development");
+        getUserChallengeHistory(handle,"specification");
+        getUserChallengeHistory(handle,"architecture");
+        getUserChallengeHistory(handle,"bug_hunt");
+        getUserChallengeHistory(handle,"test_suites");
+        getUserChallengeHistory(handle,"ui_prototypes");
+        getUserChallengeHistory(handle,"conceptualization");
+        getUserChallengeHistory(handle,"ria_build");
+        getUserChallengeHistory(handle,"ria_component");
+        getUserChallengeHistory(handle,"test_scenarios");
+        getUserChallengeHistory(handle,"copilot_posting");
+        getUserChallengeHistory(handle,"content_creation");
+        getUserChallengeHistory(handle,"first2finish");
+        getUserChallengeHistory(handle,"code");
+    }
 }

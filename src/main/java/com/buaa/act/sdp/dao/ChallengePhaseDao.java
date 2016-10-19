@@ -1,0 +1,10 @@
+package com.buaa.act.sdp.dao;
+
+import com.buaa.act.sdp.bean.challenge.ChallengePhase;
+
+/**
+ * Created by yang on 2016/10/19.
+ */
+public interface ChallengePhaseDao {
+    void insert(ChallengePhase[]challengePhases);
+}

@@ -4,28 +4,27 @@ package com.buaa.act.sdp.bean.challenge;
  * Created by YLT on 2016/10/18.
  */
 public class ChallengeRegistrant {
-    private String challengeID;
+    private int id;
+    private int  challengeID;
     private String handle;
     private String reliability;
     private String registrationDate;
     private String submissionDate;
-    private String rating;
+    private int rating;
 
-
-    public ChallengeRegistrant(String challengeID, String handle, String reliability, String registrationDate, String submissionDate, String rating) {
-        this.challengeID = challengeID;
-        this.handle = handle;
-        this.reliability = reliability;
-        this.registrationDate = registrationDate;
-        this.submissionDate = submissionDate;
-        this.rating = rating;
+    public int getId() {
+        return id;
     }
 
-    public String getChallengeID() {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getChallengeID() {
         return challengeID;
     }
 
-    public void setChallengeID(String challengeID) {
+    public void setChallengeID(int challengeID) {
         this.challengeID = challengeID;
     }
 
@@ -61,11 +60,11 @@ public class ChallengeRegistrant {
         this.submissionDate = submissionDate;
     }
 
-    public String getRating() {
+    public int getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(int rating) {
         this.rating = rating;
     }
 

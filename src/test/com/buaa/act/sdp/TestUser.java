@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:conf/applicationContext.xml")
-public class TestUserService {
+public class TestUser {
 
     @Autowired
     private UserApi  userApi;
@@ -27,6 +27,11 @@ public class TestUserService {
     @Test
     public void testInsertRatingHistory(){
         userApi.getUserChallengeHistory("lifeloner","development");
+    }
+
+    @Test
+    public void testSaveUser(){
+        userApi.saveUser("iRabbit");
     }
 
 }

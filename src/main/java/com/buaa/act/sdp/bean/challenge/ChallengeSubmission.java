@@ -4,7 +4,8 @@ package com.buaa.act.sdp.bean.challenge;
  * Created by YLT on 2016/10/18.
  */
 public class ChallengeSubmission {
-    private String challengeID;
+    private int id;
+    private int challengeID;
     private String handle;
     private String placement;
     private String submissionDate;
@@ -15,24 +16,19 @@ public class ChallengeSubmission {
     private String initialScore;
     private String submissionDownloadLink;
 
-    public ChallengeSubmission(String challengeID, String handle, String placement, String submissionDate, String submissionStatus, String points, String finalScore, String screeningScore, String initialScore, String submissionDownloadLink) {
-        this.challengeID = challengeID;
-        this.handle = handle;
-        this.placement = placement;
-        this.submissionDate = submissionDate;
-        this.submissionStatus = submissionStatus;
-        this.points = points;
-        this.finalScore = finalScore;
-        this.screeningScore = screeningScore;
-        this.initialScore = initialScore;
-        this.submissionDownloadLink = submissionDownloadLink;
+    public int getId() {
+        return id;
     }
 
-    public String getChallengeID() {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getChallengeID() {
         return challengeID;
     }
 
-    public void setChallengeID(String challengeID) {
+    public void setChallengeID(int challengeID) {
         this.challengeID = challengeID;
     }
 
@@ -107,9 +103,4 @@ public class ChallengeSubmission {
     public void setSubmissionDownloadLink(String submissionDownloadLink) {
         this.submissionDownloadLink = submissionDownloadLink;
     }
-
-
-
-
-
 }

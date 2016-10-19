@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buaa.act.sdp.dao.ChallengeSubmissionDao">
+    <insert id="insert" parameterType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission" useGeneratedKeys="true" keyProperty="id">
+        insert into challenge_submission(challengeID,handle,placement,submissionDate,submissionStatus,points,finalScore,screeningScore,initialScore,submissionDownloadLink) values
+        <foreach collection="array" item="item" index="index" separator=",">
+        (#{item.challengeID},#{item.handle},#{item.placement},#{item.submissionDate},#{item.submissionStatus},#{item.points},#{item.finalScore},#{item.screeningScore},#{item.initialScore},#{item.submissionDownloadLink})
+        </foreach>
+    </insert>
+</mapper>

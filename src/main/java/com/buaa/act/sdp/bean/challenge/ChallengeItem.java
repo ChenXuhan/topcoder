@@ -4,14 +4,15 @@ package com.buaa.act.sdp.bean.challenge;
  * Created by YLT on 2016/10/17.
  */
 public class ChallengeItem {
-    private String challengeID;
+    private int challengeId;
     private String challengeName;
     private String challengeType;
-    private String projectId;
-    private String forumId;
-    private String screeningScorecardId;
-    private String reviewScorecardId;
-    private String numberOfCheckpointsPrizes;
+    private int projectId;
+    private int forumId;
+    private String detailedRequirements;
+    private int screeningScorecardId;
+    private int reviewScorecardId;
+    private int numberOfCheckpointsPrizes;
     private String topCheckPointPrize;
     private String currentStatus;
     private String postingDate;
@@ -22,42 +23,20 @@ public class ChallengeItem {
     private String checkpointSubmissionEndDate;
     private String forumLink;
     private String registrationStartDate;
-    private String digitalRunPoints;
-    private String reliabilityBonus;
-    private String challengeCommunity;
-    private String technology;
-    private String prize;
-    private String platforms;
-    private int numRegistrants;
+    private int digitalRunPoints;
+    private int reliabilityBonus;
+    private String []technology;
+    private String []prize;
+    private String []platforms;
     private int numSubmissions;
+    private int numRegistrants;
 
-    public ChallengeItem(String challengeID, String challengeName, String challengeType, String projectId, String forumId, String screeningScorecardId, String reviewScorecardId, String numberOfCheckpointsPrizes, String topCheckPointPrize, String currentStatus, String postingDate, String registrationEndDate, String submissionEndDate, String finalFixEndDate, String appealsEndDate, String checkpointSubmissionEndDate, String forumLink, String registrationStartDate, String digitalRunPoints, String reliabilityBonus, String challengeCommunity, String technology, String prize, String platforms, int numRegistrants, int numSubmissions) {
-        this.challengeID = challengeID;
-        this.challengeName = challengeName;
-        this.challengeType = challengeType;
-        this.projectId = projectId;
-        this.forumId = forumId;
-        this.screeningScorecardId = screeningScorecardId;
-        this.reviewScorecardId = reviewScorecardId;
-        this.numberOfCheckpointsPrizes = numberOfCheckpointsPrizes;
-        this.topCheckPointPrize = topCheckPointPrize;
-        this.currentStatus = currentStatus;
-        this.postingDate = postingDate;
-        this.registrationEndDate = registrationEndDate;
-        this.submissionEndDate = submissionEndDate;
-        this.finalFixEndDate = finalFixEndDate;
-        this.appealsEndDate = appealsEndDate;
-        this.checkpointSubmissionEndDate = checkpointSubmissionEndDate;
-        this.forumLink = forumLink;
-        this.registrationStartDate = registrationStartDate;
-        this.digitalRunPoints = digitalRunPoints;
-        this.reliabilityBonus = reliabilityBonus;
-        this.challengeCommunity = challengeCommunity;
-        this.technology = technology;
-        this.prize = prize;
-        this.platforms = platforms;
-        this.numRegistrants = numRegistrants;
-        this.numSubmissions = numSubmissions;
+    public int getChallengeId() {
+        return challengeId;
+    }
+
+    public void setChallengeId(int challengeId) {
+        this.challengeId = challengeId;
     }
 
     public String getChallengeName() {
@@ -76,43 +55,51 @@ public class ChallengeItem {
         this.challengeType = challengeType;
     }
 
-    public String getProjectId() {
+    public int getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(String projectId) {
+    public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
 
-    public String getForumId() {
+    public int getForumId() {
         return forumId;
     }
 
-    public void setForumId(String forumId) {
+    public void setForumId(int forumId) {
         this.forumId = forumId;
     }
 
-    public String getScreeningScorecardId() {
+    public String getDetailedRequirements() {
+        return detailedRequirements;
+    }
+
+    public void setDetailedRequirements(String detailedRequirements) {
+        this.detailedRequirements = detailedRequirements;
+    }
+
+    public int getScreeningScorecardId() {
         return screeningScorecardId;
     }
 
-    public void setScreeningScorecardId(String screeningScorecardId) {
+    public void setScreeningScorecardId(int screeningScorecardId) {
         this.screeningScorecardId = screeningScorecardId;
     }
 
-    public String getReviewScorecardId() {
+    public int getReviewScorecardId() {
         return reviewScorecardId;
     }
 
-    public void setReviewScorecardId(String reviewScorecardId) {
+    public void setReviewScorecardId(int reviewScorecardId) {
         this.reviewScorecardId = reviewScorecardId;
     }
 
-    public String getNumberOfCheckpointsPrizes() {
+    public int getNumberOfCheckpointsPrizes() {
         return numberOfCheckpointsPrizes;
     }
 
-    public void setNumberOfCheckpointsPrizes(String numberOfCheckpointsPrizes) {
+    public void setNumberOfCheckpointsPrizes(int numberOfCheckpointsPrizes) {
         this.numberOfCheckpointsPrizes = numberOfCheckpointsPrizes;
     }
 
@@ -196,60 +183,44 @@ public class ChallengeItem {
         this.registrationStartDate = registrationStartDate;
     }
 
-    public String getDigitalRunPoints() {
+    public int getDigitalRunPoints() {
         return digitalRunPoints;
     }
 
-    public void setDigitalRunPoints(String digitalRunPoints) {
+    public void setDigitalRunPoints(int digitalRunPoints) {
         this.digitalRunPoints = digitalRunPoints;
     }
 
-    public String getReliabilityBonus() {
+    public int getReliabilityBonus() {
         return reliabilityBonus;
     }
 
-    public void setReliabilityBonus(String reliabilityBonus) {
+    public void setReliabilityBonus(int reliabilityBonus) {
         this.reliabilityBonus = reliabilityBonus;
     }
 
-    public String getChallengeCommunity() {
-        return challengeCommunity;
-    }
-
-    public void setChallengeCommunity(String challengeCommunity) {
-        this.challengeCommunity = challengeCommunity;
-    }
-
-    public String getTechnology() {
+    public String[] getTechnology() {
         return technology;
     }
 
-    public void setTechnology(String technology) {
+    public void setTechnology(String[] technology) {
         this.technology = technology;
     }
 
-    public String getPrize() {
+    public String[] getPrize() {
         return prize;
     }
 
-    public void setPrize(String prize) {
+    public void setPrize(String[] prize) {
         this.prize = prize;
     }
 
-    public String getPlatforms() {
+    public String[] getPlatforms() {
         return platforms;
     }
 
-    public void setPlatforms(String platforms) {
+    public void setPlatforms(String[] platforms) {
         this.platforms = platforms;
-    }
-
-    public int getNumRegistrants() {
-        return numRegistrants;
-    }
-
-    public void setNumRegistrants(int numRegistrants) {
-        this.numRegistrants = numRegistrants;
     }
 
     public int getNumSubmissions() {
@@ -260,11 +231,11 @@ public class ChallengeItem {
         this.numSubmissions = numSubmissions;
     }
 
-    public String getChallengeID() {
-        return challengeID;
+    public int getNumRegistrants() {
+        return numRegistrants;
     }
 
-    public void setChallengeID(String challengeID) {
-        this.challengeID = challengeID;
+    public void setNumRegistrants(int numRegistrants) {
+        this.numRegistrants = numRegistrants;
     }
 }
