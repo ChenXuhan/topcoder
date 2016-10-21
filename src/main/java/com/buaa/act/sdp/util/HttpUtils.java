@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class HttpUtils {
     public static String httpGet(String url) {
-        String result = "";
+        String result = null;
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
         HttpResponse response = null;

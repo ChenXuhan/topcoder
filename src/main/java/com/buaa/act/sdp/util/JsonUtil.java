@@ -31,8 +31,43 @@ public class JsonUtil {
         JsonElement jsonElement = parser.parse(json);
         if(jsonElement!=null){
             return jsonElement.getAsJsonObject().get(param);
+
         }
         return null;
+    }
+
+    public static  List<JsonElement> getJsonElement(String json, String[] params) {
+        JsonParser parser = new JsonParser();
+        JsonElement jsonElement = parser.parse(json);
+        List<JsonElement> list = new ArrayList<>();
+        list.add(jsonElement);
+        for (int i = 0; i < params.length; i++) {
+            List<JsonElement> temp=new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                jsonElement = list.get(j);
+                temp.addAll(getJsonElement(jsonElement,params[i]));
+            }
+            list = temp;
+        }
+        return list;
+    }
+
+    public static List<JsonElement> getJsonElement(JsonElement jsonElement, String parameterName) {
+        List<JsonElement> list = new ArrayList<>();
+        JsonElement jsonElement1;
+        if (jsonElement.isJsonObject()) {
+            jsonElement1=jsonElement.getAsJsonObject().get(parameterName);
+            if(jsonElement1!=null) {
+                list.add(jsonElement1);
+            }
+        }
+        if (jsonElement.isJsonArray()) {
+            JsonArray jsonArray=jsonElement.getAsJsonArray();
+            for(int i=0;i<jsonArray.size();i++) {
+                list.addAll(getJsonElement(jsonArray.get(i), parameterName));
+            }
+        }
+        return list;
     }
 
     public static <T> Map<String,T> jsonToMap(JsonObject jsonObject, Class<T>clazz ){

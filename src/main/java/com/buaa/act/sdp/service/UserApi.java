@@ -5,14 +5,17 @@ import com.buaa.act.sdp.dao.DevelopmentDao;
 import com.buaa.act.sdp.dao.DevelopmentHistoryDao;
 import com.buaa.act.sdp.dao.RatingHistoryDao;
 import com.buaa.act.sdp.dao.UserDao;
+import com.buaa.act.sdp.util.HttpUtils;
 import com.buaa.act.sdp.util.JsonUtil;
 import com.buaa.act.sdp.util.RequestUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -38,10 +41,33 @@ public class UserApi {
         String json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName);
         if (json != null) {
             User user = JsonUtil.fromJson(json, User.class);
+            String[]skills=getUserSkills(userName);
+            if(skills!=null){
+                user.setSkills(skills);
+            }
             userDao.insert(user);
         }
     }
 
+    public String[] getUserSkills(String userName){
+        String json= HttpUtils.httpGet("http://api.topcoder.com/v3/members/"+userName+"/skills");
+        if(json!=null){
+            List<JsonElement>list=JsonUtil.getJsonElement(json,new String[]{"result","content","skills"});
+            if(list!=null&&list.size()>0){
+                JsonElement jsonElement=list.get(0);
+                if(jsonElement!=null&&jsonElement.isJsonObject()){
+                    Map<String,Skill>map=JsonUtil.jsonToMap(jsonElement.getAsJsonObject(),Skill.class);
+                    String[]str=new String[map.size()];
+                    int index=0;
+                    for(Map.Entry<String,Skill>entry:map.entrySet()){
+                        str[index++]=entry.getValue().getTagName();
+                    }
+                    return str;
+                }
+            }
+        }
+        return null;
+    }
     public void handUserDevelopmentInfo(String handle, String json) {
         JsonElement jsonElement = JsonUtil.getJsonElement(json, "Tracks");
         if (jsonElement != null) {
@@ -123,4 +149,5 @@ public class UserApi {
         getUserChallengeHistory(handle,"first2finish");
         getUserChallengeHistory(handle,"code");
     }
+
 }
