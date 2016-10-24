@@ -80,6 +80,7 @@ public class ChallengeApi {
         String str=RequestUtil.request("http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=1&pageSize=50");
         JsonElement jsonElement=JsonUtil.getJsonElement(str,"total");
         if(jsonElement.isJsonPrimitive()){
+            System.out.print(jsonElement.getAsInt());
             return jsonElement.getAsInt();
         }
         return 0;
@@ -98,7 +99,7 @@ public class ChallengeApi {
     }
 
     public void  savePastChallenge(){
-        int count =50;
+        int count =getCompleteChallengeCount();
         int pages=count/50;
         if(count%50!=0){
             pages++;

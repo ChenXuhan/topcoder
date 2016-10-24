@@ -4,7 +4,7 @@
     <insert id="insert" parameterType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission" useGeneratedKeys="true" keyProperty="id">
         insert into challenge_submission(challengeID,handle,placement,submissionDate,submissionStatus,points,finalScore,screeningScore,initialScore,submissionDownloadLink) values
         <foreach collection="array" item="item" index="index" separator=",">
-        (#{challengeID},#{handle},#{placement},#{submissionDate},#{submissionStatus},#{points},#{finalScore},#{screeningScore},#{initialScore},#{submissionDownloadLink})
+        (#{item.challengeID},#{item.handle},#{item.placement},#{item.submissionDate},#{item.submissionStatus},#{item.points},#{item.finalScore},#{item.screeningScore},#{item.initialScore},#{item.submissionDownloadLink})
         </foreach>
     </insert>
 </mapper>

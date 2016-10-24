@@ -84,9 +84,9 @@
                         #{registrationStartDate},
                         #{digitalRunPoints},
                         #{reliabilityBonus},
-                        #{technology,javaType=[Ljava.lang.String;, jdbcType=VARCHAR}},
-                        #{prize,javaType=[Ljava.lang.String;, jdbcType=VARCHAR}},
-                        #{platforms,javaType=[Ljava.lang.String;, jdbcType=VARCHAR}},
+                        #{technology,javaType=[Ljava.lang.String;, jdbcType=VARCHAR},
+                        #{prize,javaType=[Ljava.lang.String;, jdbcType=VARCHAR},
+                        #{platforms,javaType=[Ljava.lang.String;, jdbcType=VARCHAR},
                         #{numSubmissions},
                         #{numRegistrants})
     </insert>

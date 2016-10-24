@@ -4,7 +4,7 @@
     <insert id="insert" parameterType="com.buaa.act.sdp.bean.challenge.ChallengeRegistrant" useGeneratedKeys="true" keyProperty="id">
         insert into challenge_registrant(challengeID,handle,reliability,registrationDate,submissionDate,rating) values
         <foreach collection="array" item="item" index="index" separator=",">
-        (#{challengeID},#{handle},#{reliability},#{registrationDate},#{submissionDate},#{rating})
+        (#{item.challengeID},#{item.handle},#{item.reliability},#{item.registrationDate},#{item.submissionDate},#{item.rating})
         </foreach>
     </insert>
 </mapper>

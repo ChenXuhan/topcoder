@@ -4,7 +4,7 @@
     <insert id="insert" parameterType="com.buaa.act.sdp.bean.challenge.ChallengePhase" useGeneratedKeys="true" keyProperty="id">
         insert into challenge_phase(challengeID,type,status,scheduledStartTime,actualStartTime,scheduledEndTime,actualendTime) values
         <foreach collection="array" item="item" index="index" separator=",">
-        (#{challengeID},#{type},#{status},#{scheduledStartTime},#{actualStartTime},#{scheduledEndTime},#{actualendTime})
-        </foreach>>
+        (#{item.challengeID},#{item.type},#{item.status},#{item.scheduledStartTime},#{item.actualStartTime},#{item.scheduledEndTime},#{item.actualendTime})
+        </foreach>
     </insert>
 </mapper>

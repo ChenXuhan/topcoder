@@ -90,4 +90,7 @@
                         #{numSubmissions},
                         #{numRegistrants})
     </insert>
+    <select id="getChallengeItem" parameterType="int" resultType="ChallengeItem">
+        select * from challenge_item where challengeId = #{challengeId}
+    </select>
 </mapper>
