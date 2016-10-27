@@ -7,4 +7,7 @@
         (#{item.challengeID},#{item.type},#{item.status},#{item.scheduledStartTime},#{item.actualStartTime},#{item.scheduledEndTime},#{item.actualendTime})
         </foreach>
     </insert>
+    <select id="getChallengePhase" parameterType="com.buaa.act.sdp.bean.challenge.ChallengePhase" resultType="com.buaa.act.sdp.bean.challenge.ChallengePhase">
+        select * from challenge_phase where challengeID = #{challengeID} AND type = #{type}
+    </select>
 </mapper>

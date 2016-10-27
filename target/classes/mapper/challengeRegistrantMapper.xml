@@ -7,4 +7,30 @@
         (#{item.challengeID},#{item.handle},#{item.reliability},#{item.registrationDate},#{item.submissionDate},#{item.rating})
         </foreach>
     </insert>
+
+    <select id="getChallengeRegistrant" parameterType="com.buaa.act.sdp.bean.challenge.ChallengeRegistrant" resultType="com.buaa.act.sdp.bean.challenge.ChallengeRegistrant">
+        select * from challenge_registrant where challengeID = #{challengeID} AND handle = #{handle}
+    </select>
+
+   <!-- <insert id="insert" parameterType="com.buaa.act.sdp.bean.challenge.ChallengeRegistrant">
+        insert into challenge_registrant(
+        id,
+        challengeID,
+        handle,
+        reliability,
+        registrationDate,
+        submissionDate,
+        rating
+        )  values(
+        #{challengeID},
+        #{handle},
+        #{reliability},
+        #{registrationDate},
+        #{submissionDate},
+        #{rating}
+    </insert>-->
+
+    <select id="getUsers" resultType="java.lang.String">
+        select DISTINCT handle from challenge_registrant
+    </select>
 </mapper>

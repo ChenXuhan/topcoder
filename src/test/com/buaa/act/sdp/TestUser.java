@@ -18,7 +18,7 @@ public class TestUser {
     private UserApi  userApi;
     @Test
     public void testInsertUser(){
-        userApi.getUserByName("lifeloner");
+        userApi.getUserByName("iRabbit");
     }
     @Test
     public void testInsertDevelopment(){
@@ -31,7 +31,12 @@ public class TestUser {
 
     @Test
     public void testSaveUser(){
-        userApi.saveUser("iRabbit");
+        userApi.getUserStatistics("14blades");
+        //userApi.saveUser("iRabbit");
+    }
+    @Test
+    public void test1(){
+        userApi.saveAllUsers();
     }
 
 }

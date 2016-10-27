@@ -11,6 +11,15 @@ public class User {
     private String quote;
     private String photoLink;
     private boolean copilot;
+    private String[]skills;
+
+    public String[] getSkills() {
+        return skills;
+    }
+
+    public void setSkills(String[] skills) {
+        this.skills = skills;
+    }
 
     public int getId() {
         return id;

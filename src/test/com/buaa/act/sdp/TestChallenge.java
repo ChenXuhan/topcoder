@@ -21,21 +21,19 @@ public class TestChallenge {
     /**
      *
      */
-    @Autowired
-    private ChallengeItemDao challengeItemDao;
+
     @Test
     public void test(){
         challengeApi.savePastChallenge();
     }
     @Test
     public void testId(){
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(challengeApi.getChallengeById(30055168)));
-        ChallengeItem challengeItem=challengeApi.getChallengeById(30055168);
-
-
-        challengeItemDao.insert(challengeItem);
+        challengeApi.storeTest(30047584);
     }
+   /* @Test
+    public void testExist(){
+        challengeApi.existOrNot(30054988);
+    }*/
 
 
 }

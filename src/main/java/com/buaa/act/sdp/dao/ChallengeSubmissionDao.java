@@ -7,4 +7,5 @@ import com.buaa.act.sdp.bean.challenge.ChallengeSubmission;
  */
 public interface ChallengeSubmissionDao {
     void insert(ChallengeSubmission [] challengeSubmission);
+    ChallengeSubmission[] getChallengeSubmission(ChallengeSubmission challengeSubmission);
 }

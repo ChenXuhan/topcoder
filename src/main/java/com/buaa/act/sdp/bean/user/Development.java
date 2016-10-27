@@ -8,7 +8,7 @@ public class Development {
     private String developType;
     private String handle;
     private int rating;
-    private double reliability;
+    private String reliability;
     private String activePercentile;
     private int activeRank;
     private int activeCountryRank;
@@ -51,11 +51,11 @@ public class Development {
         this.rating = rating;
     }
 
-    public double getReliability() {
+    public String getReliability() {
         return reliability;
     }
 
-    public void setReliability(double reliability) {
+    public void setReliability(String reliability) {
         this.reliability = reliability;
     }
 

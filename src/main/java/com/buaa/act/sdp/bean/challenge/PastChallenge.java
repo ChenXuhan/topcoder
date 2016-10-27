@@ -6,8 +6,6 @@ package com.buaa.act.sdp.bean.challenge;
 public class PastChallenge {
     private int challengeId;
     private String registrationStartDate;
-    private int digitalRunPoints;
-    private int reliabilityBonus;
     private int numSubmissions;
     private int numRegistrants;
 
@@ -25,22 +23,6 @@ public class PastChallenge {
 
     public void setRegistrationStartDate(String registrationStartDate) {
         this.registrationStartDate = registrationStartDate;
-    }
-
-    public int getDigitalRunPoints() {
-        return digitalRunPoints;
-    }
-
-    public void setDigitalRunPoints(int digitalRunPoints) {
-        this.digitalRunPoints = digitalRunPoints;
-    }
-
-    public int getReliabilityBonus() {
-        return reliabilityBonus;
-    }
-
-    public void setReliabilityBonus(int reliabilityBonus) {
-        this.reliabilityBonus = reliabilityBonus;
     }
 
     public int getNumSubmissions() {

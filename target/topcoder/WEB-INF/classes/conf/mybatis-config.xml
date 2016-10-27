@@ -5,6 +5,7 @@
 
     <typeHandlers>
         <typeHandler handler="com.buaa.act.sdp.util.StringArrayTypeHandler"/>
+        <typeHandler handler="com.buaa.act.sdp.util.StringArrayToTextHandler"/>
     </typeHandlers>
 
 </configuration>

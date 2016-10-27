@@ -20,7 +20,9 @@ public class StringArrayTypeHandler extends BaseTypeHandler<String[]> {
             for (String value : strings) {
                 result.append(value).append(",");
             }
-            result.deleteCharAt(result.length()-1);
+            if(result.length()>0) {
+                result.deleteCharAt(result.length() - 1);
+            }
             preparedStatement.setString(i, result.toString());
         }
     }

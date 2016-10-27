@@ -23,8 +23,8 @@ public class ChallengeItem {
     private String checkpointSubmissionEndDate;
     private String forumLink;
     private String registrationStartDate;
-    private int digitalRunPoints;
-    private int reliabilityBonus;
+    private double digitalRunPoints;
+    private double reliabilityBonus;
     private String []technology;
     private String []prize;
     private String []platforms;
@@ -183,19 +183,19 @@ public class ChallengeItem {
         this.registrationStartDate = registrationStartDate;
     }
 
-    public int getDigitalRunPoints() {
+    public double getDigitalRunPoints() {
         return digitalRunPoints;
     }
 
-    public void setDigitalRunPoints(int digitalRunPoints) {
+    public void setDigitalRunPoints(double digitalRunPoints) {
         this.digitalRunPoints = digitalRunPoints;
     }
 
-    public int getReliabilityBonus() {
+    public double getReliabilityBonus() {
         return reliabilityBonus;
     }
 
-    public void setReliabilityBonus(int reliabilityBonus) {
+    public void setReliabilityBonus(double reliabilityBonus) {
         this.reliabilityBonus = reliabilityBonus;
     }
 
@@ -237,5 +237,31 @@ public class ChallengeItem {
 
     public void setNumRegistrants(int numRegistrants) {
         this.numRegistrants = numRegistrants;
+    }
+
+    @Override
+    public String toString() {
+        return challengeName+"+++"+detailedRequirements;
+        //return challengeId+challengeName+challengeType+ projectId+forumId+detailedRequirements;
+        /*private int screeningScorecardId;
+        private int reviewScorecardId;
+        private int numberOfCheckpointsPrizes;
+        private String topCheckPointPrize;
+        private String currentStatus;
+        private String postingDate;
+        private String registrationEndDate;
+        private String submissionEndDate;
+        private String finalFixEndDate;
+        private String appealsEndDate;
+        private String checkpointSubmissionEndDate;
+        private String forumLink;
+        private String registrationStartDate;
+        private double digitalRunPoints;
+        private double reliabilityBonus;
+        private String []technology;
+        private String []prize;
+        private String []platforms;
+        private int numSubmissions;
+        private int numRegistrants;*/
     }
 }

@@ -7,4 +7,5 @@ import com.buaa.act.sdp.bean.challenge.ChallengePhase;
  */
 public interface ChallengePhaseDao {
     void insert(ChallengePhase[]challengePhases);
+    ChallengePhase[] getChallengePhase(ChallengePhase challengePhase);
 }

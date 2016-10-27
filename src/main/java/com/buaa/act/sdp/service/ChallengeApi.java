@@ -38,6 +38,7 @@ public class ChallengeApi {
 
     public  ChallengeItem  getChallengeById(int challengeId){
         String str= RequestUtil.request("http://api.topcoder.com/v2/challenges/"+challengeId);
+        //System.out.print(str);
         if(str!=null){
              return JsonUtil.fromJson(str,ChallengeItem.class);
         }
@@ -65,7 +66,7 @@ public class ChallengeApi {
 
     //http://api.topcoder.com/v2/challenges/submissions/
     public  ChallengeSubmission[] getChallengeSubmissionsById(int challengeId){
-        System.out.println(challengeId);
+        //System.out.println(challengeId);
         String str=RequestUtil.request("http://api.topcoder.com/v2/develop/challenges/result/"+challengeId);
         if(str!=null){
             JsonElement jsonElement=JsonUtil.getJsonElement(str,"results");
@@ -97,13 +98,50 @@ public class ChallengeApi {
         }
         return null;
     }
+    public void storeTest(int challengeId){
+        ChallengeItem challengeItem;
+        ChallengeRegistrant []challengeRegistrant;
+        ChallengeSubmission[]challengeSubmissions;
+        ChallengePhase[]challengePhases;
+        challengeItem=getChallengeById(challengeId);
+        if(challengeItem!=null) {
+            System.out.println(challengeItem.toString());
+            //challengeItemGenerate(challengeItem, pastChallenges[j]);
+            challengeItemDao.insert(challengeItem);
 
+            challengeRegistrant = getChallengeRegistrantsById(challengeId);
+            if(challengeRegistrant!=null&&challengeRegistrant.length!=0) {
+                challengeRegistrantGenerate(challengeId, challengeRegistrant);
+                challengeRegistrantDao.insert(challengeRegistrant);
+            }
+            challengeSubmissions = getChallengeSubmissionsById(challengeId);
+            if(challengeSubmissions!=null&&challengeSubmissions.length!=0) {
+                challengeSubmissionGenerate(challengeId, challengeSubmissions);
+                challengeSubmissionDao.insert(challengeSubmissions);
+            }
+            challengePhases = getChallengePhasesById(challengeId);
+            if(challengePhases!=null&&challengePhases.length!=0) {
+                challengePhaseGenerate(challengeId, challengePhases);
+                challengePhaseDao.insert(challengePhases);
+            }
+        }
+
+    }
+    public boolean challengeExistOrNot(int challengeId){
+        ChallengeItem []items=challengeItemDao.getChallengeItem(challengeId);
+        if(items.length>0) {
+            return true;
+        }
+        else
+            return false;
+    }
     public void  savePastChallenge(){
         int count =getCompleteChallengeCount();
         int pages=count/50;
         if(count%50!=0){
             pages++;
         }
+        System.out.println(pages);
         PastChallenge[]pastChallenges;
         ChallengeItem challengeItem;
         ChallengeRegistrant []challengeRegistrant;
@@ -111,14 +149,16 @@ public class ChallengeApi {
         ChallengePhase[]challengePhases;
         int challengeId;
         for(int i=1;i<=pages;i++){
+            System.out.println(i+"oooooooooooooooooo");
             pastChallenges=getPastChallenges(i,50);
             if(pastChallenges==null){
                 continue;
             }
             for(int j=0;j<pastChallenges.length;j++){
                 challengeId=pastChallenges[j].getChallengeId();
+                System.out.println(challengeId);
                 challengeItem=getChallengeById(challengeId);
-                if(challengeItem!=null) {
+                if(challengeItem!=null&&(!challengeExistOrNot(challengeId))) {
                     challengeItemGenerate(challengeItem, pastChallenges[j]);
                     challengeItemDao.insert(challengeItem);
                     challengeRegistrant = getChallengeRegistrantsById(challengeId);
@@ -165,11 +205,9 @@ public class ChallengeApi {
 
 
     public void challengeItemGenerate(ChallengeItem item,PastChallenge pastChallenge){
-        item.setDigitalRunPoints(pastChallenge.getDigitalRunPoints());
         item.setNumRegistrants(pastChallenge.getNumRegistrants());
         item.setNumSubmissions(pastChallenge.getNumSubmissions());
         item.setRegistrationStartDate(pastChallenge.getRegistrationStartDate());
-        item.setReliabilityBonus(pastChallenge.getReliabilityBonus());
     }
 
     public void challengeRegistrantGenerate(int challengeId, ChallengeRegistrant[]challengeRegistrants){
