@@ -11,4 +11,8 @@
     <select id="getChallengeSubmission" parameterType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission" resultType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission">
         select * from challenge_submission where challengeID = #{challengeID} AND handle = #{handle}
     </select>
+
+    <select id="getUserSubmissonCount" >
+        select handle from challenge_submission group by handle,challengeID having count(*)>5;
+    </select>
 </mapper>

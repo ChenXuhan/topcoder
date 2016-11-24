@@ -2,63 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8383e2c-457c-4ccb-bf59-3a45a0db25db" name="Default" comment="topcoder-challenge">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/bean/user/Skill.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/StringArrayToTextHandler.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/user/Skill.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/service/ChallengeApi.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/StringArrayToTextHandler.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/user/Skill.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/bean/challenge/ChallengeItem.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/bean/challenge/ChallengeItem.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/bean/challenge/PastChallenge.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/bean/challenge/PastChallenge.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/bean/user/Development.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/bean/user/Development.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/bean/user/User.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/bean/user/User.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeItemDao.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeItemDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengePhaseDao.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengePhaseDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeRegistrantDao.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeRegistrantDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeSubmissionDao.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeSubmissionDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/ChallengeApi.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/ChallengeApi.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/UserApi.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/UserApi.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/HttpUtils.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/HttpUtils.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/JsonUtil$1.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/JsonUtil$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/JsonUtil.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/JsonUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/StringArrayTypeHandler.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/StringArrayTypeHandler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/com/buaa/act/sdp/TestChallenge.class" afterPath="$PROJECT_DIR$/target/test-classes/com/buaa/act/sdp/TestChallenge.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/com/buaa/act/sdp/TestUser.class" afterPath="$PROJECT_DIR$/target/test-classes/com/buaa/act/sdp/TestUser.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/user/User.class" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/user/User.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/service/UserApi.class" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/service/UserApi.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/HttpUtils.class" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/HttpUtils.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/JsonUtil$1.class" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/JsonUtil$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/JsonUtil.class" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/JsonUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/topcoder-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/topcoder-1.0-SNAPSHOT.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/common/Constant.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/challenge/ChallengeItem.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/challenge/ChallengeItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/challenge/PastChallenge.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/challenge/PastChallenge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/user/Development.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/user/Development.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/user/User.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/user/User.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeItemDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeItemDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengePhaseDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengePhaseDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeRegistrantDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeRegistrantDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeSubmissionDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeSubmissionDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/ChallengeApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/ChallengeApi.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/UserApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/UserApi.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/util/HttpUtils.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/util/HttpUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/util/JsonUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/util/JsonUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/util/StringArrayTypeHandler.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/util/StringArrayTypeHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/challengeItemMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/challengeItemMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/challengePhaseMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/challengePhaseMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/challengeRegistrantMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/challengeRegistrantMapper.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/userMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/userMapper.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestChallenge.java" afterPath="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestChallenge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestUser.java" afterPath="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestUser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/challengeItemMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/challengeItemMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/challengePhaseMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/challengePhaseMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/challengeRegistrantMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/challengeRegistrantMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/challengeSubmissionMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/challengeSubmissionMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/userMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/userMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/conf/mybatis-config.xml" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/conf/mybatis-config.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/challengeItemMapper.xml" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/challengeItemMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/userMapper.xml" afterPath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/userMapper.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/ChallengeApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/ChallengeApi.java" />
     </list>
     <ignored path="topcoder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -89,8 +38,8 @@
       <file leaf-file-name="UserApi.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/UserApi.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="75" column="73" selection-start-line="75" selection-start-column="73" selection-end-line="75" selection-end-column="73" />
+            <state relative-caret-position="382">
+              <caret line="22" column="58" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -98,24 +47,39 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TestUser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestUser.java">
+      <file leaf-file-name="challengeSubmissionMapper.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="473">
-              <caret line="37" column="20" selection-start-line="37" selection-start-column="16" selection-end-line="37" selection-end-column="21" />
+            <state relative-caret-position="495">
+              <caret line="15" column="94" selection-start-line="15" selection-start-column="94" selection-end-line="15" selection-end-column="94" />
               <folding>
-                <element signature="e#591#592#0" expanded="true" />
-                <element signature="e#639#640#0" expanded="true" />
-                <element signature="e#797#798#0" expanded="true" />
-                <element signature="e#871#872#0" expanded="true" />
-                <element signature="e#1041#1042#0" expanded="true" />
-                <element signature="e#1079#1080#0" expanded="true" />
+                <marker date="1479974646385" expanded="true" signature="1039:1131" ph="select * fro... challenge_submission" />
+                <marker date="1479974646385" expanded="true" signature="1196:1281" ph="select handl... challenge_submission" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ChallengeApi.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/ChallengeApi.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="785">
+              <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -128,9 +92,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/user/UserServiceImp.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserApi.java" />
-        <option value="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/UserDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/DevelopmentDao.java" />
         <option value="$PROJECT_DIR$/src/main/resources/mapper/developmentMapper.xml" />
@@ -166,7 +127,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/util/StringArrayTypeHandler.java" />
         <option value="$PROJECT_DIR$/src/main/resources/mapper/challengePhaseMapper.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengePhaseDao.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeSubmissionDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/challenge/PastChallenge.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/challenge/ChallengeItem.java" />
@@ -178,6 +138,10 @@
         <option value="$PROJECT_DIR$/src/main/resources/mapper/challengeRegistrantMapper.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/user/Development.java" />
         <option value="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestUser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/common/Constant.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/ChallengeApi.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserApi.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/UserApi.java" />
       </list>
     </option>
@@ -236,7 +200,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -269,32 +232,6 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sdp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="topcoder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="topcoder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -314,7 +251,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
+              <option name="myItemId" value="webapp" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -337,36 +274,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mapper" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="topcoder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="topcoder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conf" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -456,7 +363,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="dao" />
+              <option name="myItemId" value="service" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -512,51 +423,14 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="bean" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="user" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="topcoder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="topcoder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sdp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bean" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="challenge" />
+              <option name="myItemId" value="common" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1270,6 +1144,7 @@
       <workItem from="1477028544721" duration="10983000" />
       <workItem from="1477310284394" duration="1759000" />
       <workItem from="1477312087767" duration="42001000" />
+      <workItem from="1479973370414" duration="1362000" />
     </task>
     <servers>
       <YouTrack shared="false" url="">
@@ -1319,22 +1194,21 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="142850000" />
+    <option name="totallyTimeSpent" value="144212000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27874187" sideWeight="0.5053305" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36984816" sideWeight="0.4946695" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3689218" sideWeight="0.4946695" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3373102" sideWeight="0.4936034" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329718" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1353,6 +1227,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Dynamic Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329718" sideWeight="0.4978678" order="1" side_tool="false" content_ui="tabs" />
@@ -1414,13 +1289,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-beans/4.1.5.RELEASE/spring-beans-4.1.5.RELEASE.jar!/org/springframework/beans/factory/support/AbstractAutowireCapableBeanFactory.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="1072" column="0" selection-start-line="1072" selection-start-column="0" selection-end-line="1072" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/mybatis/mybatis-spring/1.3.0/mybatis-spring-1.3.0.jar!/org/mybatis/spring/SqlSessionFactoryBean.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5008">
@@ -1500,13 +1368,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_45/src.zip!/java/lang/reflect/ParameterizedType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="746">
-          <caret line="74" column="9" selection-start-line="74" selection-start-column="9" selection-end-line="74" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_45/src.zip!/java/lang/reflect/ParameterizedType.java" />
     <entry file="file://$PROJECT_DIR$/src/main/resources/properties/jdbc.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
@@ -1514,13 +1376,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11-sources.jar!/org/junit/internal/requests/FilterRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11-sources.jar!/org/junit/internal/requests/FilterRequest.java" />
     <entry file="file://$PROJECT_DIR$/src/test/com/buaa/act/sdp/service/ChallengeApiTest.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/util/HttpUtils.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1530,14 +1386,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_45/src.zip!/java/lang/StringBuffer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="442" column="0" selection-start-line="442" selection-start-column="0" selection-end-line="442" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_45/src.zip!/java/lang/StringBuffer.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/user/Skill.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
@@ -1578,31 +1427,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/mapper/userMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="9" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/mapper/challengePhaseMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
           <caret line="10" column="91" selection-start-line="10" selection-start-column="91" selection-end-line="10" selection-end-column="91" />
-          <folding>
-            <marker date="1477378295706" expanded="true" signature="904:987" ph="select * fro... challenge_phase" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="10" column="38" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="38" />
-          <folding>
-            <marker date="1477378494682" expanded="true" signature="1039:1131" ph="select * fro... challenge_submission" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1610,18 +1439,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
           <caret line="9" column="90" selection-start-line="9" selection-start-column="90" selection-end-line="9" selection-end-column="90" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/mybatis/mybatis/3.4.0/mybatis-3.4.0-sources.jar!/org/apache/ibatis/builder/xml/XMLStatementBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="108" column="0" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/mybatis/mybatis/3.4.0/mybatis-3.4.0-sources.jar!/org/apache/ibatis/builder/xml/XMLStatementBuilder.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/bean/challenge/ChallengePhase.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -1650,15 +1471,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
           <caret line="9" column="68" selection-start-line="9" selection-start-column="68" selection-end-line="9" selection-end-column="68" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/RatingHistoryDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1691,11 +1503,11 @@
         <state relative-caret-position="247">
           <caret line="26" column="41" selection-start-line="26" selection-start-column="41" selection-end-line="26" selection-end-column="41" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#752#753#0" expanded="true" />
-            <element signature="e#800#801#0" expanded="true" />
-            <element signature="e#836#837#0" expanded="true" />
-            <element signature="e#884#885#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#627#628#0" expanded="false" />
+            <element signature="e#675#676#0" expanded="false" />
+            <element signature="e#711#712#0" expanded="false" />
+            <element signature="e#759#760#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1704,7 +1516,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
           <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1724,22 +1535,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/mapper/challengeItemMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
-          <folding>
-            <marker date="1477549734289" expanded="true" signature="2680:5078" ph="insert into challenge_item... " />
-            <marker date="1477549734289" expanded="true" signature="5215:5278" ph="select * fro... challenge_item" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeItemDao.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
           <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1755,9 +1554,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
           <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1765,21 +1561,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="494">
           <caret line="33" column="24" selection-start-line="33" selection-start-column="24" selection-end-line="33" selection-end-column="24" />
-          <folding>
-            <marker date="1477550512560" expanded="true" signature="887:979" ph="select * fro... challenge_registrant" />
-            <marker date="1477550512560" expanded="true" signature="1100:1428" ph="insert into challenge_registrant... " />
-            <marker date="1477550512560" expanded="true" signature="1512:1560" ph="select ${han... challenge_registrant" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/ChallengeApi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="893">
-          <caret line="170" column="87" selection-start-line="170" selection-start-column="87" selection-end-line="170" selection-end-column="87" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1803,23 +1585,77 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestUser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
+        <state relative-caret-position="488">
           <caret line="37" column="20" selection-start-line="37" selection-start-column="16" selection-end-line="37" selection-end-column="21" />
           <folding>
-            <element signature="e#591#592#0" expanded="true" />
-            <element signature="e#639#640#0" expanded="true" />
-            <element signature="e#797#798#0" expanded="true" />
-            <element signature="e#871#872#0" expanded="true" />
-            <element signature="e#1041#1042#0" expanded="true" />
-            <element signature="e#1079#1080#0" expanded="true" />
+            <element signature="e#1041#1042#0" expanded="false" />
+            <element signature="e#1079#1080#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/mapper/userMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="6" column="9" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
+          <folding>
+            <marker date="1479973324638" expanded="true" signature="319:529" ph="insert into user... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/RatingHistoryDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="8" column="9" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/common/Constant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3359">
+          <caret line="111" column="22" selection-start-line="111" selection-start-column="22" selection-end-line="111" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/mapper/challengeItemMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="94" column="13" selection-start-line="94" selection-start-column="13" selection-end-line="94" selection-end-column="13" />
+          <folding>
+            <marker date="1477557036048" expanded="true" signature="2680:5078" ph="insert into challenge_item... " />
+            <marker date="1477557036048" expanded="true" signature="5215:5278" ph="select * fro... challenge_item" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="15" column="94" selection-start-line="15" selection-start-column="94" selection-end-line="15" selection-end-column="94" />
+          <folding>
+            <marker date="1479974646385" expanded="true" signature="1039:1131" ph="select * fro... challenge_submission" />
+            <marker date="1479974646385" expanded="true" signature="1196:1281" ph="select handl... challenge_submission" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/ChallengeApi.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="785">
+          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/UserApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="75" column="73" selection-start-line="75" selection-start-column="73" selection-end-line="75" selection-end-column="73" />
+        <state relative-caret-position="382">
+          <caret line="22" column="58" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
