@@ -35,9 +35,13 @@ public class UserApi {
     private RatingHistoryDao ratingHistoryDao;
 
     public void getUserByName(String userName) {
-        String json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName);
+        String json = null;
+        for(int i=0;i<10&&json==null;i++) {
+            json=RequestUtil.request("http://api.topcoder.com/v2/users/" + userName);
+        }
         //System.out.println(json);
         if (json != null) {
+            System.out.println(userName);
             User user = JsonUtil.fromJson(json, User.class);
             String[]skills=getUserSkills(userName);
             if(skills!=null){
@@ -45,10 +49,16 @@ public class UserApi {
             }
             userDao.insert(user);
         }
+        else {
+            System.out.println();
+        }
     }
 
     public String[] getUserSkills(String userName){
-        String json= HttpUtils.httpGet("http://api.topcoder.com/v3/members/"+userName+"/skills");
+        String json= null;
+        for(int i = 0;i<10&&json==null;i++){
+            json=HttpUtils.httpGet("http://api.topcoder.com/v3/members/"+userName+"/skills");
+        }
         if(json!=null){
             List<JsonElement>list=JsonUtil.getJsonElement(json,new String[]{"result","content","skills"});
             if(list!=null&&list.size()>0){
@@ -68,7 +78,7 @@ public class UserApi {
     }
     public void handUserDevelopmentInfo(String handle, String json) {
         JsonElement jsonElement = JsonUtil.getJsonElement(json, "Tracks");
-        System.out.println(jsonElement);
+
         if (jsonElement != null) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             Map<String, Development> map = JsonUtil.jsonToMap(jsonObject, Development.class);
@@ -101,16 +111,22 @@ public class UserApi {
     }
     //a
     public void getUserStatistics(String userName) {
-        String string = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/statistics/develop");
-        //System.out.println(string);
+        String string =null;
+        for(int i=0;i<10&&string==null;i++){
+            string=RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/statistics/develop");
+        }
         if (string != null) {
+            //System.out.println(string);
             handUserDevelopmentInfo(userName, string);
         }
     }
     //rating
     //"challengeType should be an element of design,development,specification,architecture,bug_hunt,test_suites,assembly,ui_prototypes,conceptualization,ria_build,ria_component,test_scenarios,copilot_posting,content_creation,reporting,marathon_match,first2finish,code,algorithm."
     public void getUserChallengeHistory(String userName, String challengeType) {
-        String json = RequestUtil.request("http://api.topcoder.com/v2/develop/statistics/" + userName + "/" + challengeType);
+        String json = null;
+        for(int i=0;i<10&&json==null;i++){
+            json=RequestUtil.request("http://api.topcoder.com/v2/develop/statistics/" + userName + "/" + challengeType);
+        }
         if (json != null) {
             handUserRatingHistory(userName, challengeType, json);
         }
@@ -155,8 +171,8 @@ public class UserApi {
 
         String[] names=challengeRegistrantDao.getUsers();
         for(int i=0;i<names.length;i++){
+            System.out.print(i+":");
             saveUser(names[i]);
-            System.out.println(i+":"+names[i]);
         }
     }
 
