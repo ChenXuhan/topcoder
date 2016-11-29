@@ -1,6 +1,5 @@
 package com.buaa.act.sdp.controller;
 
-import com.buaa.act.sdp.bean.user.User;
 import com.buaa.act.sdp.service.UserApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
