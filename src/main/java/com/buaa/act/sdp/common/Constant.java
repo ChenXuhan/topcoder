@@ -208,4 +208,6 @@ public class Constant {
             "Twilio",
             "Wordpress",
             "iOS"};
+
+    public static final String DIRECTORY = "F:/arff/";
 }

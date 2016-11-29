@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.service.api;
+package com.buaa.act.sdp.service;
 
 /**
  * Created by YLT on 2016/10/18.

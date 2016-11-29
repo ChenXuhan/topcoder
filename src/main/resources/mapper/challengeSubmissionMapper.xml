@@ -12,7 +12,7 @@
         select * from challenge_submission where challengeID = #{challengeID} AND handle = #{handle}
     </select>
 
-    <select id="getUserSubmissonCount" >
-        select handle from challenge_submission group by handle,challengeID having count(*)>5;
+    <select id="getUserSubmissons" resultType="java.util.Map">
+        select handle,group_concat(CAST(challengeID as char)) as challengeIds,group_concat(finalScore) as scores from challenge_submission group by handle having count(DISTINCT  challengeID)>=10;
     </select>
 </mapper>

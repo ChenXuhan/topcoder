@@ -1,5 +1,6 @@
 package com.buaa.act.sdp;
 
+import com.buaa.act.sdp.service.LinerRegression;
 import com.buaa.act.sdp.service.UserApi;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +17,8 @@ public class TestUser {
 
     @Autowired
     private UserApi  userApi;
+    @Autowired
+    private LinerRegression linerRegression;
     @Test
     public void testInsertUser(){
         userApi.getUserByName("iRabbit");
@@ -37,6 +40,10 @@ public class TestUser {
     @Test
     public void test1(){
         userApi.saveAllUsers();
+    }
+    @Test
+    public void  getUsers(){
+       linerRegression.getUsersSubmissions();
     }
 
 }

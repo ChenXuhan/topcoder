@@ -4,4 +4,8 @@
     <insert id="insert" parameterType="com.buaa.act.sdp.bean.user.User" useGeneratedKeys="true" keyProperty="id">
        insert into user(handle,country,memberSince,quote,photoLink,copilot,skills) values(#{handle},#{country},#{memberSince},#{quote},#{photoLink},#{copilot}, #{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR})
     </insert>
+
+    <select id="getUserByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.bean.user.User">
+        select * from user where handle=#{name}
+    </select>
 </mapper>
