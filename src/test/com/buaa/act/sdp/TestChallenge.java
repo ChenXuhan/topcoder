@@ -23,14 +23,10 @@ public class TestChallenge {
     public void test(){
         challengeApi.savePastChallenge();
     }
-    @Test
-    public void testId(){
-        challengeApi.storeTest(30047584);
-    }
-   /* @Test
-    public void testExist(){
-        challengeApi.existOrNot(30054988);
-    }*/
 
+    @Test
+    public void testGetMissedChallenge(){
+        challengeApi.getMissedChallenges(30018281);
+    }
 
 }

@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ChallengeItemDao {
      void insert(ChallengeItem challengeItem);
-     ChallengeItem[] getChallengeItem(int challengeId);
      ChallengeItem getChallengeItemById(@Param("challengeId") int challengeId);
 
 

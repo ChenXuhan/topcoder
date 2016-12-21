@@ -90,9 +90,6 @@
                         #{numSubmissions},
                         #{numRegistrants})
     </insert>
-    <select id="getChallengeItem" parameterType="int" resultType="com.buaa.act.sdp.bean.challenge.ChallengeItem">
-        select * from challenge_item where challengeId = #{challengeId}
-    </select>
 
     <select id="getChallengeItemById" parameterType="int" resultType="com.buaa.act.sdp.bean.challenge.ChallengeItem">
         select * from challenge_item where challengeId = #{challengeId}

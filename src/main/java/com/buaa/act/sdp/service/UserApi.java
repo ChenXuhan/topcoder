@@ -36,37 +36,43 @@ public class UserApi {
     private RatingHistoryDao ratingHistoryDao;
 
     public void getUserByName(String userName) {
-        String json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName);
-        //System.out.println(json);
-        if (json != null) {
-            User user = JsonUtil.fromJson(json, User.class);
-            String[]skills=getUserSkills(userName);
-            if(skills!=null){
-                user.setSkills(skills);
+        for(int i=0;i<10;i++) {
+            String json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName);
+            if (json != null) {
+                User user = JsonUtil.fromJson(json, User.class);
+                String[] skills = getUserSkills(userName);
+                if (skills != null) {
+                    user.setSkills(skills);
+                }
+                userDao.insert(user);
+                return ;
             }
-            userDao.insert(user);
         }
     }
 
     public String[] getUserSkills(String userName){
-        String json= HttpUtils.httpGet("http://api.topcoder.com/v3/members/"+userName+"/skills");
-        if(json!=null){
-            List<JsonElement>list=JsonUtil.getJsonElement(json,new String[]{"result","content","skills"});
-            if(list!=null&&list.size()>0){
-                JsonElement jsonElement=list.get(0);
-                if(jsonElement!=null&&jsonElement.isJsonObject()){
-                    Map<String,Skill>map=JsonUtil.jsonToMap(jsonElement.getAsJsonObject(),Skill.class);
-                    String[]str=new String[map.size()];
-                    int index=0;
-                    for(Map.Entry<String,Skill>entry:map.entrySet()){
-                        str[index++]=entry.getValue().getTagName();
+        for(int i=0;i<10;i++) {
+            String json = HttpUtils.httpGet("http://api.topcoder.com/v3/members/" + userName + "/skills");
+            if (json != null) {
+                List<JsonElement> list = JsonUtil.getJsonElement(json, new String[]{"result", "content", "skills"});
+                if (list != null && list.size() > 0) {
+                    JsonElement jsonElement = list.get(0);
+                    if (jsonElement != null && jsonElement.isJsonObject()) {
+                        Map<String, Skill> map = JsonUtil.jsonToMap(jsonElement.getAsJsonObject(), Skill.class);
+                        String[] str = new String[map.size()];
+                        int index = 0;
+                        for (Map.Entry<String, Skill> entry : map.entrySet()) {
+                            str[index++] = entry.getValue().getTagName();
+                        }
+                        return str;
                     }
-                    return str;
                 }
+                return null;
             }
         }
         return null;
     }
+
     public void handUserDevelopmentInfo(String handle, String json) {
         JsonElement jsonElement = JsonUtil.getJsonElement(json, "Tracks");
         System.out.println(jsonElement);
@@ -100,7 +106,7 @@ public class UserApi {
             }
         }
     }
-    //a
+
     public void getUserStatistics(String userName) {
         String string = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/statistics/develop");
         //System.out.println(string);
@@ -108,8 +114,7 @@ public class UserApi {
             handUserDevelopmentInfo(userName, string);
         }
     }
-    //rating
-    //"challengeType should be an element of design,development,specification,architecture,bug_hunt,test_suites,assembly,ui_prototypes,conceptualization,ria_build,ria_component,test_scenarios,copilot_posting,content_creation,reporting,marathon_match,first2finish,code,algorithm."
+
     public void getUserChallengeHistory(String userName, String challengeType) {
         String json = RequestUtil.request("http://api.topcoder.com/v2/develop/statistics/" + userName + "/" + challengeType);
         if (json != null) {
@@ -151,9 +156,7 @@ public class UserApi {
         getUserChallengeHistory(handle,"code");
     }
 
-
     public void saveAllUsers(){
-
         String[] names=challengeRegistrantDao.getUsers();
         for(int i=0;i<names.length;i++){
             saveUser(names[i]);
