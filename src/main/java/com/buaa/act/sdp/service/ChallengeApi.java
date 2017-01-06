@@ -5,15 +5,17 @@ package com.buaa.act.sdp.service;
  */
 
 import com.buaa.act.sdp.bean.challenge.*;
-import com.buaa.act.sdp.dao.ChallengeItemDao;
-import com.buaa.act.sdp.dao.ChallengePhaseDao;
-import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
-import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
+import com.buaa.act.sdp.bean.user.User;
+import com.buaa.act.sdp.dao.*;
 import com.buaa.act.sdp.util.JsonUtil;
 import com.buaa.act.sdp.util.RequestUtil;
 import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by yang on 2016/9/30.
@@ -29,74 +31,104 @@ public class ChallengeApi {
     private ChallengePhaseDao challengePhaseDao;
     @Autowired
     private ChallengeRegistrantDao challengeRegistrantDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private UserApi userApi;
+    @Autowired
+    private TimeOutDao timeOutDao;
 
     public ChallengeItem getChallengeById(int challengeId) {
-        for(int i=0;i<10;i++) {
-            String str = RequestUtil.request("http://api.topcoder.com/v2/challenges/" + challengeId);
-            if (str != null) {
-                return JsonUtil.fromJson(str, ChallengeItem.class);
-            }
+        String str = null;
+        try {
+            str = RequestUtil.request("http://api.topcoder.com/v2/challenges/" + challengeId);
+        } catch (Exception e) {
+            System.err.println("time out getChallenge " + challengeId);
+            timeOutDao.insertTimeOutData("challenge", "" + challengeId);
+        }
+        if (str != null) {
+            return JsonUtil.fromJson(str, ChallengeItem.class);
         }
         return null;
     }
 
     public ChallengeRegistrant[] getChallengeRegistrantsById(int challengeId) {
-        for(int i=0;i<10;i++) {
-            String str = RequestUtil.request("http://api.topcoder.com/v2/challenges/registrants/" + challengeId);
-            if (str != null) {
-                return JsonUtil.fromJson(str, ChallengeRegistrant[].class);
-            }
+        String str = null;
+        try {
+            str = RequestUtil.request("http://api.topcoder.com/v2/challenges/registrants/" + challengeId);
+        } catch (Exception e) {
+            System.err.println("time out getRegistrants " + challengeId);
+            timeOutDao.insertTimeOutData("registrant", "" + challengeId);
+        }
+        if (str != null) {
+            return JsonUtil.fromJson(str, ChallengeRegistrant[].class);
         }
         return null;
     }
 
     public ChallengePhase[] getChallengePhasesById(int challengeId) {
-        for(int i=0;i<10;i++) {
-            String str = RequestUtil.request("http://api.topcoder.com/v2/challenges/phases/" + challengeId);
-            if (str != null) {
-                JsonElement jsonElement = JsonUtil.getJsonElement(str, "phases");
-                if (jsonElement != null) {
-                    return JsonUtil.fromJson(jsonElement, ChallengePhase[].class);
-                }
+        String str = null;
+        try {
+            str = RequestUtil.request("http://api.topcoder.com/v2/challenges/phases/" + challengeId);
+        } catch (Exception e) {
+            System.err.println("time out getPhases " + challengeId);
+            timeOutDao.insertTimeOutData("phase", "" + challengeId);
+        }
+        if (str != null) {
+            JsonElement jsonElement = JsonUtil.getJsonElement(str, "phases");
+            if (jsonElement != null) {
+                return JsonUtil.fromJson(jsonElement, ChallengePhase[].class);
             }
         }
         return null;
     }
 
     public ChallengeSubmission[] getChallengeSubmissionsById(int challengeId) {
-        for(int i=0;i<10;i++) {
-            String str = RequestUtil.request("http://api.topcoder.com/v2/develop/challenges/result/" + challengeId);
-            if (str != null) {
-                JsonElement jsonElement = JsonUtil.getJsonElement(str, "results");
-                if (jsonElement != null) {
-                    return JsonUtil.fromJson(jsonElement, ChallengeSubmission[].class);
-                }
+        String str = null;
+        try {
+            str = RequestUtil.request("http://api.topcoder.com/v2/develop/challenges/result/" + challengeId);
+        } catch (Exception e) {
+            System.err.println("time out getSubmissions " + challengeId);
+            timeOutDao.insertTimeOutData("submission", "" + challengeId);
+        }
+        if (str != null) {
+            JsonElement jsonElement = JsonUtil.getJsonElement(str, "results");
+            if (jsonElement != null) {
+                return JsonUtil.fromJson(jsonElement, ChallengeSubmission[].class);
             }
         }
         return null;
     }
 
     public int getCompleteChallengeCount() {
-        for(int i=0;i<10;i++) {
-            String str = RequestUtil.request("http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=1&pageSize=50");
-            JsonElement jsonElement = JsonUtil.getJsonElement(str, "total");
-            if (jsonElement.isJsonPrimitive()) {
-                System.out.print(jsonElement.getAsInt());
-                return jsonElement.getAsInt();
-            }
+        String str = null;
+        try {
+            str = RequestUtil.request("http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=1&pageSize=50");
+        } catch (Exception e) {
+            System.err.println("time out getChallengeCount");
+            timeOutDao.insertTimeOutData("challengeCount", "");
+        }
+        JsonElement jsonElement = JsonUtil.getJsonElement(str, "total");
+        if (jsonElement.isJsonPrimitive()) {
+            System.out.print(jsonElement.getAsInt());
+            return jsonElement.getAsInt();
         }
         return 0;
     }
 
     public PastChallenge[] getPastChallenges(int pageIndex, int pageSize) {
-        for(int i=0;i<10;i++) {
-            String str = RequestUtil.request("http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=" + pageIndex + "&pageSize=" + pageSize);
-            if (str != null) {
-                JsonElement jsonElement = JsonUtil.getJsonElement(str, "data");
-                if (jsonElement != null) {
-                    PastChallenge[] pastChallenges = JsonUtil.fromJson(jsonElement, PastChallenge[].class);
-                    return pastChallenges;
-                }
+        String str = null;
+        try {
+            str = RequestUtil.request("http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=" + pageIndex + "&pageSize=" + pageSize);
+        } catch (Exception e) {
+            System.err.println("time out getPastChallenges");
+            timeOutDao.insertTimeOutData("pastChallenges", pageIndex + "_" + pageSize);
+        }
+        if (str != null) {
+            JsonElement jsonElement = JsonUtil.getJsonElement(str, "data");
+            if (jsonElement != null) {
+                PastChallenge[] pastChallenges = JsonUtil.fromJson(jsonElement, PastChallenge[].class);
+                return pastChallenges;
             }
         }
         return null;
@@ -104,7 +136,7 @@ public class ChallengeApi {
 
     public boolean challengeExistOrNot(int challengeId) {
         ChallengeItem item = challengeItemDao.getChallengeItemById(challengeId);
-        if (item!=null) {
+        if (item != null) {
             return true;
         }
         return false;
@@ -116,6 +148,12 @@ public class ChallengeApi {
         if (count % 50 != 0) {
             pages++;
         }
+        List<String>userList=userDao.getUsers();
+        Set<String>userSet=new HashSet<>();
+        userSet.addAll(userList);
+        List<Integer>challengeList=challengeItemDao.getChallenges();
+        Set<Integer>challengeSet=new HashSet<>();
+        challengeSet.addAll(challengeList);
         PastChallenge[] pastChallenges;
         ChallengeItem challengeItem;
         ChallengeRegistrant[] challengeRegistrant;
@@ -123,30 +161,38 @@ public class ChallengeApi {
         ChallengePhase[] challengePhases;
         int challengeId;
         for (int i = 1; i <= pages; i++) {
-            System.out.println("page " + i + "");
             pastChallenges = getPastChallenges(i, 50);
-            if (pastChallenges == null) {
+            if (pastChallenges == null||pastChallenges.length==0) {
                 continue;
             }
             for (int j = 0; j < pastChallenges.length; j++) {
                 challengeId = pastChallenges[j].getChallengeId();
-                challengeItem=getChallengeById(challengeId);
-                if(challengeItem!=null&&(!challengeExistOrNot(challengeId))) {
-                    challengeItemGenerate(challengeItem, pastChallenges[j]);
-                    handChallenge(challengeItem);
+                if (!challengeSet.contains(challengeId)) {
+                    challengeItem = getChallengeById(challengeId);
+                    if(challengeItem != null) {
+                        challengeItemGenerate(challengeItem, pastChallenges[j]);
+                        handChallenge(challengeItem,userSet);
+                    }
                 }
             }
         }
     }
 
-    public void handChallenge(ChallengeItem challengeItem) {
-        int challengeId = challengeItem.getChallengeId();
+    public void handChallenge(ChallengeItem challengeItem,Set<String>username) {
         challengeItemDao.insert(challengeItem);
-        System.out.println(challengeId+" finished");
+        int challengeId=challengeItem.getChallengeId();
+        System.out.println(challengeId);
         ChallengeRegistrant[] challengeRegistrant = getChallengeRegistrantsById(challengeId);
         if (challengeRegistrant != null && challengeRegistrant.length != 0) {
             challengeRegistrantGenerate(challengeId, challengeRegistrant);
             challengeRegistrantDao.insert(challengeRegistrant);
+            for (int i = 0; i < challengeRegistrant.length; i++) {
+                if (!username.contains(challengeRegistrant[i].getHandle())) {
+                    username.add(challengeRegistrant[i].getHandle());
+                    userApi.saveUser(challengeRegistrant[i].getHandle());
+                    System.out.println("\t" + challengeRegistrant[i].getHandle());
+                }
+            }
         }
         ChallengeSubmission[] challengeSubmissions = getChallengeSubmissionsById(challengeId);
         if (challengeSubmissions != null && challengeSubmissions.length != 0) {
@@ -186,13 +232,27 @@ public class ChallengeApi {
 
     public void getMissedChallenges(int startId) {
         int min = 30000000;
+        List<String>userList=userDao.getUsers();
+        Set<String>userSet=new HashSet<>();
+        userSet.addAll(userList);
+        List<Integer>challengeList=challengeItemDao.getChallenges();
+        Set<Integer>challengeSet=new HashSet<>();
+        challengeSet.addAll(challengeList);
+        System.out.println(userSet.size());
+        System.out.println(challengeSet.size());
         ChallengeItem challengeItem;
         while (startId >= min) {
-            challengeItem=getChallengeById(startId);
-            if(challengeItem!=null){
-                handChallenge(challengeItem);
+            if(!challengeSet.contains(startId)) {
+                challengeSet.add(startId);
+                challengeItem = getChallengeById(startId);
+                if(challengeItem != null) {
+                    handChallenge(challengeItem,userSet);
+                }else{
+                    System.out.println(startId+" failed");
+                }
             }
             startId--;
         }
     }
+
 }

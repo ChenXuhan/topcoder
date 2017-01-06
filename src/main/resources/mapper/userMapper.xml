@@ -8,4 +8,9 @@
     <select id="getUserByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.bean.user.User">
         select * from user where handle=#{name}
     </select>
+
+    <select id="getUsers"  resultType="java.lang.String">
+        select DISTINCT handle from user
+    </select>
+
 </mapper>

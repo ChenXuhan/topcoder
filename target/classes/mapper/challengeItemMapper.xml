@@ -94,4 +94,7 @@
     <select id="getChallengeItemById" parameterType="int" resultType="com.buaa.act.sdp.bean.challenge.ChallengeItem">
         select * from challenge_item where challengeId = #{challengeId}
     </select>
+    <select id="getChallenges" resultType="java.lang.Integer">
+        select challengeId from challenge_item
+    </select>
 </mapper>

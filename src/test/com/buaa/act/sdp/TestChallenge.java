@@ -21,12 +21,15 @@ public class TestChallenge {
 
     @Test
     public void test(){
-        challengeApi.savePastChallenge();
+        //challengeApi.savePastChallenge();
     }
 
     @Test
     public void testGetMissedChallenge(){
-        challengeApi.getMissedChallenges(30018281);
+        challengeApi.getMissedChallenges(30012813);
     }
-
+    @Test
+    public void testPhrase(){
+        System.out.println(challengeApi.getChallengePhasesById(30018229));
+    }
 }

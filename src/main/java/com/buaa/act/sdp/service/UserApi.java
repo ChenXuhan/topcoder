@@ -22,52 +22,58 @@ public class UserApi {
 
     @Autowired
     private ChallengeRegistrantDao challengeRegistrantDao;
-
     @Autowired
     private UserDao userDao;
-
     @Autowired
     private DevelopmentDao developmentDao;
-
     @Autowired
     private DevelopmentHistoryDao developmentHistoryDao;
-
     @Autowired
     private RatingHistoryDao ratingHistoryDao;
+    @Autowired
+    private TimeOutDao timeOutDao;
 
     public void getUserByName(String userName) {
-        for(int i=0;i<10;i++) {
-            String json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName);
-            if (json != null) {
-                User user = JsonUtil.fromJson(json, User.class);
-                String[] skills = getUserSkills(userName);
-                if (skills != null) {
-                    user.setSkills(skills);
-                }
-                userDao.insert(user);
-                return ;
+        String json = null;
+        try {
+            json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName);
+        } catch (Exception e) {
+            System.err.println("time out getUser " + userName);
+            timeOutDao.insertTimeOutData("user ", userName);
+        }
+        if (json != null) {
+            User user = JsonUtil.fromJson(json, User.class);
+            String[] skills = getUserSkills(userName);
+            if (skills != null) {
+                user.setSkills(skills);
             }
+            userDao.insert(user);
         }
     }
 
-    public String[] getUserSkills(String userName){
-        for(int i=0;i<10;i++) {
-            String json = HttpUtils.httpGet("http://api.topcoder.com/v3/members/" + userName + "/skills");
-            if (json != null) {
-                List<JsonElement> list = JsonUtil.getJsonElement(json, new String[]{"result", "content", "skills"});
-                if (list != null && list.size() > 0) {
-                    JsonElement jsonElement = list.get(0);
-                    if (jsonElement != null && jsonElement.isJsonObject()) {
-                        Map<String, Skill> map = JsonUtil.jsonToMap(jsonElement.getAsJsonObject(), Skill.class);
-                        String[] str = new String[map.size()];
-                        int index = 0;
-                        for (Map.Entry<String, Skill> entry : map.entrySet()) {
-                            str[index++] = entry.getValue().getTagName();
-                        }
-                        return str;
+    public String[] getUserSkills(String userName) {
+        String json = null;
+        try {
+            for (int i = 0; i < 10 && json == null; i++) {
+                json = HttpUtils.httpGet("http://api.topcoder.com/v3/members/" + userName + "/skills");
+            }
+        } catch (Exception e) {
+            System.err.println("time out skills " + userName);
+            timeOutDao.insertTimeOutData("skills ", userName);
+        }
+        if (json != null) {
+            List<JsonElement> list = JsonUtil.getJsonElement(json, new String[]{"result", "content", "skills"});
+            if (list != null && list.size() > 0) {
+                JsonElement jsonElement = list.get(0);
+                if (jsonElement != null && jsonElement.isJsonObject()) {
+                    Map<String, Skill> map = JsonUtil.jsonToMap(jsonElement.getAsJsonObject(), Skill.class);
+                    String[] str = new String[map.size()];
+                    int index = 0;
+                    for (Map.Entry<String, Skill> entry : map.entrySet()) {
+                        str[index++] = entry.getValue().getTagName();
                     }
+                    return str;
                 }
-                return null;
             }
         }
         return null;
@@ -75,7 +81,6 @@ public class UserApi {
 
     public void handUserDevelopmentInfo(String handle, String json) {
         JsonElement jsonElement = JsonUtil.getJsonElement(json, "Tracks");
-        System.out.println(jsonElement);
         if (jsonElement != null) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             Map<String, Development> map = JsonUtil.jsonToMap(jsonObject, Development.class);
@@ -108,15 +113,26 @@ public class UserApi {
     }
 
     public void getUserStatistics(String userName) {
-        String string = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/statistics/develop");
-        //System.out.println(string);
+        String string = null;
+        try {
+            string = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/statistics/develop");
+        } catch (Exception e) {
+            System.err.println("time out statistics " + userName);
+            timeOutDao.insertTimeOutData("statistics", userName);
+        }
         if (string != null) {
             handUserDevelopmentInfo(userName, string);
         }
     }
 
     public void getUserChallengeHistory(String userName, String challengeType) {
-        String json = RequestUtil.request("http://api.topcoder.com/v2/develop/statistics/" + userName + "/" + challengeType);
+        String json = null;
+        try {
+            json = RequestUtil.request("http://api.topcoder.com/v2/develop/statistics/" + userName + "/" + challengeType);
+        } catch (Exception e) {
+            System.err.println("time out history " + userName + "_" + challengeType);
+            timeOutDao.insertTimeOutData("history", userName + "_" + challengeType);
+        }
         if (json != null) {
             handUserRatingHistory(userName, challengeType, json);
         }
@@ -136,32 +152,30 @@ public class UserApi {
         }
     }
 
-    public void saveUser(String handle){
+    public void saveUser(String handle) {
         getUserByName(handle);
         getUserStatistics(handle);
-        getUserChallengeHistory(handle,"design");
-        getUserChallengeHistory(handle,"development");
-        getUserChallengeHistory(handle,"specification");
-        getUserChallengeHistory(handle,"architecture");
-        getUserChallengeHistory(handle,"bug_hunt");
-        getUserChallengeHistory(handle,"test_suites");
-        getUserChallengeHistory(handle,"ui_prototypes");
-        getUserChallengeHistory(handle,"conceptualization");
-        getUserChallengeHistory(handle,"ria_build");
-        getUserChallengeHistory(handle,"ria_component");
-        getUserChallengeHistory(handle,"test_scenarios");
-        getUserChallengeHistory(handle,"copilot_posting");
-        getUserChallengeHistory(handle,"content_creation");
-        getUserChallengeHistory(handle,"first2finish");
-        getUserChallengeHistory(handle,"code");
+        getUserChallengeHistory(handle, "design");
+        getUserChallengeHistory(handle, "development");
+        getUserChallengeHistory(handle, "specification");
+        getUserChallengeHistory(handle, "architecture");
+        getUserChallengeHistory(handle, "bug_hunt");
+        getUserChallengeHistory(handle, "test_suites");
+        getUserChallengeHistory(handle, "ui_prototypes");
+        getUserChallengeHistory(handle, "conceptualization");
+        getUserChallengeHistory(handle, "ria_build");
+        getUserChallengeHistory(handle, "ria_component");
+        getUserChallengeHistory(handle, "test_scenarios");
+        getUserChallengeHistory(handle, "copilot_posting");
+        getUserChallengeHistory(handle, "content_creation");
+        getUserChallengeHistory(handle, "first2finish");
+        getUserChallengeHistory(handle, "code");
     }
 
-    public void saveAllUsers(){
-        String[] names=challengeRegistrantDao.getUsers();
-        for(int i=0;i<names.length;i++){
+    public void saveAllUsers() {
+        String[] names = challengeRegistrantDao.getUsers();
+        for (int i = 0; i < names.length; i++) {
             saveUser(names[i]);
-            System.out.println(i+":"+names[i]);
         }
     }
-
 }

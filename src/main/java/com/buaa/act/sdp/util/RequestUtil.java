@@ -13,8 +13,11 @@ public class RequestUtil {
     public static String request(String url){
         Client client = ClientBuilder.newClient();
         Response response = client.target(url).request(MediaType.TEXT_PLAIN_TYPE).get();
-        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            return response.readEntity(String.class);
+        for(int i=0;i<6;i++){
+            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+                return response.readEntity(String.class);
+            }
+            response = client.target(url).request(MediaType.TEXT_PLAIN_TYPE).get();
         }
         return null;
     }

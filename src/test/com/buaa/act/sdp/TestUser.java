@@ -34,7 +34,9 @@ public class TestUser {
 
     @Test
     public void testSaveUser(){
-        userApi.getUserStatistics("14blades");
+        //userApi.getUserStatistics("arthurjlp");
+       // userApi.getUserByName("arthurjlp");
+        //linerRegression.getDate("30055549");
         //userApi.saveUser("iRabbit");
     }
     @Test
@@ -44,6 +46,10 @@ public class TestUser {
     @Test
     public void  getUsers(){
        linerRegression.getUsersSubmissions();
+    }
+    @Test
+    public void getNumber(){
+        //userApi.getNumbers();
     }
 
 }
