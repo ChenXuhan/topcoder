@@ -27,6 +27,7 @@ public class LinerRegression {
 
     @Autowired
     private UserDao userDao;
+
     public void getUsersSubmissions() {
         List<Map<String, String>> list = challengeSubmissionDao.getUserSubmissons();
         String[] challengeIds;

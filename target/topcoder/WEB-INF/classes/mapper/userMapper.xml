@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buaa.act.sdp.dao.UserDao">
+    <insert id="insert" parameterType="com.buaa.act.sdp.bean.user.User" useGeneratedKeys="true" keyProperty="id">
+       insert into user(handle,country,memberSince,quote,photoLink,copilot,skills) values(#{handle},#{country},#{memberSince},#{quote},#{photoLink},#{copilot}, #{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR})
+    </insert>
+
+    <select id="getUserByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.bean.user.User">
+        select * from user where handle=#{name}
+    </select>
+
+    <select id="getUsers"  resultType="java.lang.String">
+        select DISTINCT handle from user
+    </select>
+
+</mapper>

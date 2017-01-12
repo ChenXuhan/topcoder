@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buaa.act.sdp.dao.DevelopmentDao">
+    <insert id="insert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into development(
+        handle,
+        developType,
+        rating,
+        reliability,
+        activePercentile,
+        activeRank,
+        activeCountryRank,
+        activeSchoolRank,
+        overallPercentile,
+        overallRank,
+        overallCountryRank,
+        overallSchoolRank,
+        volatility) values
+        <foreach collection="list" item="item" index="index" separator=","> (
+        #{item.handle},
+        #{item.developType},
+        #{item.rating},
+        #{item.reliability},
+        #{item.activePercentile},
+        #{item.activeRank},
+        #{item.activeCountryRank},
+        #{item.activeSchoolRank},
+        #{item.overallPercentile},
+        #{item.overallRank},
+        #{item.overallCountryRank},
+        #{item.overallSchoolRank},
+        #{item.volatility})
+        </foreach>
+    </insert>
+
+</mapper>

@@ -1,7 +1,7 @@
 package com.buaa.act.sdp;
 
 import com.buaa.act.sdp.service.LinerRegression;
-import com.buaa.act.sdp.service.UserApi;
+import com.buaa.act.sdp.service.api.UserApi;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

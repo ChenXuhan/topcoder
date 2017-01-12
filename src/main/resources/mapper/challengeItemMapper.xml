@@ -97,4 +97,5 @@
     <select id="getChallenges" resultType="java.lang.Integer">
         select challengeId from challenge_item
     </select>
+
 </mapper>

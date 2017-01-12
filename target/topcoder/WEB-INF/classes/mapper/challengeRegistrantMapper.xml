@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buaa.act.sdp.dao.ChallengeRegistrantDao">
+    <insert id="insert" parameterType="com.buaa.act.sdp.bean.challenge.ChallengeRegistrant" useGeneratedKeys="true" keyProperty="id">
+        insert into challenge_registrant(challengeID,handle,reliability,registrationDate,submissionDate,rating) values
+        <foreach collection="array" item="item" index="index" separator=",">
+        (#{item.challengeID},#{item.handle},#{item.reliability},#{item.registrationDate},#{item.submissionDate},#{item.rating})
+        </foreach>
+    </insert>
+
+    <select id="getChallengeRegistrant" parameterType="com.buaa.act.sdp.bean.challenge.ChallengeRegistrant" resultType="com.buaa.act.sdp.bean.challenge.ChallengeRegistrant">
+        select * from challenge_registrant where challengeID = #{challengeID} AND handle = #{handle}
+    </select>
+
+    <select id="getUsers" resultType="java.lang.String">
+        select DISTINCT handle from challenge_registrant
+    </select>
+</mapper>

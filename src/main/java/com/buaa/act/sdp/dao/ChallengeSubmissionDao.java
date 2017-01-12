@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.dao;
 
 import com.buaa.act.sdp.bean.challenge.ChallengeSubmission;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -12,4 +13,5 @@ public interface ChallengeSubmissionDao {
     void insert(ChallengeSubmission [] challengeSubmission);
     ChallengeSubmission[] getChallengeSubmission(ChallengeSubmission challengeSubmission);
     List<Map<String,String>> getUserSubmissons();
+    List<ChallengeSubmission>getChallengeAndScore();
 }
