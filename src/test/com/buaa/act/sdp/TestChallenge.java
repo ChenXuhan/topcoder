@@ -6,6 +6,7 @@ import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.service.api.ChallengeApi;
 import com.buaa.act.sdp.service.cbm.ContentBased;
+import com.buaa.act.sdp.service.statistics.ChallengeStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class TestChallenge {
     @Autowired(required = false)
     private ChallengeItemDao challengeItemDao;
 
+    @Autowired
+    private ChallengeStatistics challengeStatistics;
+
     @Test
     public void test(){
 //        challengeApi.savePastChallenge();
@@ -49,5 +53,10 @@ public class TestChallenge {
     @Test
     public void testPhrase(){
         System.out.println(challengeApi.getChallengePhasesById(30018229));
+    }
+
+    @Test
+    public void updateChallenges(){
+        challengeStatistics.updateChallenges();
     }
 }

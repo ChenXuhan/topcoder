@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.dao;
 
 import com.buaa.act.sdp.bean.user.DevelopmentHistory;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -9,4 +10,5 @@ import java.util.List;
  */
 public interface DevelopmentHistoryDao {
     void insert(List<DevelopmentHistory>list);
+    List<DevelopmentHistory>getChallengeCountByHandle(@Param("handle") String handle);
 }

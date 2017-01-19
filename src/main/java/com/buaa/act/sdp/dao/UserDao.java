@@ -12,4 +12,6 @@ public interface UserDao {
      void insert(User user);
      User getUserByName(@Param("name") String name);
      List<String> getUsers();
+     List<User>getAllUsers();
+     void updateUsers(User user);
 }

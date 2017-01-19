@@ -22,7 +22,7 @@ public class ContentBased {
     private ChallengeItemDao challengeItemDao;
     private Map<Integer, Map<String, String>> userSubmissionMap;
     private Map<Integer, ChallengeItem> challengeMap;
-    private List<Integer> testChallenges;
+    private List<Integer> challenges;
     private int maxRequireMentLength;
     private int minRequireMentLength;
     private int maxDuration;
@@ -35,7 +35,7 @@ public class ContentBased {
         List<ChallengeSubmission> submission = challengeSubmissionDao.getChallengeAndScore();
         challengeMap = new HashMap<>();
         userSubmissionMap = new HashMap<>();
-        testChallenges = new ArrayList<>();
+        challenges = new ArrayList<>();
         challengeCount = 1;
         minRequireMentLength = Integer.MAX_VALUE;
         minReward = minRequireMentLength;
@@ -43,39 +43,26 @@ public class ContentBased {
         maxReward = 0;
         maxRequireMentLength = 0;
         maxDuration = maxRequireMentLength;
-        for (int i = 1; i < submission.size(); i++) {
-            if (submission.get(i).getChallengeID() != submission.get(i - 1).getChallengeID()) {
-                challengeCount++;
+        ChallengeItem item;
+        for (int i = 0; i < submission.size(); i++) {
+            if (i==0||submission.get(i).getChallengeID() != submission.get(i - 1).getChallengeID()) {
+                item=challengeItemDao.getChallengeItemById(submission.get(i).getChallengeID());
+                if(item.getChallengeType().equals("Assembly Competition")) {
+                    challengeMap.put(item.getChallengeId(),item);
+                    challengeCount++;
+                    challenges.add(item.getChallengeId());
+                    findMaxAndMinValue(item);
+                }
+            }
+            if (userSubmissionMap.containsKey(submission.get(i).getChallengeID())) {
+                userSubmissionMap.get(submission.get(i).getChallengeID()).put(submission.get(i).getHandle(), submission.get(i).getFinalScore());
+            } else {
+                Map<String, String> temp = new HashMap<>();
+                temp.put(submission.get(i).getHandle(), submission.get(i).getFinalScore());
+                userSubmissionMap.put(submission.get(i).getChallengeID(), temp);
             }
         }
         return submission;
-    }
-
-    public void getUserSubmissionsAndScore() {
-        List<ChallengeSubmission> submission = init();
-        ChallengeItem item;
-        int count = 0;
-        for (ChallengeSubmission challengeSubmission : submission) {
-            if (!challengeMap.containsKey(challengeSubmission.getChallengeID())) {
-                item = challengeItemDao.getChallengeItemById(challengeSubmission.getChallengeID());
-                if(!item.getChallengeType().equals("Development")){
-                    continue;
-                }
-                if (count >= challengeCount * 0.8) {
-                    testChallenges.add(challengeSubmission.getChallengeID());
-                }
-                count++;
-                findMaxAndMinValue(item);
-                challengeMap.put(challengeSubmission.getChallengeID(), item);
-            }
-            if (userSubmissionMap.containsKey(challengeSubmission.getChallengeID())) {
-                userSubmissionMap.get(challengeSubmission.getChallengeID()).put(challengeSubmission.getHandle(), challengeSubmission.getFinalScore());
-            } else {
-                Map<String, String> temp = new HashMap<>();
-                temp.put(challengeSubmission.getHandle(), challengeSubmission.getFinalScore());
-                userSubmissionMap.put(challengeSubmission.getChallengeID(), temp);
-            }
-        }
     }
 
     public void findMaxAndMinValue(ChallengeItem item) {
@@ -187,15 +174,15 @@ public class ContentBased {
 
     public List<String> contentBasedRecomend(ChallengeItem item) {
         if (userSubmissionMap == null) {
-            getUserSubmissionsAndScore();
+            init();
         }
         Map<String, List<Double>> map = new HashMap<>();
         ChallengeItem temp;
         double similarity;
-        for (Map.Entry<Integer, Map<String, String>> entry : userSubmissionMap.entrySet()) {
-            temp = challengeMap.get(entry.getKey());
-            if (temp.getChallengeId() < item.getChallengeId() && temp.getChallengeType().equals(item.getChallengeType())&&(similarity = calculateSimilarity(temp, item)) >= 0.6) {
-                for (Map.Entry<String, String> entrys : entry.getValue().entrySet()) {
+        for(Map.Entry<Integer,ChallengeItem>entry:challengeMap.entrySet()){
+            temp = entry.getValue();
+            if (temp.getChallengeId() < item.getChallengeId() &&(similarity = calculateSimilarity(temp, item)) >= 0.9) {
+                for (Map.Entry<String, String> entrys : userSubmissionMap.get(entry.getKey()).entrySet()) {
                     if (map.containsKey(entrys.getKey())) {
                         map.get(entrys.getKey()).add(Double.parseDouble(entrys.getValue()));
                         map.get(entrys.getKey()).add(similarity);
@@ -241,23 +228,23 @@ public class ContentBased {
 
     public void recommendAccurary() {
         if (userSubmissionMap == null) {
-            getUserSubmissionsAndScore();
+            init();
         }
         List<String> result = new ArrayList<>();
         Set<String> set = new HashSet<>();
         Map<String, String> map = new HashMap<>();
         double[] accurary = new double[]{0,0,0,0,0,0};
-        int count, min;
+        int count=(int)(challengeCount*0.8), min;
         int nums[] = new int[]{1,3,5,10,15,20};
-        for (int i = 0; i < testChallenges.size(); i++) {
-            result = contentBasedRecomend(challengeMap.get(testChallenges.get(i)));
-           set.clear();
+        for (int i = count; i < challenges.size(); i++) {
+            result = contentBasedRecomend(challengeMap.get(challenges.get(i)));
+            set.clear();
             for (int k = 0; k < nums.length; k++) {
                 min = Math.min(result.size(), nums[k]);
                 for (int j = 0; j < min; j++) {
                     set.add(result.get(j));
                 }
-                map = userSubmissionMap.get(testChallenges.get(i));
+                map = userSubmissionMap.get(challenges.get(i));
                 count = 0;
                 for (Map.Entry<String, String> entry : map.entrySet()) {
                     if (set.contains(entry.getKey())) {
@@ -269,8 +256,9 @@ public class ContentBased {
                 }
             }
         }
+        System.out.println(challengeCount+" "+challenges.size());
         for (int i = 0; i < nums.length; i++) {
-            System.out.println(nums[i] + "\t" + accurary[i] / testChallenges.size());
+            System.out.println(nums[i] + "\t" + accurary[i] / (challenges.size()-(int)(challengeCount*0.8)));
         }
     }
 }

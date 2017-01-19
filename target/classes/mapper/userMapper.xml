@@ -13,4 +13,12 @@
         select DISTINCT handle from user
     </select>
 
+    <select id="getAllUsers" resultType="com.buaa.act.sdp.bean.user.User">
+        SELECT * from user;
+    </select>
+
+    <update id="updateUsers" parameterType="com.buaa.act.sdp.bean.user.User">
+            UPDATE user set competitionNums=#{competitionNums},submissionNums=#{submissionNums},winNums=#{winNums} where handle=#{handle}
+    </update>
+
 </mapper>

@@ -18,7 +18,11 @@
     </select>
 
     <select id="getChallengeAndScore" resultType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission">
-        SELECT handle, challengeId, max(finalScore) as finalScore from  challenge_submission where challengeType='Development' GROUP BY challengeId,handle ORDER  BY challengeId asc
+        SELECT handle, challengeId, max(finalScore) as finalScore from  challenge_submission GROUP BY challengeId,handle ORDER  BY challengeId asc
+    </select>
+
+    <select id="getChallengeSubmissionCount" resultType="java.lang.Integer">
+        SELECT count(DISTINCT handle) from challenge_submission where challengeID=#{challengeId}
     </select>
 
 </mapper>

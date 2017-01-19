@@ -4,7 +4,9 @@ package com.buaa.act.sdp.common;
  * Created by yang on 2016/11/24.
  */
 public class Constant {
-    public static final String[] TECHNOLOGIES = {".NET",
+
+    public static final String[] TECHNOLOGIES = {
+            ".NET",
             ".NET System.Addins",
             "ADO.NET",
             "AJAX",
@@ -176,6 +178,12 @@ public class Constant {
             "jQuery",
             "jQuery Mobile",
             "tvOS"};
+
+    public static final String[]LANGUAGES={
+        "Java","C","C#","C++","Python","Go","HTML","HTML5", "R","Ruby", "Perl", "PHP","JavaScript","Swift","VB","Objective C",
+            "SQL","Matlab","Fortran","ActionScript"
+    };
+
     public static final String[] PLATFORMS = {"AWS",
             "Android",
             "Beanstalk",

@@ -12,4 +12,6 @@ public interface ChallengeItemDao {
      void insert(ChallengeItem challengeItem);
      ChallengeItem getChallengeItemById(@Param("challengeId") int challengeId);
      List<Integer> getChallenges();
+     List<ChallengeItem>getAllChallenges();
+     void updateChallenges(ChallengeItem item);
 }

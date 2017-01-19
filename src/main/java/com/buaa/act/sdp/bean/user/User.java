@@ -12,6 +12,33 @@ public class User {
     private String photoLink;
     private boolean copilot;
     private String[]skills;
+    private int competitionNums;
+    private int submissionNums;
+    private int winNums;
+
+    public int getSubmissionNums() {
+        return submissionNums;
+    }
+
+    public void setSubmissionNums(int submissionNums) {
+        this.submissionNums = submissionNums;
+    }
+
+    public int getCompetitionNums() {
+        return competitionNums;
+    }
+
+    public void setCompetitionNums(int competitionNums) {
+        this.competitionNums = competitionNums;
+    }
+
+    public int getWinNums() {
+        return winNums;
+    }
+
+    public void setWinNums(int winNums) {
+        this.winNums = winNums;
+    }
 
     public String[] getSkills() {
         return skills;
@@ -76,4 +103,5 @@ public class User {
     public void setCopilot(boolean copilot) {
         this.copilot = copilot;
     }
+
 }

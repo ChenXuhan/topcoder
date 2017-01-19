@@ -2,6 +2,7 @@ package com.buaa.act.sdp;
 
 import com.buaa.act.sdp.service.LinerRegression;
 import com.buaa.act.sdp.service.api.UserApi;
+import com.buaa.act.sdp.service.statistics.UserStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class TestUser {
     private UserApi  userApi;
     @Autowired
     private LinerRegression linerRegression;
+    @Autowired
+    private UserStatistics userStatistics;
+
     @Test
     public void testInsertUser(){
         userApi.getUserByName("iRabbit");
@@ -51,5 +55,8 @@ public class TestUser {
     public void getNumber(){
         //userApi.getNumbers();
     }
-
+    @Test
+    public void updateUsers(){
+        userStatistics.updateUsers();
+    }
 }

@@ -4,6 +4,7 @@ package com.buaa.act.sdp.bean.challenge;
  * Created by YLT on 2016/10/17.
  */
 public class ChallengeItem {
+
     private int challengeId;
     private String challengeName;
     private String challengeType;
@@ -26,10 +27,20 @@ public class ChallengeItem {
     private double digitalRunPoints;
     private double reliabilityBonus;
     private String []technology;
+    private String[]languages;
     private String []prize;
     private String []platforms;
     private int numSubmissions;
     private int numRegistrants;
+    private int duration;
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 
     public int getChallengeId() {
         return challengeId;
@@ -239,29 +250,16 @@ public class ChallengeItem {
         this.numRegistrants = numRegistrants;
     }
 
+    public String[] getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(String[] languages) {
+        this.languages = languages;
+    }
+
     @Override
     public String toString() {
         return challengeName+"+++"+detailedRequirements;
-        //return challengeId+challengeName+challengeType+ projectId+forumId+detailedRequirements;
-        /*private int screeningScorecardId;
-        private int reviewScorecardId;
-        private int numberOfCheckpointsPrizes;
-        private String topCheckPointPrize;
-        private String currentStatus;
-        private String postingDate;
-        private String registrationEndDate;
-        private String submissionEndDate;
-        private String finalFixEndDate;
-        private String appealsEndDate;
-        private String checkpointSubmissionEndDate;
-        private String forumLink;
-        private String registrationStartDate;
-        private double digitalRunPoints;
-        private double reliabilityBonus;
-        private String []technology;
-        private String []prize;
-        private String []platforms;
-        private int numSubmissions;
-        private int numRegistrants;*/
     }
 }
