@@ -1,6 +1,5 @@
 package com.buaa.act.sdp;
 
-import com.buaa.act.sdp.service.LinerRegression;
 import com.buaa.act.sdp.service.api.UserApi;
 import com.buaa.act.sdp.service.statistics.UserStatistics;
 import org.junit.Test;
@@ -17,46 +16,47 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class TestUser {
 
     @Autowired
-    private UserApi  userApi;
-    @Autowired
-    private LinerRegression linerRegression;
+    private UserApi userApi;
+
     @Autowired
     private UserStatistics userStatistics;
 
     @Test
-    public void testInsertUser(){
+    public void testInsertUser() {
         userApi.getUserByName("iRabbit");
-    }
-    @Test
-    public void testInsertDevelopment(){
-        userApi.getUserStatistics("lifeloner");
-    }
-    @Test
-    public void testInsertRatingHistory(){
-        userApi.getUserChallengeHistory("lifeloner","development");
     }
 
     @Test
-    public void testSaveUser(){
+    public void testInsertDevelopment() {
+        userApi.getUserStatistics("lifeloner");
+    }
+
+    @Test
+    public void testInsertRatingHistory() {
+        userApi.getUserChallengeHistory("lifeloner", "development");
+    }
+
+    @Test
+    public void testSaveUser() {
         //userApi.getUserStatistics("arthurjlp");
-       // userApi.getUserByName("arthurjlp");
+        // userApi.getUserByName("arthurjlp");
         //linerRegression.getDate("30055549");
         //userApi.saveUser("iRabbit");
     }
+
     @Test
-    public void test1(){
+    public void test1() {
         userApi.saveAllUsers();
     }
+
+
     @Test
-    public void  getUsers(){
-       linerRegression.getUsersSubmissions();
-    }
-    @Test
-    public void getNumber(){
+    public void getNumber() {
         //userApi.getNumbers();
     }
+
     @Test
-    public void updateUsers(){
+    public void updateUsers() {
         userStatistics.updateUsers();
     }
 }

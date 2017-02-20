@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.service.cbm;
+package com.buaa.act.sdp.service.recommend.cbm;
 
 import com.buaa.act.sdp.bean.challenge.ChallengeItem;
 import com.buaa.act.sdp.bean.challenge.ChallengeSubmission;
@@ -20,6 +20,7 @@ public class ContentBased {
     private ChallengeSubmissionDao challengeSubmissionDao;
     @Autowired
     private ChallengeItemDao challengeItemDao;
+
     private Map<Integer, Map<String, String>> userSubmissionMap;
     private Map<Integer, ChallengeItem> challengeMap;
     private List<Integer> challenges;
@@ -29,27 +30,26 @@ public class ContentBased {
     private int minDuration;
     private double maxReward;
     private double minReward;
-    private int challengeCount;
+    private Map<Integer,String>winner;
 
-    public List<ChallengeSubmission> init() {
+    public void init() {
         List<ChallengeSubmission> submission = challengeSubmissionDao.getChallengeAndScore();
         challengeMap = new HashMap<>();
         userSubmissionMap = new HashMap<>();
         challenges = new ArrayList<>();
-        challengeCount = 1;
+        winner=new HashMap<>();
         minRequireMentLength = Integer.MAX_VALUE;
         minReward = minRequireMentLength;
         minDuration = minRequireMentLength;
         maxReward = 0;
         maxRequireMentLength = 0;
-        maxDuration = maxRequireMentLength;
+        maxDuration = 0;
         ChallengeItem item;
         for (int i = 0; i < submission.size(); i++) {
-            if (i==0||submission.get(i).getChallengeID() != submission.get(i - 1).getChallengeID()) {
-                item=challengeItemDao.getChallengeItemById(submission.get(i).getChallengeID());
-                if(item.getChallengeType().equals("Assembly Competition")) {
-                    challengeMap.put(item.getChallengeId(),item);
-                    challengeCount++;
+            if (i == 0 || submission.get(i).getChallengeID() != submission.get(i - 1).getChallengeID()) {
+                item = challengeItemDao.getChallengeItemById(submission.get(i).getChallengeID());
+                if (item.getChallengeType().equals("Assembly Competition")) {
+                    challengeMap.put(item.getChallengeId(), item);
                     challenges.add(item.getChallengeId());
                     findMaxAndMinValue(item);
                 }
@@ -60,9 +60,9 @@ public class ContentBased {
                 Map<String, String> temp = new HashMap<>();
                 temp.put(submission.get(i).getHandle(), submission.get(i).getFinalScore());
                 userSubmissionMap.put(submission.get(i).getChallengeID(), temp);
+                winner.put(submission.get(i).getChallengeID(),submission.get(i).getHandle());
             }
         }
-        return submission;
     }
 
     public void findMaxAndMinValue(ChallengeItem item) {
@@ -103,85 +103,122 @@ public class ContentBased {
     public double calculateSimilarity(ChallengeItem one, ChallengeItem two) {
         double[] vectorOne = generateFeatureVector(one);
         double[] vectorTwo = generateFeatureVector(two);
-        double num = 0, a = 0, b = 0;
+        double similarty = 0;
         for (int i = 0; i < vectorOne.length; i++) {
-            num += vectorOne[i] * vectorTwo[i];
-            a += vectorOne[i] * vectorOne[i];
-            b += vectorTwo[i] * vectorTwo[i];
+            similarty += Math.abs(vectorOne[i] - vectorTwo[i]);
         }
-        return num / Math.sqrt(a * b);
+//        double num = 0, a = 0, b = 0;
+//        for (int i = 0; i < vectorOne.length; i++) {
+//            num += vectorOne[i] * vectorTwo[i];
+//            a += vectorOne[i] * vectorOne[i];
+//            b += vectorTwo[i] * vectorTwo[i];
+//        }
+//        return num / Math.sqrt(a * b);
+        Set<String>set=new HashSet<>();
+        if (one.getTechnology() != null && one.getTechnology().length > 0) {
+            for (String str : one.getTechnology()) {
+                set.add(str.toLowerCase());
+            }
+        }
+        int sum=set.size(),count=0;
+        if(two.getTechnology()!=null&&two.getTechnology().length>0){
+            for(String str:two.getTechnology()) {
+                if (set.contains(str.toLowerCase())){
+                    count++;
+                }else{
+                    sum++;
+                }
+            }
+        }
+        similarty+=(sum-count)/sum;
+        set.clear();
+        if (one.getPlatforms() != null && one.getPlatforms().length > 0) {
+            for (String str : one.getPlatforms()) {
+                set.add(str.toLowerCase());
+            }
+        }
+        sum=set.size();
+        count=0;
+        if(two.getPlatforms()!=null&&two.getPlatforms().length>0){
+            for(String str:two.getPlatforms()) {
+                if (set.contains(str.toLowerCase())){
+                    count++;
+                }else{
+                    sum++;
+                }
+            }
+        }
+        similarty+=(sum-count)/sum;
+        return 1-similarty/5;
     }
 
     public double[] generateFeatureVector(ChallengeItem item) {
-        double[] vector = new double[207];
+        double[] vector = new double[3];
         double num = minRequireMentLength;
         int k = 0;
         if (item.getDetailedRequirements() != null) {
             num = item.getDetailedRequirements().length();
         }
         vector[k++] = (num - minRequireMentLength) / (maxRequireMentLength - minRequireMentLength);
-        String[] strings = null, string = null;
-        if (item.getSubmissionEndDate() != null && item.getPostingDate() != null) {
-            item.getSubmissionEndDate().substring(0, 10).split("-");
-            item.getPostingDate().substring(0, 10).split("-");
-        }
-        num = minDuration;
-        if (strings != null && strings.length > 0 && string != null && string.length > 0) {
-            num = (Integer.parseInt(strings[0]) - Integer.parseInt(string[0])) * 365 + (Integer.parseInt(strings[1]) - Integer.parseInt(string[1])) * 30 + (Integer.parseInt(strings[2]) - Integer.parseInt(string[2]));
-        }
-        vector[k++] = (num - minDuration) / (maxDuration - minDuration);
+//        String[] strings = null, string = null;
+//        if (item.getSubmissionEndDate() != null && item.getPostingDate() != null) {
+//            strings=item.getSubmissionEndDate().substring(0, 10).split("-");
+//            string=item.getPostingDate().substring(0, 10).split("-");
+//        }
+//        num = minDuration;
+//        if (strings != null && strings.length > 0 && string != null && string.length > 0) {
+//            num = (Integer.parseInt(strings[0]) - Integer.parseInt(string[0])) * 365 + (Integer.parseInt(strings[1]) - Integer.parseInt(string[1])) * 30 + (Integer.parseInt(strings[2]) - Integer.parseInt(string[2]));
+//        }
+        vector[k++] = (item.getDuration() - minDuration) / (maxDuration - minDuration);
         num = minReward;
         if (item.getPrize() != null && item.getPrize().length > 0 && !item.getPrize()[0].equals("")) {
             num = Double.parseDouble(item.getPrize()[0]);
         }
         vector[k++] = (num - minReward) / (maxReward - minReward);
-        Set<String> set = new HashSet<>();
-        if (item.getTechnology() != null && item.getTechnology().length > 0) {
-            for (String str : item.getTechnology()) {
-                set.add(str);
-            }
-            for (String str : Constant.TECHNOLOGIES) {
-                if (set.contains(str)) {
-                    vector[k++] = 1;
-                } else {
-                    vector[k++] = 0;
-                }
-            }
-        } else {
-            for (int i = 0; i < Constant.TECHNOLOGIES.length; i++) {
-                vector[k++] = 0;
-            }
-        }
-        set.clear();
-        if (item.getPlatforms() != null && item.getPlatforms().length > 0) {
-            for (String str : item.getPlatforms()) {
-                set.add(str);
-            }
-            for (String str : Constant.PLATFORMS) {
-                if (set.contains(str)) {
-                    vector[k++] = 1;
-                } else {
-                    vector[k++] = 0;
-                }
-            }
-        } else {
-            for (String str : Constant.PLATFORMS) {
-                vector[k++] = 0;
-            }
-        }
-        return vector;
+//        Set<String> set = new HashSet<>();
+//        if (item.getTechnology() != null && item.getTechnology().length > 0) {
+//            for (String str : item.getTechnology()) {
+//                set.add(str);
+//            }
+//            for (String str : Constant.TECHNOLOGIES) {
+//                if (set.contains(str)) {
+//                    vector[k++] = 1;
+//                } else {
+//                    vector[k++] = 0;
+//                }
+//            }
+//        } else {
+//            for (int i = 0; i < Constant.TECHNOLOGIES.length; i++) {
+//                vector[k++] = 0;
+//            }
+//        }
+//        set.clear();
+//        if (item.getPlatforms() != null && item.getPlatforms().length > 0) {
+//            for (String str : item.getPlatforms()) {
+//                set.add(str);
+//            }
+//            for (String str : Constant.PLATFORMS) {
+//                if (set.contains(str)) {
+//                    vector[k++] = 1;
+//                } else {
+//                    vector[k++] = 0;
+//                }
+//            }
+//        } else {
+//            for (String str : Constant.PLATFORMS) {
+//                vector[k++] = 0;
+//            }
+//        }
+  return vector;
     }
 
     public List<String> contentBasedRecomend(ChallengeItem item) {
-        if (userSubmissionMap == null) {
-            init();
-        }
         Map<String, List<Double>> map = new HashMap<>();
         ChallengeItem temp;
         double similarity;
-        for(Map.Entry<Integer,ChallengeItem>entry:challengeMap.entrySet()){
+        for (Map.Entry<Integer, ChallengeItem> entry : challengeMap.entrySet()) {
             temp = entry.getValue();
-            if (temp.getChallengeId() < item.getChallengeId() &&(similarity = calculateSimilarity(temp, item)) >= 0.9) {
+            if (temp.getChallengeId() < item.getChallengeId() && (similarity = calculateSimilarity(temp, item)) >= 0.8) {
                 for (Map.Entry<String, String> entrys : userSubmissionMap.get(entry.getKey()).entrySet()) {
                     if (map.containsKey(entrys.getKey())) {
                         map.get(entrys.getKey()).add(Double.parseDouble(entrys.getValue()));
@@ -196,14 +233,17 @@ public class ContentBased {
             }
         }
         List<Double> list = null;
-        double score;
+        double score, weight;
         Map<String, Double> userRank = new HashMap<>();
         for (Map.Entry<String, List<Double>> data : map.entrySet()) {
             list = data.getValue();
             score = 0;
+            weight = 0;
             for (int i = 0; i < list.size(); i += 2) {
                 score += list.get(i) * list.get(i + 1);
+                weight += list.get(i + 1);
             }
+            score = score / weight;
             userRank.put(data.getKey(), score);
         }
         List<Map.Entry<String, Double>> recommendResult = new ArrayList<>();
@@ -230,12 +270,13 @@ public class ContentBased {
         if (userSubmissionMap == null) {
             init();
         }
-        List<String> result = new ArrayList<>();
+        List<String> result;
         Set<String> set = new HashSet<>();
-        Map<String, String> map = new HashMap<>();
-        double[] accurary = new double[]{0,0,0,0,0,0};
-        int count=(int)(challengeCount*0.8), min;
-        int nums[] = new int[]{1,3,5,10,15,20};
+       // Map<String, String> map = new HashMap<>();
+        String handle;
+        double[] accurary = new double[]{0, 0, 0, 0, 0, 0};
+        int count = (int) (challenges.size() * 0.8), min;
+        int nums[] = new int[]{1, 3, 5, 10, 15, 20};
         for (int i = count; i < challenges.size(); i++) {
             result = contentBasedRecomend(challengeMap.get(challenges.get(i)));
             set.clear();
@@ -244,21 +285,23 @@ public class ContentBased {
                 for (int j = 0; j < min; j++) {
                     set.add(result.get(j));
                 }
-                map = userSubmissionMap.get(challenges.get(i));
-                count = 0;
-                for (Map.Entry<String, String> entry : map.entrySet()) {
-                    if (set.contains(entry.getKey())) {
-                        count++;
-                    }
-                }
-                if (result.size() > 0) {
-                    accurary[k] += count / min;
+                handle = winner.get(challenges.get(i));
+//                count = 0;
+//                for (Map.Entry<String, String> entry : map.entrySet()) {
+//                    if (set.contains(entry.getKey())) {
+//                        count++;
+//                    }
+//                }
+//                if (count > 0) {
+//                    accurary[k] += 1;
+//                }
+                if(set.contains(handle)){
+                    accurary[k]+=1;
                 }
             }
         }
-        System.out.println(challengeCount+" "+challenges.size());
         for (int i = 0; i < nums.length; i++) {
-            System.out.println(nums[i] + "\t" + accurary[i] / (challenges.size()-(int)(challengeCount*0.8)));
+            System.out.println(nums[i] + "\t" + accurary[i] / (challenges.size() - (int) (challenges.size() * 0.8)));
         }
     }
 }

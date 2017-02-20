@@ -217,5 +217,5 @@ public class Constant {
             "Wordpress",
             "iOS"};
 
-    public static final String DIRECTORY = "F:/arff/";
+    public static final String DIRECTORY = "F:/arff/classifier/";
 }

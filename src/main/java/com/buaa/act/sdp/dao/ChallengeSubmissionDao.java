@@ -16,4 +16,5 @@ public interface ChallengeSubmissionDao {
     List<Map<String,String>> getUserSubmissons();
     List<ChallengeSubmission>getChallengeAndScore();
     int getChallengeSubmissionCount(@Param("challengeId") int challengeId);
+    List<ChallengeSubmission>getChallengeWinner();
 }
