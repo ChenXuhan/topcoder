@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8383e2c-457c-4ccb-bf59-3a45a0db25db" name="Default" comment="topcoder-challenge">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/RecommendResult.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/cbm/ContentBase.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/cbm/ContentBased.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/statistics/ChallengeStatistics.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/statistics/UserStatistics.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeSubmissionDao.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeSubmissionDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/api/UserApi.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/api/UserApi.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/com/buaa/act/sdp/TestChallenge.class" afterPath="$PROJECT_DIR$/target/test-classes/com/buaa/act/sdp/TestChallenge.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/com/buaa/act/sdp/TestUser.class" afterPath="$PROJECT_DIR$/target/test-classes/com/buaa/act/sdp/TestUser.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeSubmissionDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeSubmissionDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserApi.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserApi.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/classification/Bayes.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/classification/Bayes.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestChallenge.java" afterPath="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestChallenge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestUser.java" afterPath="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestUser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/challengeSubmissionMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/challengeSubmissionMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/topcoder.iml" afterPath="$PROJECT_DIR$/topcoder.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/classification/TfIdf.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/WordCount.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/statistics/ChallengeStatistics.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/update/ChallengeStatistics.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/statistics/UserStatistics.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/update/UserStatistics.java" />
-    </list>
+    <list default="true" id="b8383e2c-457c-4ccb-bf59-3a45a0db25db" name="Default" comment="topcoder-challenge" />
     <ignored path="topcoder.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
