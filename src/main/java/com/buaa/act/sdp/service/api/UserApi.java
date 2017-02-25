@@ -115,10 +115,10 @@ public class UserApi {
     public void getUserStatistics(String userName) {
         String string = null;
         try {
-            string = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/statistics/develop");
+            string = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/update/develop");
         } catch (Exception e) {
-            System.err.println("time out statistics " + userName);
-            timeOutDao.insertTimeOutData("statistics", userName);
+            System.err.println("time out update " + userName);
+            timeOutDao.insertTimeOutData("update", userName);
         }
         if (string != null) {
             handUserDevelopmentInfo(userName, string);
@@ -128,7 +128,7 @@ public class UserApi {
     public void getUserChallengeHistory(String userName, String challengeType) {
         String json = null;
         try {
-            json = RequestUtil.request("http://api.topcoder.com/v2/develop/statistics/" + userName + "/" + challengeType);
+            json = RequestUtil.request("http://api.topcoder.com/v2/develop/update/" + userName + "/" + challengeType);
         } catch (Exception e) {
             System.err.println("time out history " + userName + "_" + challengeType);
             timeOutDao.insertTimeOutData("history", userName + "_" + challengeType);

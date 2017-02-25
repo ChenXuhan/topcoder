@@ -3,10 +3,9 @@ package com.buaa.act.sdp;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.service.api.ChallengeApi;
-import com.buaa.act.sdp.service.recommend.cbm.ContentBased;
-import com.buaa.act.sdp.service.recommend.classification.Bayes;
-import com.buaa.act.sdp.service.recommend.classification.FeatureExtract;
-import com.buaa.act.sdp.service.statistics.ChallengeStatistics;
+import com.buaa.act.sdp.service.recommend.RecommendResult;
+import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
+import com.buaa.act.sdp.service.update.ChallengeStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,8 @@ public class TestChallenge {
     @Autowired(required = false)
     private ChallengeSubmissionDao challengeSubmissionDao;
 
-    @Autowired
-    private ContentBased contentBased;
+    @Autowired(required = false)
+    private ContentBase contentBase;
 
     @Autowired(required = false)
     private ChallengeItemDao challengeItemDao;
@@ -36,22 +35,12 @@ public class TestChallenge {
     private ChallengeStatistics challengeStatistics;
 
     @Autowired
-    private FeatureExtract featureExtract;
-
-    @Autowired
-    private Bayes bayes;
+    private RecommendResult recommendResult;
 
     @Test
     public void test() {
-//        challengeApi.savePastChallenge();
-//        System.out.println(Constant.PLATFORMS.length);
-//        System.out.println(challengeSubmissionDao.getChallengeAndScore().get(5).getFinalScore());
-//        ChallengeItem item= challengeItemDao.getChallengeItemById(30055474);
-//        System.out.println(contentBased.contentBasedRecomend(item));
-        contentBased.recommendAccurary();
-//        featureExtract.getFeatures();
-//            featureExtract.weka();
-      //  System.out.println(bayes.calAccurary());
+//        recommendResult.getRecommendResult();
+        recommendResult.getRecommendUcl();
     }
 
     @Test

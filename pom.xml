@@ -174,11 +174,11 @@
       <version>1.0.6</version>
     </dependency>
 
-    <!--<dependency>-->
-      <!--<groupId>org.apache.lucene</groupId>-->
-      <!--<artifactId>lucene-core</artifactId>-->
-      <!--<version>5.2.1</version>-->
-    <!--</dependency>-->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.2</version>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.lucene</groupId>

@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.service.statistics;
+package com.buaa.act.sdp.service.update;
 
 import com.buaa.act.sdp.bean.user.DevelopmentHistory;
 import com.buaa.act.sdp.bean.user.User;

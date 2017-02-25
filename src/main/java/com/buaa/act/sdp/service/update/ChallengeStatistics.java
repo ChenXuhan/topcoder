@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.service.statistics;
+package com.buaa.act.sdp.service.update;
 
 import com.buaa.act.sdp.bean.challenge.ChallengeItem;
 import com.buaa.act.sdp.common.Constant;

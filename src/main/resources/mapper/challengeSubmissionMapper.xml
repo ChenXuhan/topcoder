@@ -10,22 +10,18 @@
     </insert>
 
     <select id="getChallengeSubmission" parameterType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission" resultType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission">
-        select * from challenge_submission where challengeID = #{challengeID} AND handle = #{handle}
+        select * from challenge_submission where challengeID = #{challengeID} AND handle = #{handle};
     </select>
 
     <select id="getUserSubmissons" resultType="java.util.Map">
-        select handle,group_concat(CAST(challengeID as char)) as challengeIds,group_concat(finalScore) as scores from challenge_submission group by handle having count(DISTINCT  challengeID)>=10
-    </select>
-
-    <select id="getChallengeAndScore" resultType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission">
-        SELECT handle, challengeId, max(finalScore) as finalScore from  challenge_submission GROUP BY challengeId,handle ORDER  BY challengeId asc,finalScore desc
+        select handle,group_concat(CAST(challengeID as char)) as challengeIds,group_concat(finalScore) as scores from challenge_submission group by handle having count(DISTINCT  challengeID)>=10;
     </select>
 
     <select id="getChallengeSubmissionCount" resultType="java.lang.Integer">
-        SELECT count(DISTINCT handle) from challenge_submission where challengeID=#{challengeId}
+        SELECT count(DISTINCT handle) from challenge_submission where challengeID=#{challengeId};
     </select>
 
     <select id="getChallengeWinner" resultType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission">
-        SELECT handle, challengeId, max(finalScore) as finalScore from  challenge_submission where submissionStatus='Active'GROUP BY challengeId
+        SELECT handle,challengeId,finalScore,placement,submissionStatus from  challenge_submission ORDER BY challengeID ASC;
     </select>
 </mapper>
