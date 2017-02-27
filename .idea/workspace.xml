@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8383e2c-457c-4ccb-bf59-3a45a0db25db" name="Default" comment="topcoder-challenge">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/FeatureExtract.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/FeatureExtract.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/RecommendResult.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/RecommendResult.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/FeatureExtract.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/FeatureExtract.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/RecommendResult.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/RecommendResult.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/WordCount.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/WordCount.java" />
     </list>
     <ignored path="topcoder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -121,8 +116,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="33">
-              <caret line="1" column="7" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
+            <state relative-caret-position="165">
+              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -1000,7 +995,7 @@
       <workItem from="1487406230456" duration="92324000" />
       <workItem from="1487725262884" duration="107472000" />
       <workItem from="1488074836991" duration="11680000" />
-      <workItem from="1488181314226" duration="148000" />
+      <workItem from="1488181314226" duration="333000" />
     </task>
     <servers>
       <YouTrack shared="false" url="">
@@ -1050,7 +1045,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="662386000" />
+    <option name="totallyTimeSpent" value="662571000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1492,8 +1487,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="33">
-          <caret line="1" column="7" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
+        <state relative-caret-position="165">
+          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
           <folding />
         </state>
       </provider>
