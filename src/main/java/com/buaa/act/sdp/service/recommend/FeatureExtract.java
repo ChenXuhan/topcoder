@@ -112,7 +112,7 @@ public class FeatureExtract {
             return false;
         }
         String str = challengeItem.getChallengeType();
-        if (!str.equals("First2Finish")) {
+        if (!str.equals("Design")) {
             return false;
         }
         if (challengeItem.getDetailedRequirements() == null || challengeItem.getDetailedRequirements().length() == 0) {

@@ -104,7 +104,7 @@ public class WordCount {
 //                            return o2.getValue() - o1.getValue();
 //                        }
 //                    });
-//                    for (int j = 0; j < 15 && j < list.size(); j++) {
+//                    for (int j = 0; j < 10 && j < list.size(); j++) {
 //                        if (allWords.containsKey(list.get(j).getKey())) {
 //                            allWords.put(list.get(j).getKey(), allWords.get(list.get(j).getKey()) + 1);
 //                        } else {
