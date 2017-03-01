@@ -39,8 +39,8 @@ public class TestChallenge {
 
     @Test
     public void test() {
-//        recommendResult.getRecommendResult();
-        recommendResult.getRecommendUcl();
+        recommendResult.getRecommendResult();
+//        recommendResult.getRecommendUcl();
     }
 
     @Test
