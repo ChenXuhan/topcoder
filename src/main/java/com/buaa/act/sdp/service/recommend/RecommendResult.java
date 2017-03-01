@@ -3,6 +3,7 @@ package com.buaa.act.sdp.service.recommend;
 import com.buaa.act.sdp.bean.challenge.ChallengeItem;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.recommend.classification.Bayes;
+import com.buaa.act.sdp.service.recommend.classification.Knn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ public class RecommendResult {
     private ContentBase contentBase;
     @Autowired
     private FeatureExtract featureExtract;
+    @Autowired
+    private Knn knn;
 
     public void getRecommendResult() {
         double[][] features = featureExtract.getFeatures();
@@ -33,13 +36,15 @@ public class RecommendResult {
         }
         List<Map<String, Double>> bayesResult = bayes.getRecommendResult(features, winners, start);
         List<Map<String, Double>> cbmResult = contentBase.getRecommendResult(features, start, scores);
+        List<Map<String, Integer>> knnResult = knn.getRecommendResult(features, start, winners);
         List<String> worker;
         int[] num = new int[]{1, 5, 10, 20};
         int[] count = new int[]{0, 0, 0, 0};
         for (int i = start; i < winners.size(); i++) {
 //            worker = recommendWorker(bayesResult.get(i-start));
 //            worker = recommendWorker(cbmResult.get(i));
-            worker = recommendWorker(bayesResult.get(i - start), cbmResult.get(i - start));
+            worker = recommendKnnWorker(knnResult.get(i));
+            //worker = recommendWorker(bayesResult.get(i - start), cbmResult.get(i - start));
             for (int j = 0; j < num.length; j++) {
                 for (int k = 0; k < worker.size() && k < num[j]; k++) {
                     if (winners.get(i).equals(worker.get(k))) {
@@ -116,6 +121,22 @@ public class RecommendResult {
         Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
             @Override
             public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        for (int i = 0; i < list.size() && i < 20; i++) {
+            workers.add(list.get(i).getKey());
+        }
+        return workers;
+    }
+
+    public List<String> recommendKnnWorker(Map<String, Integer> map) {
+        List<String> workers = new ArrayList<>();
+        List<Map.Entry<String, Integer>> list = new ArrayList<>();
+        list.addAll(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
                 return o2.getValue().compareTo(o1.getValue());
             }
         });

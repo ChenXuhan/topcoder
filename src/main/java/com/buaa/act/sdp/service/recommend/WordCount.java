@@ -50,6 +50,10 @@ public class WordCount {
         this.taskWordCount = taskWordCount;
     }
 
+    public int getWordSize(){
+        return allWords.size();
+    }
+
     public List<String>[] getWordsFromText(String[] texts) {
         Analyzer analyzer = new StandardAnalyzer();
         TokenStream tokenStream = null;
