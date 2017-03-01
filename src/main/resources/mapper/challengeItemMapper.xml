@@ -75,4 +75,24 @@
           UPDATE challenge_item SET duration=#{duration} , numSubmissions=#{numSubmissions} , numRegistrants=#{numRegistrants} ,languages=#{languages} where challengeId=#{challengeId}
     </update>
 
+    <select id="getAllPrizes" resultType="java.lang.String">
+        select prize from challenge_item
+    </select>
+
+    <select id="getAllReliabilityBonus" resultType="java.lang.Integer">
+        select reliabilityBonus from challenge_item
+    </select>
+
+    <select id="getAllDuration" resultType="java.lang.Integer">
+        select duration from challenge_item
+    </select>
+
+    <select id="getAllNumRegistrants" resultType="java.lang.Integer">
+        select numRegistrants from challenge_item
+    </select>
+
+    <select id="getAllNumSubmissions" resultType="java.lang.Integer">
+        select numSubmissions from challenge_item
+    </select>
+
 </mapper>

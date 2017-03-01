@@ -13,4 +13,5 @@ public interface ChallengeRegistrantDao {
     ChallengeRegistrant[] getChallengeRegistrant(ChallengeRegistrant challengeRegistrant);
     String[] getUsers();
     int getRegistrantCountById(@Param("challengeId") int challengeId);
+    ChallengeRegistrant[] getRegistrantById(@Param("challengeId") int challengeId);
 }
