@@ -3,7 +3,7 @@ package com.buaa.act.sdp.dao;
 import com.buaa.act.sdp.bean.challenge.ChallengeItem;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by yang on 2016/10/19.
@@ -14,4 +14,9 @@ public interface ChallengeItemDao {
      List<Integer> getChallenges();
      List<ChallengeItem>getAllChallenges();
      void updateChallenges(ChallengeItem item);
+     String[] getAllPrizes();
+     Integer[] getAllReliabilityBonus();
+     Integer[] getAllDuration();
+     Integer[] getAllNumRegistrants();
+     Integer[] getAllNumSubmissions();
 }
