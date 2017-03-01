@@ -4,175 +4,10 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b8383e2c-457c-4ccb-bf59-3a45a0db25db" name="Default" comment="topcoder-challenge">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/AbilityExp.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserAbility.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_jniloader_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_core_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_native_ref_java_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_native_system_java_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_ref_linux_armhf_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_ref_linux_i686_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_ref_linux_x86_64_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_ref_osx_x86_64_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_ref_win_i686_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_ref_win_x86_64_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_system_linux_armhf_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_system_linux_i686_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_system_linux_x86_64_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_system_osx_x86_64_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_system_win_i686_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_github_fommil_netlib_netlib_native_system_win_x86_64_natives_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_googlecode_matrix_toolkits_java_mtj_1_0_4.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_googlecode_netlib_java_netlib_java_1_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_sourceforge_f2j_arpack_combined_all_0_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__nz_ac_waikato_cms_weka_thirdparty_bounce_0_18.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__nz_ac_waikato_cms_weka_thirdparty_java_cup_11b_2015_03_26.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__nz_ac_waikato_cms_weka_thirdparty_java_cup_11b_runtime_2015_03_26.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__nz_ac_waikato_cms_weka_weka_stable_3_8_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder.war" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/challenge/ChallengeItem.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/challenge/ChallengePhase.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/challenge/ChallengeRegistrant.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/challenge/ChallengeSubmission.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/challenge/PastChallenge.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/user/Development.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/user/DevelopmentHistory.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/user/RatingHistory.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/user/Skill.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/bean/user/User.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/common/Constant.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/controller/UserController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/dao/ChallengeItemDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/dao/ChallengePhaseDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/dao/ChallengeRegistrantDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/dao/ChallengeSubmissionDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/dao/DevelopmentDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/dao/DevelopmentHistoryDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/dao/RatingHistoryDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/dao/TimeOutDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/dao/UserDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/service/LinerRegression.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/service/api/ChallengeApi.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/service/api/UserApi.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/service/cbm/ContentBased$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/service/cbm/ContentBased.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/FileUtil.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/HttpUtils.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/JsonUtil$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/JsonUtil.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/RequestUtil.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/com/buaa/act/sdp/util/StringArrayTypeHandler.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/conf/applicationContext.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/conf/mybatis-config.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/conf/spring-mybatis.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/conf/spring-service.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/conf/spring-servlet.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/challengeItemMapper.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/challengePhaseMapper.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/challengeRegistrantMapper.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/challengeSubmissionMapper.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/developmentHistoryMapper.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/developmentMapper.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/ratingHistoryMapper.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/timeOutMapper.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/mapper/userMapper.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/properties/jdbc.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/classes/properties/log4j.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/aopalliance-1.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/aopalliance-repackaged-2.2.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/arpack_combined_all-0.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/bounce-0.18.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/c3p0-0.9.1.2.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/commons-codec-1.4.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/commons-logging-1.2.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/core-1.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/gson-2.4.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/hk2-api-2.2.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/hk2-locator-2.2.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/hk2-utils-2.2.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/httpclient-4.1.2.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/httpcore-4.1.2.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jackson-annotations-2.7.4.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jackson-core-2.7.4.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jackson-core-asl-1.9.13.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jackson-databind-2.7.4.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jackson-jaxrs-1.9.13.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jackson-mapper-asl-1.9.13.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jackson-xc-1.9.13.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/java-cup-11b-2015.03.26.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/java-cup-11b-runtime-2015.03.26.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/javassist-3.18.1-GA.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/javax.annotation-api-1.2.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/javax.inject-2.2.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/javax.servlet-api-3.1.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/javax.ws.rs-api-2.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jersey-client-2.8.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jersey-common-2.8.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jersey-guava-2.8.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jersey-media-json-jackson-2.8.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/jniloader-1.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/log4j-1.2.17.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/mtj-1.0.4.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/mybatis-3.4.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/mybatis-spring-1.3.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/mysql-connector-java-5.1.34.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/native_ref-java-1.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/native_system-java-1.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-java-1.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_ref-linux-armhf-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_ref-linux-i686-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_ref-linux-x86_64-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_ref-osx-x86_64-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_ref-win-i686-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_ref-win-x86_64-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_system-linux-armhf-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_system-linux-i686-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_system-linux-x86_64-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_system-osx-x86_64-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_system-win-i686-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/netlib-native_system-win-x86_64-1.1-natives.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/osgi-resource-locator-1.0.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/slf4j-api-1.7.14.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/slf4j-log4j12-1.7.14.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-aop-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-beans-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-context-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-context-support-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-core-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-expression-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-jdbc-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-oxm-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-tx-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-web-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/spring-webmvc-4.1.5.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/lib/weka-stable-3.8.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/WEB-INF/web.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/topcoder/index.jsp" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeItemDao.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeItemDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeSubmissionDao.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeSubmissionDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/api/ChallengeApi.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/api/ChallengeApi.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/FeatureExtract.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/FeatureExtract.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/RecommendResult.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/RecommendResult.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/WordCount.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/WordCount.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/cbm/ContentBase.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/cbm/ContentBase.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/classification/Bayes.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/recommend/classification/Bayes.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/update/ChallengeStatistics.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/update/ChallengeStatistics.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/update/UserStatistics.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/service/update/UserStatistics.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/JsonUtil.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/util/JsonUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/com/buaa/act/sdp/TestChallenge.class" afterPath="$PROJECT_DIR$/target/test-classes/com/buaa/act/sdp/TestChallenge.class" />
+    <list default="true" id="b8383e2c-457c-4ccb-bf59-3a45a0db25db" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeRegistrantDao.class" afterPath="$PROJECT_DIR$/target/classes/com/buaa/act/sdp/dao/ChallengeRegistrantDao.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeItemDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeItemDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeRegistrantDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeRegistrantDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeSubmissionDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeSubmissionDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/challengeItemMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/challengeItemMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/challengeRegistrantMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/challengeRegistrantMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/challengeSubmissionMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestChallenge.java" afterPath="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestChallenge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/challengeItemMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/challengeItemMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/challengeSubmissionMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/challengeSubmissionMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/topcoder.iml" afterPath="$PROJECT_DIR$/topcoder.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/challengeRegistrantMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/challengeRegistrantMapper.xml" />
     </list>
     <ignored path="topcoder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -221,11 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DatabaseOpe.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DatabaseOpe.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/DatabaseOpe.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="87">
-              <caret line="145" column="17" selection-start-line="145" selection-start-column="17" selection-end-line="145" selection-end-column="17" />
+            <state relative-caret-position="277">
+              <caret line="23" column="46" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#617#634#0" expanded="true" />
@@ -244,7 +79,7 @@
       <file leaf-file-name="UserAbility.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserAbility.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
+            <state relative-caret-position="638">
               <caret line="44" column="67" selection-start-line="44" selection-start-column="67" selection-end-line="45" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -253,10 +88,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AbilityExp.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AbilityExp.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/AbilityExp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="923">
+            <state relative-caret-position="1539">
               <caret line="81" column="5" selection-start-line="81" selection-start-column="5" selection-end-line="81" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -359,10 +194,10 @@
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/dao/ChallengeRegistrantDao.java" />
         <option value="$PROJECT_DIR$/src/main/resources/mapper/challengeRegistrantMapper.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserAbility.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/DatabaseOpe.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/AbilityExp.java" />
         <option value="$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestChallenge.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/classification/CoderSort.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/DatabaseOpe.java" />
       </list>
     </option>
   </component>
@@ -1608,8 +1443,16 @@
       <workItem from="1486989739323" duration="46153000" />
       <workItem from="1487406230456" duration="92324000" />
       <workItem from="1487725262884" duration="106725000" />
-      <workItem from="1488028914178" duration="58275000" />
+      <workItem from="1488028914178" duration="58450000" />
     </task>
+    <task id="LOCAL-00001" summary="排序简单实现">
+      <created>1488371159776</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1488371159776</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers>
       <YouTrack shared="false" url="">
         <commitMessageFormat>{id} {summary}</commitMessageFormat>
@@ -1658,7 +1501,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="708086000" />
+    <option name="totallyTimeSpent" value="708261000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1679,7 +1522,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329718" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19296375" sideWeight="0.49566162" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19296375" sideWeight="0.49566162" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17537314" sideWeight="0.5043384" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30260304" sideWeight="0.4978678" order="1" side_tool="false" content_ui="tabs" />
@@ -1743,7 +1586,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="topcoder-challenge" />
-    <option name="LAST_COMMIT_MESSAGE" value="topcoder-challenge" />
+    <MESSAGE value="排序简单实现" />
+    <option name="LAST_COMMIT_MESSAGE" value="排序简单实现" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2069,27 +1913,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserAbility.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="44" column="67" selection-start-line="44" selection-start-column="67" selection-end-line="45" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/AbilityExp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="923">
-          <caret line="81" column="5" selection-start-line="81" selection-start-column="5" selection-end-line="81" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#967#975#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/classification/CoderSort.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
@@ -2108,8 +1931,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/DatabaseOpe.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="145" column="17" selection-start-line="145" selection-start-column="17" selection-end-line="145" selection-end-column="17" />
+        <state relative-caret-position="277">
+          <caret line="23" column="46" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#617#634#0" expanded="true" />
@@ -2120,6 +1943,27 @@
             <element signature="method#maxMinIntFind#0;class#DatabaseOpe#0" expanded="false" />
             <element signature="e#5380#5381#0" expanded="true" />
             <element signature="e#5440#5441#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserAbility.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="44" column="67" selection-start-line="44" selection-start-column="67" selection-end-line="45" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/AbilityExp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1539">
+          <caret line="81" column="5" selection-start-line="81" selection-start-column="5" selection-end-line="81" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#967#975#0" expanded="true" />
           </folding>
         </state>
       </provider>

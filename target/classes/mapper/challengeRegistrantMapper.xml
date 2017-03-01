@@ -21,4 +21,8 @@
         select count(DISTINCT handle) from challenge_registrant where challengeID=#{challengeId}
     </select>
 
+    <select id="getRegistrantById" resultType="com.buaa.act.sdp.bean.challenge.ChallengeRegistrant">
+        select * from challenge_registrant where challengeID=#{challengeId}
+    </select>
+
 </mapper>
