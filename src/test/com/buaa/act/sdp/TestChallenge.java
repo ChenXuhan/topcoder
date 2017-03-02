@@ -47,7 +47,7 @@ public class TestChallenge {
     private AbilityExp exp;
 
     @Test
-    public void test() {
+    public void testrecommend() {
         recommendResult.getRecommendResult();
 //        recommendResult.getRecommendUcl();
     }

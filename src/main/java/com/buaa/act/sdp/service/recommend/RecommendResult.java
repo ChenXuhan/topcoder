@@ -34,9 +34,9 @@ public class RecommendResult {
         for (int i = 0; i < start; i++) {
             scores.add(score.get(items.get(i).getChallengeId()));
         }
-        List<Map<String, Double>> bayesResult = bayes.getRecommendResult(features, winners, start);
-        List<Map<String, Double>> cbmResult = contentBase.getRecommendResult(features, start, scores);
-        List<Map<String, Integer>> knnResult = knn.getRecommendResult(features, start, winners);
+//        List<Map<String, Double>> bayesResult = bayes.getRecommendResult(features, winners, start);
+//        List<Map<String, Double>> cbmResult = contentBase.getRecommendResult(features, start, scores);
+        List<Map<String, Integer>> knnResult = knn.getRecommendResult(features, 1,start, winners);
         List<String> worker;
         int[] num = new int[]{1, 5, 10, 20};
         int[] count = new int[]{0, 0, 0, 0};

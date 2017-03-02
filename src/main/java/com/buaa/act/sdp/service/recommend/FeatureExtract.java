@@ -198,7 +198,7 @@ public class FeatureExtract {
 
     //UCL中KNN分类器特征
     public double[][] generateVectorUcl() {
-        double[][] paymentAndDuration = new double[2][items.size()];
+        double[][] paymentAndDuration = new double[items.size()][2];
         String[] requirements = new String[items.size()];
         String[] title = new String[items.size()];
         double [][] skills = new double[items.size()][Constant.TECHNOLOGIES.length];
@@ -211,10 +211,10 @@ public class FeatureExtract {
             temp = items.get(i).getTechnology();
             Set<String>set=new HashSet<>();
             for(String str:temp){
-                set.add(str);
+                set.add(str.toLowerCase());
             }
             for(int j=0;j<Constant.TECHNOLOGIES.length;j++){
-                if(set.contains(Constant.TECHNOLOGIES[j])){
+                if(set.contains(Constant.TECHNOLOGIES[j].toLowerCase())){
                     skills[i][j]=1.0;
                 }else {
                     skills[i][j]=0;
@@ -223,17 +223,17 @@ public class FeatureExtract {
             set.clear();
             temp = items.get(i).getPlatforms();
             for(String str:temp){
-                set.add(str);
+                set.add(str.toLowerCase());
             }
             for(int j=0;j<Constant.PLATFORMS.length;j++){
-                if(set.contains(Constant.PLATFORMS[j])){
+                if(set.contains(Constant.PLATFORMS[j].toLowerCase())){
                     platforms[i][j]=1.0;
                 }else {
                     platforms[i][j]=0;
                 }
             }
-            paymentAndDuration[0][i] = Double.parseDouble(items.get(i).getPrize()[0]);
-            paymentAndDuration[1][i] = items.get(i).getDuration();
+            paymentAndDuration[i][0] = Double.parseDouble(items.get(i).getPrize()[0]);
+            paymentAndDuration[i][1] = items.get(i).getDuration();
         }
         WordCount tfIdf = new WordCount();
         requirementTfIdf = tfIdf.getTfIdf(requirements);
@@ -247,8 +247,8 @@ public class FeatureExtract {
         int index;
         for (int i = 0; i < features.length; i++) {
             index = 0;
-            features[i][index++] = paymentAndDuration[0][i];
-            features[i][index++] = paymentAndDuration[1][i];
+            features[i][index++] = paymentAndDuration[i][0];
+            features[i][index++] = paymentAndDuration[i][1];
             for (int j = 0; j < Constant.TECHNOLOGIES.length; j++) {
                 features[i][index++] = skills[i][j];
             }
