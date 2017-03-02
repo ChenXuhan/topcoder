@@ -13,6 +13,9 @@ import java.util.*;
  * Created by yang on 2017/2/16.
  */
 public class WordCount {
+
+    //待处理的文本
+    private String[] texts;
     //所有的单词及次数
     private Map<String, Integer> allWords;
     //每一个任务的单词数量
@@ -20,7 +23,9 @@ public class WordCount {
     //每一个任务中每一个单词的数量
     private List<Map<String, Integer>> taskWordCount;
 
-    public WordCount() {
+
+    public WordCount(String[] texts) {
+        this.texts = texts;
         allWords = new HashMap<>();
         taskWords = new ArrayList<>();
         taskWordCount = new ArrayList<>();
@@ -54,7 +59,7 @@ public class WordCount {
         return allWords.size();
     }
 
-    public List<String>[] getWordsFromText(String[] texts) {
+    public List<String>[] getWordsFromText() {
         Analyzer analyzer = new StandardAnalyzer();
         TokenStream tokenStream = null;
         List<String>[] words = new List[texts.length];
@@ -77,8 +82,8 @@ public class WordCount {
         return words;
     }
 
-    public void init(String[] texts) {
-        List<String>[] words = getWordsFromText(texts);
+    public void init() {
+        List<String>[] words = getWordsFromText();
         List<String> word;
         for (int i = 0; i < texts.length; i++) {
             word = words[i];
@@ -144,8 +149,10 @@ public class WordCount {
         return idf;
     }
 
-    public List<double[]> getTfIdf(String[] texts) {
-        init(texts);
+    public List<double[]> getTfIdf() {
+        if (allWords.isEmpty()) {
+            init();
+        }
         List<double[]> tfIdf = new ArrayList<>();
         double[] idf = getIdf();
         for (int i = 0; i < texts.length; i++) {
@@ -158,26 +165,4 @@ public class WordCount {
         return tfIdf;
     }
 
-    public BigDecimal getTypeProbality(int k, List<Integer> list) {
-        BigDecimal bigDecimal = BigDecimal.valueOf(1.0);
-        Map<String, Integer> map;
-        Map<String, Integer> current = taskWordCount.get(k);
-        int count, sum;
-        for (Map.Entry<String, Integer> entry : current.entrySet()) {
-            count = 0;
-            sum = 0;
-            for (int index : list) {
-                map = taskWordCount.get(index);
-                if (map.containsKey(entry.getKey())) {
-                    count += map.get(entry.getKey());
-                }
-                sum += taskWords.get(index);
-            }
-            BigDecimal decimal = BigDecimal.valueOf(1.0 * (count + 1) / (sum + allWords.size()));
-            for (int j = 0; j < entry.getValue(); j++) {
-                bigDecimal = bigDecimal.multiply(decimal);
-            }
-        }
-        return bigDecimal;
-    }
 }

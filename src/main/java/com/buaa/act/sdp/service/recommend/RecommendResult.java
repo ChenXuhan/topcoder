@@ -64,7 +64,7 @@ public class RecommendResult {
         double[][] features = featureExtract.getTimesAndAward();
         List<String> winners = featureExtract.getWinners();
         int start = (int) (0.9 * winners.size());
-        WordCount[] wordCounts = featureExtract.getWordCount(start);
+        WordCount[] wordCounts = featureExtract.getWordCount();
         List<Map<String, Double>> result = bayes.getRecommendResultUcl(wordCounts, features, winners, start);
         int[] num = new int[]{1, 5, 10, 20};
         int[] count = new int[]{0, 0, 0, 0};

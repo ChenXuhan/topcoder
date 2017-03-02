@@ -151,7 +151,7 @@ public class FeatureExtract {
     }
 
     // 文本分词
-    public WordCount[] getWordCount(int start) {
+    public WordCount[] getWordCount() {
         String[] requirements = new String[items.size()];
         String[] skills = new String[items.size()];
         String[] titles = new String[items.size()], temp;
@@ -170,12 +170,12 @@ public class FeatureExtract {
             }
             skills[i] = stringBuilder.toString();
         }
-        WordCount requirement = new WordCount();
-        requirement.init(requirements);
-        WordCount title = new WordCount();
-        title.init(titles);
-        WordCount skill = new WordCount();
-        skill.init(skills);
+        WordCount requirement = new WordCount(requirements);
+        requirement.init();
+        WordCount title = new WordCount(titles);
+        title.init();
+        WordCount skill = new WordCount(skills);
+        skill.init();
         wordCounts[0] = requirement;
         wordCounts[1] = title;
         wordCounts[2] = skill;
@@ -199,61 +199,46 @@ public class FeatureExtract {
     //UCL中KNN分类器特征
     public double[][] generateVectorUcl() {
         double[][] paymentAndDuration = new double[items.size()][2];
-        String[] requirements = new String[items.size()];
-        String[] title = new String[items.size()];
-        double [][] skills = new double[items.size()][Constant.TECHNOLOGIES.length];
-        double [][] platforms= new double[items.size()][Constant.PLATFORMS.length];
+        Set<String>skillSet=getSkills();
+        double [][] skills = new double[items.size()][skillSet.size()];
         String[] temp;
+        int index;
         List<double[]> requirementTfIdf, titleTfIdf;
         for (int i = 0; i < items.size(); i++) {
-            requirements[i] = items.get(i).getDetailedRequirements();
-            title[i] = items.get(i).getChallengeName();
             temp = items.get(i).getTechnology();
             Set<String>set=new HashSet<>();
             for(String str:temp){
                 set.add(str.toLowerCase());
             }
-            for(int j=0;j<Constant.TECHNOLOGIES.length;j++){
-                if(set.contains(Constant.TECHNOLOGIES[j].toLowerCase())){
-                    skills[i][j]=1.0;
-                }else {
-                    skills[i][j]=0;
-                }
-            }
-            set.clear();
             temp = items.get(i).getPlatforms();
             for(String str:temp){
                 set.add(str.toLowerCase());
             }
-            for(int j=0;j<Constant.PLATFORMS.length;j++){
-                if(set.contains(Constant.PLATFORMS[j].toLowerCase())){
-                    platforms[i][j]=1.0;
+            index=0;
+            for(String str:skillSet){
+                if(set.contains(str)){
+                    skills[i][index++]=1.0;
                 }else {
-                    platforms[i][j]=0;
+                    skills[i][index++]=0;
                 }
             }
             paymentAndDuration[i][0] = Double.parseDouble(items.get(i).getPrize()[0]);
             paymentAndDuration[i][1] = items.get(i).getDuration();
         }
-        WordCount tfIdf = new WordCount();
-        requirementTfIdf = tfIdf.getTfIdf(requirements);
-        requirementWordSize=tfIdf.getWordSize();
-        tfIdf = new WordCount();
-        titleTfIdf = tfIdf.getTfIdf(title);
-        titleWordSize=tfIdf.getWordSize();
-        int length = requirementWordSize + titleWordSize + Constant.TECHNOLOGIES.length+Constant.PLATFORMS.length+2;
+        WordCount []wordCounts = getWordCount();
+        requirementTfIdf = wordCounts[0].getTfIdf();
+        requirementWordSize=wordCounts[0].getWordSize();
+        titleTfIdf = wordCounts[1].getTfIdf();
+        titleWordSize=wordCounts[1].getWordSize();
+        int length = requirementWordSize + titleWordSize + skillSet.size()+2;
         double[][] features = new double[items.size()][length];
         normalization(paymentAndDuration);
-        int index;
         for (int i = 0; i < features.length; i++) {
             index = 0;
             features[i][index++] = paymentAndDuration[i][0];
             features[i][index++] = paymentAndDuration[i][1];
-            for (int j = 0; j < Constant.TECHNOLOGIES.length; j++) {
+            for (int j = 0; j < skills.length; j++) {
                 features[i][index++] = skills[i][j];
-            }
-            for (int j = 0; j < Constant.PLATFORMS.length; j++) {
-                features[i][index++] = platforms[i][j];
             }
             for (int j = 0; j < requirementWordSize; j++) {
                 features[i][index++] = requirementTfIdf.get(i)[j];
@@ -266,18 +251,7 @@ public class FeatureExtract {
     }
 
     public double[][] generateVector() {
-        Set<String> set = new HashSet<>();
-        String[] strings;
-        for (int i = 0; i < items.size(); i++) {
-            strings = items.get(i).getTechnology();
-            for (String str : strings) {
-                set.add(str.toLowerCase());
-            }
-            strings = items.get(i).getPlatforms();
-            for (String str : strings) {
-                set.add(str.toLowerCase());
-            }
-        }
+        Set<String> set=getSkills();
         double[][] features = new double[items.size()][set.size() + 4];
         ChallengeItem item;
         int index;
@@ -306,6 +280,22 @@ public class FeatureExtract {
         }
         normalization(features);
         return features;
+    }
+
+    public Set<String>getSkills(){
+        Set<String>skills=new HashSet<>();
+        String[]strings;
+        for (int i = 0; i < items.size(); i++) {
+            strings = items.get(i).getTechnology();
+            for (String str : strings) {
+                skills.add(str.toLowerCase());
+            }
+            strings = items.get(i).getPlatforms();
+            for (String str : strings) {
+                skills.add(str.toLowerCase());
+            }
+        }
+        return skills;
     }
 
     public double[][] getFeatures() {

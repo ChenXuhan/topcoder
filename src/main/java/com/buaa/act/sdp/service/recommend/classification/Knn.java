@@ -1,6 +1,5 @@
 package com.buaa.act.sdp.service.recommend.classification;
 
-import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.service.recommend.FeatureExtract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,16 +55,7 @@ public class Knn {
         BigDecimal bigDecimal = BigDecimal.valueOf(0.0);
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(Math.abs(vectorOne[0] - vectorTwo[0])));
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(Math.abs(vectorOne[1] - vectorTwo[1])));
-        int count = 0, length = Constant.TECHNOLOGIES.length, start = 2;
-        for (int i = start; i < length + start; i++) {
-            if (Math.abs(vectorOne[i] - vectorTwo[i]) < 0.0001) {
-                count++;
-            }
-        }
-        bigDecimal = bigDecimal.add(BigDecimal.valueOf(1.0 * count / length));
-        start = start + length;
-        count = 0;
-        length = Constant.PLATFORMS.length;
+        int count = 0, length = featureExtract.getSkills().size(), start = 2;
         for (int i = start; i < length + start; i++) {
             if (Math.abs(vectorOne[i] - vectorTwo[i]) < 0.0001) {
                 count++;
