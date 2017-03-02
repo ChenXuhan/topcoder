@@ -74,7 +74,6 @@ public class Knn {
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(1.0 * count / length));
         start = start + length;
         length = featureExtract.getChallengeRequirementSize();
-        System.out.println(cosSimilarity(vectorOne, vectorTwo, start, start + length));
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(cosSimilarity(vectorOne, vectorTwo, start, start + length)));
         start = start + length;
         length = featureExtract.getTitleWordSize();
@@ -88,9 +87,6 @@ public class Knn {
             sum = sum + one[i] * two[i];
             a = one[i] * one[i] + a;
             b = two[i] * two[i] + b;
-        }
-        if(a*b==0){
-            System.out.println("error");
         }
         return sum / Math.sqrt(a * b);
     }

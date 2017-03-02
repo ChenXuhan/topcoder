@@ -36,14 +36,14 @@ public class RecommendResult {
         }
 //        List<Map<String, Double>> bayesResult = bayes.getRecommendResult(features, winners, start);
 //        List<Map<String, Double>> cbmResult = contentBase.getRecommendResult(features, start, scores);
-        List<Map<String, Integer>> knnResult = knn.getRecommendResult(features, 1,start, winners);
+        List<Map<String, Integer>> knnResult = knn.getRecommendResult(features, 5,start, winners);
         List<String> worker;
         int[] num = new int[]{1, 5, 10, 20};
         int[] count = new int[]{0, 0, 0, 0};
         for (int i = start; i < winners.size(); i++) {
 //            worker = recommendWorker(bayesResult.get(i-start));
-//            worker = recommendWorker(cbmResult.get(i));
-            worker = recommendKnnWorker(knnResult.get(i));
+//            worker = recommendWorker(cbmResult.get(i-start));
+            worker = recommendKnnWorker(knnResult.get(i-start));
             //worker = recommendWorker(bayesResult.get(i - start), cbmResult.get(i - start));
             for (int j = 0; j < num.length; j++) {
                 for (int k = 0; k < worker.size() && k < num[j]; k++) {
@@ -59,7 +59,7 @@ public class RecommendResult {
         }
     }
 
-    public void getRecommendUcl() {
+    public void getRecommendBayesUcl() {
         featureExtract.getWinnersAndScores();
         double[][] features = featureExtract.getTimesAndAward();
         List<String> winners = featureExtract.getWinners();

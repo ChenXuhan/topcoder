@@ -129,7 +129,7 @@ public class FeatureExtract {
             return false;
         }
         String str = challengeItem.getChallengeType();
-        if (!str.equals("Development")) {
+        if (!str.equals("Design")) {
             return false;
         }
         if (challengeItem.getDetailedRequirements() == null || challengeItem.getDetailedRequirements().length() == 0) {
@@ -171,11 +171,11 @@ public class FeatureExtract {
             skills[i] = stringBuilder.toString();
         }
         WordCount requirement = new WordCount();
-        requirement.init(requirements, start);
+        requirement.init(requirements);
         WordCount title = new WordCount();
-        title.init(titles, start);
+        title.init(titles);
         WordCount skill = new WordCount();
-        skill.init(skills, start);
+        skill.init(skills);
         wordCounts[0] = requirement;
         wordCounts[1] = title;
         wordCounts[2] = skill;

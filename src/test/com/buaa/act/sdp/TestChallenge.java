@@ -49,7 +49,7 @@ public class TestChallenge {
     @Test
     public void testrecommend() {
         recommendResult.getRecommendResult();
-//        recommendResult.getRecommendUcl();
+//        recommendResult.getRecommendBayesUcl();
     }
 
     @Test

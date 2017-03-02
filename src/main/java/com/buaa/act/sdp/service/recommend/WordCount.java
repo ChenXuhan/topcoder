@@ -50,7 +50,7 @@ public class WordCount {
         this.taskWordCount = taskWordCount;
     }
 
-    public int getWordSize(){
+    public int getWordSize() {
         return allWords.size();
     }
 
@@ -77,7 +77,7 @@ public class WordCount {
         return words;
     }
 
-    public void init(String[] texts,int start) {
+    public void init(String[] texts) {
         List<String>[] words = getWordsFromText(texts);
         List<String> word;
         for (int i = 0; i < texts.length; i++) {
@@ -90,12 +90,10 @@ public class WordCount {
                         map.put(s, map.get(s) + 1);
                     } else {
                         map.put(s, 1);
-                        if(i<start) {
-                            if (allWords.containsKey(s)) {
-                                allWords.put(s, allWords.get(s) + 1);
-                            } else {
-                                allWords.put(s, 1);
-                            }
+                        if (allWords.containsKey(s)) {
+                            allWords.put(s, allWords.get(s) + 1);
+                        } else {
+                            allWords.put(s, 1);
                         }
                     }
                 }
@@ -147,7 +145,7 @@ public class WordCount {
     }
 
     public List<double[]> getTfIdf(String[] texts) {
-        init(texts,0);
+        init(texts);
         List<double[]> tfIdf = new ArrayList<>();
         double[] idf = getIdf();
         for (int i = 0; i < texts.length; i++) {
@@ -161,7 +159,7 @@ public class WordCount {
     }
 
     public BigDecimal getTypeProbality(int k, List<Integer> list) {
-        BigDecimal bigDecimal=BigDecimal.valueOf(1.0);
+        BigDecimal bigDecimal = BigDecimal.valueOf(1.0);
         Map<String, Integer> map;
         Map<String, Integer> current = taskWordCount.get(k);
         int count, sum;
@@ -175,9 +173,9 @@ public class WordCount {
                 }
                 sum += taskWords.get(index);
             }
-            BigDecimal decimal=BigDecimal.valueOf(1.0 * (count + 1) / (sum + allWords.size()));
-            for(int j=0;j<entry.getValue();j++){
-                bigDecimal=bigDecimal.multiply(decimal);
+            BigDecimal decimal = BigDecimal.valueOf(1.0 * (count + 1) / (sum + allWords.size()));
+            for (int j = 0; j < entry.getValue(); j++) {
+                bigDecimal = bigDecimal.multiply(decimal);
             }
         }
         return bigDecimal;
