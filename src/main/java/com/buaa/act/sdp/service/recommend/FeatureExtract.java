@@ -5,6 +5,7 @@ import com.buaa.act.sdp.bean.challenge.ChallengeSubmission;
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
+import com.buaa.act.sdp.util.WekaArffUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +17,9 @@ import java.util.*;
 @Component
 public class FeatureExtract {
 
-    @Autowired(required = false)
+    @Autowired
     private ChallengeSubmissionDao challengeSubmissionDao;
-    @Autowired(required = false)
+    @Autowired
     private ChallengeItemDao challengeItemDao;
 
     //过滤掉的所有challenges
@@ -35,7 +36,7 @@ public class FeatureExtract {
         items = new ArrayList<>();
         winners = new ArrayList<>();
         scores = new HashMap<>();
-        requirementWordSize=0;
+        requirementWordSize = 0;
     }
 
     public List<String> getWinners() {
@@ -50,7 +51,7 @@ public class FeatureExtract {
         return scores;
     }
 
-    public int getChallengeRequirementSize(){
+    public int getChallengeRequirementSize() {
         return requirementWordSize;
     }
 
@@ -75,7 +76,7 @@ public class FeatureExtract {
         scores.put(challengeSubmission.getChallengeID(), score);
     }
 
-    public void getWinnersAndScores() {
+    public void getWinnersAndScores(String challengeType) {
         List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
         Map<String, Integer> map = new HashMap<>();
         Set<Integer> challengeSet = new HashSet<>();
@@ -94,7 +95,7 @@ public class FeatureExtract {
                 getUserScores(challengeSubmission);
             } else {
                 challengeItem = challengeItemDao.getChallengeItemById(challengeSubmission.getChallengeID());
-                if (filterChallenge(challengeItem)) {
+                if (filterChallenge(challengeItem, challengeType)) {
                     challengeSet.add(challengeItem.getChallengeId());
                     challengeItems.add(challengeItem);
                     user.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
@@ -124,12 +125,12 @@ public class FeatureExtract {
     }
 
     //对challenge进行过滤
-    public boolean filterChallenge(ChallengeItem challengeItem) {
+    public boolean filterChallenge(ChallengeItem challengeItem, String challengeType) {
         if (!challengeItem.getCurrentStatus().equals("Completed")) {
             return false;
         }
         String str = challengeItem.getChallengeType();
-        if (!str.equals("Design")) {
+        if (!str.equals(challengeType)) {
             return false;
         }
         if (challengeItem.getDetailedRequirements() == null || challengeItem.getDetailedRequirements().length() == 0) {
@@ -150,8 +151,8 @@ public class FeatureExtract {
         return true;
     }
 
-    // 文本分词
-    public WordCount[] getWordCount() {
+    // 文本分词统计
+    public WordCount[] getWordCount(int start) {
         String[] requirements = new String[items.size()];
         String[] skills = new String[items.size()];
         String[] titles = new String[items.size()], temp;
@@ -171,11 +172,11 @@ public class FeatureExtract {
             skills[i] = stringBuilder.toString();
         }
         WordCount requirement = new WordCount(requirements);
-        requirement.init();
+        requirement.init(start);
         WordCount title = new WordCount(titles);
-        title.init();
+        title.init(start);
         WordCount skill = new WordCount(skills);
-        skill.init();
+        skill.init(start);
         wordCounts[0] = requirement;
         wordCounts[1] = title;
         wordCounts[2] = skill;
@@ -192,52 +193,64 @@ public class FeatureExtract {
             features[i][index++] = item.getDuration();
             features[i][index++] = Double.parseDouble(item.getPrize()[0]);
         }
-        normalization(features);
+        normalization(features, 2);
         return features;
     }
 
     //UCL中KNN分类器特征
     public double[][] generateVectorUcl() {
-        double[][] paymentAndDuration = new double[items.size()][2];
-        Set<String>skillSet=getSkills();
-        double [][] skills = new double[items.size()][skillSet.size()];
+        double[][] paymentAndDuration = new double[items.size()][3];
+        Set<String> skillSet = getSkills();
+        double[][] skills = new double[items.size()][skillSet.size()];
         String[] temp;
         int index;
         List<double[]> requirementTfIdf, titleTfIdf;
         for (int i = 0; i < items.size(); i++) {
             temp = items.get(i).getTechnology();
-            Set<String>set=new HashSet<>();
-            for(String str:temp){
+            Set<String> set = new HashSet<>();
+            for (String str : temp) {
                 set.add(str.toLowerCase());
             }
             temp = items.get(i).getPlatforms();
-            for(String str:temp){
+            for (String str : temp) {
                 set.add(str.toLowerCase());
             }
-            index=0;
-            for(String str:skillSet){
-                if(set.contains(str)){
-                    skills[i][index++]=1.0;
-                }else {
-                    skills[i][index++]=0;
+            index = 0;
+            boolean flag = false;
+            for (String str : skillSet) {
+                flag = false;
+                for (String strs : set) {
+                    if (strs.startsWith(str)) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag) {
+                    skills[i][index++] = 1.0;
+                } else {
+                    skills[i][index++] = 0;
                 }
             }
             paymentAndDuration[i][0] = Double.parseDouble(items.get(i).getPrize()[0]);
             paymentAndDuration[i][1] = items.get(i).getDuration();
+            temp = items.get(i).getPostingDate().substring(0, 10).split("-");
+            paymentAndDuration[i][2] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
         }
-        WordCount []wordCounts = getWordCount();
+        int start = (int) (0.9 * winners.size());
+        WordCount[] wordCounts = getWordCount(start);
         requirementTfIdf = wordCounts[0].getTfIdf();
-        requirementWordSize=wordCounts[0].getWordSize();
+        requirementWordSize = wordCounts[0].getWordSize();
         titleTfIdf = wordCounts[1].getTfIdf();
-        titleWordSize=wordCounts[1].getWordSize();
-        int length = requirementWordSize + titleWordSize + skillSet.size()+2;
+        titleWordSize = wordCounts[1].getWordSize();
+        int length = requirementWordSize + titleWordSize + skillSet.size() + 3;
         double[][] features = new double[items.size()][length];
-        normalization(paymentAndDuration);
+        normalization(paymentAndDuration, 3);
         for (int i = 0; i < features.length; i++) {
             index = 0;
             features[i][index++] = paymentAndDuration[i][0];
             features[i][index++] = paymentAndDuration[i][1];
-            for (int j = 0; j < skills.length; j++) {
+            features[i][index++] = paymentAndDuration[i][2];
+            for (int j = 0; j < skillSet.size(); j++) {
                 features[i][index++] = skills[i][j];
             }
             for (int j = 0; j < requirementWordSize; j++) {
@@ -250,9 +263,10 @@ public class FeatureExtract {
         return features;
     }
 
+    //需求和标题使用的长度,没有处理文本
     public double[][] generateVector() {
-        Set<String> set=getSkills();
-        double[][] features = new double[items.size()][set.size() + 4];
+        Set<String> set = getSkills();
+        double[][] features = new double[items.size()][set.size() + 5];
         ChallengeItem item;
         int index;
         Set<String> skill = new HashSet<>();
@@ -261,6 +275,8 @@ public class FeatureExtract {
             index = 0;
             features[i][index++] = item.getDetailedRequirements().length();
             features[i][index++] = item.getChallengeName().length();
+            String[] temp = items.get(i).getPostingDate().substring(0, 10).split("-");
+            features[i][index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
             features[i][index++] = item.getDuration();
             features[i][index++] = Double.parseDouble(item.getPrize()[0]);
             skill.clear();
@@ -270,47 +286,53 @@ public class FeatureExtract {
             for (String str : item.getPlatforms()) {
                 skill.add(str.toLowerCase());
             }
+            boolean flag;
             for (String str : set) {
-                if (skill.contains(str)) {
-                    features[i][index++] = 1;
+                flag = false;
+                for (String strs : skill) {
+                    if (strs.startsWith(str)) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag) {
+                    features[i][index++] = 1.0;
                 } else {
                     features[i][index++] = 0;
                 }
             }
         }
-        normalization(features);
+        normalization(features, 5);
         return features;
     }
 
-    public Set<String>getSkills(){
-        Set<String>skills=new HashSet<>();
-        String[]strings;
-        for (int i = 0; i < items.size(); i++) {
-            strings = items.get(i).getTechnology();
-            for (String str : strings) {
-                skills.add(str.toLowerCase());
-            }
-            strings = items.get(i).getPlatforms();
-            for (String str : strings) {
-                skills.add(str.toLowerCase());
-            }
+    public Set<String> getSkills() {
+        Set<String> skills = new HashSet<>();
+        for (String str : Constant.TECHNOLOGIES) {
+            skills.add(str.toLowerCase());
+        }
+        for (String str : Constant.PLATFORMS) {
+            skills.add(str.toLowerCase());
         }
         return skills;
     }
 
-    public double[][] getFeatures() {
+    //获取challenge的特征向量
+    public double[][] getFeatures(String challengeType) {
         if (items.size() == 0) {
-            getWinnersAndScores();
+            getWinnersAndScores(challengeType);
         }
-       double[][] features = generateVectorUcl();
-//        double[][] features = generateVector();
+//       double[][] features = generateVectorUcl();
+        double[][] features = generateVector();
+//         WekaArffUtil.writeToArff(challengeType, features, winners);
+//        WekaArffUtil.writeTaskAndWinner(items, winners, challengeType);
         return features;
     }
 
-    // 向量统一处理[0-1]
-    public void normalization(double[][] features) {
+    // 向量归一化处理,[0-1]
+    public void normalization(double[][] features, int k) {
         double max, min;
-        for (int i = 0; i < features[0].length; i++) {
+        for (int i = 0; i < k; i++) {
             max = 0;
             min = Integer.MAX_VALUE;
             for (int j = 0; j < features.length; j++) {

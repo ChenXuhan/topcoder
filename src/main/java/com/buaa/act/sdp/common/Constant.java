@@ -12,7 +12,6 @@ public class Constant {
             "AJAX",
             "API",
             "ASP.NET",
-            "ASP.NET AJAX",
             "ASP.NET Web Parts",
             "ActionScript",
             "Active Directory",
@@ -31,7 +30,6 @@ public class Constant {
             "C++",
             "COBOL",
             "COM",
-            "COM+",
             "CSS",
             "Castor",
             "Chatter",
@@ -148,6 +146,7 @@ public class Constant {
             "Struts",
             "Swift",
             "Swing",
+            "RMI",
             "Titanium",
             "Twitter Bootstrap",
             "UML",
@@ -171,12 +170,7 @@ public class Constant {
             "Xcode",
             "iBATIS/MyBatis",
             "iOS",
-            "iOS 5.0",
-            "iOS 6.0",
-            "iOS 8.0",
-            "iOS 8.0",
             "jQuery",
-            "jQuery Mobile",
             "tvOS"};
 
     public static final String[]LANGUAGES={
@@ -217,5 +211,5 @@ public class Constant {
             "Wordpress",
             "iOS"};
 
-    public static final String DIRECTORY = "F:/arff/classifier/";
+    public static final String DIRECTORY = "F:/arff/";
 }

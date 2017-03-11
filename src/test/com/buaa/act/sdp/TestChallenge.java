@@ -1,5 +1,7 @@
 package com.buaa.act.sdp;
 
+import com.buaa.act.sdp.bean.challenge.ChallengeItem;
+import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.service.api.AbilityExp;
@@ -8,6 +10,7 @@ import com.buaa.act.sdp.service.api.ChallengeApi;
 import com.buaa.act.sdp.service.api.UserAbility;
 import com.buaa.act.sdp.service.recommend.RecommendResult;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
+import com.buaa.act.sdp.service.recommend.classification.Weka;
 import com.buaa.act.sdp.service.update.ChallengeStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +19,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by yang on 2016/10/19.
@@ -46,10 +51,14 @@ public class TestChallenge {
     @Autowired
     private AbilityExp exp;
 
+    @Autowired
+    private Weka weka;
+
     @Test
     public void testrecommend() {
-        recommendResult.getRecommendResult();
+//        recommendResult.getRecommendResult();
 //        recommendResult.getRecommendBayesUcl();
+//        weka.weka();
     }
 
     @Test
@@ -74,5 +83,34 @@ public class TestChallenge {
         //exp.getTech(30054047);
         exp.userAbility.ope.run();
         exp.getCoder(30054422);
+    }
+
+    @Test
+    public void challengeSkill(){
+        Set<String> set=new HashSet<>();
+        List<ChallengeItem>items=challengeItemDao.getAllChallenges();
+        Set<String>sets=new HashSet<>();
+        for(ChallengeItem item:items){
+            if(item.getTechnology()!=null) {
+                for (String s : item.getTechnology()) {
+                    sets.add(s);
+                }
+            }
+        }
+        for(String s: Constant.TECHNOLOGIES){
+            set.add(s);
+        }
+        for(String s:sets){
+            boolean flag=false;
+            for(String ss:set) {
+                if (ss.startsWith(s)) {
+                    flag=true;
+                    break;
+                }
+            }
+            if(!flag){
+                System.out.println(s);
+            }
+        }
     }
 }

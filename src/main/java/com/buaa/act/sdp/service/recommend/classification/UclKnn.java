@@ -11,12 +11,12 @@ import java.util.*;
  * Created by fuyang on 2017/3/1.
  */
 @Component
-public class Knn {
+public class UclKnn {
 
     @Autowired
     private FeatureExtract featureExtract;
 
-    // 选择n个最近的排序，取前K个）
+    // 选择n个最近的排序，取前K个
     public Map<String,Integer> getRecommendWorker(double[][] features, double[] feature, int k,int start, List<String> winners) {
         Map<Integer, Double> map = new HashMap<>(start);
         for (int i = 0; i < start; i++) {
@@ -51,13 +51,15 @@ public class Knn {
         return result;
     }
 
+    //KNN自定义的距离公式
     public double similarity(double[] vectorOne, double[] vectorTwo) {
         BigDecimal bigDecimal = BigDecimal.valueOf(0.0);
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(Math.abs(vectorOne[0] - vectorTwo[0])));
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(Math.abs(vectorOne[1] - vectorTwo[1])));
-        int count = 0, length = featureExtract.getSkills().size(), start = 2;
+        bigDecimal = bigDecimal.add(BigDecimal.valueOf(Math.abs(vectorOne[2] - vectorTwo[2])));
+        int count = 0, length = featureExtract.getSkills().size(), start = 3;
         for (int i = start; i < length + start; i++) {
-            if (Math.abs(vectorOne[i] - vectorTwo[i]) < 0.0001) {
+            if (Math.abs(vectorOne[i] - vectorTwo[i]) < 0.01) {
                 count++;
             }
         }
@@ -71,6 +73,7 @@ public class Knn {
         return bigDecimal.doubleValue();
     }
 
+    //余弦相似度
     public double cosSimilarity(double[] one, double[] two, int start, int end) {
         double sum = 0, a = 0, b = 0;
         for (int i = start; i < end; i++) {

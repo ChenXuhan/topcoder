@@ -20,17 +20,17 @@ import java.util.Map;
 @Service
 public class UserApi {
 
-    @Autowired(required = false)
+    @Autowired
     private ChallengeRegistrantDao challengeRegistrantDao;
-    @Autowired(required = false)
+    @Autowired
     private UserDao userDao;
-    @Autowired(required = false)
+    @Autowired
     private DevelopmentDao developmentDao;
-    @Autowired(required = false)
+    @Autowired
     private DevelopmentHistoryDao developmentHistoryDao;
-    @Autowired(required = false)
+    @Autowired
     private RatingHistoryDao ratingHistoryDao;
-    @Autowired(required = false)
+    @Autowired
     private TimeOutDao timeOutDao;
 
     public void getUserByName(String userName) {

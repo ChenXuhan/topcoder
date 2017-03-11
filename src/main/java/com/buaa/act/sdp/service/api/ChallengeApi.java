@@ -22,19 +22,19 @@ import java.util.Set;
 @Service
 public class ChallengeApi {
 
-    @Autowired(required = false)
+    @Autowired
     private ChallengeItemDao challengeItemDao;
-    @Autowired(required = false)
+    @Autowired
     private ChallengeSubmissionDao challengeSubmissionDao;
-    @Autowired(required = false)
+    @Autowired
     private ChallengePhaseDao challengePhaseDao;
-    @Autowired(required = false)
+    @Autowired
     private ChallengeRegistrantDao challengeRegistrantDao;
-    @Autowired(required = false)
+    @Autowired
     private UserDao userDao;
     @Autowired
     private UserApi userApi;
-    @Autowired(required = false)
+    @Autowired
     private TimeOutDao timeOutDao;
 
     public ChallengeItem getChallengeById(int challengeId) {

@@ -23,7 +23,7 @@ public class Bayes {
         for (int i = 0; i < feature.length; i++) {
             for (int j = 0; j < list.size(); j++) {
                 vector = features[list.get(j)];
-                if (Math.abs(vector[i] - feature[i]) < 0.1) {
+                if (Math.abs(vector[i] - feature[i]) <= 0.1) {
                     count[i]++;
                 }
             }

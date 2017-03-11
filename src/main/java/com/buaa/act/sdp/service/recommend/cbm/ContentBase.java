@@ -1,11 +1,9 @@
 package com.buaa.act.sdp.service.recommend.cbm;
 
+import com.buaa.act.sdp.service.recommend.WordCount;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yang on 2017/2/23.
@@ -35,24 +33,51 @@ public class ContentBase {
         return similarity;
     }
 
-    public Map<String,Double> getRecommendWorker(double[] feature,double[][] features,int start,List<Map<String, Double>> scores) {
+    public Map<String,Double> getRecommendWorker(double[] feature,double[][] features,int start,List<Map<String, Double>> scores,Set<String>winner) {
         Map<String, List<Double>> map = new HashMap<>();
-        double similarity;
-        for (int i = 0; i < start; i++) {
-            if ((similarity = taskSimilariry(feature, features[i])) >= 0.8) {
-                for (Map.Entry<String, Double> entry : scores.get(i).entrySet()) {
+//        double similarity;
+       Map<Integer,Double>similarity=new HashMap<>();
+        for(int i=0;i<start;i++){
+            similarity.put(i,taskSimilariry(feature,features[i]));
+        }
+        List<Map.Entry<Integer,Double>>lists=new ArrayList<>();
+        lists.addAll(similarity.entrySet());
+        Collections.sort(lists, new Comparator<Map.Entry<Integer, Double>>() {
+            @Override
+            public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        for(int i=0;i<40;i++){
+            for (Map.Entry<String, Double> entry : scores.get(lists.get(i).getKey()).entrySet()) {
+                if(winner.contains(entry.getKey())) {
                     if (map.containsKey(entry.getKey())) {
                         map.get(entry.getKey()).add(entry.getValue());
-                        map.get(entry.getKey()).add(similarity);
+                        map.get(entry.getKey()).add(lists.get(i).getValue());
                     } else {
                         List<Double> list = new ArrayList<>();
                         list.add(entry.getValue());
-                        list.add(similarity);
+                        list.add(lists.get(i).getValue());
                         map.put(entry.getKey(), list);
                     }
                 }
             }
         }
+//        for (int i = 0; i < start; i++) {
+//            if ((similarity = taskSimilariry(feature, features[i])) >= 0.8) {
+//                for (Map.Entry<String, Double> entry : scores.get(i).entrySet()) {
+//                    if (map.containsKey(entry.getKey())) {
+//                        map.get(entry.getKey()).add(entry.getValue());
+//                        map.get(entry.getKey()).add(similarity);
+//                    } else {
+//                        List<Double> list = new ArrayList<>();
+//                        list.add(entry.getValue());
+//                        list.add(similarity);
+//                        map.put(entry.getKey(), list);
+//                    }
+//                }
+//            }
+//        }
         double score, weight;
         Map<String, Double> workerMap = new HashMap<>();
         for (Map.Entry<String, List<Double>> entry : map.entrySet()) {
@@ -69,12 +94,12 @@ public class ContentBase {
         return workerMap;
     }
 
-    public List<Map<String,Double>>getRecommendResult(double[][] features,int start,List<Map<String, Double>> scores){
+    public List<Map<String,Double>>getRecommendResult(double[][] features,int start,List<Map<String, Double>> scores,Set<String>winner){
         double[]testFeature;
         List<Map<String,Double>>result=new ArrayList<>();
         for(int i=start;i<features.length;i++){
             testFeature=features[i];
-            result.add(getRecommendWorker(testFeature,features,start,scores));
+            result.add(getRecommendWorker(testFeature,features,start,scores,winner));
         }
         return result;
     }

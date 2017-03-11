@@ -14,6 +14,7 @@ import java.util.*;
  */
 public class WordCount {
 
+    protected int a;
     //待处理的文本
     private String[] texts;
     //所有的单词及次数
@@ -82,7 +83,7 @@ public class WordCount {
         return words;
     }
 
-    public void init() {
+    public void init(int start) {
         List<String>[] words = getWordsFromText();
         List<String> word;
         for (int i = 0; i < texts.length; i++) {
@@ -95,30 +96,30 @@ public class WordCount {
                         map.put(s, map.get(s) + 1);
                     } else {
                         map.put(s, 1);
-                        if (allWords.containsKey(s)) {
-                            allWords.put(s, allWords.get(s) + 1);
+//                        if (allWords.containsKey(s)) {
+//                            allWords.put(s, allWords.get(s) + 1);
+//                        } else {
+//                            allWords.put(s, 1);
+//                        }
+                    }
+                }
+                if (i < start) {
+                    List<Map.Entry<String, Integer>> list = new ArrayList<>();
+                    list.addAll(map.entrySet());
+                    Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+                        @Override
+                        public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                            return o2.getValue() - o1.getValue();
+                        }
+                    });
+                    for (int j = 0; j < 10 && j < list.size(); j++) {
+                        if (allWords.containsKey(list.get(j).getKey())) {
+                            allWords.put(list.get(j).getKey(), allWords.get(list.get(j).getKey()) + 1);
                         } else {
-                            allWords.put(s, 1);
+                            allWords.put(list.get(j).getKey(), 1);
                         }
                     }
                 }
-//                if(i<start) {
-//                    List<Map.Entry<String, Integer>> list = new ArrayList<>();
-//                    list.addAll(map.entrySet());
-//                    Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-//                        @Override
-//                        public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-//                            return o2.getValue() - o1.getValue();
-//                        }
-//                    });
-//                    for (int j = 0; j < 10 && j < list.size(); j++) {
-//                        if (allWords.containsKey(list.get(j).getKey())) {
-//                            allWords.put(list.get(j).getKey(), allWords.get(list.get(j).getKey()) + 1);
-//                        } else {
-//                            allWords.put(list.get(j).getKey(), 1);
-//                        }
-//                    }
-//                }
             }
             taskWordCount.add(map);
         }
@@ -131,9 +132,11 @@ public class WordCount {
         for (Map.Entry<String, Integer> entry : allWords.entrySet()) {
             map = taskWordCount.get(index);
             if (map.containsKey(entry.getKey())) {
-                tf[k++] = 1.0 * map.get(entry.getKey()) / taskWords.get(index);
+//                tf[k++] = 1.0 * map.get(entry.getKey()) / taskWords.get(index);
+                tf[k++] = 1 + Math.log(map.get(entry.getKey()));
             } else {
-                tf[k++] = 0;
+                //tf[k++] = 0;
+                tf[k++] = 1;
             }
         }
         return tf;
@@ -144,15 +147,12 @@ public class WordCount {
         int index = 0, num;
         for (Map.Entry<String, Integer> entry : allWords.entrySet()) {
             num = entry.getValue();
-            idf[index++] = Math.log(taskWords.size() * 1.0 / num);
+            idf[index++] = Math.log(1.0 * taskWords.size() / num);
         }
         return idf;
     }
 
     public List<double[]> getTfIdf() {
-        if (allWords.isEmpty()) {
-            init();
-        }
         List<double[]> tfIdf = new ArrayList<>();
         double[] idf = getIdf();
         for (int i = 0; i < texts.length; i++) {
