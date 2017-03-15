@@ -1,5 +1,6 @@
 package com.buaa.act.sdp.service.recommend.classification;
 
+import org.springframework.stereotype.Service;
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.j48.ClassifierTree;
@@ -12,6 +13,7 @@ import java.util.*;
 /**
  * Created by yang on 2017/3/9.
  */
+@Service
 public class TcJ48 extends J48 {
 
     public List<Map<String, Double>> getRecommendResult(Instances instances, int start, Map<Double, String> winners) {

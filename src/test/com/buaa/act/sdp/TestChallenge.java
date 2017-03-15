@@ -5,12 +5,9 @@ import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.service.api.AbilityExp;
-import com.buaa.act.sdp.service.api.DatabaseOpe;
 import com.buaa.act.sdp.service.api.ChallengeApi;
-import com.buaa.act.sdp.service.api.UserAbility;
 import com.buaa.act.sdp.service.recommend.RecommendResult;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
-import com.buaa.act.sdp.service.recommend.classification.Weka;
 import com.buaa.act.sdp.service.update.ChallengeStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,9 +46,6 @@ public class TestChallenge {
 
     @Autowired
     private AbilityExp exp;
-
-    @Autowired
-    private Weka weka;
 
     @Test
     public void testrecommend() {

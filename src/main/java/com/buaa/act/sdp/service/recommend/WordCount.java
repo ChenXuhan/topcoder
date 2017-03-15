@@ -14,7 +14,6 @@ import java.util.*;
  */
 public class WordCount {
 
-    protected int a;
     //待处理的文本
     private String[] texts;
     //所有的单词及次数

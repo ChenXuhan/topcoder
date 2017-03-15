@@ -203,7 +203,6 @@ public class Constant {
             "Microsoft Azure",
             "Mobile",
             "NodeJS",
-            "Other",
             "Predix",
             "Salesforce.com",
             "Smartsheet",
@@ -211,5 +210,6 @@ public class Constant {
             "Wordpress",
             "iOS"};
 
-    public static final String DIRECTORY = "F:/arff/";
+    public static final String CLASSIFIER_DIRECTORY = "F:/arff/classifier/";
+    public static final String CLUSTER_DIRECTORY = "F:/arff/cluster/";
 }

@@ -115,7 +115,7 @@ public class FeatureExtract {
         Set<String> mySet = new HashSet<>();
         for (int i = 0; i < challengeItems.size(); i++) {
             String win = user.get(challengeItems.get(i).getChallengeId());
-            if (map.get(win) >= 5) {
+            if (map.get(win) >=5) {
                 items.add(challengeItems.get(i));
                 winners.add(win);
                 mySet.add(win);
@@ -278,7 +278,11 @@ public class FeatureExtract {
             String[] temp = items.get(i).getPostingDate().substring(0, 10).split("-");
             features[i][index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
             features[i][index++] = item.getDuration();
-            features[i][index++] = Double.parseDouble(item.getPrize()[0]);
+            double award = 0;
+            for (String str : item.getPrize()) {
+                award += Double.parseDouble(str);
+            }
+            features[i][index++] = award;
             skill.clear();
             for (String str : item.getTechnology()) {
                 skill.add(str.toLowerCase());
@@ -322,10 +326,7 @@ public class FeatureExtract {
         if (items.size() == 0) {
             getWinnersAndScores(challengeType);
         }
-//       double[][] features = generateVectorUcl();
         double[][] features = generateVector();
-//         WekaArffUtil.writeToArff(challengeType, features, winners);
-//        WekaArffUtil.writeTaskAndWinner(items, winners, challengeType);
         return features;
     }
 

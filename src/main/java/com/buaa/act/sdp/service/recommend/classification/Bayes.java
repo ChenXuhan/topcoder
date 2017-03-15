@@ -55,20 +55,20 @@ public class Bayes {
     }
 
     //只计算需求长度、不使用tf-idf
-    public List<Map<String, Double>> getRecommendResult(double[][] features, List<String> winners, int start) {
-        Map<String, List<Integer>> lableIndexMap = getLableIndexMap(winners, start);
+    public List<Map<String, Double>> getRecommendResult(double[][] features, List<String> winners,int num) {
+        Map<String, List<Integer>> lableIndexMap = getLableIndexMap(winners, num);
         double[] testFeature;
         List<Map<String, Double>> result = new ArrayList<>();
-        for (int i = start; i < features.length; i++) {
+        for (int i = num; i < features.length; i++) {
             testFeature = features[i];
             result.add(getAllClassProbality(features, testFeature, lableIndexMap));
         }
         return result;
     }
 
-    public Map<String, List<Integer>> getLableIndexMap(List<String> winners, int start) {
+    public Map<String, List<Integer>> getLableIndexMap(List<String> winners, int num) {
         Map<String, List<Integer>> lableIndexMap = new HashMap<>();
-        for (int i = 0; i < start; i++) {
+        for (int i = 0; i < num; i++) {
             if (lableIndexMap.containsKey(winners.get(i))) {
                 lableIndexMap.get(winners.get(i)).add(i);
             } else {
