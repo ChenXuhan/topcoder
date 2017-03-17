@@ -95,4 +95,7 @@
         select numSubmissions from challenge_item
     </select>
 
+    <select id="getProjectId" resultType="java.util.Map">
+        SELECT challengeId,projectId from challenge_item where projectId>0
+    </select>
 </mapper>
