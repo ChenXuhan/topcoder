@@ -1,15 +1,13 @@
 package com.buaa.act.sdp.service.recommend;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.recommend.classification.Bayes;
+import com.buaa.act.sdp.service.recommend.classification.LocalClassifier;
 import com.buaa.act.sdp.service.recommend.classification.TcBayes;
-import com.buaa.act.sdp.util.WekaArffUtil;
+import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import weka.clusterers.SimpleKMeans;
-import weka.core.Instances;
 
 import java.util.*;
 
@@ -24,131 +22,48 @@ public class RecommendResult {
     @Autowired
     private TcBayes tcBayes;
     @Autowired
+    private LocalClassifier localClassifier;
+    @Autowired
+    private Cluster cluster;
+    @Autowired
     private ContentBase contentBase;
     @Autowired
     private FeatureExtract featureExtract;
 
-
-    // weka分类类别号对应的开发者handle
-    public Map<Double, String> getWinnerIndex(List<String> winner, int len) {
-        Map<Double, String> map = new HashMap<>();
-        Set<String> set = new LinkedHashSet<>();
-        for (int i = 0; i < len; i++) {
-            set.add(winner.get(i));
-        }
-        int k = 0;
-        double index;
-        for (String s : set) {
-            index = k++;
-            map.put(index, s);
-        }
-        return map;
-    }
-
-    //寻找k个邻居，局部的分类器
+    //  寻找k个邻居，局部的分类器
     public void localClassifier(String challengeType, int neighborNums) {
+        System.out.println("Local");
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners();
         int start = (int) (0.9 * winners.size());
-        int[] num = new int[]{1, 5, 10, 20};
         int[] count = new int[]{0, 0, 0, 0};
-        List<String> worker;
+        List<String> worker = null;
         for (int i = start; i < winners.size(); i++) {
-            List<String> user = contentBase.getNeighbors(features, i, winners, neighborNums);
-            Set<String> set = new HashSet<>(user);
-            // 分类时只有一个类异常
-            if (set.size() == 1) {
-                worker = new ArrayList<String>() {{
-                    add(user.get(0));
-                }};
-            } else {
-                Map<Double, String> winnerIndex = getWinnerIndex(user, neighborNums);
-                Instances instances = WekaArffUtil.getInstances(Constant.CLASSIFIER_DIRECTORY + String.valueOf(i));
-                instances.setClassIndex(instances.numAttributes() - 1);
-                Map<String, Double> tcResult = tcBayes.getRecommendResult(instances, neighborNums, winnerIndex);
-                worker = recommendWorker(tcResult);
-            }
-            for (int j = 0; j < num.length; j++) {
-                for (int k = 0; k < worker.size() && k < num[j]; k++) {
-                    if (winners.get(i).equals(worker.get(k))) {
-                        count[j]++;
-                        break;
-                    }
-                }
-            }
+            Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, i, winners, neighborNums);
+            worker = recommendWorker(tcResult);
+            calculateResult(winners.get(i), worker, count);
         }
-        for (int i = 0; i < num.length; i++) {
-            System.out.println(num[i] + "\t" + 1.0 * count[i] / (winners.size() - start));
+        for (int i = 0; i < count.length; i++) {
+            System.out.println(1.0 * count[i] / (winners.size() - start));
         }
     }
 
     // 先kmeans聚类在某一类别中分类
     public void clusterClassifier(String challengeType, int n) {
+        System.out.println("Cluster");
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winner = featureExtract.getWinners();
-        WekaArffUtil.writeToArffCluster(challengeType, features);
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        Instances instances = WekaArffUtil.getInstances(Constant.CLUSTER_DIRECTORY + challengeType);
-        int k, start = (int) (0.9 * winner.size());
+        int start = (int) (0.9 * winner.size());
         try {
-            SimpleKMeans kMeans = new SimpleKMeans();
-            kMeans.setNumClusters(n);
-            kMeans.buildClusterer(new Instances(instances, 0, start));
-            for (int i = 0; i < start; i++) {
-                k = kMeans.clusterInstance(instances.instance(i));
-                if (map.containsKey(k)) {
-                    map.get(k).add(i);
-                } else {
-                    List<Integer> temp = new ArrayList<>();
-                    temp.add(i);
-                    map.put(k, temp);
-                }
-            }
             List<String> worker;
-            int[] num = new int[]{1, 5, 10, 20};
             int[] count = new int[]{0, 0, 0, 0};
             for (int i = start; i < winner.size(); i++) {
-                k = kMeans.clusterInstance(instances.instance(i));
-                List<Integer> list = map.get(k);
-                double[][] feature = new double[list.size() + 1][features[0].length];
-                List<String> user = new ArrayList<>(list.size() + 1);
-                for (int j = 0; j < list.size(); j++) {
-                    feature[j] = features[list.get(j)];
-                    user.add(winner.get(list.get(j)));
-                }
-                feature[list.size()] = features[i];
-                user.add(winner.get(i));
-                Set<String> set = new HashSet<>(user);
-                if (set.size() > 1) {
-                    WekaArffUtil.writeToArffClassfiler(String.valueOf(i), feature, user);
-                    Map<Double, String> winnerIndex = getWinnerIndex(user, user.size() - 1);
-                    Instances testInstances = WekaArffUtil.getInstances(Constant.CLASSIFIER_DIRECTORY + String.valueOf(i));
-                    testInstances.setClassIndex(testInstances.numAttributes() - 1);
-                    Map<String, Double> tcResult = tcBayes.getRecommendResult(testInstances, list.size(), winnerIndex);
-                    worker = recommendWorker(tcResult);
-                } else {
-                    worker = new ArrayList<>();
-                    worker.add(user.get(0));
-                }
-                for (int j = 0; j < num.length; j++) {
-                    for (int t = 0; t < worker.size() && t < num[j]; t++) {
-                        if (winner.get(i).equals(worker.get(t))) {
-                            count[j]++;
-                            break;
-                        }
-                    }
-                }
-                // 更新聚类结果
-                if (map.containsKey(k)) {
-                    map.get(k).add(i);
-                } else {
-                    List<Integer> temp = new ArrayList<>();
-                    temp.add(i);
-                    map.put(k, temp);
-                }
+                Map<String, Double> result = cluster.getRecommendResult(challengeType, features, i, n, winner);
+                worker = recommendWorker(result);
+                calculateResult(winner.get(i), worker, count);
             }
-            for (int j = 0; j < num.length; j++) {
-                System.out.println(num[j] + "\t" + 1.0 * count[j] / (winner.size() - start));
+            for (int j = 0; j < count.length; j++) {
+                System.out.println(1.0 * count[j] / (winner.size() - start));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,47 +74,36 @@ public class RecommendResult {
     public void getRecommendResult(String challengeType) {
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners();
-        WekaArffUtil.writeToArffClassfiler(challengeType, features, winners);
-        Map<Integer, Map<String, Double>> score = featureExtract.getScores();
-        List<ChallengeItem> items = featureExtract.getItems();
+        List<Map<String, Double>> scores = featureExtract.getUserScore();
         int start = (int) (0.9 * winners.size());
-        Instances instances = WekaArffUtil.getInstances(Constant.CLASSIFIER_DIRECTORY + challengeType);
-        instances.setClassIndex(instances.numAttributes() - 1);
-        Set<String> set = new HashSet<>(winners);
-        List<Map<String, Double>> scores = new ArrayList<>(start);
-        for (int i = 0; i < winners.size(); i++) {
-            scores.add(score.get(items.get(i).getChallengeId()));
-        }
         List<String> worker;
-        int a;
-        double b, c;
-        double[][] results = new double[11][4];
-        for (a = 0; a <= 10; a++) {
-            b = 1.0 * a / 10;
-            c = 1.0 - b;
-            int[] num = new int[]{1, 5, 10, 20};
-            int[] count = new int[]{0, 0, 0, 0};
-            for (int i = start; i < winners.size(); i++) {
-                Map<Double, String> winnerIndex = getWinnerIndex(winners, i);
-//                Map<String, Double> tcResult = tcBayes.getRecommendResult(instances, i, winnerIndex);
-                Map<String, Double> cbmResult = contentBase.getRecommendResult(features, i, scores, set);
-//                worker = recommendWorker(tcResult);
-                worker = recommendWorker(cbmResult);
-//                worker = recommendWorker(tcResult, cbmResult, b, c);
-                for (int j = 0; j < num.length; j++) {
-                    for (int k = 0; k < worker.size() && k < num[j]; k++) {
-                        if (winners.get(i).equals(worker.get(k))) {
-                            count[j]++;
-                            break;
-                        }
-                    }
-                }
+        int[] count = new int[]{0, 0, 0, 0};
+        System.out.println("UCL");
+        for (int i = start; i < winners.size(); i++) {
+            double[][]data=new double[i+1][features[0].length];
+            List<String>user=new ArrayList<>(i+1);
+            List<Integer>index=new ArrayList<>(i+1);
+            for(int j=0;j<=i;j++){
+                index.add(j);
             }
-            System.out.println(b + " : " + c);
-            for (int i = 0; i < num.length; i++) {
-                results[a][i] = 1.0 * count[i] / (winners.size() - start);
-                System.out.println(num[i] + "\t" + results[a][i]);
-            }
+            Maths.copy(features,data,winners,user,index);
+            Maths.normalization(data,5);
+            Map<String, Double> tcResult = tcBayes.getRecommendResult(Constant.CLASSIFIER_DIRECTORY + challengeType + "/" + i, data, i, user);
+            worker = recommendWorker(tcResult);
+            calculateResult(winners.get(i), worker, count);
+        }
+        for (int i = 0; i < count.length; i++) {
+            System.out.println(1.0 * count[i] / (winners.size() - start));
+        }
+        count = new int[]{0, 0, 0, 0};
+        System.out.println("CBM");
+        for (int i = start; i < winners.size(); i++) {
+            Map<String, Double> cbmResult = contentBase.getRecommendResult(features, i, scores, winners);
+            worker = recommendWorker(cbmResult);
+            calculateResult(winners.get(i), worker, count);
+        }
+        for (int i = 0; i < count.length; i++) {
+            System.out.println(1.0 * count[i] / (winners.size() - start));
         }
     }
 
@@ -208,24 +112,16 @@ public class RecommendResult {
         double[][] features = featureExtract.getTimesAndAward();
         List<String> winners = featureExtract.getWinners();
         int start = (int) (0.9 * winners.size());
-        WordCount[] wordCounts = featureExtract.getWordCount(start);
-        List<Map<String, Double>> result = bayes.getRecommendResultUcl(wordCounts, features, winners, start);
-        int[] num = new int[]{1, 5, 10, 20};
         int[] count = new int[]{0, 0, 0, 0};
         List<String> worker;
         for (int i = start; i < winners.size(); i++) {
-            worker = recommendWorker(result.get(i - start));
-            for (int j = 0; j < num.length; j++) {
-                for (int k = 0; k < worker.size() && k < num[j]; k++) {
-                    if (winners.get(i).equals(worker.get(k))) {
-                        count[j]++;
-                        break;
-                    }
-                }
-            }
+            WordCount[] wordCounts = featureExtract.getWordCount(i);
+            Map<String, Double> result = bayes.getRecommendResultUcl(wordCounts, features, winners, i);
+            worker = recommendWorker(result);
+            calculateResult(winners.get(i), worker, count);
         }
-        for (int i = 0; i < num.length; i++) {
-            System.out.println(num[i] + "\t" + 1.0 * count[i] / (winners.size() - start));
+        for (int i = 0; i < count.length; i++) {
+            System.out.println(1.0 * count[i] / (winners.size() - start));
         }
     }
 
@@ -288,5 +184,17 @@ public class RecommendResult {
             workers.add(list.get(i).getKey());
         }
         return workers;
+    }
+
+    public void calculateResult(String winner, List<String> worker, int[] count) {
+        int[] num = new int[]{1, 5, 10, 20};
+        for (int j = 0; j < num.length; j++) {
+            for (int k = 0; k < worker.size() && k < num[j]; k++) {
+                if (winner.equals(worker.get(k))) {
+                    count[j]++;
+                    break;
+                }
+            }
+        }
     }
 }

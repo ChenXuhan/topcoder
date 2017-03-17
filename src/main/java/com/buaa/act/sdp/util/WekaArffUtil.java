@@ -19,7 +19,7 @@ public class WekaArffUtil {
         FileWriter fileWriter = null;
         BufferedWriter writer = null;
         try {
-            fileWriter = new FileWriter(Constant.CLASSIFIER_DIRECTORY +filename+".arff");
+            fileWriter = new FileWriter(filename+".arff");
             writer = new BufferedWriter(fileWriter);
             writer.write("@relation user-features\n");
             for (int i = 0; i < data[0].length; i++) {
@@ -57,7 +57,7 @@ public class WekaArffUtil {
         FileWriter fileWriter = null;
         BufferedWriter writer = null;
         try {
-            fileWriter = new FileWriter(Constant.CLUSTER_DIRECTORY +filename+".arff");
+            fileWriter = new FileWriter(filename+".arff");
             writer = new BufferedWriter(fileWriter);
             writer.write("@relation user-features\n");
             for (int i = 0; i < data[0].length; i++) {

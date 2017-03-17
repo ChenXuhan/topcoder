@@ -6,6 +6,7 @@ import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.service.api.AbilityExp;
 import com.buaa.act.sdp.service.api.ChallengeApi;
+import com.buaa.act.sdp.service.recommend.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.RecommendResult;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.update.ChallengeStatistics;
@@ -15,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by yang on 2016/10/19.
@@ -46,12 +45,33 @@ public class TestChallenge {
 
     @Autowired
     private AbilityExp exp;
+    @Autowired
+    private FeatureExtract featureExtract;
 
     @Test
-    public void testrecommend() {
-//        recommendResult.getRecommendResult();
-//        recommendResult.getRecommendBayesUcl();
-//        weka.weka();
+    public void testChallenge() {
+        featureExtract.getFeatures("Assembly Competition");
+        List<ChallengeItem> items = featureExtract.getItems();
+        List<String>winner=featureExtract.getWinners();
+        System.out.println(items.size()+"\t"+winner.size());
+        Map<String,List<Integer>>map=new HashMap<>();
+        for(int i=0;i<winner.size();i++){
+            if(map.containsKey(winner.get(i))){
+                map.get(winner.get(i)).add(i);
+            }else {
+                List<Integer>list=new ArrayList<>();
+                list.add(i);
+                map.put(winner.get(i),list);
+            }
+        }
+        for(Map.Entry<String,List<Integer>>entry:map.entrySet()){
+            List<Integer>list=entry.getValue();
+            System.out.println(entry.getKey()+"\t"+list.size());
+            for(int j=0;j<list.size();j++){
+                ChallengeItem item=items.get(list.get(j));
+                System.out.println(item.getChallengeName()+" "+item.getPostingDate()+" "+item.getDuration()+" "+Arrays.toString(item.getPrize())+"\t"+Arrays.toString(item.getTechnology())+" "+Arrays.toString(item.getPlatforms()));
+            }
+        }
     }
 
     @Test
@@ -79,29 +99,29 @@ public class TestChallenge {
     }
 
     @Test
-    public void challengeSkill(){
-        Set<String> set=new HashSet<>();
-        List<ChallengeItem>items=challengeItemDao.getAllChallenges();
-        Set<String>sets=new HashSet<>();
-        for(ChallengeItem item:items){
-            if(item.getTechnology()!=null) {
+    public void challengeSkill() {
+        Set<String> set = new HashSet<>();
+        List<ChallengeItem> items = challengeItemDao.getAllChallenges();
+        Set<String> sets = new HashSet<>();
+        for (ChallengeItem item : items) {
+            if (item.getTechnology() != null) {
                 for (String s : item.getTechnology()) {
                     sets.add(s);
                 }
             }
         }
-        for(String s: Constant.TECHNOLOGIES){
+        for (String s : Constant.TECHNOLOGIES) {
             set.add(s);
         }
-        for(String s:sets){
-            boolean flag=false;
-            for(String ss:set) {
+        for (String s : sets) {
+            boolean flag = false;
+            for (String ss : set) {
                 if (ss.startsWith(s)) {
-                    flag=true;
+                    flag = true;
                     break;
                 }
             }
-            if(!flag){
+            if (!flag) {
                 System.out.println(s);
             }
         }

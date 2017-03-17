@@ -35,11 +35,11 @@ public class Bayes {
         return result;
     }
 
-    public Map<String, Double> getAllClassProbality(double[][] features, double[] feature, Map<String, List<Integer>> lableIndexMap) {
+    public Map<String, Double> getAllClassProbality(double[][] features, int index, Map<String, List<Integer>> lableIndexMap) {
         Map<String, BigDecimal> map = new HashMap<>();
         BigDecimal bigDecimal = BigDecimal.valueOf(0.0), temp;
         for (String type : lableIndexMap.keySet()) {
-            temp = getClassProbality(features, feature, type, lableIndexMap);
+            temp = getClassProbality(features, features[index], type, lableIndexMap);
             bigDecimal = bigDecimal.add(temp);
             map.put(type, temp);
         }
@@ -55,20 +55,14 @@ public class Bayes {
     }
 
     //只计算需求长度、不使用tf-idf
-    public List<Map<String, Double>> getRecommendResult(double[][] features, List<String> winners,int num) {
-        Map<String, List<Integer>> lableIndexMap = getLableIndexMap(winners, num);
-        double[] testFeature;
-        List<Map<String, Double>> result = new ArrayList<>();
-        for (int i = num; i < features.length; i++) {
-            testFeature = features[i];
-            result.add(getAllClassProbality(features, testFeature, lableIndexMap));
-        }
-        return result;
+    public Map<String, Double> getRecommendResult(double[][] features, List<String> winners, int index) {
+        Map<String, List<Integer>> lableIndexMap = getLableIndexMap(winners, index);
+        return getAllClassProbality(features, index, lableIndexMap);
     }
 
-    public Map<String, List<Integer>> getLableIndexMap(List<String> winners, int num) {
+    public Map<String, List<Integer>> getLableIndexMap(List<String> winners, int index) {
         Map<String, List<Integer>> lableIndexMap = new HashMap<>();
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < index; i++) {
             if (lableIndexMap.containsKey(winners.get(i))) {
                 lableIndexMap.get(winners.get(i)).add(i);
             } else {
@@ -81,13 +75,9 @@ public class Bayes {
     }
 
     //UCL论文中推荐方法、使用tf-idf处理需求文本
-    public List<Map<String, Double>> getRecommendResultUcl(WordCount[] wordCounts, double[][] features, List<String> winners, int start) {
-        Map<String, List<Integer>> indexMap = getLableIndexMap(winners, start);
-        List<Map<String, Double>> list = new ArrayList<>(winners.size() - start);
-        for (int i = start; i < winners.size(); i++) {
-            list.add(getTypeProbalityUcl(wordCounts, features, indexMap, i));
-        }
-        return list;
+    public Map<String, Double> getRecommendResultUcl(WordCount[] wordCounts, double[][] features, List<String> winners, int index) {
+        Map<String, List<Integer>> indexMap = getLableIndexMap(winners, index);
+        return getTypeProbalityUcl(wordCounts, features, indexMap, index);
     }
 
     public Map<String, Double> getTypeProbalityUcl(WordCount[] wordCounts, double[][] features, Map<String, List<Integer>> indexMap, int index) {
@@ -95,9 +85,9 @@ public class Bayes {
         BigDecimal sum = BigDecimal.valueOf(0.0);
         for (Map.Entry<String, List<Integer>> entry : indexMap.entrySet()) {
             BigDecimal bigDecimal = BigDecimal.valueOf(1.0);
-            bigDecimal = bigDecimal.multiply(getTypeProbality(wordCounts[0],index, entry.getValue()));
-            bigDecimal = bigDecimal.multiply(getTypeProbality(wordCounts[1],index, entry.getValue()));
-            bigDecimal = bigDecimal.multiply(getTypeProbality(wordCounts[2],index, entry.getValue()));
+            bigDecimal = bigDecimal.multiply(getTypeProbality(wordCounts[0], index, entry.getValue()));
+            bigDecimal = bigDecimal.multiply(getTypeProbality(wordCounts[1], index, entry.getValue()));
+            bigDecimal = bigDecimal.multiply(getTypeProbality(wordCounts[2], index, entry.getValue()));
             bigDecimal = bigDecimal.multiply(getClassProbality(features, features[index], entry.getKey(), indexMap));
             sum = sum.add(bigDecimal);
             map.put(entry.getKey(), bigDecimal);
@@ -132,6 +122,7 @@ public class Bayes {
                 sum += taskWords.get(index);
             }
             BigDecimal decimal = BigDecimal.valueOf(1.0 * (count + 1) / (sum + allWords.size()));
+//            BigDecimal decimal = BigDecimal.valueOf(1.0 * count / sum);
             for (int j = 0; j < entry.getValue(); j++) {
                 bigDecimal = bigDecimal.multiply(decimal);
             }

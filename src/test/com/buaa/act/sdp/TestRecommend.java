@@ -29,10 +29,10 @@ public class TestRecommend {
 
     @Test
     public void testRecommend() {
-        recommendResult.getRecommendResult("Development");
+//        recommendResult.getRecommendResult("Design");
 //        recommendResult.getRecommendBayesUcl("Assembly Competition");
 //        recommendResult.clusterAndClassifier("Assembly Competition", 200);
-        recommendResult.clusterClassifier("Development",5);
-        recommendResult.localClassifier("Development",250);
+//        recommendResult.clusterClassifier("Assembly Competition", 20);
+        recommendResult.localClassifier("Code", -1);
     }
 }

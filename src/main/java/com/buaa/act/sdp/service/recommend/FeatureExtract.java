@@ -5,7 +5,7 @@ import com.buaa.act.sdp.bean.challenge.ChallengeSubmission;
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
-import com.buaa.act.sdp.util.WekaArffUtil;
+import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +28,7 @@ public class FeatureExtract {
     private List<String> winners;
     //challengeId对应的提交人的得分
     private Map<Integer, Map<String, Double>> scores;
-
+    private List<Map<String,Double>>userScore;
     private int requirementWordSize;
     private int titleWordSize;
 
@@ -36,6 +36,7 @@ public class FeatureExtract {
         items = new ArrayList<>();
         winners = new ArrayList<>();
         scores = new HashMap<>();
+        userScore=new ArrayList<>();
         requirementWordSize = 0;
     }
 
@@ -59,9 +60,16 @@ public class FeatureExtract {
         return titleWordSize;
     }
 
+    public List<Map<String, Double>> getUserScore() {
+        return userScore;
+    }
+
     //一个人对一个challenge提交多次，以最高分数为主
     public void getUserScores(ChallengeSubmission challengeSubmission) {
         Map<String, Double> score;
+        if(Double.parseDouble(challengeSubmission.getFinalScore())<80){
+            return;
+        }
         if (scores.containsKey(challengeSubmission.getChallengeID())) {
             score = scores.get(challengeSubmission.getChallengeID());
             if (score.containsKey(challengeSubmission.getHandle()) && score.get(challengeSubmission.getHandle()).doubleValue() >= Double.parseDouble(challengeSubmission.getFinalScore())) {
@@ -89,7 +97,7 @@ public class FeatureExtract {
                 continue;
             }
             if (challengeSet.contains(challengeSubmission.getChallengeID())) {
-                if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1")) {
+                if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1")&&Double.parseDouble(challengeSubmission.getFinalScore())>=80) {
                     user.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
                 }
                 getUserScores(challengeSubmission);
@@ -98,7 +106,9 @@ public class FeatureExtract {
                 if (filterChallenge(challengeItem, challengeType)) {
                     challengeSet.add(challengeItem.getChallengeId());
                     challengeItems.add(challengeItem);
-                    user.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
+                    if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1")&&Double.parseDouble(challengeSubmission.getFinalScore())>=80) {
+                        user.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
+                    }
                     getUserScores(challengeSubmission);
                 } else {
                     set.add(challengeSubmission.getChallengeID());
@@ -112,16 +122,16 @@ public class FeatureExtract {
                 map.put(entry.getValue(), 1);
             }
         }
-        Set<String> mySet = new HashSet<>();
         for (int i = 0; i < challengeItems.size(); i++) {
             String win = user.get(challengeItems.get(i).getChallengeId());
-            if (map.get(win) >=5) {
+            if (map.containsKey(win)&&map.get(win) >=5) {
                 items.add(challengeItems.get(i));
                 winners.add(win);
-                mySet.add(win);
+                userScore.add(scores.get(challengeItems.get(i).getChallengeId()));
             }
         }
-        System.out.println(items.size() + "\t" + mySet.size());
+        Set<String>sets=new HashSet<>(winners);
+        System.out.println(winners.size()+"\t"+sets.size());
     }
 
     //对challenge进行过滤
@@ -193,7 +203,7 @@ public class FeatureExtract {
             features[i][index++] = item.getDuration();
             features[i][index++] = Double.parseDouble(item.getPrize()[0]);
         }
-        normalization(features, 2);
+        Maths.normalization(features, 2);
         return features;
     }
 
@@ -244,7 +254,7 @@ public class FeatureExtract {
         titleWordSize = wordCounts[1].getWordSize();
         int length = requirementWordSize + titleWordSize + skillSet.size() + 3;
         double[][] features = new double[items.size()][length];
-        normalization(paymentAndDuration, 3);
+        Maths.normalization(paymentAndDuration, 3);
         for (int i = 0; i < features.length; i++) {
             index = 0;
             features[i][index++] = paymentAndDuration[i][0];
@@ -281,6 +291,7 @@ public class FeatureExtract {
             double award = 0;
             for (String str : item.getPrize()) {
                 award += Double.parseDouble(str);
+                break;
             }
             features[i][index++] = award;
             skill.clear();
@@ -306,7 +317,7 @@ public class FeatureExtract {
                 }
             }
         }
-        normalization(features, 5);
+//        Maths.normalization(features, 5);
         return features;
     }
 
@@ -330,23 +341,4 @@ public class FeatureExtract {
         return features;
     }
 
-    // 向量归一化处理,[0-1]
-    public void normalization(double[][] features, int k) {
-        double max, min;
-        for (int i = 0; i < k; i++) {
-            max = 0;
-            min = Integer.MAX_VALUE;
-            for (int j = 0; j < features.length; j++) {
-                if (features[j][i] > max) {
-                    max = features[j][i];
-                }
-                if (features[j][i] < min) {
-                    min = features[j][i];
-                }
-            }
-            for (int j = 0; j < features.length; j++) {
-                features[j][i] = (features[j][i] - min) / (max - min);
-            }
-        }
-    }
 }

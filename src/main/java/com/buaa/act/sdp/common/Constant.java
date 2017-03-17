@@ -212,4 +212,5 @@ public class Constant {
 
     public static final String CLASSIFIER_DIRECTORY = "F:/arff/classifier/";
     public static final String CLUSTER_DIRECTORY = "F:/arff/cluster/";
+    public static final String LOCAL_DIRECTORY = "F:/arff/local/";
 }
