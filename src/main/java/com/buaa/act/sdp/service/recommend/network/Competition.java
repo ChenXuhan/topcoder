@@ -38,7 +38,6 @@ public class Competition {
                 scores.put(challengeRegistrant.getChallengeID(),score);
             }
         }
-        featureExtract.getWinnersAndScores("");
         Map<Integer, Map<String, Double>>submissionScores=featureExtract.getScores();
         updateWorkerScores(submissionScores);
         return scores;

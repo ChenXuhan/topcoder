@@ -49,6 +49,9 @@ public class FeatureExtract {
     }
 
     public Map<Integer, Map<String, Double>> getScores() {
+        if(scores.size()==0){
+            getWinnersAndScores(null);
+        }
         return scores;
     }
 
@@ -62,6 +65,10 @@ public class FeatureExtract {
 
     public List<Map<String, Double>> getUserScore() {
         return userScore;
+    }
+
+    public void init(String challengeType){
+        getWinnersAndScores(challengeType);
     }
 
     //一个人对一个challenge提交多次，以最高分数为主
