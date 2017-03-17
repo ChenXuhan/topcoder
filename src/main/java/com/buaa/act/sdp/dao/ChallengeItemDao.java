@@ -22,4 +22,5 @@ public interface ChallengeItemDao {
      Integer[] getAllDuration();
      Integer[] getAllNumRegistrants();
      Integer[] getAllNumSubmissions();
+     List<Map<String,Integer>>getProjectId();
 }

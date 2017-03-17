@@ -9,6 +9,8 @@ import com.buaa.act.sdp.service.api.ChallengeApi;
 import com.buaa.act.sdp.service.recommend.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.RecommendResult;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
+import com.buaa.act.sdp.service.recommend.network.Collaboration;
+import com.buaa.act.sdp.service.recommend.network.Competition;
 import com.buaa.act.sdp.service.update.ChallengeStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +49,22 @@ public class TestChallenge {
     private AbilityExp exp;
     @Autowired
     private FeatureExtract featureExtract;
+
+    @Autowired
+    private Collaboration collaboration;
+
+    @Autowired
+    private Competition competition;
+
+    @Test
+    public void testProjectId(){
+        System.out.println(collaboration.getProjectToChallenges());
+    }
+
+    @Test
+    public void  testGetWorkerScores(){
+        System.out.println(competition.getAllWorkerScores());
+    }
 
     @Test
     public void testChallenge() {
