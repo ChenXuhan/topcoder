@@ -64,10 +64,9 @@ public class Maths {
 
     public static List<Integer> getSimilarityChallenges(double[][] features, int index) {
         Map<Integer, Double> map = new HashMap<>();
-        double k, sum;
+        double k;
         for (int i = 0; i <features.length; i++) {
             k=0;
-            sum=0;
             if (i == index) {
                 continue;
             }

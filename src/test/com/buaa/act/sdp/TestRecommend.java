@@ -26,7 +26,6 @@ public class TestRecommend {
         featureExtract.getFeatures("Code");
     }
 
-
     @Test
     public void testRecommend() {
 //        recommendResult.getRecommendResult("Design");
