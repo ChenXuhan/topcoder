@@ -1,10 +1,12 @@
 package com.buaa.act.sdp.service.recommend;
 
+import com.buaa.act.sdp.bean.challenge.ChallengeItem;
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.recommend.classification.Bayes;
 import com.buaa.act.sdp.service.recommend.classification.LocalClassifier;
 import com.buaa.act.sdp.service.recommend.classification.TcBayes;
+import com.buaa.act.sdp.service.recommend.network.Competition;
 import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,18 +31,26 @@ public class RecommendResult {
     private ContentBase contentBase;
     @Autowired
     private FeatureExtract featureExtract;
+    @Autowired
+    private Competition competition;
 
     //  寻找k个邻居，局部的分类器
     public void localClassifier(String challengeType, int neighborNums) {
         System.out.println("Local");
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners();
+        List<ChallengeItem> challengeItems = featureExtract.getItems();
         int start = (int) (0.9 * winners.size());
-        int[] count = new int[]{0, 0, 0, 0};
+        int[] count = new int[]{0,0,0,0};
         List<String> worker = null;
         for (int i = start; i < winners.size(); i++) {
-            Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, i, winners, neighborNums);
+            System.out.println(challengeItems.get(i).getChallengeId() + "\t" + i + "\t" + winners.get(i));
+            Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, i, winners);
             worker = recommendWorker(tcResult);
+            System.out.println(worker);
+            List<Integer> index = localClassifier.getNeighbors();
+            worker = competition.workerRank(index, worker);
+            System.out.println(worker);
             calculateResult(winners.get(i), worker, count);
         }
         for (int i = 0; i < count.length; i++) {
@@ -80,14 +90,14 @@ public class RecommendResult {
         int[] count = new int[]{0, 0, 0, 0};
         System.out.println("UCL");
         for (int i = start; i < winners.size(); i++) {
-            double[][]data=new double[i+1][features[0].length];
-            List<String>user=new ArrayList<>(i+1);
-            List<Integer>index=new ArrayList<>(i+1);
-            for(int j=0;j<=i;j++){
+            double[][] data = new double[i + 1][features[0].length];
+            List<String> user = new ArrayList<>(i + 1);
+            List<Integer> index = new ArrayList<>(i + 1);
+            for (int j = 0; j <= i; j++) {
                 index.add(j);
             }
-            Maths.copy(features,data,winners,user,index);
-            Maths.normalization(data,5);
+            Maths.copy(features, data, winners, user, index);
+            Maths.normalization(data, 5);
             Map<String, Double> tcResult = tcBayes.getRecommendResult(Constant.CLASSIFIER_DIRECTORY + challengeType + "/" + i, data, i, user);
             worker = recommendWorker(tcResult);
             calculateResult(winners.get(i), worker, count);
@@ -187,7 +197,7 @@ public class RecommendResult {
     }
 
     public void calculateResult(String winner, List<String> worker, int[] count) {
-        int[] num = new int[]{1, 5, 10, 20};
+        int[] num = new int[]{1,5,10,20};
         for (int j = 0; j < num.length; j++) {
             for (int k = 0; k < worker.size() && k < num[j]; k++) {
                 if (winner.equals(worker.get(k))) {
