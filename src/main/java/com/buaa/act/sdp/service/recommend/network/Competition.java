@@ -25,6 +25,9 @@ public class Competition {
         scores=new HashMap<>();
     }
 
+    /*
+    * 所有challenge中，所有开发者的分数
+    * */
     public Map<Integer, Map<String, Double>> getAllWorkerScores() {
         List<ChallengeRegistrant>challengeRegistrants=challengeRegistrantDao.getAllRegistrant();
         Map<String,Double>score;

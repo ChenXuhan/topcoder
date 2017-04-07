@@ -98,4 +98,8 @@
     <select id="getProjectId" resultType="java.util.Map">
         SELECT challengeId,projectId from challenge_item where projectId>0
     </select>
+
+    <select id="getDifficultyDegree" resultType="java.lang.Double">
+        SELECT difficultyDegree from challenge_item where challengeId=#{challengeId}
+    </select>
 </mapper>

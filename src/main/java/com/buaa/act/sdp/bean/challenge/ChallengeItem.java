@@ -33,6 +33,7 @@ public class ChallengeItem {
     private int numSubmissions;
     private int numRegistrants;
     private int duration;
+    private double difficultyDegree;
 
     public int getDuration() {
         return duration;
@@ -261,5 +262,13 @@ public class ChallengeItem {
     @Override
     public String toString() {
         return challengeName+"+++"+detailedRequirements;
+    }
+
+    public double getDifficultyDegree() {
+        return difficultyDegree;
+    }
+
+    public void setDifficultyDegree(double difficultyDegree) {
+        this.difficultyDegree = difficultyDegree;
     }
 }

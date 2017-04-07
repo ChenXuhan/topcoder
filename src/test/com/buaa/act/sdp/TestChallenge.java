@@ -6,11 +6,13 @@ import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.service.api.AbilityExp;
 import com.buaa.act.sdp.service.api.ChallengeApi;
+import com.buaa.act.sdp.service.api.neo4jConn;
 import com.buaa.act.sdp.service.recommend.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.RecommendResult;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.recommend.network.Collaboration;
 import com.buaa.act.sdp.service.recommend.network.Competition;
+import com.buaa.act.sdp.service.recommend.network.relationGen;
 import com.buaa.act.sdp.service.update.ChallengeStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,14 +58,43 @@ public class TestChallenge {
     @Autowired
     private Competition competition;
 
+    @Autowired
+    private relationGen gen;
+
+    @Autowired
+    private neo4jConn neo4j;
     @Test
     public void testProjectId(){
         System.out.println(collaboration.getProjectToChallenges());
+        System.out.println(collaboration.getProjectToChallenges().size());
     }
 
     @Test
     public void  testGetWorkerScores(){
-        System.out.println(competition.getAllWorkerScores());
+        Map<Integer, Map<String, Double>> scores = competition.getAllWorkerScores();
+        Iterator<Map.Entry<Integer, Map<String, Double>>> entries = scores.entrySet().iterator();
+        while (entries.hasNext()) {
+            Map.Entry<Integer, Map<String, Double>> entry = entries.next();
+            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+        }
+        System.out.println(competition.getAllWorkerScores().size());
+    }
+
+
+    @Test
+    public void testRelationGen(){
+       // neo4j.getTry();
+        //exp.userAbility.userAbilityInsert();
+        //gen.collaborationGen();
+       // gen.writeToDb();
+       exp.userAbility.userAbilityInsert();
+      // System.out.println(exp.userAbility.getAbility("Breusov"));
+    }
+
+
+    @Test
+    public void testCsv(){
+        gen.collaborationGen();
     }
 
     @Test
@@ -109,11 +140,30 @@ public class TestChallenge {
 
     @Test
     public void teat1() {
+
         /*ability.ope.run();
         ability.getAbility("nomo_kazza","CSS");*/
         //exp.getTech(30054047);
-        exp.userAbility.ope.run();
-        exp.getCoder(30054422);
+       // exp.userAbility.ope.run();
+        //exp.getCoder(30050505);
+        //exp.userAbility.getUserAllAbility("ksladkov");
+        //exp.userAbility.getAbility("ksladkov","CSS");
+        /*int sun = 0;
+        for(int i = 0; i < Constant.TECH.length -1;i ++){
+            for(int j = i+1; j <Constant.TECH.length;j++){
+                if(Constant.TECH[i]==Constant.TECH[j]){
+                    sun++;
+                    System.out.println(Constant.TECH[i]);
+                }
+            }
+        }
+        System.out.println(sun);*/
+        //System.out.println(Constant.TECH.length);
+        //System.out.println(exp.userAbility.getAbility("-jacob-"));
+        //neo4j.getTry();
+     //exp.userAbility.ttt();
+       String str =  exp.userAbility.getAbility("12778");
+        System.out.println(str);
     }
 
     @Test
@@ -144,4 +194,5 @@ public class TestChallenge {
             }
         }
     }
+
 }
