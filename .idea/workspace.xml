@@ -42,18 +42,10 @@
       <file leaf-file-name="TestChallenge.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestChallenge.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="165" column="30" selection-start-line="165" selection-start-column="30" selection-end-line="165" selection-end-column="30" />
+            <state relative-caret-position="105">
+              <caret line="89" column="33" selection-start-line="89" selection-start-column="33" selection-end-line="89" selection-end-column="33" />
               <folding>
-                <element signature="e#3037#3038#0" expanded="false" />
-                <element signature="e#3075#3076#0" expanded="false" />
                 <element signature="method#testChallenge#0;class#TestChallenge#0" expanded="false" />
-                <element signature="e#4319#4320#0" expanded="false" />
-                <element signature="e#4377#4378#0" expanded="false" />
-                <element signature="e#4419#4420#0" expanded="false" />
-                <element signature="e#4500#4501#0" expanded="false" />
-                <element signature="e#4548#4549#0" expanded="false" />
-                <element signature="e#4602#4603#0" expanded="false" />
                 <element signature="method#challengeSkill#0;class#TestChallenge#0" expanded="false" />
               </folding>
             </state>
@@ -65,21 +57,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1558">
               <caret line="103" column="27" selection-start-line="103" selection-start-column="27" selection-end-line="103" selection-end-column="27" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#1257#1258#0" expanded="false" />
-                <element signature="e#1287#1288#0" expanded="false" />
-                <element signature="e#1332#1333#0" expanded="false" />
-                <element signature="e#1360#1361#0" expanded="false" />
-                <element signature="e#1576#1577#0" expanded="false" />
-                <element signature="e#1618#1619#0" expanded="false" />
-                <element signature="e#1655#1656#0" expanded="false" />
-                <element signature="e#1691#1692#0" expanded="false" />
-                <element signature="e#1746#1747#0" expanded="false" />
-                <element signature="e#1778#1779#0" expanded="false" />
-                <element signature="e#1823#1824#0" expanded="false" />
-                <element signature="e#1873#1874#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -87,28 +65,28 @@
       <file leaf-file-name="Competition.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/network/Competition.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="646">
+            <state relative-caret-position="817">
               <caret line="53" column="58" selection-start-line="53" selection-start-column="58" selection-end-line="53" selection-end-column="58" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserApi.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UserApi.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserApi.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-465">
+            <state relative-caret-position="19">
               <caret line="117" column="74" selection-start-line="117" selection-start-column="74" selection-end-line="117" selection-end-column="74" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserAbility.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="UserAbility.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserAbility.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1938">
-              <caret line="102" column="28" selection-start-line="102" selection-start-column="18" selection-end-line="102" selection-end-column="28" />
+            <state relative-caret-position="466">
+              <caret line="157" column="16" selection-start-line="157" selection-start-column="16" selection-end-line="157" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -119,15 +97,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="551">
               <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
-              <folding>
-                <marker date="1490850944141" expanded="true" signature="319:529" ph="insert into user... " />
-                <marker date="1490850944141" expanded="true" signature="663:702" ph="select * fro... user" />
-                <marker date="1490850944141" expanded="true" signature="784:816" ph="select DISTI... user" />
-                <marker date="1490850944141" expanded="true" signature="915:933" ph="SELECT * fro... user" />
-                <marker date="1490850944141" expanded="true" signature="1040:1165" ph="UPDATE user " />
-                <marker date="1490850944141" expanded="true" signature="1226:1291" ph="UPDATE user " />
-                <marker date="1490850944141" expanded="true" signature="1434:1488" ph="UPDATE user " />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -137,9 +107,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="266">
               <caret line="18" column="9" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -299,6 +267,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -715,8 +685,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -1467,6 +1435,7 @@
       <workItem from="1490712872873" duration="991000" />
       <workItem from="1490713870549" duration="33705000" />
       <workItem from="1491537584709" duration="917000" />
+      <workItem from="1491545655821" duration="23000" />
     </task>
     <servers>
       <YouTrack shared="false" url="">
@@ -1516,10 +1485,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="780152000" />
+    <option name="totallyTimeSpent" value="780175000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="1" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1871,10 +1840,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
-          <folding>
-            <marker date="1489902850886" expanded="true" signature="319:650" ph="insert into collaborationRelation... " />
-            <marker date="1489902850886" expanded="true" signature="702:735" ph="DELETE FROM " />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1928,20 +1894,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
           <caret line="73" column="28" selection-start-line="73" selection-start-column="28" selection-end-line="73" selection-end-column="28" />
-          <folding>
-            <marker date="1489826491557" expanded="true" signature="303:2701" ph="insert into challenge_item... " />
-            <marker date="1489826491557" expanded="true" signature="2843:2906" ph="select * fro... challenge_item" />
-            <marker date="1489826491557" expanded="true" signature="2993:3031" ph="select chall... challenge_item" />
-            <marker date="1489826491557" expanded="true" signature="3149:3177" ph="select * fro... challenge_item" />
-            <marker date="1489826491557" expanded="true" signature="3300:3473" ph="UPDATE chall... " />
-            <marker date="1489826491557" expanded="true" signature="3558:3590" ph="select prize... challenge_item" />
-            <marker date="1489826491557" expanded="true" signature="3686:3729" ph="select relia... challenge_item" />
-            <marker date="1489826491557" expanded="true" signature="3817:3852" ph="select durat... challenge_item" />
-            <marker date="1489826491557" expanded="true" signature="3946:3987" ph="select numRe... challenge_item" />
-            <marker date="1489826491557" expanded="true" signature="4081:4122" ph="select numSu... challenge_item" />
-            <marker date="1489826491557" expanded="true" signature="4204:4270" ph="SELECT chall... challenge_item" />
-            <marker date="1489826491557" expanded="true" signature="4362:4438" ph="SELECT diffi... challenge_item" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1988,9 +1941,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
           <caret line="18" column="9" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1998,42 +1949,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="551">
           <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
-          <folding>
-            <marker date="1490850944141" expanded="true" signature="319:529" ph="insert into user... " />
-            <marker date="1490850944141" expanded="true" signature="663:702" ph="select * fro... user" />
-            <marker date="1490850944141" expanded="true" signature="784:816" ph="select DISTI... user" />
-            <marker date="1490850944141" expanded="true" signature="915:933" ph="SELECT * fro... user" />
-            <marker date="1490850944141" expanded="true" signature="1040:1165" ph="UPDATE user " />
-            <marker date="1490850944141" expanded="true" signature="1226:1291" ph="UPDATE user " />
-            <marker date="1490850944141" expanded="true" signature="1434:1488" ph="UPDATE user " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserAbility.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1938">
-          <caret line="102" column="28" selection-start-line="102" selection-start-column="18" selection-end-line="102" selection-end-column="28" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestChallenge.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="165" column="30" selection-start-line="165" selection-start-column="30" selection-end-line="165" selection-end-column="30" />
-          <folding>
-            <element signature="e#3037#3038#0" expanded="false" />
-            <element signature="e#3075#3076#0" expanded="false" />
-            <element signature="method#testChallenge#0;class#TestChallenge#0" expanded="false" />
-            <element signature="e#4319#4320#0" expanded="false" />
-            <element signature="e#4377#4378#0" expanded="false" />
-            <element signature="e#4419#4420#0" expanded="false" />
-            <element signature="e#4500#4501#0" expanded="false" />
-            <element signature="e#4548#4549#0" expanded="false" />
-            <element signature="e#4602#4603#0" expanded="false" />
-            <element signature="method#challengeSkill#0;class#TestChallenge#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2041,21 +1957,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1558">
           <caret line="103" column="27" selection-start-line="103" selection-start-column="27" selection-end-line="103" selection-end-column="27" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1257#1258#0" expanded="false" />
-            <element signature="e#1287#1288#0" expanded="false" />
-            <element signature="e#1332#1333#0" expanded="false" />
-            <element signature="e#1360#1361#0" expanded="false" />
-            <element signature="e#1576#1577#0" expanded="false" />
-            <element signature="e#1618#1619#0" expanded="false" />
-            <element signature="e#1655#1656#0" expanded="false" />
-            <element signature="e#1691#1692#0" expanded="false" />
-            <element signature="e#1746#1747#0" expanded="false" />
-            <element signature="e#1778#1779#0" expanded="false" />
-            <element signature="e#1823#1824#0" expanded="false" />
-            <element signature="e#1873#1874#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2076,7 +1978,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/recommend/network/Competition.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
+        <state relative-caret-position="817">
           <caret line="53" column="58" selection-start-line="53" selection-start-column="58" selection-end-line="53" selection-end-column="58" />
           <folding />
         </state>
@@ -2084,8 +1986,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-465">
+        <state relative-caret-position="19">
           <caret line="117" column="74" selection-start-line="117" selection-start-column="74" selection-end-line="117" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/com/buaa/act/sdp/TestChallenge.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="89" column="33" selection-start-line="89" selection-start-column="33" selection-end-line="89" selection-end-column="33" />
+          <folding>
+            <element signature="method#testChallenge#0;class#TestChallenge#0" expanded="false" />
+            <element signature="method#challengeSkill#0;class#TestChallenge#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/buaa/act/sdp/service/api/UserAbility.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="466">
+          <caret line="157" column="16" selection-start-line="157" selection-start-column="16" selection-end-line="157" selection-end-column="16" />
           <folding />
         </state>
       </provider>
