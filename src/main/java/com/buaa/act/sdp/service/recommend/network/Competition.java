@@ -154,7 +154,6 @@ public class Competition {
         Map<String, Integer> index = getIndex(worker);
 
         Map<Integer,String>allWinners=new HashMap<>();
-       
 
         int[][] relation = getRelationEdge(index, neighbors, scores, winners,n);
         int[][] winTimes = new int[worker.size()][2];
