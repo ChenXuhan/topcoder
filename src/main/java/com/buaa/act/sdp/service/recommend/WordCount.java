@@ -59,6 +59,7 @@ public class WordCount {
         return allWords.size();
     }
 
+    // 分词，去除停顿词，获取所有的单词
     public List<String>[] getWordsFromText() {
         Analyzer analyzer = new StandardAnalyzer();
         TokenStream tokenStream = null;
@@ -82,6 +83,7 @@ public class WordCount {
         return words;
     }
 
+    // 预处理，分别统计每段话的单词类别数及其数量
     public void init(int start) {
         List<String>[] words = getWordsFromText();
         List<String> word;
@@ -124,6 +126,7 @@ public class WordCount {
         }
     }
 
+    // 计算某一句话的tf
     public double[] getTf(int index) {
         double[] tf = new double[allWords.size()];
         int k = 0;
@@ -141,6 +144,7 @@ public class WordCount {
         return tf;
     }
 
+    // 计算idf
     public double[] getIdf() {
         double[] idf = new double[allWords.size()];
         int index = 0, num;
@@ -151,6 +155,7 @@ public class WordCount {
         return idf;
     }
 
+    // 计算tf-idf
     public List<double[]> getTfIdf() {
         List<double[]> tfIdf = new ArrayList<>();
         double[] idf = getIdf();

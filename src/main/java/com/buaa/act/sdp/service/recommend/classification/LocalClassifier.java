@@ -28,8 +28,8 @@ public class LocalClassifier {
     public List<Integer>getNeighbors(){
         return neighborIndex;
     }
+
     public Map<String, Double> getRecommendResult(String challengeType, double[][] features, int position, List<String> winners) {
-//        List<Integer> neighborIndex = Maths.getNeighbors(features,position, neighbors);
         List<Integer>neighbors=new ArrayList<>(getNeighborIndex(features,position));
         neighbors.add(position);
         int k = neighbors.size();

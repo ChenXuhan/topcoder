@@ -1,7 +1,5 @@
 package com.buaa.act.sdp.service.recommend.classification;
 
-import com.buaa.act.sdp.common.Constant;
-import com.buaa.act.sdp.util.Maths;
 import com.buaa.act.sdp.util.WekaArffUtil;
 import org.springframework.stereotype.Service;
 import weka.classifiers.bayes.NaiveBayes;
@@ -17,6 +15,7 @@ public class TcBayes extends NaiveBayes {
 
     private Instances instances;
 
+    // 获取训练数据
     public Instances getInstances(String path, double[][] features, List<String> winners) {
         WekaArffUtil.writeToArffClassfiler(path, features, winners);
         instances = WekaArffUtil.getInstances(path);
@@ -24,6 +23,7 @@ public class TcBayes extends NaiveBayes {
         return instances;
     }
 
+    // weka分类器类别对应的下标
     public Map<Double, String> getWinnerIndex(List<String> winner, int len) {
         Map<Double, String> map = new HashMap<>();
         Set<String> set = new LinkedHashSet<>();
@@ -39,10 +39,9 @@ public class TcBayes extends NaiveBayes {
         return map;
     }
 
+    // 按概率对分类结果排序
     public Map<String, Double> getRecommendResult(String path, double[][] features, int position, List<String> winners) {
-        if(position+1!=winners.size()){
-            System.out.println(false);
-        }
+
         Map<Double, String> winnerIndex = getWinnerIndex(winners, position);
         Map<String, Double> map = new HashMap<>();
         double index = 0;

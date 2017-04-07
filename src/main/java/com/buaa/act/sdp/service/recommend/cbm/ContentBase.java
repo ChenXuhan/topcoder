@@ -12,24 +12,47 @@ import java.util.*;
 @Component
 public class ContentBase {
 
-    public Set<String> getWinner(List<String> winner) {
-        return new HashSet<>(winner);
+    // 获取相似任务中所有的获胜者handle
+    public Set<String> getWinner(List<String> winner, List<Integer> neighbors) {
+        Set<String> set = new HashSet<>();
+        for (int i = 0; i < neighbors.size(); i++) {
+            set.add(winner.get(neighbors.get(i)));
+        }
+        return set;
+    }
+
+    // 计算当前任务与其相似任务之间的相似度，并按照相似度排序
+    public double[][] getSimilarityTasks(double[][] features, int index, List<Integer> neighborIndex) {
+        double[][] similarity = new double[neighborIndex.size()][2];
+        for (int i = 0; i < neighborIndex.size(); i++) {
+            similarity[i][0] = neighborIndex.get(i);
+            similarity[i][1] = Maths.taskSimilariry(features[index], features[neighborIndex.get(i)]);
+        }
+        Arrays.sort(similarity, new Comparator<double[]>() {
+            @Override
+            public int compare(double[] o1, double[] o2) {
+                return Double.compare(o2[1], o1[1]);
+            }
+        });
+        return similarity;
     }
 
     public Map<String, Double> getRecommendResult(double[][] features, int index, List<Map<String, Double>> scores, List<String> winner) {
         Map<String, List<Double>> map = new HashMap<>();
-        List<Map.Entry<Integer, Double>> lists = Maths.findNeighbor(index, features);
-        Set<String> winners = getWinner(winner);
-        for (int i = 0; i < 40; i++) {
-            for (Map.Entry<String, Double> entry : scores.get(lists.get(i).getKey()).entrySet()) {
-                if (winners.contains(entry.getKey())) {
+        List<Integer> neighborIndex = Maths.getSimilarityChallenges(features, index);
+        double[][] similarity =getSimilarityTasks(features,index,neighborIndex);
+        Set<String> winnerSet = getWinner(winner, neighborIndex);
+        // 取前20个相似任务,item-based推荐
+        for (int i = 0; i < 20 && i < neighborIndex.size(); i++) {
+            for (Map.Entry<String, Double> entry : scores.get((int) similarity[i][0]).entrySet()) {
+                if (winnerSet.contains(entry.getKey())) {
                     if (map.containsKey(entry.getKey())) {
                         map.get(entry.getKey()).add(entry.getValue());
-                        map.get(entry.getKey()).add(lists.get(i).getValue());
+                        map.get(entry.getKey()).add(similarity[i][1]);
                     } else {
                         List<Double> list = new ArrayList<>();
                         list.add(entry.getValue());
-                        list.add(lists.get(i).getValue());
+                        list.add(similarity[i][1]);
                         map.put(entry.getKey(), list);
                     }
                 }

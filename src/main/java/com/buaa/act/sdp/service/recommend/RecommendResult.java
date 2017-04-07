@@ -1,11 +1,11 @@
 package com.buaa.act.sdp.service.recommend;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.recommend.classification.Bayes;
 import com.buaa.act.sdp.service.recommend.classification.LocalClassifier;
 import com.buaa.act.sdp.service.recommend.classification.TcBayes;
+import com.buaa.act.sdp.service.recommend.cluster.Cluster;
 import com.buaa.act.sdp.service.recommend.network.Competition;
 import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,22 +35,21 @@ public class RecommendResult {
     private Competition competition;
 
     //  寻找k个邻居，局部的分类器
-    public void localClassifier(String challengeType, int neighborNums) {
+    public void localClassifier(String challengeType) {
         System.out.println("Local");
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners();
-        List<ChallengeItem> challengeItems = featureExtract.getItems();
         int start = (int) (0.9 * winners.size());
-        int[] count = new int[]{0,0,0,0};
+        int[] count = new int[]{0, 0, 0, 0};
         List<String> worker = null;
         for (int i = start; i < winners.size(); i++) {
-            System.out.println(challengeItems.get(i).getChallengeId() + "\t" + i + "\t" + winners.get(i));
             Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, i, winners);
+//            System.out.println(winners.get(i));
             worker = recommendWorker(tcResult);
-            System.out.println(worker);
+//            System.out.println(worker);
             List<Integer> index = localClassifier.getNeighbors();
-            worker = competition.workerRank(index, worker);
-            System.out.println(worker);
+            worker = competition.reRank(index, worker, winners,i);
+//            System.out.println(worker);
             calculateResult(winners.get(i), worker, count);
         }
         for (int i = 0; i < count.length; i++) {
@@ -68,7 +67,7 @@ public class RecommendResult {
             List<String> worker;
             int[] count = new int[]{0, 0, 0, 0};
             for (int i = start; i < winner.size(); i++) {
-                Map<String, Double> result = cluster.getRecommendResult(challengeType, features, i, n, winner);
+                List<Map<String, Double>> result = cluster.getRecommendResult(challengeType, features, i, n, winner);
                 worker = recommendWorker(result);
                 calculateResult(winner.get(i), worker, count);
             }
@@ -174,10 +173,47 @@ public class RecommendResult {
                 return o2.getValue().compareTo(o1.getValue());
             }
         });
-        for (int i = 0; i < list.size() && i < 20; i++) {
+        for (int i = 0; i < list.size(); i++) {
             workers.add(list.get(i).getKey());
         }
         return workers;
+    }
+
+    public List<String> recommendWorker(List<Map<String, Double>> list) {
+        Map<String, Double> result = new HashMap<>();
+        Map<String, Integer> count = new HashMap<>();
+        for (int i = 0; i < list.size(); i++) {
+            List<String> worker = recommendWorker(list.get(i));
+            for (int j = 0; j < worker.size(); j++) {
+                double k = result.getOrDefault(worker.get(j), -1.0);
+                if (k >= 0) {
+                    result.put(worker.get(j), k + j);
+                } else {
+                    result.put(worker.get(j), 1.0 * j);
+                }
+                int m = count.getOrDefault(worker.get(j), -1);
+                if (m >= 0) {
+                    count.put(worker.get(j), m + 1);
+                } else {
+                    count.put(worker.get(j), 1);
+                }
+            }
+        }
+        for (Map.Entry<String, Integer> entry : count.entrySet()) {
+            result.put(entry.getKey(), 1.0 * result.get(entry.getKey()) / entry.getValue());
+        }
+        List<Map.Entry<String, Double>> workers = new ArrayList<>(result.entrySet());
+        Collections.sort(workers, new Comparator<Map.Entry<String, Double>>() {
+            @Override
+            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
+        List<String> worker = new ArrayList<>();
+        for (int i = 0; i < workers.size(); i++) {
+            worker.add(workers.get(i).getKey());
+        }
+        return worker;
     }
 
     public List<String> recommendKnnWorker(Map<String, Integer> map) {
@@ -197,7 +233,7 @@ public class RecommendResult {
     }
 
     public void calculateResult(String winner, List<String> worker, int[] count) {
-        int[] num = new int[]{1,5,10,20};
+        int[] num = new int[]{1, 5, 10, 15};
         for (int j = 0; j < num.length; j++) {
             for (int k = 0; k < worker.size() && k < num[j]; k++) {
                 if (winner.equals(worker.get(k))) {

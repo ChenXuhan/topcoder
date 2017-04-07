@@ -7,6 +7,7 @@ import java.util.*;
  */
 public class Maths {
 
+    // 余弦相似度计算
     public static double taskSimilariry(double[] vectorOne, double[] vectorTwo) {
         double num = 0, a = 0, b = 0;
         for (int i = 0; i < vectorOne.length; i++) {
@@ -62,34 +63,38 @@ public class Maths {
         return list;
     }
 
+    // 获取某一任务较为相似的任务
     public static List<Integer> getSimilarityChallenges(double[][] features, int index) {
         Map<Integer, Double> map = new HashMap<>();
-        double k;
-        for (int i = 0; i <features.length; i++) {
-            k=0;
+        double k, sum1, sum2, sum;
+        for (int i = 0; i < index; i++) {
+            k = 0;
+            sum1 = 0;
+            sum2 = 0;
+            sum = 0;
             if (i == index) {
                 continue;
             }
             if (Math.abs(features[i][2] - features[index][2]) > 366) {
-               continue;
+                continue;
             }
-//            if (Math.abs(features[i][2] - features[index][2]) <= 180) {
-//               k+=1;
-//            }else if(Math.abs(features[i][2] - features[index][2]) <=366){
-//                k+=0.5;
-//            }else{
-//                continue;
-//            }
             for (int j = 5; j < features[0].length; j++) {
-//                if (features[i][j]!=features[index][j] ) {
-//                    k++;
-//                }
-                if (features[i][j] == features[index][j] && features[i][j] >0.5) {
+                if (features[i][j] == 1.0) {
+                    sum1++;
+                }
+                if (features[index][j] == 1.0) {
+                    sum2++;
+                }
+                if (features[i][j] == 1.0 || features[index][j] == 1.0) {
+                    sum++;
+                }
+                if (features[i][j] == features[index][j] && features[i][j] == 1.0) {
                     k++;
                 }
             }
-            if (k >=1.0) {
-                map.put(i, 1.0 * k );
+            if (k >= 1.0) {
+//                map.put(i, k/sum);
+                map.put(i, k / Math.sqrt(sum1 * sum2));
             }
         }
         List<Map.Entry<Integer, Double>> list = new ArrayList<>(map.entrySet());
@@ -100,7 +105,6 @@ public class Maths {
             }
         });
         List<Integer> result = new ArrayList<>(list.size());
-        System.out.println(list.size());
         for (int i = 0; i < list.size(); i++) {
             result.add(list.get(i).getKey());
         }
@@ -127,13 +131,16 @@ public class Maths {
         }
     }
 
+    // 从全部向量中复制出需要的子数据进行分类
     public static void copy(double[][] features, double[][] data, List<String> winners, List<String> user, List<Integer> index) {
         int row = index.size(), column = features[0].length;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 data[i][j] = features[index.get(i)][j];
             }
-            user.add(winners.get(index.get(i)));
+            if (winners != null) {
+                user.add(winners.get(index.get(i)));
+            }
         }
     }
 }

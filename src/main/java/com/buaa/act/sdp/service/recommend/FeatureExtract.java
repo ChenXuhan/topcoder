@@ -33,12 +33,15 @@ public class FeatureExtract {
     private int requirementWordSize;
     private int titleWordSize;
 
+    private Map<Integer,String>allWinners;
+
     public FeatureExtract() {
         items = new ArrayList<>();
         winners = new ArrayList<>();
         scores = new HashMap<>();
         userScore = new ArrayList<>();
         requirementWordSize = 0;
+        allWinners=new HashMap<>();
     }
 
     public List<String> getWinners() {
@@ -68,6 +71,10 @@ public class FeatureExtract {
         return userScore;
     }
 
+    public Map<Integer, String> getAllWinners() {
+        return allWinners;
+    }
+
     public void init(String challengeType) {
         getWinnersAndScores(challengeType);
     }
@@ -92,6 +99,7 @@ public class FeatureExtract {
         scores.put(challengeSubmission.getChallengeID(), score);
     }
 
+    // 从所有的任务中进行筛选，过滤出一部分任务，计算winner、tasks，以及开发者所得分数
     public void getWinnersAndScores(String challengeType) {
         List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
         Map<String, Integer> map = new HashMap<>();
@@ -101,6 +109,11 @@ public class FeatureExtract {
         ChallengeItem challengeItem;
         List<ChallengeItem> challengeItems = new ArrayList<>();
         for (ChallengeSubmission challengeSubmission : list) {
+
+            if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
+                allWinners.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
+            }
+
             if (set.contains(challengeSubmission.getChallengeID())) {
                 continue;
             }
@@ -132,14 +145,14 @@ public class FeatureExtract {
         }
         for (int i = 0; i < challengeItems.size(); i++) {
             String win = user.get(challengeItems.get(i).getChallengeId());
-            if (map.containsKey(win)&&map.get(win) >=5) {
+            if (map.containsKey(win) && map.get(win) >= 5) {
                 items.add(challengeItems.get(i));
                 winners.add(win);
                 userScore.add(scores.get(challengeItems.get(i).getChallengeId()));
             }
         }
-        Set<String>sets=new HashSet<>(winners);
-        System.out.println(winners.size()+"\t"+sets.size());
+        Set<String> sets = new HashSet<>(winners);
+        System.out.println(winners.size() + "\t" + sets.size());
     }
 
     //对challenge进行过滤
@@ -204,6 +217,7 @@ public class FeatureExtract {
         return wordCounts;
     }
 
+    // 只获取任务的时间和奖金
     public double[][] getTimesAndAward() {
         double[][] features = new double[items.size()][2];
         ChallengeItem item;
@@ -237,7 +251,7 @@ public class FeatureExtract {
                 set.add(str.toLowerCase());
             }
             index = 0;
-            setWorkerSkills(i,index,skills,skillSet,set);
+            setWorkerSkills(i, index, skills, skillSet, set);
             paymentAndDuration[i][0] = Double.parseDouble(items.get(i).getPrize()[0]);
             paymentAndDuration[i][1] = items.get(i).getDuration();
             temp = items.get(i).getPostingDate().substring(0, 10).split("-");
@@ -298,12 +312,13 @@ public class FeatureExtract {
             for (String str : item.getPlatforms()) {
                 skill.add(str.toLowerCase());
             }
-           setWorkerSkills(i,index,features,set,skill);
+            setWorkerSkills(i, index, features, set, skill);
         }
         return features;
     }
 
-    public void setWorkerSkills(int k,int index,double[][]features, Set<String>set, Set<String>skill){
+    // 统计任务中的技能
+    public void setWorkerSkills(int k, int index, double[][] features, Set<String> set, Set<String> skill) {
         boolean flag;
         for (String str : set) {
             flag = false;
@@ -321,6 +336,7 @@ public class FeatureExtract {
         }
     }
 
+    // 所有技能的集合
     public Set<String> getSkills() {
         Set<String> skills = new HashSet<>();
         for (String str : Constant.TECHNOLOGIES) {
@@ -332,7 +348,7 @@ public class FeatureExtract {
         return skills;
     }
 
-    //获取challenge的特征向量
+    //筛选一部分任务后，获取这些challenge的特征向量
     public double[][] getFeatures(String challengeType) {
         if (items.size() == 0) {
             getWinnersAndScores(challengeType);
