@@ -41,16 +41,21 @@ public class RecommendResult {
         List<String> winners = featureExtract.getWinners();
         int start = (int) (0.9 * winners.size());
         int[] count = new int[]{0, 0, 0, 0};
+        int[] counts = new int[]{0, 0, 0, 0};
         List<String> worker = null;
         for (int i = start; i < winners.size(); i++) {
             Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, i, winners);
-//            System.out.println(winners.get(i));
+            System.out.println(winners.get(i));
             worker = recommendWorker(tcResult);
-//            System.out.println(worker);
+            calculateResult(winners.get(i), worker, counts);
+            System.out.println(worker);
             List<Integer> index = localClassifier.getNeighbors();
-            worker = competition.reRank(index, worker, winners,i);
-//            System.out.println(worker);
+            worker = competition.rank(index, worker, winners,i);
+            System.out.println(worker);
             calculateResult(winners.get(i), worker, count);
+        }
+        for (int i = 0; i < counts.length; i++) {
+            System.out.println(1.0 * counts[i] / (winners.size() - start));
         }
         for (int i = 0; i < count.length; i++) {
             System.out.println(1.0 * count[i] / (winners.size() - start));
@@ -61,18 +66,28 @@ public class RecommendResult {
     public void clusterClassifier(String challengeType, int n) {
         System.out.println("Cluster");
         double[][] features = featureExtract.getFeatures(challengeType);
-        List<String> winner = featureExtract.getWinners();
-        int start = (int) (0.9 * winner.size());
+        List<String> winners= featureExtract.getWinners();
+        int start = (int) (0.9 * winners.size());
         try {
             List<String> worker;
             int[] count = new int[]{0, 0, 0, 0};
-            for (int i = start; i < winner.size(); i++) {
-                List<Map<String, Double>> result = cluster.getRecommendResult(challengeType, features, i, n, winner);
+            int[] counts = new int[]{0, 0, 0, 0};
+            for (int i = start; i < winners.size(); i++) {
+                Map<String, Double> result = cluster.getRecommendResult(challengeType, features, i, n, winners);
+                System.out.println(winners.get(i));
                 worker = recommendWorker(result);
-                calculateResult(winner.get(i), worker, count);
+                calculateResult(winners.get(i), worker, counts);
+                System.out.println(worker);
+                List<Integer> index = cluster.getNeighbors();
+                worker = competition.rank(index, worker, winners,i);
+                System.out.println(worker);
+                calculateResult(winners.get(i), worker, count);
+            }
+            for (int j = 0; j < counts.length; j++) {
+                System.out.println(1.0 * counts[j] / (winners.size() - start));
             }
             for (int j = 0; j < count.length; j++) {
-                System.out.println(1.0 * count[j] / (winner.size() - start));
+                System.out.println(1.0 * count[j] / (winners.size() - start));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,10 +98,10 @@ public class RecommendResult {
     public void getRecommendResult(String challengeType) {
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners();
-        List<Map<String, Double>> scores = featureExtract.getUserScore();
         int start = (int) (0.9 * winners.size());
         List<String> worker;
         int[] count = new int[]{0, 0, 0, 0};
+        int[] counts = new int[]{0, 0, 0, 0};
         System.out.println("UCL");
         for (int i = start; i < winners.size(); i++) {
             double[][] data = new double[i + 1][features[0].length];
@@ -96,20 +111,41 @@ public class RecommendResult {
                 index.add(j);
             }
             Maths.copy(features, data, winners, user, index);
-            Maths.normalization(data, 5);
+//            Maths.normalization(data, 5);
             Map<String, Double> tcResult = tcBayes.getRecommendResult(Constant.CLASSIFIER_DIRECTORY + challengeType + "/" + i, data, i, user);
+//            System.out.println(winners.get(i));
             worker = recommendWorker(tcResult);
+//            System.out.println(worker);
+            calculateResult(winners.get(i), worker, counts);
+            List<Integer>indexs=new ArrayList<>();
+            for(int j=0;j<i;j++){
+                indexs.add(j);
+            }
+            worker = competition.rank(indexs, worker, winners,i);
+//            System.out.println(worker);
             calculateResult(winners.get(i), worker, count);
         }
-        for (int i = 0; i < count.length; i++) {
-            System.out.println(1.0 * count[i] / (winners.size() - start));
-        }
-        count = new int[]{0, 0, 0, 0};
-        System.out.println("CBM");
-        for (int i = start; i < winners.size(); i++) {
-            Map<String, Double> cbmResult = contentBase.getRecommendResult(features, i, scores, winners);
-            worker = recommendWorker(cbmResult);
-            calculateResult(winners.get(i), worker, count);
+//        for (int i = 0; i < count.length; i++) {
+//            System.out.println(1.0 * count[i] / (winners.size() - start));
+//        }
+//        count = new int[]{0, 0, 0, 0};
+//        System.out.println("CBM");
+//        for (int i = start; i < winners.size(); i++) {
+//            Map<String, Double> cbmResult = contentBase.getRecommendResult(features, i, scores, winners);
+//            System.out.println(winners.get(i));
+//            worker = recommendWorker(cbmResult);
+//            System.out.println(worker);
+//            calculateResult(winners.get(i), worker, counts);
+//            List<Integer>index=new ArrayList<>();
+//            for(int j=0;j<i;j++){
+//                index.add(j);
+//            }
+//            worker = competition.rankWorkers(index, worker, winners,i);
+//            System.out.println(worker);
+//            calculateResult(winners.get(i), worker, count);
+//        }
+        for (int i = 0; i < counts.length; i++) {
+            System.out.println(1.0 * counts[i] / (winners.size() - start));
         }
         for (int i = 0; i < count.length; i++) {
             System.out.println(1.0 * count[i] / (winners.size() - start));

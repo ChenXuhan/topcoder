@@ -32,12 +32,6 @@ public class Cluster {
         return instances;
     }
 
-    // 获取当前任务的相似任务
-    public List<Integer> getNeighborIndex(double[][] features, int position) {
-        neighborIndex = Maths.getSimilarityChallenges(features, position);
-        return neighborIndex;
-    }
-
     public List<Integer> getNeighbors() {
         return neighborIndex;
     }
@@ -67,14 +61,12 @@ public class Cluster {
         return kMeans;
     }
 
-    public List<Map<String, Double>> getRecommendResult(String challengeType, double[][] features, int position, int num, List<String> winners) {
+    public Map<String, Double> getRecommendResult(String challengeType, double[][] features, int position, int num, List<String> winners) {
         //选取聚类的数据集
-//        List<Integer> neighbors = new ArrayList<>(position+1);
-//        for(int i=0;i<=position;i++){
-//            neighbors.add(i);
-//        }
-        List<Integer> neighbors = new ArrayList<>(getNeighborIndex(features, position));
-        neighbors.add(position);
+        List<Integer> neighbors = new ArrayList<>(position + 1);
+        for (int i = 0; i <= position; i++) {
+            neighbors.add(i);
+        }
         double[][] data = new double[neighbors.size()][features[0].length];
         List<String> user = new ArrayList<>(neighbors.size());
         Maths.copy(features, data, winners, user, neighbors);
@@ -88,13 +80,11 @@ public class Cluster {
         }
         String path = Constant.CLUSTER_DIRECTORY + challengeType + "/" + position;
         // 在聚类中进行分类
-        List<Map<String, Double>> result = new ArrayList<>();
-        for (Map.Entry<Integer, List<Integer>> entry : map.entrySet()) {
-            List<Integer> list = new ArrayList<>(entry.getValue());
-            list.add(neighbors.size() - 1);
-            result.add(getResult(list, user, data, path));
-        }
-        return result;
+        List<Integer> list = new ArrayList<>();
+        list.addAll(map.get(k));
+        neighborIndex=map.get(k);
+        list.add(neighbors.size() - 1);
+        return getResult(list, user, data, path);
     }
 
     // 聚类后，适用bayes进行分类

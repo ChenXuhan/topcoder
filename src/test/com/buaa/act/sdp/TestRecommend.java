@@ -28,10 +28,8 @@ public class TestRecommend {
 
     @Test
     public void testRecommend() {
-//        recommendResult.getRecommendResult("First2Finish");
-//        recommendResult.getRecommendBayesUcl("Assembly Competition");
-//        recommendResult.clusterAndClassifier("Assembly Competition", 200);
-//        recommendResult.clusterClassifier("Development",3);
-        recommendResult.localClassifier("Assembly Competition");
+//        recommendResult.getRecommendResult("Assembly Competition");
+        recommendResult.clusterClassifier("Code", 3);
+//        recommendResult.localClassifier("Code");
     }
 }
