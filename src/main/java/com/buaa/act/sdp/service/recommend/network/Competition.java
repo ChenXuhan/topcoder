@@ -25,7 +25,7 @@ public class Competition {
         scores = new HashMap<>();
     }
 
-    // 注册表获取所有task所有人的得分:0
+    // 注册表获取所有task所有注册人的得分:0
     public Map<Integer, Map<String, Double>> getAllWorkerScores() {
         if (scores.size() > 0) {
             return scores;
@@ -47,7 +47,7 @@ public class Competition {
         return scores;
     }
 
-    //依据submission表更新worker的得分
+    // 依据submission表更新worker的得分
     public void updateWorkerScores(Map<Integer, Map<String, Double>> submissionScores) {
         if (submissionScores != null) {
             Map<String, Double> registrant, submission;
@@ -72,22 +72,22 @@ public class Competition {
 
     // 获取当前任务的相似任务中worker的得分
     public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner) {
-        Map<Integer, Map<String, Double>> score = getAllWorkerScores();
-        List<ChallengeItem> items = featureExtract.getItems();
-        List<Map<String, Double>> list = new ArrayList<>();
-        for (int i = 0; i < neighbors.size(); i++) {
-            list.add(score.get(items.get(neighbors.get(i)).getChallengeId()));
-            winner.add(winners.get(neighbors.get(i)));
-        }
-        return list;
-//        只考虑80分以上的
-//        List<Map<String, Double>> lists = featureExtract.getUserScore();
+//        Map<Integer, Map<String, Double>> score = getAllWorkerScores();
+//        List<ChallengeItem> items = featureExtract.getItems();
 //        List<Map<String, Double>> list = new ArrayList<>();
 //        for (int i = 0; i < neighbors.size(); i++) {
-//            list.add(lists.get(neighbors.get(i)));
+//            list.add(score.get(items.get(neighbors.get(i)).getChallengeId()));
 //            winner.add(winners.get(neighbors.get(i)));
 //        }
 //        return list;
+//        只考虑80分以上的
+        List<Map<String, Double>> lists = featureExtract.getUserScore();
+        List<Map<String, Double>> list = new ArrayList<>();
+        for (int i = 0; i < neighbors.size(); i++) {
+            list.add(lists.get(neighbors.get(i)));
+            winner.add(winners.get(neighbors.get(i)));
+        }
+        return list;
     }
 
     // 获取在当前任务前的所有类型任务中参与的worker
@@ -114,12 +114,12 @@ public class Competition {
     }
 
     public List<Integer> getNeighbors(List<Integer> list, int n) {
-//        return list;
-        List<Integer> result = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
-            result.add(i);
-        }
-        return result;
+        return list;
+//        List<Integer> result = new ArrayList<>(n);
+//        for (int i = 0; i < n; i++) {
+//            result.add(i);
+//        }
+//        return result;
     }
 
     // 有向边,worker和worker之间的输赢边
@@ -145,42 +145,15 @@ public class Competition {
         return attraction;
     }
 
-    //worker之间分数差距
-    public double[][] getScoreDiff(Map<String, Integer> index, List<Map<String, Double>> scores, List<String> winners, int[][] attr) {
-        double[][] attraction = new double[index.size()][index.size()];
-        String winner;
-        int one, two;
-        double a, b;
-        Map<String, Double> score;
-        for (int i = 0; i < scores.size(); i++) {
-            score = scores.get(i);
-            winner = winners.get(i);
-            if (!index.containsKey(winner)) {
-                continue;
-            }
-            one = index.get(winner);
-            a = score.get(winner);
-            for (String user : score.keySet()) {
-                if (index.containsKey(user) && !winner.equals(user)) {
-                    two = index.get(user);
-                    b = score.get(user);
-                    attraction[one][two] += (a - b);
-                    attr[one][two]++;
-                }
-            }
-        }
-        return attraction;
-    }
-
     // worker吸引力(worker之间边的和)
     public int[][] getWorkerAttraction(int[][] attraction) {
         int[][] attr = new int[attraction.length][attraction.length];
         for (int i = 0; i < attraction.length; i++) {
             for (int j = i + 1; j < attraction.length; j++) {
-                attr[i][j] = attraction[j][i] + attraction[i][j];
-                attr[j][i] = attr[i][j];
-//                attr[i][j] = attraction[j][i] - attraction[i][j];
-//                attr[j][i] = -attr[i][j];
+//                attr[i][j] = attraction[j][i] + attraction[i][j];
+//                attr[j][i] = attr[i][j];
+                attr[i][j] = attraction[j][i] - attraction[i][j];
+                attr[j][i] = -attr[i][j];
             }
         }
         return attr;
@@ -287,8 +260,8 @@ public class Competition {
     public List<String> rank(List<Integer> neighbors, List<String> worker, List<String> winners, int n) {
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(neighbors, n);
-        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
-//        List<Map<String, Double>> scores=getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(),winner);
+//        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
+        List<Map<String, Double>> scores=getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(),winner);
         Map<String, Integer> index = getIndex(worker);
         int[][] relation = getRelationEdge(index, scores, winner);
         int t = index.getOrDefault(winners.get(n), -1);
@@ -305,18 +278,22 @@ public class Competition {
         }
         List<String> result = new ArrayList<>();
         for (int i = 0; i < worker.size(); i++) {
-            if(!result.contains(worker.get(i))){
+            if (!result.contains(worker.get(i))) {
                 result.add(worker.get(i));
             }
-            int[]num=new int[worker.size()];
+            int[] num = new int[worker.size()];
             for (int j = 0; j < attr[i].length; j++) {
-                num[attr[i][j]]=attr[i][j]+j;
+                num[attr[i][j]] = attr[i][j] + j;
             }
-            num=sortAttraction(num);
-            for(int j=num.length-1;j>=0;j--){
-                if(!result.contains(worker.get(num[j]))){
+            int count = 0;
+            num = sortAttraction(num);
+            for (int j = num.length - 1; j >= 0; j--) {
+                if (!result.contains(worker.get(num[j]))) {
+                    count++;
                     result.add(worker.get(num[j]));
-                    break;
+                    if (count >= 1) {
+                        break;
+                    }
                 }
             }
         }

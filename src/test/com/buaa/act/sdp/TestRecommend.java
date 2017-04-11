@@ -28,8 +28,8 @@ public class TestRecommend {
 
     @Test
     public void testRecommend() {
-//        recommendResult.getRecommendResult("Assembly Competition");
-        recommendResult.clusterClassifier("Code", 3);
-//        recommendResult.localClassifier("Code");
+//        recommendResult.getRecommendResult("First2Finish");
+//        recommendResult.clusterClassifier("First2Finish", 3);
+//        recommendResult.localClassifier("Assembly Competition");
     }
 }
