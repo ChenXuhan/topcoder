@@ -1,5 +1,6 @@
 package com.buaa.act.sdp.service.recommend.classification;
 
+import com.buaa.act.sdp.util.WekaArffUtil;
 import org.springframework.stereotype.Service;
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.J48;
@@ -16,27 +17,36 @@ import java.util.*;
 @Service
 public class TcJ48 extends J48 {
 
-    public List<Map<String, Double>> getRecommendResult(Instances instances, int start, Map<Double, String> winners) {
-        List<Map<String, Double>> result = new ArrayList<>();
-        double index;
+    private Instances instances;
+
+    // 按概率对分类结果排序
+    public Map<String, Double> getRecommendResult(String path, double[][] features, int position, List<String> winners) {
+        Map<Double, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners, position);
+        Map<String, Double> map = new HashMap<>();
+        double index = 0;
+        if (winnerIndex.size() == 0) {
+            return map;
+        }
+        if (winnerIndex.size() == 1) {
+            map.put(winnerIndex.get(index), 1.0);
+            return map;
+        }
         try {
             Class treeClassfier = ClassifierTree.class;
             Method method = treeClassfier.getDeclaredMethod("getProbs", int.class, Instance.class, double.class);
             method.setAccessible(true);
-            buildClassifier(new Instances(instances, 0, start));
-            for (int i = start; i < instances.numInstances(); i++) {
-                Map<String, Double> map = new HashMap<>();
-                for (int j = 0; j < instances.numClasses(); j++) {
-                    index = j;
-                    map.put(winners.get(index), (double)method.invoke(m_root, j, instances.instance(i), 1));
+            instances = WekaArffUtil.getInstances(path, features, winners);
+            buildClassifier(new Instances(instances, 0, position));
+            for (int j = 0; j < instances.numClasses(); j++) {
+                index = j;
+                if (winnerIndex.containsKey(index)) {
+                    map.put(winnerIndex.get(index), (double) method.invoke(m_root, j, instances.instance(position), 1));
                 }
-                result.add(map);
             }
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return map;
     }
+
 }

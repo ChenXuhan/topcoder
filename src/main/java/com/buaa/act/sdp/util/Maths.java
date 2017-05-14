@@ -105,7 +105,7 @@ public class Maths {
             }
         });
         List<Integer> result = new ArrayList<>(list.size());
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < 8*list.size()/10; i++) {
             result.add(list.get(i).getKey());
         }
         return result;

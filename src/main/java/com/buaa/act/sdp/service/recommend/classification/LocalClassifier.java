@@ -17,7 +17,8 @@ public class LocalClassifier {
 
     @Autowired
     private TcBayes tcBayes;
-
+    @Autowired
+    private TcJ48 tcJ48;
     private List<Integer> neighborIndex;
 
     public List<Integer> getNeighborIndex(double[][] features,int position) {
@@ -37,6 +38,7 @@ public class LocalClassifier {
         List<String> winner = new ArrayList<>(k);
         Maths.copy(features, data, winners, winner, neighbors);
         Maths.normalization(data, 5);
-        return tcBayes.getRecommendResult(Constant.LOCAL_DIRECTORY + challengeType + "/" + position, data, k - 1, winner);
+//        return tcBayes.getRecommendResult(Constant.LOCAL_DIRECTORY + challengeType + "/" + position, data, k - 1, winner);
+        return tcJ48.getRecommendResult(Constant.LOCAL_DIRECTORY + challengeType + "/" + position, data, k - 1, winner);
     }
 }

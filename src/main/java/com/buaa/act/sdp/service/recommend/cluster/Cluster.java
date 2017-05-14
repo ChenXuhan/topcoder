@@ -2,6 +2,8 @@ package com.buaa.act.sdp.service.recommend.cluster;
 
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.service.recommend.classification.TcBayes;
+import com.buaa.act.sdp.service.recommend.classification.TcJ48;
+import com.buaa.act.sdp.service.recommend.classification.TcLibSvm;
 import com.buaa.act.sdp.util.Maths;
 import com.buaa.act.sdp.util.WekaArffUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,10 @@ public class Cluster {
     private List<Integer> neighborIndex;
     @Autowired
     private TcBayes tcBayes;
-
+    @Autowired
+    private TcJ48 tcJ48;
+    @Autowired
+    private TcLibSvm tcLibSvm;
     // 获取训练数据集
     public Instances getInstances(String path, double[][] features) {
         WekaArffUtil.writeToArffCluster(path, features);
@@ -94,5 +99,7 @@ public class Cluster {
         Maths.copy(feature, data, user, winner, list);
 //        Maths.normalization(data,5);
         return tcBayes.getRecommendResult(path, data, list.size() - 1, winner);
+//        return tcJ48.getRecommendResult(path, data, list.size() - 1, winner);
+//        return tcLibSvm.getRecommendResult(path, data, list.size() - 1, winner);
     }
 }

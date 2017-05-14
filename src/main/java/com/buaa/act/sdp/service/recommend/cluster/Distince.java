@@ -76,17 +76,10 @@ public class Distince extends EuclideanDistance {
             distance = 0;
         }
         for (int p1 = 5; p1 < firstNumValues; p1++) {
-//           if(first.valueSparse(p1) ==1.0|| second.valueSparse(p1)==1.0){
-//               a++;
-//           }
-//           if(first.valueSparse(p1) ==1.0&& second.valueSparse(p1)==1.0){
-//               b++;
-//           }
             a = a + first.valueSparse(p1) * second.valueSparse(p1);
             b = b + first.valueSparse(p1) * first.valueSparse(p1);
             c = c + second.valueSparse(p1) * second.valueSparse(p1);
         }
-//        return distance+(a-b)/a;
         return distance + 1 - a / Math.sqrt(b * c);
     }
 

@@ -82,9 +82,9 @@ public class FeatureExtract {
     //一个人对一个challenge提交多次，以最高分数为主
     public void getUserScores(ChallengeSubmission challengeSubmission) {
         Map<String, Double> score;
-        if (Double.parseDouble(challengeSubmission.getFinalScore()) < 80) {
-            return;
-        }
+//        if (Double.parseDouble(challengeSubmission.getFinalScore()) < 80) {
+//            return;
+//        }
         if (scores.containsKey(challengeSubmission.getChallengeID())) {
             score = scores.get(challengeSubmission.getChallengeID());
             if (score.containsKey(challengeSubmission.getHandle()) && score.get(challengeSubmission.getHandle()).doubleValue() >= Double.parseDouble(challengeSubmission.getFinalScore())) {
@@ -179,9 +179,6 @@ public class FeatureExtract {
         if (challengeItem.getPrize() == null || challengeItem.getPrize().length == 0 || challengeItem.getPrize()[0].isEmpty()) {
             return false;
         }
-//        if(challengeItem.getTechnology().length == 1&& challengeItem.getTechnology()[0].equals("Other")){
-//            return false;
-//        }
         return true;
     }
 

@@ -1,8 +1,11 @@
 package com.buaa.act.sdp;
 
 import com.buaa.act.sdp.bean.challenge.ChallengeItem;
+import com.buaa.act.sdp.bean.challenge.ChallengeRegistrant;
+import com.buaa.act.sdp.bean.challenge.ChallengeSubmission;
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
+import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.service.api.AbilityExp;
 import com.buaa.act.sdp.service.api.ChallengeApi;
@@ -30,7 +33,7 @@ public class TestChallenge {
     @Autowired
     private ChallengeApi challengeApi;
 
-    @Autowired(required = false)
+    @Autowired
     private ChallengeSubmissionDao challengeSubmissionDao;
 
     @Autowired(required = false)
@@ -53,18 +56,15 @@ public class TestChallenge {
     @Autowired
     private Collaboration collaboration;
 
+
     @Autowired
-    private Competition competition;
+    private ChallengeRegistrantDao challengeRegistrantDao;
 
     @Test
     public void testProjectId(){
         System.out.println(collaboration.getProjectToChallenges());
     }
 
-    @Test
-    public void  testGetWorkerScores(){
-        System.out.println(competition.getAllWorkerScores());
-    }
 
     @Test
     public void testChallenge() {
@@ -143,5 +143,39 @@ public class TestChallenge {
                 System.out.println(s);
             }
         }
+    }
+
+    @Test
+    public void testNoSubmission(){
+        Map<Integer,Set<String>>submissionMap=new HashMap<>();
+        Map<Integer,Set<String>>registerMap=new HashMap<>();
+        List<ChallengeSubmission>submissions=challengeSubmissionDao.getChallengeWinner();
+        List<ChallengeRegistrant>registrants=challengeRegistrantDao.getAllRegistrant();
+        for(ChallengeSubmission challengeSubmission:submissions){
+            if(submissionMap.containsKey(challengeSubmission.getChallengeID())){
+                submissionMap.get(challengeSubmission.getChallengeID()).add(challengeSubmission.getHandle());
+            }else {
+                Set<String>set=new HashSet<>();
+                set.add(challengeSubmission.getHandle());
+                submissionMap.put(challengeSubmission.getChallengeID(),set);
+            }
+        }
+        for(ChallengeRegistrant challengeRegistrant:registrants){
+            if(registerMap.containsKey(challengeRegistrant.getChallengeID())){
+                registerMap.get(challengeRegistrant.getChallengeID()).add(challengeRegistrant.getHandle());
+            }else {
+                Set<String>set=new HashSet<>();
+                set.add(challengeRegistrant.getHandle());
+                registerMap.put(challengeRegistrant.getChallengeID(),set);
+            }
+        }
+        int regCount=0,subCount=0;
+        for(Map.Entry<Integer,Set<String>>entry:submissionMap.entrySet()){
+            subCount+=entry.getValue().size();
+        }
+        for(Map.Entry<Integer,Set<String>>entry:registerMap.entrySet()){
+            regCount+=entry.getValue().size();
+        }
+        System.out.println(subCount+"\t"+regCount+"\t"+1.0*subCount/regCount);
     }
 }

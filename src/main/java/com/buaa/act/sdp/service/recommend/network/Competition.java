@@ -4,6 +4,7 @@ import com.buaa.act.sdp.bean.challenge.ChallengeItem;
 import com.buaa.act.sdp.bean.challenge.ChallengeRegistrant;
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.service.recommend.FeatureExtract;
+import com.buaa.act.sdp.service.recommend.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,9 @@ public class Competition {
     private ChallengeRegistrantDao challengeRegistrantDao;
     @Autowired
     private FeatureExtract featureExtract;
+
+    @Autowired
+    private Statistics statistics;
 
     public Competition() {
         scores = new HashMap<>();
@@ -56,13 +60,21 @@ public class Competition {
                     registrant = scores.get(entry.getKey());
                     submission = entry.getValue();
                     for (Map.Entry<String, Double> temp : submission.entrySet()) {
-                        registrant.put(temp.getKey(), temp.getValue());
+                        if (temp.getValue() < 0.1) {
+                            registrant.put(temp.getKey(), 1.0);
+                        } else {
+                            registrant.put(temp.getKey(), temp.getValue());
+                        }
                     }
                 } else {
                     registrant = new HashMap<>();
                     submission = entry.getValue();
                     for (Map.Entry<String, Double> temp : submission.entrySet()) {
-                        registrant.put(temp.getKey(), temp.getValue());
+                        if (temp.getValue() < 0.1) {
+                            registrant.put(temp.getKey(), 1.0);
+                        } else {
+                            registrant.put(temp.getKey(), temp.getValue());
+                        }
                     }
                     scores.put(entry.getKey(), registrant);
                 }
@@ -70,17 +82,19 @@ public class Competition {
         }
     }
 
-    // 获取当前任务的相似任务中worker的得分
+    public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner) {
+        Map<Integer, Map<String, Double>> score = getAllWorkerScores();
+        List<ChallengeItem> items = featureExtract.getItems();
+        List<Map<String, Double>> list = new ArrayList<>();
+        for (int i = 0; i < neighbors.size(); i++) {
+            list.add(score.get(items.get(neighbors.get(i)).getChallengeId()));
+            winner.add(winners.get(neighbors.get(i)));
+        }
+        return list;
+    }
+
+    // 获取当前任务的相似任务中worker的得分, 只考虑80分以上的
     public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner) {
-//        Map<Integer, Map<String, Double>> score = getAllWorkerScores();
-//        List<ChallengeItem> items = featureExtract.getItems();
-//        List<Map<String, Double>> list = new ArrayList<>();
-//        for (int i = 0; i < neighbors.size(); i++) {
-//            list.add(score.get(items.get(neighbors.get(i)).getChallengeId()));
-//            winner.add(winners.get(neighbors.get(i)));
-//        }
-//        return list;
-//        只考虑80分以上的
         List<Map<String, Double>> lists = featureExtract.getUserScore();
         List<Map<String, Double>> list = new ArrayList<>();
         for (int i = 0; i < neighbors.size(); i++) {
@@ -114,12 +128,12 @@ public class Competition {
     }
 
     public List<Integer> getNeighbors(List<Integer> list, int n) {
-        return list;
-//        List<Integer> result = new ArrayList<>(n);
-//        for (int i = 0; i < n; i++) {
-//            result.add(i);
-//        }
-//        return result;
+//        return list;
+        List<Integer> result = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            result.add(i);
+        }
+        return result;
     }
 
     // 有向边,worker和worker之间的输赢边
@@ -146,7 +160,7 @@ public class Competition {
     }
 
     // worker吸引力(worker之间边的和)
-    public int[][] getWorkerAttraction(int[][] attraction) {
+    public int[][] getAttraction(int[][] attraction) {
         int[][] attr = new int[attraction.length][attraction.length];
         for (int i = 0; i < attraction.length; i++) {
             for (int j = i + 1; j < attraction.length; j++) {
@@ -154,6 +168,17 @@ public class Competition {
 //                attr[j][i] = attr[i][j];
                 attr[i][j] = attraction[j][i] - attraction[i][j];
                 attr[j][i] = -attr[i][j];
+            }
+        }
+        return attr;
+    }
+
+    public int[][] getUclAttraction(int[][] attraction) {
+        int[][] attr = new int[attraction.length][attraction.length];
+        for (int i = 0; i < attraction.length; i++) {
+            for (int j = i + 1; j < attraction.length; j++) {
+                attr[i][j] = attraction[j][i] + attraction[i][j];
+                attr[j][i] = attr[i][j];
             }
         }
         return attr;
@@ -260,18 +285,11 @@ public class Competition {
     public List<String> rank(List<Integer> neighbors, List<String> worker, List<String> winners, int n) {
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(neighbors, n);
-//        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
-        List<Map<String, Double>> scores=getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(),winner);
+        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
+//        List<Map<String, Double>> scores=getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(),winner);
         Map<String, Integer> index = getIndex(worker);
         int[][] relation = getRelationEdge(index, scores, winner);
-        int t = index.getOrDefault(winners.get(n), -1);
-//        if (t >= 0) {
-//            for (int i = 0; i < t; i++) {
-//                System.out.print(worker.get(i) + ":" + worker.get(t) + "=" + relation[i][t] + ":" + relation[t][i] + " ");
-//            }
-//            System.out.println();
-//        }
-        int[][] attraction = getWorkerAttraction(relation);
+        int[][] attraction = getAttraction(relation);
         int[][] attr = new int[worker.size()][];
         for (int i = 0; i < worker.size(); i++) {
             attr[i] = sortAttraction(attraction[i]);
@@ -289,11 +307,11 @@ public class Competition {
             num = sortAttraction(num);
             for (int j = num.length - 1; j >= 0; j--) {
                 if (!result.contains(worker.get(num[j]))) {
-                    count++;
-                    result.add(worker.get(num[j]));
                     if (count >= 1) {
                         break;
                     }
+                    count++;
+                    result.add(worker.get(num[j]));
                 }
             }
         }
@@ -303,18 +321,12 @@ public class Competition {
     //分类的结果利用关系重新排序
     public List<String> uclRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n) {
         List<String> winner = new ArrayList<>();
-        List<Integer> neighbor = getNeighbors(neighbors, n);
+//        List<Integer> neighbor = getNeighbors(neighbors, n);
 //        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
         List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(), winner);
         Map<String, Integer> index = getIndex(worker);
         int[][] attraction = getRelationEdge(index, scores, winner);
-//        for (int i = 0; i < attraction.length; i++) {
-//            for (int j = i + 1; j < attraction.length; j++) {
-//                System.out.print(worker.get(i) + ":" + worker.get(j) + "=" + attraction[i][j] + ":" + attraction[j][i] + " ");
-//            }
-//            System.out.println();
-//        }
-        attraction = getWorkerAttraction(attraction);
+        attraction = getUclAttraction(attraction);
         double[][] repulsion = getWorkerRepulsion(attraction);
         int[][] attr = new int[worker.size()][];
         int[][] replu = new int[worker.size()][];
@@ -330,13 +342,13 @@ public class Competition {
                 continue;
             }
             int[] array = replu[i];
-            int count = 0;
+            int count=0;
             for (int j = 0; j < array.length; j++) {
                 if (i < array[j] && !set.contains(array[j])) {
                     set.add(array[j]);
                     count++;
                 }
-                if (count == 2) {
+                if(count>=3){
                     break;
                 }
             }
@@ -352,6 +364,9 @@ public class Competition {
         // 添加worker吸引力大的worker
         for (int i = 0; i < result.size(); i++) {
             int k = index.get(result.get(i));
+            if(!res.contains(result.get(i))){
+                res.add(result.get(i));
+            }
             for (int j = 0; j < 2 && j < attr[k].length; j++) {
                 if (!res.contains(worker.get(attr[k][j]))) {
                     res.add(worker.get(attr[k][j]));

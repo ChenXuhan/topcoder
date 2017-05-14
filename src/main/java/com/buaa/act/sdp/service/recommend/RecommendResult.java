@@ -2,9 +2,7 @@ package com.buaa.act.sdp.service.recommend;
 
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
-import com.buaa.act.sdp.service.recommend.classification.Bayes;
-import com.buaa.act.sdp.service.recommend.classification.LocalClassifier;
-import com.buaa.act.sdp.service.recommend.classification.TcBayes;
+import com.buaa.act.sdp.service.recommend.classification.*;
 import com.buaa.act.sdp.service.recommend.cluster.Cluster;
 import com.buaa.act.sdp.service.recommend.network.Competition;
 import com.buaa.act.sdp.util.Maths;
@@ -24,6 +22,10 @@ public class RecommendResult {
     @Autowired
     private TcBayes tcBayes;
     @Autowired
+    private TcJ48 j48;
+    @Autowired
+    private TcLibSvm tcLibSvm;
+    @Autowired
     private LocalClassifier localClassifier;
     @Autowired
     private Cluster cluster;
@@ -33,32 +35,51 @@ public class RecommendResult {
     private FeatureExtract featureExtract;
     @Autowired
     private Competition competition;
+    @Autowired
+    private Statistics statistics;
+
+    private int[][] testData;
+
+    public int[][] testSet(int n) {
+        if (testData != null && testData.length > 0) {
+            return testData;
+        }
+        int k = n - (int) (0.9 * n), t = n / 2;
+        testData = new int[1][k];
+        for (int i = 0; i < k; i++) {
+            testData[0][i] = n - k + i;
+        }
+        return testData;
+    }
 
     //  寻找k个邻居，局部的分类器
     public void localClassifier(String challengeType) {
         System.out.println("Local");
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners();
-        int start = (int) (0.9 * winners.size());
-        int[] count = new int[]{0, 0, 0, 0};
-        int[] counts = new int[]{0, 0, 0, 0};
+        int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int[][] num = testSet(winners.size());
         List<String> worker = null;
-        for (int i = start; i < winners.size(); i++) {
-            Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, i, winners);
-            System.out.println(winners.get(i));
-            worker = recommendWorker(tcResult);
-            calculateResult(winners.get(i), worker, counts);
-            System.out.println(worker);
-            List<Integer> index = localClassifier.getNeighbors();
-            worker = competition.rank(index, worker, winners,i);
-            System.out.println(worker);
-            calculateResult(winners.get(i), worker, count);
+        for (int k = 0; k < num.length; k++) {
+            for (int i = 0; i < num[0].length; i++) {
+                Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, num[k][i], winners);
+//            System.out.println(winners.get(num[i]));
+                worker = recommendWorker(tcResult);
+                calculateResult(winners.get(num[k][i]), worker, counts);
+//            System.out.println(worker);
+                List<Integer> index = localClassifier.getNeighbors();
+                worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
+                worker = competition.rank(index, worker, winners, num[k][i]);
+//            System.out.println(worker);
+                calculateResult(winners.get(num[k][i]), worker, count);
+            }
         }
         for (int i = 0; i < counts.length; i++) {
-            System.out.println(1.0 * counts[i] / (winners.size() - start));
+            System.out.println(1.0 * counts[i] / num.length / num[0].length);
         }
         for (int i = 0; i < count.length; i++) {
-            System.out.println(1.0 * count[i] / (winners.size() - start));
+            System.out.println(1.0 * count[i] / num.length / num[0].length);
         }
     }
 
@@ -66,29 +87,33 @@ public class RecommendResult {
     public void clusterClassifier(String challengeType, int n) {
         System.out.println("Cluster");
         double[][] features = featureExtract.getFeatures(challengeType);
-        List<String> winners= featureExtract.getWinners();
-        int start = (int) (0.9 * winners.size());
+        List<String> winners = featureExtract.getWinners();
         try {
             List<String> worker;
-            int[] count = new int[]{0, 0, 0, 0};
-            int[] counts = new int[]{0, 0, 0, 0};
-            for (int i = start; i < winners.size(); i++) {
-                Map<String, Double> result = cluster.getRecommendResult(challengeType, features, i, n, winners);
-                System.out.println(winners.get(i));
-                worker = recommendWorker(result);
-                calculateResult(winners.get(i), worker, counts);
-                System.out.println(worker);
-                List<Integer> index = cluster.getNeighbors();
-                worker = competition.rank(index, worker, winners,i);
-                System.out.println(worker);
-                calculateResult(winners.get(i), worker, count);
+            int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            int[][] num = testSet(winners.size());
+            for (int k = 0; k < num.length; k++) {
+                for (int i = 0; i < num[0].length; i++) {
+                    Map<String, Double> result = cluster.getRecommendResult(challengeType, features, num[k][i], n, winners);
+//                    System.out.println(winners.get(num[k][i]));
+                    worker = recommendWorker(result);
+//                    System.out.println(worker);
+                    calculateResult(winners.get(num[k][i]), worker, counts);
+                    List<Integer> index = cluster.getNeighbors();
+                    worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
+//                    worker = competition.rank(index, worker, winners, num[k][i]);
+                    worker = competition.uclRank(index, worker, winners, num[k][i]);
+//                    System.out.println(worker);
+                    calculateResult(winners.get(num[k][i]), worker, count);
+                }
             }
             for (int j = 0; j < counts.length; j++) {
-                System.out.println(1.0 * counts[j] / (winners.size() - start));
+                System.out.println(1.0 * counts[j] / num.length / num[0].length + "\t" + 1.0 * count[j] / num.length / num[0].length);
             }
-            for (int j = 0; j < count.length; j++) {
-                System.out.println(1.0 * count[j] / (winners.size() - start));
-            }
+//            for (int j = 0; j < count.length; j++) {
+//                System.out.println(1.0 * count[j] / num.length / num[0].length);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,58 +123,58 @@ public class RecommendResult {
     public void getRecommendResult(String challengeType) {
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners();
-        int start = (int) (0.9 * winners.size());
+        List<Map<String, Double>> scores = featureExtract.getUserScore();
         List<String> worker;
-        int[] count = new int[]{0, 0, 0, 0};
-        int[] counts = new int[]{0, 0, 0, 0};
+        int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int[][] num = testSet(winners.size());
         System.out.println("UCL");
-        for (int i = start; i < winners.size(); i++) {
-            double[][] data = new double[i + 1][features[0].length];
-            List<String> user = new ArrayList<>(i + 1);
-            List<Integer> index = new ArrayList<>(i + 1);
-            for (int j = 0; j <= i; j++) {
-                index.add(j);
+        for (int k = 0; k < num.length; k++) {
+            for (int i = 0; i < num[0].length; i++) {
+                double[][] data = new double[num[k][i] + 1][features[0].length];
+                List<String> user = new ArrayList<>(num[k][i] + 1);
+                List<Integer> index = new ArrayList<>(num[k][i] + 1);
+                for (int j = 0; j <= num[k][i]; j++) {
+                    index.add(j);
+                }
+                Maths.copy(features, data, winners, user, index);
+                Maths.normalization(data, 5);
+                Map<String, Double> tcResult = tcBayes.getRecommendResult(Constant.CLASSIFIER_DIRECTORY + challengeType + "/" + num[k][i], data, num[k][i], user);
+                worker = recommendWorker(tcResult);
+                calculateResult(winners.get(num[k][i]), worker, counts);
+                worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
+                List<Integer> indexs = new ArrayList<>();
+                for (int j = 0; j < num[k][i]; j++) {
+                    indexs.add(j);
+                }
+//                worker = competition.rank(indexs, worker, winners, num[k][i]);
+                worker = competition.uclRank(indexs, worker, winners, num[k][i]);
+                calculateResult(winners.get(num[k][i]), worker, count);
             }
-            Maths.copy(features, data, winners, user, index);
-//            Maths.normalization(data, 5);
-            Map<String, Double> tcResult = tcBayes.getRecommendResult(Constant.CLASSIFIER_DIRECTORY + challengeType + "/" + i, data, i, user);
-//            System.out.println(winners.get(i));
-            worker = recommendWorker(tcResult);
-//            System.out.println(worker);
-            calculateResult(winners.get(i), worker, counts);
-            List<Integer>indexs=new ArrayList<>();
-            for(int j=0;j<i;j++){
-                indexs.add(j);
-            }
-            worker = competition.rank(indexs, worker, winners,i);
-//            System.out.println(worker);
-            calculateResult(winners.get(i), worker, count);
         }
-//        for (int i = 0; i < count.length; i++) {
-//            System.out.println(1.0 * count[i] / (winners.size() - start));
-//        }
-//        count = new int[]{0, 0, 0, 0};
-//        System.out.println("CBM");
-//        for (int i = start; i < winners.size(); i++) {
-//            Map<String, Double> cbmResult = contentBase.getRecommendResult(features, i, scores, winners);
-//            System.out.println(winners.get(i));
-//            worker = recommendWorker(cbmResult);
-//            System.out.println(worker);
-//            calculateResult(winners.get(i), worker, counts);
-//            List<Integer>index=new ArrayList<>();
-//            for(int j=0;j<i;j++){
-//                index.add(j);
-//            }
-//            worker = competition.rankWorkers(index, worker, winners,i);
-//            System.out.println(worker);
-//            calculateResult(winners.get(i), worker, count);
-//        }
         for (int i = 0; i < counts.length; i++) {
-            System.out.println(1.0 * counts[i] / (winners.size() - start));
+            System.out.println(1.0 * counts[i] / num.length / num[0].length + "\t" + 1.0 * count[i] / num.length / num[0].length);
         }
-        for (int i = 0; i < count.length; i++) {
-            System.out.println(1.0 * count[i] / (winners.size() - start));
-        }
+//        count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//        counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//        System.out.println("CBM");
+//        for (int k = 0; k < num.length; k++) {
+//            for (int i = 0; i < num[0].length; i++) {
+//                Map<String, Double> cbmResult = contentBase.getRecommendResult(features, num[k][i], scores, winners);
+//                worker = recommendWorker(cbmResult);
+//                calculateResult(winners.get(num[k][i]), worker, counts);
+//                List<Integer> index = new ArrayList<>();
+//                for (int j = 0; j < num[k][i]; j++) {
+//                    index.add(j);
+//                }
+//                worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
+//                worker = competition.rank(index, worker, winners, num[k][i]);
+//                calculateResult(winners.get(num[k][i]), worker, count);
+//            }
+//        }
+//        for (int i = 0; i < counts.length; i++) {
+//            System.out.println(1.0 * counts[i] / num.length / num[0].length+"\t"+1.0 * count[i] / num.length / num[0].length);
+//        }
     }
 
     public void getRecommendBayesUcl(String challengeType) {
@@ -269,7 +294,10 @@ public class RecommendResult {
     }
 
     public void calculateResult(String winner, List<String> worker, int[] count) {
-        int[] num = new int[]{1, 5, 10, 15};
+        int[] num = new int[15];
+        for (int i = 0; i < 15; i++) {
+            num[i] = i + 1;
+        }
         for (int j = 0; j < num.length; j++) {
             for (int k = 0; k < worker.size() && k < num[j]; k++) {
                 if (winner.equals(worker.get(k))) {

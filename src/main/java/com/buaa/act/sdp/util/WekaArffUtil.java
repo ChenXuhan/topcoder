@@ -15,6 +15,7 @@ import java.util.*;
  * Created by yang on 2016/11/24.
  */
 public class WekaArffUtil {
+
     public static void writeToArffClassfiler(String filename, double[][] data,List<String>classes ) {
         FileWriter fileWriter = null;
         BufferedWriter writer = null;
@@ -80,6 +81,29 @@ public class WekaArffUtil {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static Instances getInstances(String path, double[][] features, List<String> winners) {
+        WekaArffUtil.writeToArffClassfiler(path, features, winners);
+        Instances instances = WekaArffUtil.getInstances(path);
+        instances.setClassIndex(instances.numAttributes() - 1);
+        return instances;
+    }
+
+    // weka分类器类别对应的下标
+    public static Map<Double, String> getWinnerIndex(List<String> winner, int len) {
+        Map<Double, String> map = new HashMap<>();
+        Set<String> set = new LinkedHashSet<>();
+        for (int i = 0; i < len; i++) {
+            set.add(winner.get(i));
+        }
+        int k = 0;
+        double index;
+        for (String s : set) {
+            index = k++;
+            map.put(index, s);
+        }
+        return map;
     }
 
     public static Instances getInstances(String fileName){
