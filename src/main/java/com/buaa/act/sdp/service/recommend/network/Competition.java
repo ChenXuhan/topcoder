@@ -82,6 +82,7 @@ public class Competition {
         }
     }
 
+    // 获取当前任务的相似任务中worker的得分，分数多少无限制
     public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner) {
         Map<Integer, Map<String, Double>> score = getAllWorkerScores();
         List<ChallengeItem> items = featureExtract.getItems();
@@ -93,7 +94,7 @@ public class Competition {
         return list;
     }
 
-    // 获取当前任务的相似任务中worker的得分, 只考虑80分以上的
+    // 获取当前任务的相似任务中worker的得分,只考虑80分以上的
     public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner) {
         List<Map<String, Double>> lists = featureExtract.getUserScore();
         List<Map<String, Double>> list = new ArrayList<>();
@@ -104,7 +105,7 @@ public class Competition {
         return list;
     }
 
-    // 获取在当前任务前的所有类型任务中参与的worker
+    // 获取在当前任务前的所有类型任务中参与的worker，id之前
     public List<Map<String, Double>> getAllTypeWorkers(int challengeId, List<String> winner) {
         Map<Integer, Map<String, Double>> scores = getAllWorkerScores();
         Map<Integer, String> allWinners = featureExtract.getAllWinners();
@@ -159,13 +160,11 @@ public class Competition {
         return attraction;
     }
 
-    // worker吸引力(worker之间边的和)
+    // 赢次数减输的次数
     public int[][] getAttraction(int[][] attraction) {
         int[][] attr = new int[attraction.length][attraction.length];
         for (int i = 0; i < attraction.length; i++) {
             for (int j = i + 1; j < attraction.length; j++) {
-//                attr[i][j] = attraction[j][i] + attraction[i][j];
-//                attr[j][i] = attr[i][j];
                 attr[i][j] = attraction[j][i] - attraction[i][j];
                 attr[j][i] = -attr[i][j];
             }
@@ -173,6 +172,7 @@ public class Competition {
         return attr;
     }
 
+    // worker吸引力(worker之间边的和)
     public int[][] getUclAttraction(int[][] attraction) {
         int[][] attr = new int[attraction.length][attraction.length];
         for (int i = 0; i < attraction.length; i++) {
@@ -238,7 +238,6 @@ public class Competition {
             t = winTimes[i][0];
             rank[t][0] = t;
             rank[t][1] = i + t;
-//            System.out.println(worker.get(t)+":"+i+","+t+","+(i+t));
         }
         Arrays.sort(rank, new Comparator<int[]>() {
             @Override
@@ -268,7 +267,6 @@ public class Competition {
                 continue;
             }
             for (int j = i + 1; j < relation.length; j++) {
-//                System.out.print(worker.get(i)+":"+worker.get(j)+"="+relation[i][j]+":"+relation[j][i]+" ");
                 if (relation[j][i] - relation[i][j] >= j - i && i != j) {
                     if (!result.contains(worker.get(j))) {
                         result.add(worker.get(j));
@@ -276,13 +274,12 @@ public class Competition {
                 }
             }
             result.add(worker.get(i));
-//            System.out.println();
         }
         return result;
     }
 
     // 综合分类推荐排序和输赢次数排序,每次只处理一名
-    public List<String> rank(List<Integer> neighbors, List<String> worker, List<String> winners, int n) {
+    public List<String> reRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n) {
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(neighbors, n);
         List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);

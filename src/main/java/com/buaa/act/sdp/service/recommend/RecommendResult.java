@@ -64,26 +64,20 @@ public class RecommendResult {
         for (int k = 0; k < num.length; k++) {
             for (int i = 0; i < num[0].length; i++) {
                 Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, num[k][i], winners);
-//            System.out.println(winners.get(num[i]));
                 worker = recommendWorker(tcResult);
                 calculateResult(winners.get(num[k][i]), worker, counts);
-//            System.out.println(worker);
                 List<Integer> index = localClassifier.getNeighbors();
                 worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
-                worker = competition.rank(index, worker, winners, num[k][i]);
-//            System.out.println(worker);
+                worker = competition.reRank(index, worker, winners, num[k][i]);
                 calculateResult(winners.get(num[k][i]), worker, count);
             }
         }
         for (int i = 0; i < counts.length; i++) {
-            System.out.println(1.0 * counts[i] / num.length / num[0].length);
-        }
-        for (int i = 0; i < count.length; i++) {
-            System.out.println(1.0 * count[i] / num.length / num[0].length);
+            System.out.println(1.0 * counts[i] / num.length / num[0].length + "\t" + 1.0 * count[i] / num.length / num[0].length);
         }
     }
 
-    // 先kmeans聚类在某一类别中分类
+    // 先kmeans聚类在某一聚类中分类
     public void clusterClassifier(String challengeType, int n) {
         System.out.println("Cluster");
         double[][] features = featureExtract.getFeatures(challengeType);
@@ -96,31 +90,24 @@ public class RecommendResult {
             for (int k = 0; k < num.length; k++) {
                 for (int i = 0; i < num[0].length; i++) {
                     Map<String, Double> result = cluster.getRecommendResult(challengeType, features, num[k][i], n, winners);
-//                    System.out.println(winners.get(num[k][i]));
                     worker = recommendWorker(result);
-//                    System.out.println(worker);
                     calculateResult(winners.get(num[k][i]), worker, counts);
                     List<Integer> index = cluster.getNeighbors();
                     worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
-//                    worker = competition.rank(index, worker, winners, num[k][i]);
-                    worker = competition.uclRank(index, worker, winners, num[k][i]);
-//                    System.out.println(worker);
+                    worker = competition.reRank(index, worker, winners, num[k][i]);
                     calculateResult(winners.get(num[k][i]), worker, count);
                 }
             }
             for (int j = 0; j < counts.length; j++) {
                 System.out.println(1.0 * counts[j] / num.length / num[0].length + "\t" + 1.0 * count[j] / num.length / num[0].length);
             }
-//            for (int j = 0; j < count.length; j++) {
-//                System.out.println(1.0 * count[j] / num.length / num[0].length);
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // 原始的分类和协同过滤
-    public void getRecommendResult(String challengeType) {
+    // 原始的分类
+    public void classifier(String challengeType) {
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners();
         List<Map<String, Double>> scores = featureExtract.getUserScore();
@@ -147,36 +134,45 @@ public class RecommendResult {
                 for (int j = 0; j < num[k][i]; j++) {
                     indexs.add(j);
                 }
-//                worker = competition.rank(indexs, worker, winners, num[k][i]);
-                worker = competition.uclRank(indexs, worker, winners, num[k][i]);
+                worker = competition.reRank(indexs, worker, winners, num[k][i]);
                 calculateResult(winners.get(num[k][i]), worker, count);
             }
         }
         for (int i = 0; i < counts.length; i++) {
             System.out.println(1.0 * counts[i] / num.length / num[0].length + "\t" + 1.0 * count[i] / num.length / num[0].length);
         }
-//        count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//        counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//        System.out.println("CBM");
-//        for (int k = 0; k < num.length; k++) {
-//            for (int i = 0; i < num[0].length; i++) {
-//                Map<String, Double> cbmResult = contentBase.getRecommendResult(features, num[k][i], scores, winners);
-//                worker = recommendWorker(cbmResult);
-//                calculateResult(winners.get(num[k][i]), worker, counts);
-//                List<Integer> index = new ArrayList<>();
-//                for (int j = 0; j < num[k][i]; j++) {
-//                    index.add(j);
-//                }
-//                worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
-//                worker = competition.rank(index, worker, winners, num[k][i]);
-//                calculateResult(winners.get(num[k][i]), worker, count);
-//            }
-//        }
-//        for (int i = 0; i < counts.length; i++) {
-//            System.out.println(1.0 * counts[i] / num.length / num[0].length+"\t"+1.0 * count[i] / num.length / num[0].length);
-//        }
+
     }
 
+    public void contentBased(String challengeType) {
+        double[][] features = featureExtract.getFeatures(challengeType);
+        List<String> winners = featureExtract.getWinners();
+        List<Map<String, Double>> scores = featureExtract.getUserScore();
+        List<String> worker;
+        int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int[][] num = testSet(winners.size());
+        System.out.println("CBM");
+        for (int k = 0; k < num.length; k++) {
+            for (int i = 0; i < num[0].length; i++) {
+                Map<String, Double> cbmResult = contentBase.getRecommendResult(features, num[k][i], scores, winners);
+                worker = recommendWorker(cbmResult);
+                calculateResult(winners.get(num[k][i]), worker, counts);
+                List<Integer> index = new ArrayList<>();
+                for (int j = 0; j < num[k][i]; j++) {
+                    index.add(j);
+                }
+                worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
+                worker = competition.reRank(index, worker, winners, num[k][i]);
+                calculateResult(winners.get(num[k][i]), worker, count);
+            }
+        }
+        for (int i = 0; i < counts.length; i++) {
+            System.out.println(1.0 * counts[i] / num.length / num[0].length + "\t" + 1.0 * count[i] / num.length / num[0].length);
+        }
+    }
+
+    // 考虑tf-idf后的分类推荐结果
     public void getRecommendBayesUcl(String challengeType) {
         featureExtract.getWinnersAndScores(challengeType);
         double[][] features = featureExtract.getTimesAndAward();
@@ -193,34 +189,6 @@ public class RecommendResult {
         for (int i = 0; i < count.length; i++) {
             System.out.println(1.0 * count[i] / (winners.size() - start));
         }
-    }
-
-    // 分类结果排序
-    public List<String> recommendWorker(Map<String, Double> bayesMap, Map<String, Double> cbmMap, double a, double b) {
-        List<String> workers = new ArrayList<>();
-        Map<String, Double> map = new HashMap<>();
-        for (Map.Entry<String, Double> entry : bayesMap.entrySet()) {
-            map.put(entry.getKey(), a * entry.getValue());
-        }
-        for (Map.Entry<String, Double> entry : cbmMap.entrySet()) {
-            if (bayesMap.containsKey(entry.getKey())) {
-                map.put(entry.getKey(), b * entry.getValue() + map.get(entry.getKey()));
-            } else {
-                map.put(entry.getKey(), b * entry.getValue());
-            }
-        }
-        List<Map.Entry<String, Double>> list = new ArrayList<>();
-        list.addAll(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
-            @Override
-            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-                return o2.getValue().compareTo(o1.getValue());
-            }
-        });
-        for (int i = 0; i < list.size() && i < 20; i++) {
-            workers.add(list.get(i).getKey());
-        }
-        return workers;
     }
 
     //分类结果排序

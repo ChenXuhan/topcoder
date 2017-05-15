@@ -41,9 +41,10 @@ public class TestRecommend {
 //        First2Finish
 //        Assembly Competition
         String challengeType = "Assembly Competition";
-//        recommendResult.getRecommendResult(challengeType);
+        recommendResult.classifier(challengeType);
+        recommendResult.contentBased(challengeType);
         recommendResult.clusterClassifier(challengeType,3);
-//        recommendResult.localClassifier(challengeType);
+        recommendResult.localClassifier(challengeType);
     }
 
     @Test
