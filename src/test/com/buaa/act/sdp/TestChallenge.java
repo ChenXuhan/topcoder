@@ -33,7 +33,7 @@ public class TestChallenge {
     @Autowired
     private ChallengeApi challengeApi;
 
-    @Autowired
+    @Autowired(required = false)
     private ChallengeSubmissionDao challengeSubmissionDao;
 
     @Autowired(required = false)
@@ -58,7 +58,7 @@ public class TestChallenge {
     private Collaboration collaboration;
 
 
-    @Autowired
+    @Autowired(required = false)
     private ChallengeRegistrantDao challengeRegistrantDao;
 
     @Autowired
