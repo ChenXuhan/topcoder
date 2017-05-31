@@ -30,4 +30,8 @@
     <select id="getAllRegistrant" resultType="com.buaa.act.sdp.bean.challenge.ChallengeRegistrant">
         SELECT  challengeID ,handle from challenge_registrant;
     </select>
+
+    <select id="getUserRegers" resultType="java.lang.Integer">
+        select count(DISTINCT challengeID) from challenge_registrant where handle=#{handle}
+    </select>
 </mapper>

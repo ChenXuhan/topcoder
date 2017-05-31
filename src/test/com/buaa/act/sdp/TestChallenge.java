@@ -4,9 +4,7 @@ import com.buaa.act.sdp.bean.challenge.ChallengeItem;
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
-import com.buaa.act.sdp.service.api.AbilityExp;
-import com.buaa.act.sdp.service.api.ChallengeApi;
-import com.buaa.act.sdp.service.api.neo4jConn;
+import com.buaa.act.sdp.service.api.*;
 import com.buaa.act.sdp.service.recommend.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.RecommendResult;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
@@ -49,6 +47,7 @@ public class TestChallenge {
 
     @Autowired
     private AbilityExp exp;
+
     @Autowired
     private FeatureExtract featureExtract;
 
@@ -63,6 +62,13 @@ public class TestChallenge {
 
     @Autowired
     private neo4jConn neo4j;
+
+    @Autowired
+    private handle hand;
+
+    @Autowired
+    private DatabaseOpe databaseOpe;
+
     @Test
     public void testProjectId(){
         System.out.println(collaboration.getProjectToChallenges());
@@ -87,8 +93,11 @@ public class TestChallenge {
         //exp.userAbility.userAbilityInsert();
         //gen.collaborationGen();
        // gen.writeToDb();
-       exp.userAbility.userAbilityInsert();
+     //  exp.userAbility.userAbilityInsert();
       // System.out.println(exp.userAbility.getAbility("Breusov"));
+       // exp.userAbility.getCollaboration("appiriorob");
+       exp.userAbility.spiltSkill();
+       // hand.getSkillsFromDatabase();
     }
 
 
@@ -140,7 +149,7 @@ public class TestChallenge {
 
     @Test
     public void teat1() {
-
+     databaseOpe.run();
         /*ability.ope.run();
         ability.getAbility("nomo_kazza","CSS");*/
         //exp.getTech(30054047);
@@ -162,8 +171,8 @@ public class TestChallenge {
         //System.out.println(exp.userAbility.getAbility("-jacob-"));
         //neo4j.getTry();
      //exp.userAbility.ttt();
-       String str =  exp.userAbility.getAbility("12778");
-        System.out.println(str);
+      /* String str =  exp.userAbility.getAbility("12778");
+        System.out.println(str);*/
     }
 
     @Test

@@ -17,5 +17,6 @@ public interface ChallengeSubmissionDao {
     int getChallengeSubmissionCount(@Param("challengeId") int challengeId);
     List<ChallengeSubmission>getChallengeWinner();
     ChallengeSubmission[] getSubmissionByHandle(@Param("handle") String handle);
-
+    int getUserSubers(String handle);
+    int getUserWiners(String handle);
 }

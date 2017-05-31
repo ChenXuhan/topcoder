@@ -25,5 +25,9 @@
         DELETE FROM collaborationRelation
     </delete>
 
+    <select id="getCollaborations" resultType="java.lang.String">
+        SELECT handle2 from collaborationRelation where handle1=#{handle1};
+    </select>
+
 
 </mapper>

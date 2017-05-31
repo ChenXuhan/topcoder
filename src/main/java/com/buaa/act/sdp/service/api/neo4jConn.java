@@ -18,7 +18,7 @@ public class neo4jConn {
     public Connection getTry() {
         Connection con = null;
         try {
-            con = DriverManager.getConnection("jdbc:neo4j:http://localhost:7474/",login,password);
+            con = DriverManager.getConnection("jdbc:neo4j:http://192.168.7.109:7474/",login,password);
 
 
             /*String cypher = "MATCH (n:User{handle:{1}}) SET n.skillDegree = {2}";

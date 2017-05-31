@@ -24,4 +24,7 @@ public interface ChallengeItemDao {
      Integer[] getAllNumSubmissions();
      double getDifficultyDegree(@Param("challengeId") int challengeId);
      List<Map<String,Integer>>getProjectId();
+    void insertDifficultyDegree (@Param("relationMap") HashMap<Integer,Double> map);
+    String[] getAllPlatforms();
+    String[] getAllTechnology();
 }

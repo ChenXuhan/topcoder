@@ -134,7 +134,6 @@ public class DatabaseOpe extends Thread {
 
     public void run() {
         int min1, min2, min3, min4, max1, max2, max3, max4;
-        double percent;
         int[] result = new int[2];
         double percentage = 0.9;
         List<ChallengeItem> allChallenges = challengeItemDao.getAllChallenges();
@@ -155,6 +154,7 @@ public class DatabaseOpe extends Thread {
         min4 = result[0];
         max4 = result[1];
 
+        //遍历求每一个项目的难度系数
         for (int i = 0; i < allChallenges.size() * percentage; i++) {
             ChallengeItem item = allChallenges.get(i);
             String[] prizeStr = item.getPrize();
@@ -180,5 +180,6 @@ public class DatabaseOpe extends Thread {
         for(int i = (int)(Math.ceil(allChallenges.size() * percentage)); i < allChallenges.size();i ++){
             scores.put(allChallenges.get(i).getChallengeId(),0.0);
         }
+        challengeItemDao.insertDifficultyDegree(scores);
     }
 }

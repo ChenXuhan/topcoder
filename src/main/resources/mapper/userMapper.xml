@@ -27,9 +27,8 @@
 
     <update id="insertSkillDegreeBatch" >
     <foreach collection="relationMap" index="key1" item="value1" separator=";">
-     UPDATE user set ability=#{value1} where handle=#{key1}
+     UPDATE user set skillDegree=#{value1} where handle=#{key1}
     </foreach>
-
     </update>
 
 </mapper>
