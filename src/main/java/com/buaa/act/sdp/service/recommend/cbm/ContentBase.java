@@ -3,13 +3,14 @@ package com.buaa.act.sdp.service.recommend.cbm;
 import com.buaa.act.sdp.util.Maths;
 import com.buaa.act.sdp.util.WekaArffUtil;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 /**
  * Created by yang on 2017/2/23.
  */
-@Component
+@Service
 public class ContentBase {
 
     // 获取相似任务中所有的获胜者handle
@@ -37,12 +38,12 @@ public class ContentBase {
         return similarity;
     }
 
+    // 取前20个相似任务,item-based推荐
     public Map<String, Double> getRecommendResult(double[][] features, int index, List<Map<String, Double>> scores, List<String> winner) {
         Map<String, List<Double>> map = new HashMap<>();
         List<Integer> neighborIndex = Maths.getSimilarityChallenges(features, index);
-        double[][] similarity =getSimilarityTasks(features,index,neighborIndex);
+        double[][] similarity = getSimilarityTasks(features, index, neighborIndex);
         Set<String> winnerSet = getWinner(winner, neighborIndex);
-        // 取前20个相似任务,item-based推荐
         for (int i = 0; i < 20 && i < neighborIndex.size(); i++) {
             for (Map.Entry<String, Double> entry : scores.get((int) similarity[i][0]).entrySet()) {
                 if (winnerSet.contains(entry.getKey())) {

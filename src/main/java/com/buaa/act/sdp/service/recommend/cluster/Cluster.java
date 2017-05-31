@@ -30,6 +30,7 @@ public class Cluster {
     private TcJ48 tcJ48;
     @Autowired
     private TcLibSvm tcLibSvm;
+
     // 获取训练数据集
     public Instances getInstances(String path, double[][] features) {
         WekaArffUtil.writeToArffCluster(path, features);
@@ -87,12 +88,12 @@ public class Cluster {
         // 在聚类中进行分类
         List<Integer> list = new ArrayList<>();
         list.addAll(map.get(k));
-        neighborIndex=map.get(k);
+        neighborIndex = map.get(k);
         list.add(neighbors.size() - 1);
         return getResult(list, user, data, path);
     }
 
-    // 聚类后，适用bayes进行分类
+    // 聚类后，使用bayes进行分类
     public Map<String, Double> getResult(List<Integer> list, List<String> user, double[][] feature, String path) {
         double[][] data = new double[list.size()][feature[0].length];
         List<String> winner = new ArrayList<>(list.size());

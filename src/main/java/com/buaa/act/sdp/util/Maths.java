@@ -66,15 +66,11 @@ public class Maths {
     // 获取某一任务较为相似的任务
     public static List<Integer> getSimilarityChallenges(double[][] features, int index) {
         Map<Integer, Double> map = new HashMap<>();
-        double k, sum1, sum2, sum;
+        double k, sum1, sum2;
         for (int i = 0; i < index; i++) {
             k = 0;
             sum1 = 0;
             sum2 = 0;
-            sum = 0;
-            if (i == index) {
-                continue;
-            }
             if (Math.abs(features[i][2] - features[index][2]) > 366) {
                 continue;
             }
@@ -84,9 +80,6 @@ public class Maths {
                 }
                 if (features[index][j] == 1.0) {
                     sum2++;
-                }
-                if (features[i][j] == 1.0 || features[index][j] == 1.0) {
-                    sum++;
                 }
                 if (features[i][j] == features[index][j] && features[i][j] == 1.0) {
                     k++;

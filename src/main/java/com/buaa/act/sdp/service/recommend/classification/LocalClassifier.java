@@ -21,24 +21,24 @@ public class LocalClassifier {
     private TcJ48 tcJ48;
     private List<Integer> neighborIndex;
 
-    public List<Integer> getNeighborIndex(double[][] features,int position) {
-        neighborIndex=Maths.getSimilarityChallenges(features,position);
+    public List<Integer> getNeighborIndex(double[][] features, int position) {
+        neighborIndex = Maths.getSimilarityChallenges(features, position);
         return neighborIndex;
     }
 
-    public List<Integer>getNeighbors(){
+    public List<Integer> getNeighbors() {
         return neighborIndex;
     }
 
     public Map<String, Double> getRecommendResult(String challengeType, double[][] features, int position, List<String> winners) {
-        List<Integer>neighbors=new ArrayList<>(getNeighborIndex(features,position));
+        List<Integer> neighbors = new ArrayList<>(getNeighborIndex(features, position));
         neighbors.add(position);
         int k = neighbors.size();
         double[][] data = new double[k][features[0].length];
         List<String> winner = new ArrayList<>(k);
         Maths.copy(features, data, winners, winner, neighbors);
         Maths.normalization(data, 5);
-//        return tcBayes.getRecommendResult(Constant.LOCAL_DIRECTORY + challengeType + "/" + position, data, k - 1, winner);
-        return tcJ48.getRecommendResult(Constant.LOCAL_DIRECTORY + challengeType + "/" + position, data, k - 1, winner);
+        return tcBayes.getRecommendResult(Constant.LOCAL_DIRECTORY + challengeType + "/" + position, data, k - 1, winner);
+//        return tcJ48.getRecommendResult(Constant.LOCAL_DIRECTORY + challengeType + "/" + position, data, k - 1, winner);
     }
 }

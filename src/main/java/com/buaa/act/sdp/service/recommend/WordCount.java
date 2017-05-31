@@ -126,7 +126,7 @@ public class WordCount {
         }
     }
 
-    // 计算某一句话的tf
+    // 计算某一token的tf
     public double[] getTf(int index) {
         double[] tf = new double[allWords.size()];
         int k = 0;
@@ -137,7 +137,6 @@ public class WordCount {
 //                tf[k++] = 1.0 * map.get(entry.getKey()) / taskWords.get(index);
                 tf[k++] = 1 + Math.log(map.get(entry.getKey()));
             } else {
-                //tf[k++] = 0;
                 tf[k++] = 1;
             }
         }

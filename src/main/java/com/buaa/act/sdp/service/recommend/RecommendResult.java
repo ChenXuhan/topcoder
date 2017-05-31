@@ -144,6 +144,7 @@ public class RecommendResult {
 
     }
 
+    // 协同过滤
     public void contentBased(String challengeType) {
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners();
