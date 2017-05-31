@@ -23,38 +23,10 @@ public class DatabaseOpe extends Thread {
     //保存历史项目的项目难度系数
     HashMap<Integer, Double> scores = new HashMap<Integer, Double>();
 
-    public Connection dataBaseConnect() {
-        Connection conn = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        String url = "jdbc:mysql://192.168.3.176:3306/topcoder";
-        try {
-            conn = DriverManager.getConnection(url, "root", "123456");
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        return conn;
-    }
-
-    public static void stopConnection(Connection conn) {
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-
     /*
     * 找到相应属性下值的最大最小值
     */
-    public int[] findMaxMinItem(String entryName) {
+    public int[] findMaxMinItem(String entryName,double percentage) {
         Integer[] items;
         if (entryName.equals("prize")) {
             String[] allPrizesStr = challengeItemDao.getAllPrizes();
@@ -77,19 +49,19 @@ public class DatabaseOpe extends Thread {
                     items[i] += Integer.parseInt(allPrizes[i][j]);
                 }
             }
-            return (maxMinIntFind(items));
+            return (maxMinIntFind(items,percentage));
         } else if (entryName.equals("reliabilityBonus")) {
             items = challengeItemDao.getAllReliabilityBonus();
-            return (maxMinIntFind(items));
+            return (maxMinIntFind(items,percentage));
         } else if (entryName.equals("duration")) {
             items = challengeItemDao.getAllDuration();
-            return (maxMinIntFind(items));
+            return (maxMinIntFind(items,percentage));
         } else if (entryName.equals("numRegistrants")) {
             items = challengeItemDao.getAllNumRegistrants();
-            return (maxMinIntFind(items));
+            return (maxMinIntFind(items,percentage));
         } else if (entryName.equals("numSubmissions")) {
             items = challengeItemDao.getAllNumSubmissions();
-            return (maxMinIntFind(items));
+            return (maxMinIntFind(items,percentage));
         }
         return null;
     }
@@ -126,10 +98,10 @@ public class DatabaseOpe extends Thread {
     /*
     * 求数组中的最大最小值
     * */
-    public int[] maxMinIntFind(Integer[] items) {
+    public int[] maxMinIntFind(Integer[] items,double percentage) {
         int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
         int[] returnInt = new int[2];
-        for (int i = 0; i < items.length; i++) {
+        for (int i = 0; i < items.length * percentage; i++) {
             if (max < items[i]) {
                 max = items[i];
             }
@@ -160,34 +132,30 @@ public class DatabaseOpe extends Thread {
         return (double) (number - min) / (max - min);
     }
 
-    public static void main(String[] args) {
-        DatabaseOpe ope = new DatabaseOpe();
-        ope.findMaxMinItem("prize");
-    }
-
     public void run() {
         int min1, min2, min3, min4, max1, max2, max3, max4;
-        double percent;
         int[] result = new int[2];
+        double percentage = 0.9;
         List<ChallengeItem> allChallenges = challengeItemDao.getAllChallenges();
 
-        result = findMaxMinItem("reliabilityBonus");
+        result = findMaxMinItem("reliabilityBonus",percentage);
         min1 = result[0];
         max1 = result[1];
 
-        result = findMaxMinItem("prize");
+        result = findMaxMinItem("prize",percentage);
         min2 = result[0];
         max2 = result[1];
 
-        result = findMaxMinItem("numRegistrants");
+        result = findMaxMinItem("numRegistrants",percentage);
         min3 = result[0];
         max3 = result[1];
 
-        result = findMaxMinItem("duration");
+        result = findMaxMinItem("duration",percentage);
         min4 = result[0];
         max4 = result[1];
 
-        for (int i = 0; i < allChallenges.size(); i++) {
+        //遍历求每一个项目的难度系数
+        for (int i = 0; i < allChallenges.size() * percentage; i++) {
             ChallengeItem item = allChallenges.get(i);
             String[] prizeStr = item.getPrize();
             int prize = 0;
@@ -199,15 +167,19 @@ public class DatabaseOpe extends Thread {
                     prize += Integer.parseInt(prizeStr[j]);
                 }
             }
-            if (item.getNumRegistrants() != 0) {
+           /* if (item.getNumRegistrants() != 0) {
                 percent = (double) item.getNumSubmissions() / item.getNumRegistrants();
                 if (percent > 1) {
                     percent = 1;
                 }
             } else {
                 percent = 0;
-            }
+            }*/
             scores.put(item.getChallengeId(), numProcess((int) item.getReliabilityBonus(), prize, item.getNumRegistrants(), item.getDuration(), min1, max1, min2, max2, min3, max3, min4, max4));
         }
+        for(int i = (int)(Math.ceil(allChallenges.size() * percentage)); i < allChallenges.size();i ++){
+            scores.put(allChallenges.get(i).getChallengeId(),0.0);
+        }
+        challengeItemDao.insertDifficultyDegree(scores);
     }
 }

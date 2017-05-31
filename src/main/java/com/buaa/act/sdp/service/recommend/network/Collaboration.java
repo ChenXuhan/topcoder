@@ -23,7 +23,9 @@ public class Collaboration {
     public Collaboration() {
         projectIdToChallengeIds=new HashMap<>();
     }
-
+/*
+*返回所有project中所有的challengeId
+* */
     public Map<Integer,List<Integer>>getProjectToChallenges(){
         List<Map<String,Integer>>list=challengeItemDao.getProjectId();
         List<Integer>challengeIds;

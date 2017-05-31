@@ -29,7 +29,6 @@ public class Competition {
         scores = new HashMap<>();
     }
 
-    // 注册表获取所有task所有注册人的得分:0
     public Map<Integer, Map<String, Double>> getAllWorkerScores() {
         if (scores.size() > 0) {
             return scores;

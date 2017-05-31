@@ -7,6 +7,7 @@ import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -47,7 +48,7 @@ public class AbilityExp {
     /*
     * 给定一个challenge，选择合适的开发者
     * */
-    public void getCoder(int itemId){
+    /*public void getCoder(int itemId){
         challengeRegistrants = challengeRegistrantDao.getRegistrantById(itemId);
         List<String> techsNeed = getTech(itemId);
         if(challengeRegistrants != null){
@@ -56,14 +57,15 @@ public class AbilityExp {
                 for(int j = 0;j < techsNeed.size();j ++){
                     scores[i] += userAbility.getAbility(challengeRegistrants[i].getHandle(),techsNeed.get(j));
                 }
-                //System.out.println(challengeRegistrants[i].getHandle()+"...get"+scores[i]);
+                DecimalFormat df = new DecimalFormat("#.####");
+                scores[i] = Double.parseDouble(df.format(scores[i]));
             }
             bubbleSort(scores);
-            for( int i = 0; i < challengeRegistrants.length; i ++){
+            for( int i = challengeRegistrants.length - 1; i >= 0 ; i --){
                 System.out.println(challengeRegistrants[i].getHandle()+"...get"+scores[i]);
             }
         }
-    }
+    }*/
 
     public double[] bubbleSort(double[] args){//冒泡排序算法
         for(int i=0;i<args.length-1;i++){

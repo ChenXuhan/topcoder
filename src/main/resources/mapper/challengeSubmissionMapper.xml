@@ -29,4 +29,12 @@
         select * from challenge_submission where handle = #{handle}
     </select>
 
+    <select id="getUserSubers" resultType="java.lang.Integer">
+        select count(DISTINCT challengeID) from challenge_submission where handle=#{handle}
+    </select>
+
+    <select id="getUserWiners" resultType="java.lang.Integer">
+        select count(DISTINCT challengeID) from challenge_submission where handle=#{handle} AND placement= 1
+    </select>
+
 </mapper>

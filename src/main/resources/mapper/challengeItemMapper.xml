@@ -98,4 +98,22 @@
     <select id="getProjectId" resultType="java.util.Map">
         SELECT challengeId,projectId from challenge_item where projectId>0
     </select>
+
+    <select id="getDifficultyDegree" resultType="java.lang.Double">
+        SELECT difficultyDegree from challenge_item where challengeId=#{challengeId}
+    </select>
+
+    <update id="insertDifficultyDegree" >
+        <foreach collection="relationMap" index="key1" item="value1" separator=";">
+            UPDATE challenge_item set diff=#{value1} where challengeId=#{key1}
+        </foreach>
+    </update>
+
+    <select id="getAllPlatforms" resultType="java.lang.String">
+        SELECT platforms from challenge_item
+    </select>
+
+    <select id="getAllTechnology" resultType="java.lang.String">
+        SELECT technology from challenge_item
+    </select>
 </mapper>

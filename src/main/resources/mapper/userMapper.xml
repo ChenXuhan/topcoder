@@ -21,4 +21,14 @@
             UPDATE user set competitionNums=#{competitionNums},submissionNums=#{submissionNums},winNums=#{winNums} where handle=#{handle}
     </update>
 
+    <update id="insertSkillDegree" >
+        UPDATE user set skillDegree=#{skillDegree} where handle=#{handle}
+    </update>
+
+    <update id="insertSkillDegreeBatch" >
+    <foreach collection="relationMap" index="key1" item="value1" separator=";">
+     UPDATE user set skillDegree=#{value1} where handle=#{key1}
+    </foreach>
+    </update>
+
 </mapper>
