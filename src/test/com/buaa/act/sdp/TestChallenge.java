@@ -8,7 +8,7 @@ import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.service.api.*;
-import com.buaa.act.sdp.service.recommend.FeatureExtract;
+import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.RecommendResult;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.recommend.network.Collaboration;
@@ -102,7 +102,7 @@ public class TestChallenge {
      //  exp.userAbility.userAbilityInsert();
       // System.out.println(exp.userAbility.getAbility("Breusov"));
        // exp.userAbility.getCollaboration("appiriorob");
-       exp.userAbility.spiltSkill();
+//       exp.userAbility.spiltSkill();
        // hand.getSkillsFromDatabase();
     }
 

@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.service.recommend;
 
 import com.buaa.act.sdp.bean.challenge.ChallengeItem;
+import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.network.Competition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,7 +90,6 @@ public class Statistics {
     }
 
     public void timeInterval(String challengeType) {
-        featureExtract.init(challengeType);
         List<ChallengeItem> items = featureExtract.getItems();
         List<String> winners = featureExtract.getWinners();
         Map<String, List<String>> map = new HashMap<>();

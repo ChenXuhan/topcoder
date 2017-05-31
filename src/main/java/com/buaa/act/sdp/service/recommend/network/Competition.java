@@ -3,7 +3,7 @@ package com.buaa.act.sdp.service.recommend.network;
 import com.buaa.act.sdp.bean.challenge.ChallengeItem;
 import com.buaa.act.sdp.bean.challenge.ChallengeRegistrant;
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
-import com.buaa.act.sdp.service.recommend.FeatureExtract;
+import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,9 +21,6 @@ public class Competition {
     private ChallengeRegistrantDao challengeRegistrantDao;
     @Autowired
     private FeatureExtract featureExtract;
-
-    @Autowired
-    private Statistics statistics;
 
     public Competition() {
         scores = new HashMap<>();

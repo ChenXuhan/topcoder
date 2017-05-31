@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.service.recommend.classification;
 
-import com.buaa.act.sdp.service.recommend.WordCount;
+import com.buaa.act.sdp.service.recommend.feature.WordCount;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

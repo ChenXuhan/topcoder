@@ -1,14 +1,10 @@
-package com.buaa.act.sdp.service.recommend;
+package com.buaa.act.sdp.service.recommend.feature;
 
 import com.buaa.act.sdp.bean.challenge.ChallengeItem;
-import com.buaa.act.sdp.bean.challenge.ChallengeSubmission;
 import com.buaa.act.sdp.common.Constant;
-import com.buaa.act.sdp.dao.ChallengeItemDao;
-import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -18,45 +14,35 @@ import java.util.*;
 @Component
 public class FeatureExtract {
 
-    @Autowired
-    private ChallengeSubmissionDao challengeSubmissionDao;
-    @Autowired
-    private ChallengeItemDao challengeItemDao;
-
-    //过滤掉的所有challenges
-    private List<ChallengeItem> items;
-    //challenge 对应的winner
-    private List<String> winners;
-    //challengeId对应的提交人的得分
-    private Map<Integer, Map<String, Double>> scores;
-    private List<Map<String, Double>> userScore;
     private int requirementWordSize;
     private int titleWordSize;
+    private String type;
 
-    private Map<Integer,String>allWinners;
+    @Autowired
+    private UserScore userScore;
 
     public FeatureExtract() {
-        items = new ArrayList<>();
-        winners = new ArrayList<>();
-        scores = new HashMap<>();
-        userScore = new ArrayList<>();
         requirementWordSize = 0;
-        allWinners=new HashMap<>();
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public List<String> getWinners() {
-        return winners;
+        return userScore.getWinners(type);
     }
 
     public List<ChallengeItem> getItems() {
-        return items;
+        return userScore.getItems(type);
     }
 
     public Map<Integer, Map<String, Double>> getScores() {
-        if (scores.size() == 0) {
-            getWinnersAndScores(null);
-        }
-        return scores;
+        return userScore.getScores(type);
     }
 
     public int getChallengeRequirementSize() {
@@ -68,122 +54,16 @@ public class FeatureExtract {
     }
 
     public List<Map<String, Double>> getUserScore() {
-        return userScore;
+        return userScore.getUserScore(type);
     }
 
     public Map<Integer, String> getAllWinners() {
-        return allWinners;
-    }
-
-    public void init(String challengeType) {
-        getWinnersAndScores(challengeType);
-    }
-
-    //一个人对一个challenge提交多次，以最高分数为主
-    public void getUserScores(ChallengeSubmission challengeSubmission) {
-        Map<String, Double> score;
-//        if (Double.parseDouble(challengeSubmission.getFinalScore()) < 80) {
-//            return;
-//        }
-        if (scores.containsKey(challengeSubmission.getChallengeID())) {
-            score = scores.get(challengeSubmission.getChallengeID());
-            if (score.containsKey(challengeSubmission.getHandle()) && score.get(challengeSubmission.getHandle()).doubleValue() >= Double.parseDouble(challengeSubmission.getFinalScore())) {
-                return;
-            } else {
-                score.put(challengeSubmission.getHandle(), Double.parseDouble(challengeSubmission.getFinalScore()));
-            }
-        } else {
-            score = new HashMap<>();
-            score.put(challengeSubmission.getHandle(), Double.parseDouble(challengeSubmission.getFinalScore()));
-        }
-        scores.put(challengeSubmission.getChallengeID(), score);
-    }
-
-    // 从所有的任务中进行筛选，过滤出一部分任务，计算winner、tasks，以及开发者所得分数
-    public void getWinnersAndScores(String challengeType) {
-        List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
-        Map<String, Integer> map = new HashMap<>();
-        Set<Integer> challengeSet = new HashSet<>();
-        Map<Integer, String> user = new HashMap<>();
-        Set<Integer> set = new HashSet<>();
-        ChallengeItem challengeItem;
-        List<ChallengeItem> challengeItems = new ArrayList<>();
-        for (ChallengeSubmission challengeSubmission : list) {
-
-            if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
-                allWinners.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
-            }
-
-            if (set.contains(challengeSubmission.getChallengeID())) {
-                continue;
-            }
-            if (challengeSet.contains(challengeSubmission.getChallengeID())) {
-                if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
-                    user.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
-                }
-                getUserScores(challengeSubmission);
-            } else {
-                challengeItem = challengeItemDao.getChallengeItemById(challengeSubmission.getChallengeID());
-                if (filterChallenge(challengeItem, challengeType)) {
-                    challengeSet.add(challengeItem.getChallengeId());
-                    challengeItems.add(challengeItem);
-                    if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
-                        user.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
-                    }
-                    getUserScores(challengeSubmission);
-                } else {
-                    set.add(challengeSubmission.getChallengeID());
-                }
-            }
-        }
-        for (Map.Entry<Integer, String> entry : user.entrySet()) {
-            if (map.containsKey(entry.getValue())) {
-                map.put(entry.getValue(), map.get(entry.getValue()) + 1);
-            } else {
-                map.put(entry.getValue(), 1);
-            }
-        }
-        for (int i = 0; i < challengeItems.size(); i++) {
-            String win = user.get(challengeItems.get(i).getChallengeId());
-            if (map.containsKey(win) && map.get(win) >= 5) {
-                items.add(challengeItems.get(i));
-                winners.add(win);
-                userScore.add(scores.get(challengeItems.get(i).getChallengeId()));
-            }
-        }
-        Set<String> sets = new HashSet<>(winners);
-        System.out.println(winners.size() + "\t" + sets.size());
-    }
-
-    //对challenge进行过滤
-    public boolean filterChallenge(ChallengeItem challengeItem, String challengeType) {
-        if (!challengeItem.getCurrentStatus().equals("Completed")) {
-            return false;
-        }
-        String str = challengeItem.getChallengeType();
-        if (!str.equals(challengeType)) {
-            return false;
-        }
-        if (challengeItem.getDetailedRequirements() == null || challengeItem.getDetailedRequirements().length() == 0) {
-            return false;
-        }
-        if (challengeItem.getTechnology() == null || challengeItem.getTechnology().length == 0 || challengeItem.getTechnology()[0].isEmpty()) {
-            return false;
-        }
-        if (challengeItem.getChallengeName() == null || challengeItem.getChallengeName().length() == 0) {
-            return false;
-        }
-        if (challengeItem.getDuration() == 0) {
-            return false;
-        }
-        if (challengeItem.getPrize() == null || challengeItem.getPrize().length == 0 || challengeItem.getPrize()[0].isEmpty()) {
-            return false;
-        }
-        return true;
+        return userScore.getAllWinners(type);
     }
 
     // 文本分词统计
     public WordCount[] getWordCount(int start) {
+        List<ChallengeItem> items = getItems();
         String[] requirements = new String[items.size()];
         String[] skills = new String[items.size()];
         String[] titles = new String[items.size()], temp;
@@ -215,7 +95,9 @@ public class FeatureExtract {
     }
 
     // 只获取任务的时间和奖金
-    public double[][] getTimesAndAward() {
+    public double[][] getTimesAndAward(String challengeType) {
+        setType(challengeType);
+        List<ChallengeItem> items = getItems();
         double[][] features = new double[items.size()][2];
         ChallengeItem item;
         int index;
@@ -231,6 +113,7 @@ public class FeatureExtract {
 
     //UCL中KNN分类器特征
     public double[][] generateVectorUcl() {
+        List<ChallengeItem> items = getItems();
         double[][] paymentAndDuration = new double[items.size()][3];
         Set<String> skillSet = getSkills();
         double[][] skills = new double[items.size()][skillSet.size()];
@@ -254,6 +137,7 @@ public class FeatureExtract {
             temp = items.get(i).getPostingDate().substring(0, 10).split("-");
             paymentAndDuration[i][2] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
         }
+        List<String> winners = getWinners();
         int start = (int) (0.9 * winners.size());
         WordCount[] wordCounts = getWordCount(start);
         requirementTfIdf = wordCounts[0].getTfIdf();
@@ -283,6 +167,7 @@ public class FeatureExtract {
 
     //需求和标题使用的长度,没有处理文本
     public double[][] generateVector() {
+        List<ChallengeItem> items = getItems();
         Set<String> set = getSkills();
         double[][] features = new double[items.size()][set.size() + 5];
         ChallengeItem item;
@@ -347,11 +232,9 @@ public class FeatureExtract {
 
     //筛选一部分任务后，获取这些challenge的特征向量
     public double[][] getFeatures(String challengeType) {
-        if (items.size() == 0) {
-            getWinnersAndScores(challengeType);
-        }
-        double[][] features = generateVector();
-        return features;
+        setType(challengeType);
+//        return generateVectorUcl();
+        return generateVector();
     }
 
 }

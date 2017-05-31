@@ -1,8 +1,7 @@
 package com.buaa.act.sdp.service.recommend.classification;
 
-import com.buaa.act.sdp.service.recommend.FeatureExtract;
+import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

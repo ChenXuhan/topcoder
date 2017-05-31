@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.service.recommend;
+package com.buaa.act.sdp.service.recommend.feature;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;

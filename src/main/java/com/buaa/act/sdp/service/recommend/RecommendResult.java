@@ -4,6 +4,8 @@ import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.recommend.classification.*;
 import com.buaa.act.sdp.service.recommend.cluster.Cluster;
+import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
+import com.buaa.act.sdp.service.recommend.feature.WordCount;
 import com.buaa.act.sdp.service.recommend.network.Competition;
 import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,7 +143,6 @@ public class RecommendResult {
         for (int i = 0; i < counts.length; i++) {
             System.out.println(1.0 * counts[i] / num.length / num[0].length + "\t" + 1.0 * count[i] / num.length / num[0].length);
         }
-
     }
 
     // 协同过滤
@@ -175,8 +176,7 @@ public class RecommendResult {
 
     // 考虑tf-idf后的分类推荐结果
     public void getRecommendBayesUcl(String challengeType) {
-        featureExtract.getWinnersAndScores(challengeType);
-        double[][] features = featureExtract.getTimesAndAward();
+        double[][] features = featureExtract.getTimesAndAward(challengeType);
         List<String> winners = featureExtract.getWinners();
         int start = (int) (0.9 * winners.size());
         int[] count = new int[]{0, 0, 0, 0};
