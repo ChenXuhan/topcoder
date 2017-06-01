@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.bean.challenge;
+package com.buaa.act.sdp.model.challenge;
 
 /**
  * Created by yang on 2016/10/19.

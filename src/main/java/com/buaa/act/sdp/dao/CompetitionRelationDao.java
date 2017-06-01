@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.dao;
 
-import com.buaa.act.sdp.bean.challenge.CompetitionRelation;
+import com.buaa.act.sdp.model.challenge.CompetitionRelation;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

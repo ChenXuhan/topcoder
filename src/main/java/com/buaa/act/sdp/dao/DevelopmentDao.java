@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.dao;
 
-import com.buaa.act.sdp.bean.user.Development;
+import com.buaa.act.sdp.model.user.Development;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.bean.user;
+package com.buaa.act.sdp.model.user;
 
 /**
  * Created by yang on 2016/10/21.

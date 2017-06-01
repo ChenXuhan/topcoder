@@ -1,8 +1,8 @@
 package com.buaa.act.sdp.service.api;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
-import com.buaa.act.sdp.bean.challenge.ChallengeSubmission;
-import com.buaa.act.sdp.bean.user.UserSkill;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.model.challenge.ChallengeSubmission;
+import com.buaa.act.sdp.model.user.UserSkill;
 import com.buaa.act.sdp.dao.*;
 import com.csvreader.CsvReader;
 import org.json.JSONArray;

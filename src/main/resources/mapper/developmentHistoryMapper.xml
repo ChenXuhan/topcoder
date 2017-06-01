@@ -43,7 +43,7 @@
         </foreach>
     </insert>
 
-    <select id="getChallengeCountByHandle" resultType="com.buaa.act.sdp.bean.user.DevelopmentHistory">
+    <select id="getChallengeCountByHandle" resultType="com.buaa.act.sdp.model.user.DevelopmentHistory">
         SELECT * from development_history where handle=#{handle}
     </select>
 </mapper>

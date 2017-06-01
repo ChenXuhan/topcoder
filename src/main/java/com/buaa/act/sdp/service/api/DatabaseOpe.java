@@ -1,13 +1,10 @@
 package com.buaa.act.sdp.service.api;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.*;
 import java.text.DecimalFormat;
 

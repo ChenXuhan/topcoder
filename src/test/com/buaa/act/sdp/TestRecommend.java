@@ -1,8 +1,8 @@
 package com.buaa.act.sdp;
 
 import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
-import com.buaa.act.sdp.service.recommend.RecommendResult;
-import com.buaa.act.sdp.service.recommend.Statistics;
+import com.buaa.act.sdp.service.recommend.TaskRecommend;
+import com.buaa.act.sdp.service.recommend.feature.Reliability;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +20,10 @@ public class TestRecommend {
     private FeatureExtract featureExtract;
 
     @Autowired
-    private RecommendResult recommendResult;
+    private TaskRecommend recommendResult;
 
     @Autowired
-    private Statistics statistics;
+    private Reliability reliability;
 
     @Test
     public void testFeatureExtract() {
@@ -44,6 +44,6 @@ public class TestRecommend {
 
     @Test
     public void testTimeInterval() {
-        statistics.timeInterval("Code");
+        reliability.timeInterval("Code");
     }
 }

@@ -1,19 +1,13 @@
 package com.buaa.act.sdp.service.recommend.network;
 
-import com.buaa.act.sdp.bean.challenge.CollaborationRelation;
 import com.buaa.act.sdp.dao.CollaborationRelationDao;
+import com.buaa.act.sdp.service.statistics.ProjectMsg;
 import com.csvreader.CsvWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +22,7 @@ public class relationGen {
     private Competition competition;
 
     @Autowired
-    private Collaboration collaboration;
+    private ProjectMsg projectMsg;
 
     @Autowired
     private CollaborationRelationDao collaborationRelationDao;
@@ -81,7 +75,7 @@ public class relationGen {
 
     public void collaborationGen() {
 
-        Map<Integer, List<Integer>> allProject = collaboration.getProjectToChallenges();
+        Map<Integer, List<Integer>> allProject = projectMsg.getProjectToChallenges();
         Map<Integer, Map<String, Double>> scores = competition.getAllWorkerScores();
         List<String[]> allCollaboration = new ArrayList<String[]>();
         int fileNumber = 0;

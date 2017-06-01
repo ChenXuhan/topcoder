@@ -5,7 +5,7 @@
        insert into user(handle,country,memberSince,quote,photoLink,copilot,skills) values(#{handle},#{country},#{memberSince},#{quote},#{photoLink},#{copilot}, #{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR})
     </insert>
 
-    <select id="getUserByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.bean.user.User">
+    <select id="getUserByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.model.user.User">
         select * from user where handle=#{name}
     </select>
 
@@ -13,11 +13,11 @@
         select DISTINCT handle from user
     </select>
 
-    <select id="getAllUsers" resultType="com.buaa.act.sdp.bean.user.User">
+    <select id="getAllUsers" resultType="com.buaa.act.sdp.model.user.User">
         SELECT * from user;
     </select>
 
-    <update id="updateUsers" parameterType="com.buaa.act.sdp.bean.user.User">
+    <update id="updateUsers" parameterType="com.buaa.act.sdp.model.user.User">
             UPDATE user set competitionNums=#{competitionNums},submissionNums=#{submissionNums},winNums=#{winNums} where handle=#{handle}
     </update>
 

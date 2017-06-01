@@ -1,9 +1,7 @@
 package com.buaa.act.sdp.dao;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 

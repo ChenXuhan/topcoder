@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.service.update;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;

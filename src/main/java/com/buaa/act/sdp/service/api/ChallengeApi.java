@@ -4,7 +4,7 @@ package com.buaa.act.sdp.service.api;
  * Created by YLT on 2016/10/18.
  */
 
-import com.buaa.act.sdp.bean.challenge.*;
+import com.buaa.act.sdp.model.challenge.*;
 import com.buaa.act.sdp.dao.*;
 import com.buaa.act.sdp.util.JsonUtil;
 import com.buaa.act.sdp.util.RequestUtil;

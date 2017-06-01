@@ -9,7 +9,7 @@
         </foreach>
     </insert>
 
-    <select id="getChallengeSubmission" parameterType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission" resultType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission">
+    <select id="getChallengeSubmission" parameterType="com.buaa.act.sdp.model.challenge.ChallengeSubmission" resultType="com.buaa.act.sdp.model.challenge.ChallengeSubmission">
         select * from challenge_submission where challengeID = #{challengeID} AND handle = #{handle};
     </select>
 
@@ -21,11 +21,11 @@
         SELECT count(DISTINCT handle) from challenge_submission where challengeID=#{challengeId};
     </select>
 
-    <select id="getChallengeWinner" resultType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission">
+    <select id="getChallengeWinner" resultType="com.buaa.act.sdp.model.challenge.ChallengeSubmission">
         SELECT handle,challengeId,finalScore,placement,submissionStatus from  challenge_submission ORDER BY challengeID ASC;
     </select>
 
-    <select id="getSubmissionByHandle" parameterType="java.lang.String" resultType="com.buaa.act.sdp.bean.challenge.ChallengeSubmission">
+    <select id="getSubmissionByHandle" parameterType="java.lang.String" resultType="com.buaa.act.sdp.model.challenge.ChallengeSubmission">
         select * from challenge_submission where handle = #{handle}
     </select>
 

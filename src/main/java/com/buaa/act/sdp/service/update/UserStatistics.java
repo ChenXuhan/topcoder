@@ -1,7 +1,7 @@
 package com.buaa.act.sdp.service.update;
 
-import com.buaa.act.sdp.bean.user.DevelopmentHistory;
-import com.buaa.act.sdp.bean.user.User;
+import com.buaa.act.sdp.model.user.DevelopmentHistory;
+import com.buaa.act.sdp.model.user.User;
 import com.buaa.act.sdp.dao.DevelopmentHistoryDao;
 import com.buaa.act.sdp.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;

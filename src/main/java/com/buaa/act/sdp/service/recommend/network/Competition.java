@@ -1,10 +1,8 @@
 package com.buaa.act.sdp.service.recommend.network;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
-import com.buaa.act.sdp.bean.challenge.ChallengeRegistrant;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
-import com.buaa.act.sdp.service.recommend.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,65 +15,15 @@ import java.util.*;
 public class Competition {
 
     private Map<Integer, Map<String, Double>> scores;
-    @Autowired
-    private ChallengeRegistrantDao challengeRegistrantDao;
+
     @Autowired
     private FeatureExtract featureExtract;
 
-    public Competition() {
-        scores = new HashMap<>();
-    }
-
-    public Map<Integer, Map<String, Double>> getAllWorkerScores() {
-        if (scores.size() > 0) {
-            return scores;
+    Map<Integer, Map<String, Double>> getAllWorkerScores(){
+        if(scores==null){
+            scores=featureExtract.getAllWorkerScores();
         }
-        List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllRegistrant();
-        Map<String, Double> score;
-        for (ChallengeRegistrant challengeRegistrant : challengeRegistrants) {
-            score = scores.getOrDefault(challengeRegistrant.getChallengeID(), null);
-            if (score != null) {
-                score.put(challengeRegistrant.getHandle(), 0.0);
-            } else {
-                score = new HashMap<>();
-                score.put(challengeRegistrant.getHandle(), 0.0);
-                scores.put(challengeRegistrant.getChallengeID(), score);
-            }
-        }
-        Map<Integer, Map<String, Double>> submissionScores = featureExtract.getScores();
-        updateWorkerScores(submissionScores);
         return scores;
-    }
-
-    // 依据submission表更新worker的得分
-    public void updateWorkerScores(Map<Integer, Map<String, Double>> submissionScores) {
-        if (submissionScores != null) {
-            Map<String, Double> registrant, submission;
-            for (Map.Entry<Integer, Map<String, Double>> entry : submissionScores.entrySet()) {
-                if (scores.containsKey(entry.getKey())) {
-                    registrant = scores.get(entry.getKey());
-                    submission = entry.getValue();
-                    for (Map.Entry<String, Double> temp : submission.entrySet()) {
-                        if (temp.getValue() < 0.1) {
-                            registrant.put(temp.getKey(), 1.0);
-                        } else {
-                            registrant.put(temp.getKey(), temp.getValue());
-                        }
-                    }
-                } else {
-                    registrant = new HashMap<>();
-                    submission = entry.getValue();
-                    for (Map.Entry<String, Double> temp : submission.entrySet()) {
-                        if (temp.getValue() < 0.1) {
-                            registrant.put(temp.getKey(), 1.0);
-                        } else {
-                            registrant.put(temp.getKey(), temp.getValue());
-                        }
-                    }
-                    scores.put(entry.getKey(), registrant);
-                }
-            }
-        }
     }
 
     // 获取当前任务的相似任务中worker的得分，分数多少无限制

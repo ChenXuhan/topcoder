@@ -1,19 +1,20 @@
 package com.buaa.act.sdp;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
-import com.buaa.act.sdp.bean.challenge.ChallengeRegistrant;
-import com.buaa.act.sdp.bean.challenge.ChallengeSubmission;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.model.challenge.ChallengeRegistrant;
+import com.buaa.act.sdp.model.challenge.ChallengeSubmission;
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.service.api.*;
 import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
-import com.buaa.act.sdp.service.recommend.RecommendResult;
+import com.buaa.act.sdp.service.recommend.TaskRecommend;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.recommend.network.Collaboration;
 import com.buaa.act.sdp.service.recommend.network.Competition;
 import com.buaa.act.sdp.service.recommend.network.relationGen;
+import com.buaa.act.sdp.service.statistics.ProjectMsg;
 import com.buaa.act.sdp.service.update.ChallengeStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +47,7 @@ public class TestChallenge {
     private ChallengeStatistics challengeStatistics;
 
     @Autowired
-    private RecommendResult recommendResult;
+    private TaskRecommend recommendResult;
 
     @Autowired
     private AbilityExp exp;
@@ -55,7 +56,7 @@ public class TestChallenge {
     private FeatureExtract featureExtract;
 
     @Autowired
-    private Collaboration collaboration;
+    private ProjectMsg projectMsg;
 
 
     @Autowired(required = false)
@@ -77,8 +78,8 @@ public class TestChallenge {
     private Competition competition;
     @Test
     public void testProjectId(){
-        System.out.println(collaboration.getProjectToChallenges());
-        System.out.println(collaboration.getProjectToChallenges().size());
+        System.out.println(projectMsg.getProjectToChallenges());
+        System.out.println(projectMsg.getProjectToChallenges().size());
     }
 
     @Test

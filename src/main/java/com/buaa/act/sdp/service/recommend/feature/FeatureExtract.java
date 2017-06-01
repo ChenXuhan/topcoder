@@ -1,7 +1,9 @@
 package com.buaa.act.sdp.service.recommend.feature;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.common.Constant;
+import com.buaa.act.sdp.service.statistics.TaskMsg;
+import com.buaa.act.sdp.service.statistics.TaskScores;
 import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,12 +16,14 @@ import java.util.*;
 @Component
 public class FeatureExtract {
 
+    @Autowired
+    private TaskMsg taskMsg;
+    @Autowired
+    private TaskScores taskScores;
+
     private int requirementWordSize;
     private int titleWordSize;
     private String type;
-
-    @Autowired
-    private UserScore userScore;
 
     public FeatureExtract() {
         requirementWordSize = 0;
@@ -34,16 +38,16 @@ public class FeatureExtract {
     }
 
     public List<String> getWinners() {
-        return userScore.getWinners(type);
+        return taskMsg.getWinners(type);
     }
 
     public List<ChallengeItem> getItems() {
-        return userScore.getItems(type);
+        return taskMsg.getItems(type);
     }
 
-    public Map<Integer, Map<String, Double>> getScores() {
-        return userScore.getScores(type);
-    }
+//    public Map<Integer, Map<String, Double>> getScores() {
+//        return taskMsg.getScores(type);
+//    }
 
     public int getChallengeRequirementSize() {
         return requirementWordSize;
@@ -54,11 +58,19 @@ public class FeatureExtract {
     }
 
     public List<Map<String, Double>> getUserScore() {
-        return userScore.getUserScore(type);
+        return taskMsg.getUserScore(type);
     }
 
     public Map<Integer, String> getAllWinners() {
-        return userScore.getAllWinners(type);
+        return taskMsg.getAllWinners(type);
+    }
+
+    public Map<Integer, Map<String, Double>> getAllWorkerScores() {
+        List<String> types = new ArrayList<>();
+        if (type != null) {
+            types.add(type);
+        }
+        return taskScores.getAllWorkerScores(types);
     }
 
     // 文本分词统计

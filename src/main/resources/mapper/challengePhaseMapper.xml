@@ -9,7 +9,7 @@
         </foreach>
     </insert>
 
-    <select id="getChallengePhase" parameterType="com.buaa.act.sdp.bean.challenge.ChallengePhase" resultType="com.buaa.act.sdp.bean.challenge.ChallengePhase">
+    <select id="getChallengePhase" parameterType="com.buaa.act.sdp.model.challenge.ChallengePhase" resultType="com.buaa.act.sdp.model.challenge.ChallengePhase">
         select * from challenge_phase where challengeID = #{challengeID} AND type = #{type}
     </select>
 

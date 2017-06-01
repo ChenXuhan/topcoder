@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.dao;
 
-import com.buaa.act.sdp.bean.user.UserSkill;
+import com.buaa.act.sdp.model.user.UserSkill;
 
 import java.util.List;
 

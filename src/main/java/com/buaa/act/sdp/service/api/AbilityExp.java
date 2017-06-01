@@ -1,13 +1,12 @@
 package com.buaa.act.sdp.service.api;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
-import com.buaa.act.sdp.bean.challenge.ChallengeRegistrant;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.model.challenge.ChallengeRegistrant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**

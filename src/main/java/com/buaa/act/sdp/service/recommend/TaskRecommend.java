@@ -7,6 +7,7 @@ import com.buaa.act.sdp.service.recommend.cluster.Cluster;
 import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.feature.WordCount;
 import com.buaa.act.sdp.service.recommend.network.Competition;
+import com.buaa.act.sdp.service.recommend.feature.Reliability;
 import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.*;
  * Created by yang on 2017/2/24.
  */
 @Service
-public class RecommendResult {
+public class TaskRecommend {
 
     @Autowired
     private Bayes bayes;
@@ -38,7 +39,7 @@ public class RecommendResult {
     @Autowired
     private Competition competition;
     @Autowired
-    private Statistics statistics;
+    private Reliability reliability;
 
     private int[][] testData;
 
@@ -69,7 +70,7 @@ public class RecommendResult {
                 worker = recommendWorker(tcResult);
                 calculateResult(winners.get(num[k][i]), worker, counts);
                 List<Integer> index = localClassifier.getNeighbors();
-                worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
+                worker = reliability.rank(worker, index, winners, winners.get(num[k][i]));
                 worker = competition.reRank(index, worker, winners, num[k][i]);
                 calculateResult(winners.get(num[k][i]), worker, count);
             }
@@ -95,7 +96,7 @@ public class RecommendResult {
                     worker = recommendWorker(result);
                     calculateResult(winners.get(num[k][i]), worker, counts);
                     List<Integer> index = cluster.getNeighbors();
-                    worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
+                    worker = reliability.rank(worker, index, winners, winners.get(num[k][i]));
                     worker = competition.reRank(index, worker, winners, num[k][i]);
                     calculateResult(winners.get(num[k][i]), worker, count);
                 }
@@ -112,7 +113,6 @@ public class RecommendResult {
     public void classifier(String challengeType) {
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners();
-        List<Map<String, Double>> scores = featureExtract.getUserScore();
         List<String> worker;
         int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -131,7 +131,7 @@ public class RecommendResult {
                 Map<String, Double> tcResult = tcBayes.getRecommendResult(Constant.CLASSIFIER_DIRECTORY + challengeType + "/" + num[k][i], data, num[k][i], user);
                 worker = recommendWorker(tcResult);
                 calculateResult(winners.get(num[k][i]), worker, counts);
-                worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
+                worker = reliability.rank(worker, index, winners, winners.get(num[k][i]));
                 List<Integer> indexs = new ArrayList<>();
                 for (int j = 0; j < num[k][i]; j++) {
                     indexs.add(j);
@@ -164,7 +164,7 @@ public class RecommendResult {
                 for (int j = 0; j < num[k][i]; j++) {
                     index.add(j);
                 }
-                worker = statistics.rank(worker, index, winners, winners.get(num[k][i]));
+                worker = reliability.rank(worker, index, winners, winners.get(num[k][i]));
                 worker = competition.reRank(index, worker, winners, num[k][i]);
                 calculateResult(winners.get(num[k][i]), worker, count);
             }

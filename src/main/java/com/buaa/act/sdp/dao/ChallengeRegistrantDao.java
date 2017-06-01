@@ -1,9 +1,8 @@
 package com.buaa.act.sdp.dao;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeRegistrant;
+import com.buaa.act.sdp.model.challenge.ChallengeRegistrant;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.HashSet;
 import java.util.List;
 
 /**

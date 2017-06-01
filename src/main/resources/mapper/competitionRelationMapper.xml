@@ -21,7 +21,7 @@
         DELETE FROM competitionRelation
     </delete>
 
-    <select id="getCompetitions" resultType="com.buaa.act.sdp.bean.challenge.CompetitionRelation">
+    <select id="getCompetitions" resultType="com.buaa.act.sdp.model.challenge.CompetitionRelation">
         SELECT * from competitionRelation where handle1=#{handle1};
     </select>
 

@@ -1,7 +1,6 @@
-package com.buaa.act.sdp.service.recommend;
+package com.buaa.act.sdp.service.recommend.feature;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
-import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.service.recommend.network.Competition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,7 @@ import java.util.*;
  * Created by yang on 2017/4/18.
  */
 @Service
-public class Statistics {
+public class Reliability {
 
     @Autowired
     private FeatureExtract featureExtract;

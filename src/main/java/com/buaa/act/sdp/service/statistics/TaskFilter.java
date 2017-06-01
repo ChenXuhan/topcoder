@@ -1,13 +1,13 @@
-package com.buaa.act.sdp.service.recommend.feature;
+package com.buaa.act.sdp.service.statistics;
 
-import com.buaa.act.sdp.bean.challenge.ChallengeItem;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by yang on 2017/5/31.
  */
 @Component
-public class ChallengeFilter {
+public class TaskFilter {
 
     //对challenge进行过滤
     public boolean filterChallenge(ChallengeItem challengeItem, String challengeType) {

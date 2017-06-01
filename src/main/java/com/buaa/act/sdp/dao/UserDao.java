@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.dao;
 
-import com.buaa.act.sdp.bean.user.User;
+import com.buaa.act.sdp.model.user.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
