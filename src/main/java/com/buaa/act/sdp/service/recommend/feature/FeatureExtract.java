@@ -18,8 +18,6 @@ public class FeatureExtract {
 
     @Autowired
     private TaskMsg taskMsg;
-    @Autowired
-    private TaskScores taskScores;
 
     private int requirementWordSize;
     private int titleWordSize;
@@ -45,10 +43,6 @@ public class FeatureExtract {
         return taskMsg.getItems(type);
     }
 
-//    public Map<Integer, Map<String, Double>> getScores() {
-//        return taskMsg.getScores(type);
-//    }
-
     public int getChallengeRequirementSize() {
         return requirementWordSize;
     }
@@ -59,18 +53,6 @@ public class FeatureExtract {
 
     public List<Map<String, Double>> getUserScore() {
         return taskMsg.getUserScore(type);
-    }
-
-    public Map<Integer, String> getAllWinners() {
-        return taskMsg.getAllWinners(type);
-    }
-
-    public Map<Integer, Map<String, Double>> getAllWorkerScores() {
-        List<String> types = new ArrayList<>();
-        if (type != null) {
-            types.add(type);
-        }
-        return taskScores.getAllWorkerScores(types);
     }
 
     // 文本分词统计

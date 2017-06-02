@@ -15,6 +15,8 @@ import com.buaa.act.sdp.service.recommend.network.Collaboration;
 import com.buaa.act.sdp.service.recommend.network.Competition;
 import com.buaa.act.sdp.service.recommend.network.relationGen;
 import com.buaa.act.sdp.service.statistics.ProjectMsg;
+import com.buaa.act.sdp.service.statistics.TaskMsg;
+import com.buaa.act.sdp.service.statistics.TaskScores;
 import com.buaa.act.sdp.service.update.ChallengeStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,7 +77,7 @@ public class TestChallenge {
     private DatabaseOpe databaseOpe;
 
     @Autowired
-    private Competition competition;
+    private TaskScores taskScores;
     @Test
     public void testProjectId(){
         System.out.println(projectMsg.getProjectToChallenges());
@@ -84,13 +86,13 @@ public class TestChallenge {
 
     @Test
     public void  testGetWorkerScores(){
-        Map<Integer, Map<String, Double>> scores = competition.getAllWorkerScores();
+        Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
         Iterator<Map.Entry<Integer, Map<String, Double>>> entries = scores.entrySet().iterator();
         while (entries.hasNext()) {
             Map.Entry<Integer, Map<String, Double>> entry = entries.next();
             System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
         }
-        System.out.println(competition.getAllWorkerScores().size());
+        System.out.println(taskScores.getAllWorkerScores().size());
     }
 
 

@@ -1,9 +1,12 @@
 package com.buaa.act.sdp.service.statistics;
 
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
+import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.model.challenge.ChallengeRegistrant;
+import com.buaa.act.sdp.model.challenge.ChallengeSubmission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,58 +20,65 @@ public class TaskScores {
     @Autowired
     private ChallengeRegistrantDao challengeRegistrantDao;
     @Autowired
-    private TaskMsg taskMsg;
+    private ChallengeSubmissionDao challengeSubmissionDao;
 
-    public Map<Integer, Map<String, Double>> getAllWorkerScores(List<String>types) {
-        List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllRegistrant();
-        Map<Integer,Map<String,Double>>allScores=new HashMap<>();
-        Map<String, Double> score;
-        for (ChallengeRegistrant challengeRegistrant : challengeRegistrants) {
-            score = allScores.getOrDefault(challengeRegistrant.getChallengeID(), null);
-            if (score != null) {
-                score.put(challengeRegistrant.getHandle(), 0.0);
-            } else {
-                score = new HashMap<>();
-                score.put(challengeRegistrant.getHandle(), 0.0);
-                allScores.put(challengeRegistrant.getChallengeID(), score);
-            }
+    //challengeId对应的提交人的得分
+    private Map<Integer, Map<String, Double>> scores;
+    private Map<Integer,String>winners;
+
+    public TaskScores() {
+        scores = new HashMap<>();
+        winners=new HashMap<>();
+    }
+
+    // 获取task的获胜者
+    public Map<Integer,String>getWinners(){
+        if(winners.isEmpty()){
+            getAllWorkerScores();
         }
-        if(types!=null){
-            for(String type:types){
-                updateWorkerScores(allScores,type);
+        return winners;
+    }
+
+
+    // 获得所有开发者的得分
+    public Map<Integer, Map<String, Double>> getAllWorkerScores() {
+        if(scores.isEmpty()) {
+            List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllRegistrant();
+            Map<String, Double> score;
+            for (ChallengeRegistrant challengeRegistrant : challengeRegistrants) {
+                score = scores.getOrDefault(challengeRegistrant.getChallengeID(), null);
+                if (score != null) {
+                    score.put(challengeRegistrant.getHandle(), 0.0);
+                } else {
+                    score = new HashMap<>();
+                    score.put(challengeRegistrant.getHandle(), 0.0);
+                    scores.put(challengeRegistrant.getChallengeID(), score);
+                }
             }
+            updateWorkerScores();
         }
-        return allScores;
+        return scores;
     }
 
     // 依据submission表更新worker的得分
-    public void updateWorkerScores(Map<Integer,Map<String,Double>>allScores,String type) {
-        Map<Integer, Map<String, Double>> submissionScores = taskMsg.getScores(type);
-        if (submissionScores != null) {
-            Map<String, Double> registrant, submission;
-            for (Map.Entry<Integer, Map<String, Double>> entry : submissionScores.entrySet()) {
-                if (allScores.containsKey(entry.getKey())) {
-                    registrant = allScores.get(entry.getKey());
-                    submission = entry.getValue();
-                    for (Map.Entry<String, Double> temp : submission.entrySet()) {
-                        if (temp.getValue() < 0.1) {
-                            registrant.put(temp.getKey(), 1.0);
-                        } else {
-                            registrant.put(temp.getKey(), temp.getValue());
-                        }
-                    }
+    public void updateWorkerScores() {
+        List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
+        for (ChallengeSubmission challengeSubmission : list) {
+            Map<String, Double> score;
+            if (scores.containsKey(challengeSubmission.getChallengeID())) {
+                score = scores.get(challengeSubmission.getChallengeID());
+                if (score.containsKey(challengeSubmission.getHandle()) && score.get(challengeSubmission.getHandle()).doubleValue() >= Double.parseDouble(challengeSubmission.getFinalScore())) {
+                    continue;
                 } else {
-                    registrant = new HashMap<>();
-                    submission = entry.getValue();
-                    for (Map.Entry<String, Double> temp : submission.entrySet()) {
-                        if (temp.getValue() < 0.1) {
-                            registrant.put(temp.getKey(), 1.0);
-                        } else {
-                            registrant.put(temp.getKey(), temp.getValue());
-                        }
-                    }
-                    allScores.put(entry.getKey(), registrant);
+                    score.put(challengeSubmission.getHandle(), Double.parseDouble(challengeSubmission.getFinalScore()));
                 }
+            } else {
+                score = new HashMap<>();
+                score.put(challengeSubmission.getHandle(), Double.parseDouble(challengeSubmission.getFinalScore()));
+            }
+            scores.put(challengeSubmission.getChallengeID(), score);
+            if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
+                winners.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
             }
         }
     }

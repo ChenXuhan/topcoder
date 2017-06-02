@@ -23,43 +23,21 @@ public class TaskMsg {
     @Autowired
     private TaskFilter taskFilter;
     @Autowired
-    private ChallengeRegistrantDao challengeRegistrantDao;
+    private TaskScores taskScores;
 
-    // 所有任务的获胜者
-    private Map<Integer, String> allWinners;
-    //challengeId对应的提交人的得分
-    private Map<Integer, Map<String, Double>> scores;
     //过滤掉的所有challenges
     private List<ChallengeItem> items;
     //challenge 对应的winner
     private List<String> winners;
     // 选取任务的worker得分情况
     private List<Map<String, Double>> userScore;
-
+    // 任务类型
     private String type;
 
     public TaskMsg() {
         items = new ArrayList<>();
         winners = new ArrayList<>();
-        scores = new HashMap<>();
         userScore = new ArrayList<>();
-        allWinners = new HashMap<>();
-    }
-
-    public Map<Integer, String> getAllWinners(String type) {
-        if (items.size() == 0 || !type.equals(this.type)) {
-            this.type = type;
-            getWinnersAndScores(type);
-        }
-        return allWinners;
-    }
-
-    public Map<Integer, Map<String, Double>> getScores(String type) {
-        if (items.size() == 0 || !type.equals(this.type)) {
-            this.type = type;
-            getWinnersAndScores(type);
-        }
-        return scores;
     }
 
     public List<ChallengeItem> getItems(String type) {
@@ -79,30 +57,10 @@ public class TaskMsg {
     }
 
     public List<Map<String, Double>> getUserScore(String type) {
-        if (items.size() == 0 ) {
+        if (items.size() == 0 || !type.equals(this.type)) {
             getWinnersAndScores(type);
         }
         return userScore;
-    }
-
-    //一个人对一个challenge提交多次，以最高分数为主
-    public void getUserScores(ChallengeSubmission challengeSubmission) {
-        Map<String, Double> score;
-//        if (Double.parseDouble(challengeSubmission.getFinalScore()) < 80) {
-//            return;
-//        }
-        if (scores.containsKey(challengeSubmission.getChallengeID())) {
-            score = scores.get(challengeSubmission.getChallengeID());
-            if (score.containsKey(challengeSubmission.getHandle()) && score.get(challengeSubmission.getHandle()).doubleValue() >= Double.parseDouble(challengeSubmission.getFinalScore())) {
-                return;
-            } else {
-                score.put(challengeSubmission.getHandle(), Double.parseDouble(challengeSubmission.getFinalScore()));
-            }
-        } else {
-            score = new HashMap<>();
-            score.put(challengeSubmission.getHandle(), Double.parseDouble(challengeSubmission.getFinalScore()));
-        }
-        scores.put(challengeSubmission.getChallengeID(), score);
     }
 
     // 从所有的任务中进行筛选，过滤出一部分任务，计算winner、tasks，以及开发者所得分数
@@ -115,9 +73,6 @@ public class TaskMsg {
         ChallengeItem challengeItem;
         List<ChallengeItem> challengeItems = new ArrayList<>();
         for (ChallengeSubmission challengeSubmission : list) {
-            if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
-                allWinners.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
-            }
             if (set.contains(challengeSubmission.getChallengeID())) {
                 continue;
             }
@@ -125,7 +80,6 @@ public class TaskMsg {
                 if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
                     user.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
                 }
-                getUserScores(challengeSubmission);
             } else {
                 challengeItem = challengeItemDao.getChallengeItemById(challengeSubmission.getChallengeID());
                 if (taskFilter.filterChallenge(challengeItem, challengeType)) {
@@ -134,7 +88,6 @@ public class TaskMsg {
                     if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
                         user.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
                     }
-                    getUserScores(challengeSubmission);
                 } else {
                     set.add(challengeSubmission.getChallengeID());
                 }
@@ -147,6 +100,7 @@ public class TaskMsg {
                 map.put(entry.getValue(), 1);
             }
         }
+        Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
         for (int i = 0; i < challengeItems.size(); i++) {
             String win = user.get(challengeItems.get(i).getChallengeId());
             if (map.containsKey(win) && map.get(win) >= 5) {

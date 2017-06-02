@@ -8,8 +8,4 @@ import org.springframework.stereotype.Component;
 @Component
 public class Collaboration {
 
-    public Collaboration() {
-    }
-
-
 }

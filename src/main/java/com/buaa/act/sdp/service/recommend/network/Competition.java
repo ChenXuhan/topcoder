@@ -3,6 +3,7 @@ package com.buaa.act.sdp.service.recommend.network;
 import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
+import com.buaa.act.sdp.service.statistics.TaskScores;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +19,13 @@ public class Competition {
 
     @Autowired
     private FeatureExtract featureExtract;
+    @Autowired
+    private TaskScores taskScores;
 
-    Map<Integer, Map<String, Double>> getAllWorkerScores(){
-        if(scores==null){
-            scores=featureExtract.getAllWorkerScores();
+    // 所有task得分
+    Map<Integer, Map<String, Double>> getAllWorkerScores() {
+        if (scores == null) {
+            scores = taskScores.getAllWorkerScores();
         }
         return scores;
     }
@@ -52,7 +56,7 @@ public class Competition {
     // 获取在当前任务前的所有类型任务中参与的worker，id之前
     public List<Map<String, Double>> getAllTypeWorkers(int challengeId, List<String> winner) {
         Map<Integer, Map<String, Double>> scores = getAllWorkerScores();
-        Map<Integer, String> allWinners = featureExtract.getAllWinners();
+        Map<Integer, String> allWinners = taskScores.getWinners();
         List<Map<String, Double>> list = new ArrayList<>();
         for (Map.Entry<Integer, String> entry : allWinners.entrySet()) {
             if (entry.getKey() >= challengeId || !scores.containsKey(entry.getKey())) {
@@ -283,13 +287,13 @@ public class Competition {
                 continue;
             }
             int[] array = replu[i];
-            int count=0;
+            int count = 0;
             for (int j = 0; j < array.length; j++) {
                 if (i < array[j] && !set.contains(array[j])) {
                     set.add(array[j]);
                     count++;
                 }
-                if(count>=3){
+                if (count >= 3) {
                     break;
                 }
             }
@@ -305,7 +309,7 @@ public class Competition {
         // 添加worker吸引力大的worker
         for (int i = 0; i < result.size(); i++) {
             int k = index.get(result.get(i));
-            if(!res.contains(result.get(i))){
+            if (!res.contains(result.get(i))) {
                 res.add(result.get(i));
             }
             for (int j = 0; j < 2 && j < attr[k].length; j++) {

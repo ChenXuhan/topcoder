@@ -35,7 +35,7 @@ public class TestRecommend {
 //        Code
 //        First2Finish
 //        Assembly Competition
-        String challengeType = "Assembly Competition";
+        String challengeType = "First2Finish";
         recommendResult.classifier(challengeType);
         recommendResult.contentBased(challengeType);
         recommendResult.clusterClassifier(challengeType,3);

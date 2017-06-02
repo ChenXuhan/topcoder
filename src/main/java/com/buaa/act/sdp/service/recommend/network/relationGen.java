@@ -2,6 +2,7 @@ package com.buaa.act.sdp.service.recommend.network;
 
 import com.buaa.act.sdp.dao.CollaborationRelationDao;
 import com.buaa.act.sdp.service.statistics.ProjectMsg;
+import com.buaa.act.sdp.service.statistics.TaskScores;
 import com.csvreader.CsvWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class relationGen {
 
     @Autowired
-    private Competition competition;
+    private TaskScores taskScores;
 
     @Autowired
     private ProjectMsg projectMsg;
@@ -28,7 +29,7 @@ public class relationGen {
     private CollaborationRelationDao collaborationRelationDao;
 
     public void completeGen() {
-        Map<Integer, Map<String, Double>> scores = competition.getAllWorkerScores();
+        Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
         List<String[]> allComplete = new ArrayList<String[]>();
         for (Map.Entry<Integer, Map<String, Double>> entry : scores.entrySet()) {
             int key = entry.getKey();
@@ -76,7 +77,7 @@ public class relationGen {
     public void collaborationGen() {
 
         Map<Integer, List<Integer>> allProject = projectMsg.getProjectToChallenges();
-        Map<Integer, Map<String, Double>> scores = competition.getAllWorkerScores();
+        Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
         List<String[]> allCollaboration = new ArrayList<String[]>();
         int fileNumber = 0;
 
