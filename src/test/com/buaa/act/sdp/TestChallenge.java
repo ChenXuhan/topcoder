@@ -75,6 +75,16 @@ public class TestChallenge {
 
     @Autowired
     private Competition competition;
+
+    @Autowired
+    private Mongodb mongodb;
+
+    @Test
+    public void testMongodb(){
+        // mongodb.dealPLDoc("C:\\Users\\YLT\\Desktop\\开发者搜索\\ProgrammingLanguageList.txt");
+        mongodb.genMongodbFile();
+    }
+
     @Test
     public void testProjectId(){
         System.out.println(collaboration.getProjectToChallenges());

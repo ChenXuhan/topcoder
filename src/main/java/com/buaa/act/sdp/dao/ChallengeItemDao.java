@@ -14,6 +14,8 @@ import java.util.*;
 public interface ChallengeItemDao {
      void insert(ChallengeItem challengeItem);
      ChallengeItem getChallengeItemById(@Param("challengeId") int challengeId);
+     String getChallengeItemRequirementById(@Param("challengeId") int challengeId);
+     void setHandledRequirements(@Param("requirements")String requirements,@Param("challengeId")int challengeId);
      List<Integer> getChallenges();
      List<ChallengeItem>getAllChallenges();
      void updateChallenges(ChallengeItem item);

@@ -12,6 +12,7 @@ import java.util.List;
 public interface UserDao {
      void insert(User user);
      User getUserByName(@Param("name") String name);
+     User getUserById(@Param("id") int userId);
      List<String> getUsers();
      List<User>getAllUsers();
      void updateUsers(User user);

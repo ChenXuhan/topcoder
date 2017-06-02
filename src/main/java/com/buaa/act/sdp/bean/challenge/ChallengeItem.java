@@ -10,6 +10,7 @@ public class ChallengeItem {
     private String challengeType;
     private int projectId;
     private int forumId;
+    private String requirements;
     private String detailedRequirements;
     private int screeningScorecardId;
     private int reviewScorecardId;
@@ -63,6 +64,13 @@ public class ChallengeItem {
         return challengeType;
     }
 
+    public String getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
+    }
     public void setChallengeType(String challengeType) {
         this.challengeType = challengeType;
     }
