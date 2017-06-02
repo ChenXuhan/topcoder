@@ -16,20 +16,20 @@
         overallCountryRank,
         overallSchoolRank,
         volatility) values
-        <foreach collection="list" item="item" index="index" separator=","> (
-        #{item.handle},
-        #{item.developType},
-        #{item.rating},
-        #{item.reliability},
-        #{item.activePercentile},
-        #{item.activeRank},
-        #{item.activeCountryRank},
-        #{item.activeSchoolRank},
-        #{item.overallPercentile},
-        #{item.overallRank},
-        #{item.overallCountryRank},
-        #{item.overallSchoolRank},
-        #{item.volatility})
+        <foreach collection="list" item="item" index="index" separator=",">(
+            #{item.handle},
+            #{item.developType},
+            #{item.rating},
+            #{item.reliability},
+            #{item.activePercentile},
+            #{item.activeRank},
+            #{item.activeCountryRank},
+            #{item.activeSchoolRank},
+            #{item.overallPercentile},
+            #{item.overallRank},
+            #{item.overallCountryRank},
+            #{item.overallSchoolRank},
+            #{item.volatility})
         </foreach>
     </insert>
 

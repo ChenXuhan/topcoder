@@ -10,10 +10,10 @@ import javax.ws.rs.core.Response;
  */
 public class RequestUtil {
 
-    public static String request(String url){
+    public static String request(String url) {
         Client client = ClientBuilder.newClient();
         Response response = client.target(url).request(MediaType.TEXT_PLAIN_TYPE).get();
-        for(int i=0;i<6;i++){
+        for (int i = 0; i < 6; i++) {
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 return response.readEntity(String.class);
             }

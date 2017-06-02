@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Instances;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yang on 2017/3/9.
@@ -18,10 +20,10 @@ public class TcBayes extends NaiveBayes {
     // 按概率对分类结果排序
     public Map<String, Double> getRecommendResult(String path, double[][] features, int position, List<String> winners) {
 
-        Map<Double, String> winnerIndex =WekaArffUtil.getWinnerIndex(winners, position);
+        Map<Double, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners, position);
         Map<String, Double> map = new HashMap<>();
         double index = 0;
-        if(winnerIndex.size()==0){
+        if (winnerIndex.size() == 0) {
             return map;
         }
         if (winnerIndex.size() == 1) {

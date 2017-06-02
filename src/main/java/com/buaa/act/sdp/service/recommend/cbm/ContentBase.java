@@ -1,8 +1,6 @@
 package com.buaa.act.sdp.service.recommend.cbm;
 
 import com.buaa.act.sdp.util.Maths;
-import com.buaa.act.sdp.util.WekaArffUtil;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

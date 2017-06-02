@@ -4,7 +4,10 @@ import com.buaa.act.sdp.service.recommend.feature.WordCount;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yang on 2017/2/19.

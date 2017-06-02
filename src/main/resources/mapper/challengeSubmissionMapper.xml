@@ -2,14 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.act.sdp.dao.ChallengeSubmissionDao">
 
-    <insert id="insert" parameterType="com.buaa.act.sdp.model.challenge.ChallengeSubmission" useGeneratedKeys="true" keyProperty="id">
-        insert into challenge_submission(challengeID,handle,placement,submissionDate,submissionStatus,points,finalScore,screeningScore,initialScore,submissionDownloadLink) values
+    <insert id="insert" parameterType="com.buaa.act.sdp.model.challenge.ChallengeSubmission" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into
+        challenge_submission(challengeID,handle,placement,submissionDate,submissionStatus,points,finalScore,screeningScore,initialScore,submissionDownloadLink)
+        values
         <foreach collection="array" item="item" index="index" separator=",">
-        (#{item.challengeID},#{item.handle},#{item.placement},#{item.submissionDate},#{item.submissionStatus},#{item.points},#{item.finalScore},#{item.screeningScore},#{item.initialScore},#{item.submissionDownloadLink})
+            (#{item.challengeID},#{item.handle},#{item.placement},#{item.submissionDate},#{item.submissionStatus},#{item.points},#{item.finalScore},#{item.screeningScore},#{item.initialScore},#{item.submissionDownloadLink})
         </foreach>
     </insert>
 
-    <select id="getChallengeSubmission" parameterType="com.buaa.act.sdp.model.challenge.ChallengeSubmission" resultType="com.buaa.act.sdp.model.challenge.ChallengeSubmission">
+    <select id="getChallengeSubmission" parameterType="com.buaa.act.sdp.model.challenge.ChallengeSubmission"
+            resultType="com.buaa.act.sdp.model.challenge.ChallengeSubmission">
         select * from challenge_submission where challengeID = #{challengeID} AND handle = #{handle};
     </select>
 
@@ -25,7 +29,8 @@
         SELECT handle,challengeId,finalScore,placement,submissionStatus from  challenge_submission ORDER BY challengeID ASC;
     </select>
 
-    <select id="getSubmissionByHandle" parameterType="java.lang.String" resultType="com.buaa.act.sdp.model.challenge.ChallengeSubmission">
+    <select id="getSubmissionByHandle" parameterType="java.lang.String"
+            resultType="com.buaa.act.sdp.model.challenge.ChallengeSubmission">
         select * from challenge_submission where handle = #{handle}
     </select>
 

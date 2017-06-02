@@ -11,7 +11,7 @@ public class User {
     private String quote;
     private String photoLink;
     private boolean copilot;
-    private String[]skills;
+    private String[] skills;
     private int competitionNums;
     private int submissionNums;
     private int winNums;

@@ -1,13 +1,14 @@
-package com.buaa.act.sdp.service.api;
+package com.buaa.act.sdp.service.ability;
 
-import com.buaa.act.sdp.model.challenge.ChallengeItem;
-import com.buaa.act.sdp.model.challenge.ChallengeRegistrant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.model.challenge.ChallengeRegistrant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 实验。给定项目是否能给出合适的开发者
@@ -17,14 +18,11 @@ import java.util.*;
 public class AbilityExp {
 
     @Autowired
+    public UserAbility userAbility;
+    @Autowired
     ChallengeRegistrantDao challengeRegistrantDao;
-
     @Autowired
     ChallengeItemDao challengeItemDao;
-
-    @Autowired
-    public UserAbility userAbility;
-
     ChallengeRegistrant[] challengeRegistrants;
 
     public List<String> getTech(int itemId) {
@@ -36,8 +34,7 @@ public class AbilityExp {
             technology.add(tech[i]);
         }
         for (int j = 0; j < platform.length; j++) {
-            if(!technology.contains(platform[j]))
-            {
+            if (!technology.contains(platform[j])) {
                 technology.add(platform[j]);
             }
         }
@@ -65,20 +62,4 @@ public class AbilityExp {
             }
         }
     }*/
-
-    public double[] bubbleSort(double[] args){//冒泡排序算法
-        for(int i=0;i<args.length-1;i++){
-            for(int j=i+1;j<args.length;j++){
-                if (args[i]>args[j]){
-                    ChallengeRegistrant reg = challengeRegistrants[i];
-                    double temp=args[i];
-                    challengeRegistrants[i] = challengeRegistrants[j];
-                    challengeRegistrants[j] = reg;
-                    args[i]=args[j];
-                    args[j]=temp;
-                }
-            }
-        }
-        return args;
-    }
 }

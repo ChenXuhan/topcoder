@@ -17,9 +17,9 @@ public class UserController {
     @Autowired
     private UserApi userApi;
 
-    @RequestMapping(value = "/save",method = RequestMethod.GET)
+    @RequestMapping(value = "/save", method = RequestMethod.GET)
     @ResponseBody
-    public String saveUserByName(@RequestParam("userName") String userName){
+    public String saveUserByName(@RequestParam("userName") String userName) {
         userApi.getUserByName(userName);
         return "success";
     }

@@ -5,7 +5,7 @@ package com.buaa.act.sdp.model.challenge;
  */
 public class ChallengeRegistrant {
     private int id;
-    private int  challengeID;
+    private int challengeID;
     private String handle;
     private String reliability;
     private String registrationDate;
@@ -67,10 +67,6 @@ public class ChallengeRegistrant {
     public void setRating(int rating) {
         this.rating = rating;
     }
-
-
-
-
 
 
 }

@@ -1,10 +1,10 @@
 package com.buaa.act.sdp.service.update;
 
-import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
 import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,23 +27,23 @@ public class ChallengeStatistics {
     @Autowired
     private ChallengeSubmissionDao challengeSubmissionDao;
 
-    public void updateChallenges(){
-        List<ChallengeItem> items=challengeItemDao.getAllChallenges();
-        String[] strings,string;
+    public void updateChallenges() {
+        List<ChallengeItem> items = challengeItemDao.getAllChallenges();
+        String[] strings, string;
         int num;
-        for(ChallengeItem item:items){
+        for (ChallengeItem item : items) {
             strings = item.getSubmissionEndDate().substring(0, 10).split("-");
             string = item.getPostingDate().substring(0, 10).split("-");
             if (strings != null && strings.length > 0 && string != null && string.length > 0) {
                 num = (Integer.parseInt(strings[0]) - Integer.parseInt(string[0])) * 365 + (Integer.parseInt(strings[1]) - Integer.parseInt(string[1])) * 30 + (Integer.parseInt(strings[2]) - Integer.parseInt(string[2]));
                 item.setDuration(num);
             }
-            if(item.getNumRegistrants()==0){
-                num=challengeRegistrantDao.getRegistrantCountById(item.getChallengeId());
+            if (item.getNumRegistrants() == 0) {
+                num = challengeRegistrantDao.getRegistrantCountById(item.getChallengeId());
                 item.setNumRegistrants(num);
             }
-            if(item.getNumSubmissions()==0){
-                num=challengeSubmissionDao.getChallengeSubmissionCount(item.getChallengeId());
+            if (item.getNumSubmissions() == 0) {
+                num = challengeSubmissionDao.getChallengeSubmissionCount(item.getChallengeId());
                 item.setNumSubmissions(num);
             }
             item.setLanguages(getLanguages(item));
@@ -51,24 +51,24 @@ public class ChallengeStatistics {
         }
     }
 
-    public String[] getLanguages(ChallengeItem item){
-        String[]tech=item.getTechnology();
-        if(tech==null||tech.length==0){
+    public String[] getLanguages(ChallengeItem item) {
+        String[] tech = item.getTechnology();
+        if (tech == null || tech.length == 0) {
             return new String[]{};
         }
-        String[]language= Constant.LANGUAGES;
-        Set<String>set=new HashSet<>();
-        List<String>lang=new ArrayList<>();
-        for(String str:language){
+        String[] language = Constant.LANGUAGES;
+        Set<String> set = new HashSet<>();
+        List<String> lang = new ArrayList<>();
+        for (String str : language) {
             set.add(str);
         }
-        for(String str:tech){
-            if(set.contains(str)){
+        for (String str : tech) {
+            if (set.contains(str)) {
                 lang.add(str);
             }
         }
-        String []result=new String [lang.size()];
-        result=lang.toArray(result);
+        String[] result = new String[lang.size()];
+        result = lang.toArray(result);
         return result;
     }
 }

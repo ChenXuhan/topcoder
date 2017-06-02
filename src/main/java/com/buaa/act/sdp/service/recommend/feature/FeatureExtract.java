@@ -1,14 +1,16 @@
 package com.buaa.act.sdp.service.recommend.feature;
 
-import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.common.Constant;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.service.statistics.TaskMsg;
-import com.buaa.act.sdp.service.statistics.TaskScores;
 import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by yang on 2017/2/13.

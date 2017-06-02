@@ -17,7 +17,7 @@ public class UclKnn {
     private FeatureExtract featureExtract;
 
     // 选择n个最近的排序，取前K个
-    public Map<String,Integer> getRecommendWorker(double[][] features, double[] feature, int k,int start, List<String> winners) {
+    public Map<String, Integer> getRecommendWorker(double[][] features, double[] feature, int k, int start, List<String> winners) {
         Map<Integer, Double> map = new HashMap<>(start);
         for (int i = 0; i < start; i++) {
             map.put(i, similarity(features[i], feature));
@@ -32,10 +32,10 @@ public class UclKnn {
         });
         Map<String, Integer> sortMap = new HashMap<>();
         String winner;
-        for (int i = 0; i<k&&i < start; i++) {
+        for (int i = 0; i < k && i < start; i++) {
             winner = winners.get(list.get(i).getKey());
             if (sortMap.containsKey(winner)) {
-                sortMap.put(winner, sortMap.get(winner)+1);
+                sortMap.put(winner, sortMap.get(winner) + 1);
             } else {
                 sortMap.put(winner, 1);
             }
@@ -43,10 +43,10 @@ public class UclKnn {
         return sortMap;
     }
 
-    public  List<Map<String,Integer>> getRecommendResult(double[][]features,int k,int start,List<String>winners){
-        List<Map<String,Integer>>result=new ArrayList<>();
-        for(int i=start;i<features.length;i++){
-            result.add(getRecommendWorker(features,features[i],k,start,winners));
+    public List<Map<String, Integer>> getRecommendResult(double[][] features, int k, int start, List<String> winners) {
+        List<Map<String, Integer>> result = new ArrayList<>();
+        for (int i = start; i < features.length; i++) {
+            result.add(getRecommendWorker(features, features[i], k, start, winners));
         }
         return result;
     }

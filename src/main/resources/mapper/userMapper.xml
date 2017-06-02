@@ -2,14 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.act.sdp.dao.UserDao">
     <insert id="insert" parameterType="com.buaa.act.sdp.model.user.User" useGeneratedKeys="true" keyProperty="id">
-       insert into user(handle,country,memberSince,quote,photoLink,copilot,skills) values(#{handle},#{country},#{memberSince},#{quote},#{photoLink},#{copilot}, #{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR})
+        insert into user(handle,country,memberSince,quote,photoLink,copilot,skills)
+        values(#{handle},#{country},#{memberSince},#{quote},#{photoLink},#{copilot},
+        #{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR})
     </insert>
 
     <select id="getUserByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.model.user.User">
         select * from user where handle=#{name}
     </select>
 
-    <select id="getUsers"  resultType="java.lang.String">
+    <select id="getUserById" parameterType="java.lang.Integer" resultType="com.buaa.act.sdp.model.user.User">
+        select * from user where id=#{id}
+    </select>
+
+    <select id="getUsers" resultType="java.lang.String">
         select DISTINCT handle from user
     </select>
 
@@ -21,14 +27,14 @@
             UPDATE user set competitionNums=#{competitionNums},submissionNums=#{submissionNums},winNums=#{winNums} where handle=#{handle}
     </update>
 
-    <update id="insertSkillDegree" >
+    <update id="insertSkillDegree">
         UPDATE user set skillDegree=#{skillDegree} where handle=#{handle}
     </update>
 
-    <update id="insertSkillDegreeBatch" >
-    <foreach collection="relationMap" index="key1" item="value1" separator=";">
-     UPDATE user set skillDegree=#{value1} where handle=#{key1}
-    </foreach>
+    <update id="insertSkillDegreeBatch">
+        <foreach collection="relationMap" index="key1" item="value1" separator=";">
+            UPDATE user set skillDegree=#{value1} where handle=#{key1}
+        </foreach>
     </update>
 
 </mapper>

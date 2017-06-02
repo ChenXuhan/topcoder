@@ -2,42 +2,41 @@ package com.buaa.act.sdp.service.api;
 
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
-import com.buaa.act.sdp.util.RequestUtil;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Created by YLT on 2017/4/20.
  */
 @Component
-public class handle {
+public class TechTagHandle {
 
     @Autowired
     private ChallengeItemDao challengeItemDao;
 
-    public void test(){
+    public void test() {
         HashSet teches = new HashSet();
-        for(int i = 0;i < Constant.TECHNOLOGIES.length; i ++){
+        for (int i = 0; i < Constant.TECHNOLOGIES.length; i++) {
             teches.add(Constant.TECHNOLOGIES[i].toLowerCase());
         }
-        for(int i = 0;i < Constant.PLATFORMS.length; i ++){
+        for (int i = 0; i < Constant.PLATFORMS.length; i++) {
             teches.add(Constant.PLATFORMS[i].toLowerCase());
         }
         System.out.println(teches.size());
         Iterator iter = teches.iterator();
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             System.out.println(iter.next());
         }
-        System.out.println(Constant.TECHNOLOGIES.length+Constant.PLATFORMS.length);
+        System.out.println(Constant.TECHNOLOGIES.length + Constant.PLATFORMS.length);
         System.out.println(Constant.TECH.length);
-
     }
 
-    public void getSkillsFromDatabase(){
+    public void getSkillsFromDatabase() {
         //32
         String[] strs1 = {"AWS",
                 "Android",
@@ -253,32 +252,34 @@ public class handle {
         String[] plat = challengeItemDao.getAllPlatforms();
         HashSet techesDatabase = new HashSet();
 
-        for(int i = 0; i < tech.length;i ++){
-            if(tech[i]==null){
+        for (int i = 0; i < tech.length; i++) {
+            if (tech[i] == null) {
                 continue;
             }
             String[] strs = tech[i].split(",");
-            for(int j = 0; j < strs.length;j ++){
-                if(!strs[j].equals("")){
-                techesDatabase.add(strs[j].toLowerCase());}
+            for (int j = 0; j < strs.length; j++) {
+                if (!strs[j].equals("")) {
+                    techesDatabase.add(strs[j].toLowerCase());
+                }
             }
         }
-        for(int i = 0; i < plat.length;i ++){
-            if(plat[i]==null){
+        for (int i = 0; i < plat.length; i++) {
+            if (plat[i] == null) {
                 continue;
             }
             String[] strs = plat[i].split(",");
-            for(int j = 0; j < strs.length;j ++){
-                if(!strs[j].equals("")){
-                techesDatabase.add(strs[j].toLowerCase());}
+            for (int j = 0; j < strs.length; j++) {
+                if (!strs[j].equals("")) {
+                    techesDatabase.add(strs[j].toLowerCase());
+                }
             }
         }
 
         HashSet techesApi = new HashSet();
-        for(int i = 0; i < strs1.length;i++){
+        for (int i = 0; i < strs1.length; i++) {
             techesApi.add(strs1[i].toLowerCase());
         }
-        for(int i = 0; i < strs2.length;i++){
+        for (int i = 0; i < strs2.length; i++) {
             techesApi.add(strs2[i].toLowerCase());
         }
 
@@ -298,17 +299,17 @@ public class handle {
 
         HashSet allTags = new HashSet();
         Iterator iter1 = techesDatabase.iterator();
-        while (iter1.hasNext()){
+        while (iter1.hasNext()) {
             allTags.add(iter1.next().toString());
         }
         iter1 = techesApi.iterator();
-        while (iter1.hasNext()){
+        while (iter1.hasNext()) {
             allTags.add(iter1.next().toString());
         }
         System.out.println(allTags.size());
         iter1 = allTags.iterator();
         ArrayList<String> result = new ArrayList<String>();
-        while (iter1.hasNext()){
+        while (iter1.hasNext()) {
             result.add(iter1.next().toString());
             //System.out.println(iter1.next().toString()+"\",");
         }

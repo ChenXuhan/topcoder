@@ -1,6 +1,9 @@
 package com.buaa.act.sdp.util;
 
-import org.apache.ibatis.type.*;
+import org.apache.ibatis.type.BaseTypeHandler;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedJdbcTypes;
+import org.apache.ibatis.type.MappedTypes;
 
 import java.sql.*;
 
@@ -20,7 +23,7 @@ public class StringArrayTypeHandler extends BaseTypeHandler<String[]> {
             for (String value : strings) {
                 result.append(value).append(",");
             }
-            if(result.length()>0) {
+            if (result.length() > 0) {
                 result.deleteCharAt(result.length() - 1);
             }
             preparedStatement.setString(i, result.toString());
@@ -29,7 +32,7 @@ public class StringArrayTypeHandler extends BaseTypeHandler<String[]> {
 
     @Override
     public String[] getNullableResult(ResultSet resultSet, String s) throws SQLException {
-        String columnValue=resultSet.getString(s);
+        String columnValue = resultSet.getString(s);
         return getStringArray(columnValue);
     }
 

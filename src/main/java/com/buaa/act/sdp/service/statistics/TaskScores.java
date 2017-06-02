@@ -24,16 +24,16 @@ public class TaskScores {
 
     //challengeId对应的提交人的得分
     private Map<Integer, Map<String, Double>> scores;
-    private Map<Integer,String>winners;
+    private Map<Integer, String> winners;
 
     public TaskScores() {
         scores = new HashMap<>();
-        winners=new HashMap<>();
+        winners = new HashMap<>();
     }
 
     // 获取task的获胜者
-    public Map<Integer,String>getWinners(){
-        if(winners.isEmpty()){
+    public Map<Integer, String> getWinners() {
+        if (winners.isEmpty()) {
             getAllWorkerScores();
         }
         return winners;
@@ -42,7 +42,7 @@ public class TaskScores {
 
     // 获得所有开发者的得分
     public Map<Integer, Map<String, Double>> getAllWorkerScores() {
-        if(scores.isEmpty()) {
+        if (scores.isEmpty()) {
             List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllRegistrant();
             Map<String, Double> score;
             for (ChallengeRegistrant challengeRegistrant : challengeRegistrants) {

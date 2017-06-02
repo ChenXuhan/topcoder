@@ -8,11 +8,12 @@ public class UserSkill {
     private String skill;
     private String score;
 
-    public UserSkill(String handle,String skill,String score){
+    public UserSkill(String handle, String skill, String score) {
         this.handle = handle;
         this.skill = skill;
         this.score = score;
     }
+
     public String getHandle() {
         return handle;
     }

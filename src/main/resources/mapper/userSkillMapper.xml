@@ -9,7 +9,8 @@
         </foreach>
     </insert>
 
-    <insert id="insertEach" parameterType="com.buaa.act.sdp.model.user.UserSkill" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertEach" parameterType="com.buaa.act.sdp.model.user.UserSkill" useGeneratedKeys="true"
+            keyProperty="id">
         insert into userSkill(handle,skill,score) values
             (#{handle},#{skill},#{score})
     </insert>

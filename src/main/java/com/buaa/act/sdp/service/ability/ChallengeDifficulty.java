@@ -1,29 +1,29 @@
-package com.buaa.act.sdp.service.api;
+package com.buaa.act.sdp.service.ability;
 
-import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.dao.ChallengeItemDao;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by YLT on 2016/11/22.
  */
 @Service
-public class DatabaseOpe extends Thread {
-
-    @Autowired
-    private ChallengeItemDao challengeItemDao;
+public class ChallengeDifficulty {
 
     //保存历史项目的项目难度系数
     HashMap<Integer, Double> scores = new HashMap<Integer, Double>();
+    @Autowired
+    private ChallengeItemDao challengeItemDao;
 
     /*
     * 找到相应属性下值的最大最小值
     */
-    public int[] findMaxMinItem(String entryName,double percentage) {
+    public int[] findMaxMinItem(String entryName, double percentage) {
         Integer[] items;
         if (entryName.equals("prize")) {
             String[] allPrizesStr = challengeItemDao.getAllPrizes();
@@ -46,19 +46,19 @@ public class DatabaseOpe extends Thread {
                     items[i] += Integer.parseInt(allPrizes[i][j]);
                 }
             }
-            return (maxMinIntFind(items,percentage));
+            return (maxMinIntFind(items, percentage));
         } else if (entryName.equals("reliabilityBonus")) {
             items = challengeItemDao.getAllReliabilityBonus();
-            return (maxMinIntFind(items,percentage));
+            return (maxMinIntFind(items, percentage));
         } else if (entryName.equals("duration")) {
             items = challengeItemDao.getAllDuration();
-            return (maxMinIntFind(items,percentage));
+            return (maxMinIntFind(items, percentage));
         } else if (entryName.equals("numRegistrants")) {
             items = challengeItemDao.getAllNumRegistrants();
-            return (maxMinIntFind(items,percentage));
+            return (maxMinIntFind(items, percentage));
         } else if (entryName.equals("numSubmissions")) {
             items = challengeItemDao.getAllNumSubmissions();
-            return (maxMinIntFind(items,percentage));
+            return (maxMinIntFind(items, percentage));
         }
         return null;
     }
@@ -95,7 +95,7 @@ public class DatabaseOpe extends Thread {
     /*
     * 求数组中的最大最小值
     * */
-    public int[] maxMinIntFind(Integer[] items,double percentage) {
+    public int[] maxMinIntFind(Integer[] items, double percentage) {
         int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
         int[] returnInt = new int[2];
         for (int i = 0; i < items.length * percentage; i++) {
@@ -119,7 +119,7 @@ public class DatabaseOpe extends Thread {
         double para2 = toOne(prize, min2, max2);
         double para3 = toOne(numRegistrants, min3, max3);
         double para4 = toOne(duration, min4, max4);
-        double numScore = para1 + para2 + para3 + para4 ;
+        double numScore = para1 + para2 + para3 + para4;
         DecimalFormat df = new DecimalFormat("#.####");
         numScore = Double.parseDouble(df.format(numScore));
         return numScore;
@@ -135,19 +135,19 @@ public class DatabaseOpe extends Thread {
         double percentage = 0.9;
         List<ChallengeItem> allChallenges = challengeItemDao.getAllChallenges();
 
-        result = findMaxMinItem("reliabilityBonus",percentage);
+        result = findMaxMinItem("reliabilityBonus", percentage);
         min1 = result[0];
         max1 = result[1];
 
-        result = findMaxMinItem("prize",percentage);
+        result = findMaxMinItem("prize", percentage);
         min2 = result[0];
         max2 = result[1];
 
-        result = findMaxMinItem("numRegistrants",percentage);
+        result = findMaxMinItem("numRegistrants", percentage);
         min3 = result[0];
         max3 = result[1];
 
-        result = findMaxMinItem("duration",percentage);
+        result = findMaxMinItem("duration", percentage);
         min4 = result[0];
         max4 = result[1];
 
@@ -174,8 +174,8 @@ public class DatabaseOpe extends Thread {
             }*/
             scores.put(item.getChallengeId(), numProcess((int) item.getReliabilityBonus(), prize, item.getNumRegistrants(), item.getDuration(), min1, max1, min2, max2, min3, max3, min4, max4));
         }
-        for(int i = (int)(Math.ceil(allChallenges.size() * percentage)); i < allChallenges.size();i ++){
-            scores.put(allChallenges.get(i).getChallengeId(),0.0);
+        for (int i = (int) (Math.ceil(allChallenges.size() * percentage)); i < allChallenges.size(); i++) {
+            scores.put(allChallenges.get(i).getChallengeId(), 0.0);
         }
         challengeItemDao.insertDifficultyDegree(scores);
     }

@@ -9,6 +9,7 @@ import java.util.List;
  * Created by yang on 2016/10/15.
  */
 public interface DevelopmentHistoryDao {
-    void insert(List<DevelopmentHistory>list);
-    List<DevelopmentHistory>getChallengeCountByHandle(@Param("handle") String handle);
+    void insert(List<DevelopmentHistory> list);
+
+    List<DevelopmentHistory> getChallengeCountByHandle(@Param("handle") String handle);
 }

@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface CompetitionRelationDao {
     void insert(CompetitionRelation competitionRelation);
+
     void deleteAll();
-    List<CompetitionRelation> getCompetitions(@Param("handle1")String handle1);
+
+    List<CompetitionRelation> getCompetitions(@Param("handle1") String handle1);
 }

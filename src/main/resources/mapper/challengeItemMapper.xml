@@ -63,6 +63,10 @@
         select * from challenge_item where challengeId = #{challengeId}
     </select>
 
+    <select id="getChallengeItemRequirementById" parameterType="int" resultType="java.lang.String">
+        select detailedRequirements from challenge_item where challengeId = #{challengeId}
+    </select>
+
     <select id="getChallenges" resultType="java.lang.Integer">
         select challengeId from challenge_item
     </select>
@@ -103,10 +107,14 @@
         SELECT difficultyDegree from challenge_item where challengeId=#{challengeId}
     </select>
 
-    <update id="insertDifficultyDegree" >
+    <update id="insertDifficultyDegree">
         <foreach collection="relationMap" index="key1" item="value1" separator=";">
             UPDATE challenge_item set diff=#{value1} where challengeId=#{key1}
         </foreach>
+    </update>
+
+    <update id="setHandledRequirements">
+        UPDATE challenge_item set requirements=#{requirements} where challengeId=#{challengeId}
     </update>
 
     <select id="getAllPlatforms" resultType="java.lang.String">

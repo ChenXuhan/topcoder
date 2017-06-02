@@ -1,9 +1,10 @@
-package com.buaa.act.sdp.service.api;
+package com.buaa.act.sdp.service.ability;
 
+import com.buaa.act.sdp.dao.*;
 import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.model.challenge.ChallengeSubmission;
 import com.buaa.act.sdp.model.user.UserSkill;
-import com.buaa.act.sdp.dao.*;
+import com.buaa.act.sdp.service.api.Neo4jConn;
 import com.csvreader.CsvReader;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,68 +40,8 @@ public class UserAbility {
     @Autowired
     private UserDao userDao;
     @Autowired
-    private neo4jConn neo4j;
+    private Neo4jConn neo4j;
 
-    /*public double getAbility(String handle, String techName) {
-        ChallengeSubmission[] submissions = challengeSubmissionDao.getSubmissionByHandle(handle);
-        ChallengeItem itemSub;
-        double abilityScore = 0;
-        int num = 0;
-        if (submissions != null) {
-            for (int i = 0; i < submissions.length; i++) {
-                int id = submissions[i].getChallengeID();
-                if ((itemSub = challengeItemDao.getChallengeItemById(id)) != null) {
-                    List<String> techStrs = Arrays.asList(itemSub.getTechnology());
-                    List<String> platformStrs = Arrays.asList(itemSub.getPlatforms());
-                    if (techStrs.contains(techName) || platformStrs.contains(techName)) {
-                        //abilityScore = abilityScore + Double.parseDouble(submissions[i].getFinalScore()) * ope.scores.get(itemSub.getChallengeId());
-                        abilityScore = abilityScore + Double.parseDouble(submissions[i].getFinalScore()) * challengeItemDao.getDifficultyDegree(id);
-                        num ++;
-                    }
-                }
-            }
-            if(num !=0) {
-                abilityScore = abilityScore / num;
-            }
-        }
-        DecimalFormat df = new DecimalFormat("#.####");
-        abilityScore = Double.parseDouble(df.format(abilityScore));
-        return abilityScore;
-    }
-
-    public String[] getAllTechs(){
-        String[] techs = new String[200];
-        techs= Constant.TECHNOLOGIES;
-        int len = Constant.TECHNOLOGIES.length + Constant.PLATFORMS.length;
-        for(int i = Constant.TECHNOLOGIES.length;i < len; i ++ ){
-          //  techs
-        }
-        return techs;
-    }
-
-    public String getUserAllAbility(String handle){
-        JsonObject member1 = new JsonObject();
-        for(int i = 0; i < Constant.TECHNOLOGIES.length;i ++){
-            String tech = Constant.TECHNOLOGIES[i];
-            member1.addProperty(tech,getAbility(handle,tech));
-        }
-        for(int i = 0; i < Constant.PLATFORMS.length;i++){
-            String tech = Constant.PLATFORMS[i];
-            if(!member1.has(tech)){
-                member1.addProperty(tech,getAbility(handle,tech));
-            }
-        }
-        return member1.toString();
-    }
-
-    public void userAbilityInsert() {
-        List<String> userList = userDao.getUsers();
-        //List<String> ability = new ArrayList<String>();
-        for (String user : userList) {
-            userDao.insertSkillDegree(user,getUserAllAbility(user));
-            System.out.println(user);
-        }
-    }*/
     public String getAbility(String handle) {
         ChallengeSubmission[] submissions = challengeSubmissionDao.getSubmissionByHandle(handle);
         ChallengeItem itemSub;
@@ -144,11 +85,12 @@ public class UserAbility {
             String name = (String) entry.getKey();
             int t = TIMES.get(name);
             double finalScore = userSkill.get(name) / t;
-            if(finalScore !=0.0){
-            DecimalFormat df = new DecimalFormat("#.####");
-            finalScore = Double.parseDouble(df.format(finalScore));
-            userSkill.put(name, finalScore);
-            jsonObject.put(name, finalScore);}
+            if (finalScore != 0.0) {
+                DecimalFormat df = new DecimalFormat("#.####");
+                finalScore = Double.parseDouble(df.format(finalScore));
+                userSkill.put(name, finalScore);
+                jsonObject.put(name, finalScore);
+            }
         }
         return jsonObject.toString();
     }
@@ -270,7 +212,7 @@ public class UserAbility {
         return jsonObject;
     }
 
-    public void ttt() {
+    public void abilityInsertNeo4j() {
         String query = "MATCH (u:User) RETURN u.handle";
         Connection con = neo4j.getTry();
         ResultSet rs;

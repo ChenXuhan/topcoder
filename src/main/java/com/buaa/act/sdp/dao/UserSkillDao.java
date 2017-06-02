@@ -9,5 +9,6 @@ import java.util.List;
  */
 public interface UserSkillDao {
     void insert(List<UserSkill> userSkill);
+
     void insertEach(UserSkill userSkill);
 }

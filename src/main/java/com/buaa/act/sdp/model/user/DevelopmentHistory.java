@@ -18,7 +18,7 @@ public class DevelopmentHistory {
     private int appeals;
     private String appealSuccessRate;
     private int wins;
-    private String winPercentage ;
+    private String winPercentage;
     private double maximumScore;
     private double minimumScore;
     private double averageScore;

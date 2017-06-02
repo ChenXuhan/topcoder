@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface CollaborationRelationDao {
     void insert(CollaborationRelation collaborationRelation);
+
     void deleteAll();
-    List<String> getCollaborations(@Param("handle1")String handle1);
+
+    List<String> getCollaborations(@Param("handle1") String handle1);
 }

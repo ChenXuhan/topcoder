@@ -10,6 +10,7 @@ public class ChallengeItem {
     private String challengeType;
     private int projectId;
     private int forumId;
+    private String requirements;
     private String detailedRequirements;
     private int screeningScorecardId;
     private int reviewScorecardId;
@@ -26,10 +27,10 @@ public class ChallengeItem {
     private String registrationStartDate;
     private double digitalRunPoints;
     private double reliabilityBonus;
-    private String []technology;
-    private String[]languages;
-    private String []prize;
-    private String []platforms;
+    private String[] technology;
+    private String[] languages;
+    private String[] prize;
+    private String[] platforms;
     private int numSubmissions;
     private int numRegistrants;
     private int duration;
@@ -65,6 +66,14 @@ public class ChallengeItem {
 
     public void setChallengeType(String challengeType) {
         this.challengeType = challengeType;
+    }
+
+    public String getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
     }
 
     public int getProjectId() {
@@ -261,7 +270,7 @@ public class ChallengeItem {
 
     @Override
     public String toString() {
-        return challengeName+"+++"+detailedRequirements;
+        return challengeName + "+++" + detailedRequirements;
     }
 
     public double getDifficultyDegree() {

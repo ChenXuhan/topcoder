@@ -1,6 +1,9 @@
 package com.buaa.act.sdp.service.recommend.cluster;
 
-import weka.core.*;
+import weka.core.EuclideanDistance;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.Option;
 import weka.core.neighboursearch.PerformanceStats;
 
 import java.util.Enumeration;
@@ -20,18 +23,13 @@ public class Distince extends EuclideanDistance {
     }
 
     @Override
-    public void setInstances(Instances insts) {
-        m_Data = insts;
-    }
-
-    @Override
     public Instances getInstances() {
         return m_Data;
     }
 
     @Override
-    public void setAttributeIndices(String value) {
-
+    public void setInstances(Instances insts) {
+        m_Data = insts;
     }
 
     @Override
@@ -40,13 +38,18 @@ public class Distince extends EuclideanDistance {
     }
 
     @Override
-    public void setInvertSelection(boolean value) {
+    public void setAttributeIndices(String value) {
 
     }
 
     @Override
     public boolean getInvertSelection() {
         return false;
+    }
+
+    @Override
+    public void setInvertSelection(boolean value) {
+
     }
 
     @Override
@@ -67,7 +70,7 @@ public class Distince extends EuclideanDistance {
     //自定义距离公式
     @Override
     public double distance(Instance first, Instance second, double cutOffValue, PerformanceStats stats) {
-        double distance=0, a = 0, b = 0, c = 0;
+        double distance = 0, a = 0, b = 0, c = 0;
         int firstNumValues = first.numValues();
         distance = Math.abs(first.valueSparse(2) - second.valueSparse(2));
         if (distance > 366) {
@@ -112,12 +115,12 @@ public class Distince extends EuclideanDistance {
     }
 
     @Override
-    public void setOptions(String[] options) throws Exception {
-
+    public String[] getOptions() {
+        return new String[0];
     }
 
     @Override
-    public String[] getOptions() {
-        return new String[0];
+    public void setOptions(String[] options) throws Exception {
+
     }
 }

@@ -1,7 +1,7 @@
 package com.buaa.act.sdp.util;
 
-import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.common.Constant;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 
@@ -16,25 +16,25 @@ import java.util.*;
  */
 public class WekaArffUtil {
 
-    public static void writeToArffClassfiler(String filename, double[][] data,List<String>classes ) {
+    public static void writeToArffClassfiler(String filename, double[][] data, List<String> classes) {
         FileWriter fileWriter = null;
         BufferedWriter writer = null;
         try {
-            fileWriter = new FileWriter(filename+".arff");
+            fileWriter = new FileWriter(filename + ".arff");
             writer = new BufferedWriter(fileWriter);
             writer.write("@relation user-features\n");
             for (int i = 0; i < data[0].length; i++) {
                 writer.write("@attribute " + "feature" + i + " numeric\n");
             }
-            Set<String>type=new LinkedHashSet<>();
-            for(int i=0;i<classes.size();i++){
+            Set<String> type = new LinkedHashSet<>();
+            for (int i = 0; i < classes.size(); i++) {
                 type.add(classes.get(i));
             }
-            StringBuilder stringBuilder=new StringBuilder();
-            for(String str:type){
-                stringBuilder.append(str+",");
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String str : type) {
+                stringBuilder.append(str + ",");
             }
-            writer.write("@attribute class {" +stringBuilder.substring(0,stringBuilder.length()-1)+"}\n");
+            writer.write("@attribute class {" + stringBuilder.substring(0, stringBuilder.length() - 1) + "}\n");
             writer.write("@data\n");
             for (int i = 0; i < data.length; i++) {
                 for (int j = 0; j < data[i].length; j++) {
@@ -58,7 +58,7 @@ public class WekaArffUtil {
         FileWriter fileWriter = null;
         BufferedWriter writer = null;
         try {
-            fileWriter = new FileWriter(filename+".arff");
+            fileWriter = new FileWriter(filename + ".arff");
             writer = new BufferedWriter(fileWriter);
             writer.write("@relation user-features\n");
             for (int i = 0; i < data[0].length; i++) {
@@ -66,10 +66,10 @@ public class WekaArffUtil {
             }
             writer.write("@data\n");
             for (int i = 0; i < data.length; i++) {
-                for (int j = 0; j < data[i].length-1; j++) {
+                for (int j = 0; j < data[i].length - 1; j++) {
                     writer.write(data[i][j] + ",");
                 }
-                writer.write(data[i][data[i].length-1]+"\n");
+                writer.write(data[i][data[i].length - 1] + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -106,10 +106,10 @@ public class WekaArffUtil {
         return map;
     }
 
-    public static Instances getInstances(String fileName){
-        File file = new File(fileName+".arff");
+    public static Instances getInstances(String fileName) {
+        File file = new File(fileName + ".arff");
         ArffLoader loader = new ArffLoader();
-        Instances instances=null;
+        Instances instances = null;
         try {
             loader.setFile(file);
             instances = loader.getDataSet();
@@ -119,20 +119,20 @@ public class WekaArffUtil {
         return instances;
     }
 
-    public static void writeTaskAndWinner(List<ChallengeItem>items, List<String>winner, String challengeType){
-        BufferedWriter writer=null;
+    public static void writeTaskAndWinner(List<ChallengeItem> items, List<String> winner, String challengeType) {
+        BufferedWriter writer = null;
         try {
-            FileWriter fileWriter=new FileWriter(Constant.CLASSIFIER_DIRECTORY+challengeType+".txt");
-             writer=new BufferedWriter(fileWriter);
-            for(int i=0;i<items.size();i++){
-                writer.write(items.get(i).getChallengeId()+"\t"+winner.get(i)+'\n');
+            FileWriter fileWriter = new FileWriter(Constant.CLASSIFIER_DIRECTORY + challengeType + ".txt");
+            writer = new BufferedWriter(fileWriter);
+            for (int i = 0; i < items.size(); i++) {
+                writer.write(items.get(i).getChallengeId() + "\t" + winner.get(i) + '\n');
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            if(writer!=null){
+        } finally {
+            if (writer != null) {
                 try {
-                writer.close();
+                    writer.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -1,7 +1,6 @@
 package com.buaa.act.sdp.service.recommend.network;
 
 import com.buaa.act.sdp.model.challenge.ChallengeItem;
-import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.service.statistics.TaskScores;
 import org.springframework.beans.factory.annotation.Autowired;

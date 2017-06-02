@@ -1,10 +1,9 @@
 package com.buaa.act.sdp.service.statistics;
 
+import com.buaa.act.sdp.dao.ChallengeItemDao;
+import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.model.challenge.ChallengeSubmission;
-import com.buaa.act.sdp.dao.ChallengeItemDao;
-import com.buaa.act.sdp.dao.ChallengeRegistrantDao;
-import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

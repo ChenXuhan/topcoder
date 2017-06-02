@@ -1,7 +1,7 @@
 package com.buaa.act.sdp;
 
-import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.TaskRecommend;
+import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.feature.Reliability;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ public class TestRecommend {
         String challengeType = "First2Finish";
         recommendResult.classifier(challengeType);
         recommendResult.contentBased(challengeType);
-        recommendResult.clusterClassifier(challengeType,3);
+        recommendResult.clusterClassifier(challengeType, 3);
         recommendResult.localClassifier(challengeType);
     }
 

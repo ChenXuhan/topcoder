@@ -7,7 +7,7 @@ public class Skill {
     private String tagName;
     private boolean hidden;
     private int score;
-    private  String[]sources;
+    private String[] sources;
 
     public String getTagName() {
         return tagName;

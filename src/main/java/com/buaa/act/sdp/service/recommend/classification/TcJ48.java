@@ -2,14 +2,15 @@ package com.buaa.act.sdp.service.recommend.classification;
 
 import com.buaa.act.sdp.util.WekaArffUtil;
 import org.springframework.stereotype.Service;
-import weka.classifiers.Classifier;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.j48.ClassifierTree;
 import weka.core.Instance;
 import weka.core.Instances;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yang on 2017/3/9.

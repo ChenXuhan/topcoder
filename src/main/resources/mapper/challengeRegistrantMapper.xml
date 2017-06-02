@@ -15,6 +15,11 @@
         select * from challenge_registrant where challengeID = #{challengeID} AND handle = #{handle}
     </select>
 
+    <select id="getRegistrantByHandle" parameterType="java.lang.String"
+            resultType="com.buaa.act.sdp.model.challenge.ChallengeRegistrant">
+        select * from challenge_registrant where handle = #{handle}
+    </select>
+
     <select id="getUsers" resultType="java.lang.String">
         select DISTINCT handle from challenge_registrant
     </select>

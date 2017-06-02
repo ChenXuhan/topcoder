@@ -4,8 +4,8 @@ package com.buaa.act.sdp.service.api;
  * Created by YLT on 2016/10/18.
  */
 
-import com.buaa.act.sdp.model.challenge.*;
 import com.buaa.act.sdp.dao.*;
+import com.buaa.act.sdp.model.challenge.*;
 import com.buaa.act.sdp.util.JsonUtil;
 import com.buaa.act.sdp.util.RequestUtil;
 import com.google.gson.JsonElement;
@@ -147,11 +147,11 @@ public class ChallengeApi {
         if (count % 50 != 0) {
             pages++;
         }
-        List<String>userList=userDao.getUsers();
-        Set<String>userSet=new HashSet<>();
+        List<String> userList = userDao.getUsers();
+        Set<String> userSet = new HashSet<>();
         userSet.addAll(userList);
-        List<Integer>challengeList=challengeItemDao.getChallenges();
-        Set<Integer>challengeSet=new HashSet<>();
+        List<Integer> challengeList = challengeItemDao.getChallenges();
+        Set<Integer> challengeSet = new HashSet<>();
         challengeSet.addAll(challengeList);
         PastChallenge[] pastChallenges;
         ChallengeItem challengeItem;
@@ -161,25 +161,25 @@ public class ChallengeApi {
         int challengeId;
         for (int i = 1; i <= pages; i++) {
             pastChallenges = getPastChallenges(i, 50);
-            if (pastChallenges == null||pastChallenges.length==0) {
+            if (pastChallenges == null || pastChallenges.length == 0) {
                 continue;
             }
             for (int j = 0; j < pastChallenges.length; j++) {
                 challengeId = pastChallenges[j].getChallengeId();
                 if (!challengeSet.contains(challengeId)) {
                     challengeItem = getChallengeById(challengeId);
-                    if(challengeItem != null) {
+                    if (challengeItem != null) {
                         challengeItemGenerate(challengeItem, pastChallenges[j]);
-                        handChallenge(challengeItem,userSet);
+                        handChallenge(challengeItem, userSet);
                     }
                 }
             }
         }
     }
 
-    public void handChallenge(ChallengeItem challengeItem,Set<String>username) {
+    public void handChallenge(ChallengeItem challengeItem, Set<String> username) {
         challengeItemDao.insert(challengeItem);
-        int challengeId=challengeItem.getChallengeId();
+        int challengeId = challengeItem.getChallengeId();
         System.out.println(challengeId);
         ChallengeRegistrant[] challengeRegistrant = getChallengeRegistrantsById(challengeId);
         if (challengeRegistrant != null && challengeRegistrant.length != 0) {
@@ -231,21 +231,21 @@ public class ChallengeApi {
 
     public void getMissedChallenges(int startId) {
         int min = 30000000;
-        List<String>userList=userDao.getUsers();
-        Set<String>userSet=new HashSet<>();
+        List<String> userList = userDao.getUsers();
+        Set<String> userSet = new HashSet<>();
         userSet.addAll(userList);
-        List<Integer>challengeList=challengeItemDao.getChallenges();
-        Set<Integer>challengeSet=new HashSet<>();
+        List<Integer> challengeList = challengeItemDao.getChallenges();
+        Set<Integer> challengeSet = new HashSet<>();
         challengeSet.addAll(challengeList);
         ChallengeItem challengeItem;
         while (startId >= min) {
-            if(!challengeSet.contains(startId)) {
+            if (!challengeSet.contains(startId)) {
                 challengeSet.add(startId);
                 challengeItem = getChallengeById(startId);
-                if(challengeItem != null) {
-                    handChallenge(challengeItem,userSet);
-                }else{
-                    System.out.println(startId+" failed");
+                if (challengeItem != null) {
+                    handChallenge(challengeItem, userSet);
+                } else {
+                    System.out.println(startId + " failed");
                 }
             }
             startId--;

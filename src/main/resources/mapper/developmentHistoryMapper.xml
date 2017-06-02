@@ -21,7 +21,7 @@
         minimumScore,
         averageScore,
         averagePlacement) values
-        <foreach collection="list" item="item" index="index" separator=","> (
+        <foreach collection="list" item="item" index="index" separator=",">(
             #{item.handle},
             #{item.developType},
             #{item.competitions},

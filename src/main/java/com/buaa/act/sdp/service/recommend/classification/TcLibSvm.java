@@ -3,10 +3,11 @@ package com.buaa.act.sdp.service.recommend.classification;
 import com.buaa.act.sdp.util.WekaArffUtil;
 import org.springframework.stereotype.Service;
 import weka.classifiers.functions.LibSVM;
-import weka.core.Instance;
 import weka.core.Instances;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yang on 2017/3/9.

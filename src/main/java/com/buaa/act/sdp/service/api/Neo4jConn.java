@@ -2,14 +2,15 @@ package com.buaa.act.sdp.service.api;
 
 import org.springframework.stereotype.Component;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * Created by YLT on 2017/3/28.
  */
 @Component
-public class neo4jConn {
-
+public class Neo4jConn {
 
 
     String login = "neo4j";
@@ -18,7 +19,7 @@ public class neo4jConn {
     public Connection getTry() {
         Connection con = null;
         try {
-            con = DriverManager.getConnection("jdbc:neo4j:http://192.168.7.109:7474/",login,password);
+            con = DriverManager.getConnection("jdbc:neo4j:http://192.168.7.109:7474/", login, password);
 
 
             /*String cypher = "MATCH (n:User{handle:{1}}) SET n.skillDegree = {2}";
