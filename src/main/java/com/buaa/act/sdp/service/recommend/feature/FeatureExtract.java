@@ -23,25 +23,16 @@ public class FeatureExtract {
 
     private int requirementWordSize;
     private int titleWordSize;
-    private String type;
 
     public FeatureExtract() {
         requirementWordSize = 0;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public List<String> getWinners() {
+    public List<String> getWinners(String type) {
         return taskMsg.getWinners(type);
     }
 
-    public List<ChallengeItem> getItems() {
+    public List<ChallengeItem> getItems(String type) {
         return taskMsg.getItems(type);
     }
 
@@ -53,13 +44,13 @@ public class FeatureExtract {
         return titleWordSize;
     }
 
-    public List<Map<String, Double>> getUserScore() {
+    public List<Map<String, Double>> getUserScore(String type) {
         return taskMsg.getUserScore(type);
     }
 
     // 文本分词统计
-    public WordCount[] getWordCount(int start) {
-        List<ChallengeItem> items = getItems();
+    public WordCount[] getWordCount(int start,String type) {
+        List<ChallengeItem> items = getItems(type);
         String[] requirements = new String[items.size()];
         String[] skills = new String[items.size()];
         String[] titles = new String[items.size()], temp;
@@ -92,8 +83,7 @@ public class FeatureExtract {
 
     // 只获取任务的时间和奖金
     public double[][] getTimesAndAward(String challengeType) {
-        setType(challengeType);
-        List<ChallengeItem> items = getItems();
+        List<ChallengeItem> items = getItems(challengeType);
         double[][] features = new double[items.size()][2];
         ChallengeItem item;
         int index;
@@ -108,8 +98,8 @@ public class FeatureExtract {
     }
 
     //UCL中KNN分类器特征
-    public double[][] generateVectorUcl() {
-        List<ChallengeItem> items = getItems();
+    public double[][] generateVectorUcl(String type) {
+        List<ChallengeItem> items = getItems(type);
         double[][] paymentAndDuration = new double[items.size()][3];
         Set<String> skillSet = getSkills();
         double[][] skills = new double[items.size()][skillSet.size()];
@@ -133,9 +123,9 @@ public class FeatureExtract {
             temp = items.get(i).getPostingDate().substring(0, 10).split("-");
             paymentAndDuration[i][2] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
         }
-        List<String> winners = getWinners();
+        List<String> winners = getWinners(type);
         int start = (int) (0.9 * winners.size());
-        WordCount[] wordCounts = getWordCount(start);
+        WordCount[] wordCounts = getWordCount(start,type);
         requirementTfIdf = wordCounts[0].getTfIdf();
         requirementWordSize = wordCounts[0].getWordSize();
         titleTfIdf = wordCounts[1].getTfIdf();
@@ -162,8 +152,8 @@ public class FeatureExtract {
     }
 
     //需求和标题使用的长度,没有处理文本
-    public double[][] generateVector() {
-        List<ChallengeItem> items = getItems();
+    public double[][] generateVector(String type) {
+        List<ChallengeItem> items = getItems(type);
         Set<String> set = getSkills();
         double[][] features = new double[items.size()][set.size() + 5];
         ChallengeItem item;
@@ -228,9 +218,8 @@ public class FeatureExtract {
 
     //筛选一部分任务后，获取这些challenge的特征向量
     public double[][] getFeatures(String challengeType) {
-        setType(challengeType);
 //        return generateVectorUcl();
-        return generateVector();
+        return generateVector(challengeType);
     }
 
 }

@@ -24,46 +24,122 @@ public class TaskMsg {
     @Autowired
     private TaskScores taskScores;
 
-    //过滤掉的所有challenges
-    private List<ChallengeItem> items;
-    //challenge 对应的winner
-    private List<String> winners;
+    //不同类型的challenges
+    private List<ChallengeItem> codeItems;
+    private List<ChallengeItem> assemblyItems;
+    private List<ChallengeItem> f2fItems;
+
+    //不同类型challenge 对应的winner
+    private List<String> codeWinners;
+    private List<String> assemblyWinners;
+    private List<String> f2fWinners;
+
     // 选取任务的worker得分情况
-    private List<Map<String, Double>> userScore;
-    // 任务类型
-    private String type;
+    private List<Map<String, Double>> codeScore;
+    private List<Map<String, Double>> assemblyScore;
+    private List<Map<String, Double>> f2fScore;
 
     public TaskMsg() {
-        items = new ArrayList<>();
-        winners = new ArrayList<>();
-        userScore = new ArrayList<>();
+        codeItems = new ArrayList<>();
+        assemblyItems = new ArrayList<>();
+        f2fItems = new ArrayList<>();
+        codeWinners = new ArrayList<>();
+        assemblyWinners = new ArrayList<>();
+        f2fWinners = new ArrayList<>();
+        codeScore = new ArrayList<>();
+        assemblyScore = new ArrayList<>();
+        f2fScore = new ArrayList<>();
+    }
+
+    public void initCode() {
+        if (codeItems.isEmpty()) {
+            synchronized (codeItems) {
+                if (codeItems.isEmpty()) {
+                    getWinnersAndScores("Code",codeItems,codeWinners,codeScore);
+                }
+            }
+        }
+    }
+
+    public void initF2f() {
+        if (f2fItems.isEmpty()) {
+            synchronized (f2fItems) {
+                if (f2fItems.isEmpty()) {
+                    getWinnersAndScores("First2Finish",f2fItems,f2fWinners,f2fScore);
+                }
+            }
+        }
+    }
+
+    public void initAssembly() {
+        if (assemblyItems.isEmpty()) {
+            synchronized (assemblyItems) {
+                if (assemblyItems.isEmpty()) {
+                    getWinnersAndScores("Assembly Competition",assemblyItems,assemblyWinners,assemblyScore);
+                }
+            }
+        }
     }
 
     public List<ChallengeItem> getItems(String type) {
-        if (items.size() == 0 || !type.equals(this.type)) {
-            this.type = type;
-            getWinnersAndScores(type);
+        if (type.equals("Code")) {
+            if (codeItems.isEmpty()) {
+                initCode();
+            }
+            return codeItems;
+        } else if (type.equals("First2Finish")) {
+            if (f2fItems.isEmpty()) {
+                initF2f();
+            }
+            return f2fItems;
+        } else {
+            if (assemblyItems.isEmpty()) {
+                initAssembly();
+            }
+            return assemblyItems;
         }
-        return items;
     }
 
     public List<String> getWinners(String type) {
-        if (items.size() == 0 || !type.equals(this.type)) {
-            this.type = type;
-            getWinnersAndScores(type);
+        if (type.equals("First2Finish")) {
+            if (f2fWinners.isEmpty()) {
+                initF2f();
+            }
+            return f2fWinners;
+        } else if (type.equals("Code")) {
+            if (codeWinners.isEmpty()) {
+                initCode();
+            }
+            return codeWinners;
+        } else {
+            if (assemblyWinners.isEmpty()) {
+                initAssembly();
+            }
+            return assemblyWinners;
         }
-        return winners;
     }
 
     public List<Map<String, Double>> getUserScore(String type) {
-        if (items.size() == 0 || !type.equals(this.type)) {
-            getWinnersAndScores(type);
+        if (type.equals("Assembly Competition")) {
+            if (assemblyScore.isEmpty()) {
+                initAssembly();
+            }
+            return assemblyScore;
+        } else if (type.equals("Code")) {
+            if (codeScore.isEmpty()) {
+                initCode();
+            }
+            return codeScore;
+        } else {
+            if (f2fScore.isEmpty()) {
+                initF2f();
+            }
+            return f2fScore;
         }
-        return userScore;
     }
 
     // 从所有的任务中进行筛选，过滤出一部分任务，计算winner、tasks，以及开发者所得分数
-    public void getWinnersAndScores(String challengeType) {
+    public void getWinnersAndScores(String challengeType,List<ChallengeItem>items,List<String>winners,List<Map<String, Double>>userScore) {
         List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
         Map<String, Integer> map = new HashMap<>();
         Set<Integer> challengeSet = new HashSet<>();
@@ -111,6 +187,5 @@ public class TaskMsg {
         Set<String> sets = new HashSet<>(winners);
         System.out.println(winners.size() + "\t" + sets.size());
     }
-
 
 }

@@ -32,7 +32,7 @@ public class TaskScores {
     }
 
     // 获取task的获胜者
-    public Map<Integer, String> getWinners() {
+    public synchronized Map<Integer, String> getWinners() {
         if (winners.isEmpty()) {
             getAllWorkerScores();
         }
@@ -41,7 +41,7 @@ public class TaskScores {
 
 
     // 获得所有开发者的得分
-    public Map<Integer, Map<String, Double>> getAllWorkerScores() {
+    public synchronized Map<Integer, Map<String, Double>> getAllWorkerScores() {
         if (scores.isEmpty()) {
             List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllRegistrant();
             Map<String, Double> score;

@@ -25,10 +25,6 @@ public class TaskRecommend {
     @Autowired
     private TcBayes tcBayes;
     @Autowired
-    private TcJ48 j48;
-    @Autowired
-    private TcLibSvm tcLibSvm;
-    @Autowired
     private LocalClassifier localClassifier;
     @Autowired
     private Cluster cluster;
@@ -44,9 +40,6 @@ public class TaskRecommend {
     private int[][] testData;
 
     public int[][] testSet(int n) {
-        if (testData != null && testData.length > 0) {
-            return testData;
-        }
         int k = n - (int) (0.9 * n), t = n / 2;
         testData = new int[1][k];
         for (int i = 0; i < k; i++) {
@@ -59,7 +52,7 @@ public class TaskRecommend {
     public void localClassifier(String challengeType) {
         System.out.println("Local");
         double[][] features = featureExtract.getFeatures(challengeType);
-        List<String> winners = featureExtract.getWinners();
+        List<String> winners = featureExtract.getWinners(challengeType);
         int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         int[][] num = testSet(winners.size());
@@ -70,8 +63,8 @@ public class TaskRecommend {
                 worker = recommendWorker(tcResult);
                 calculateResult(winners.get(num[k][i]), worker, counts);
                 List<Integer> index = localClassifier.getNeighbors();
-                worker = reliability.rank(worker, index, winners, winners.get(num[k][i]));
-                worker = competition.reRank(index, worker, winners, num[k][i]);
+                worker = reliability.rank(worker, index, winners,challengeType);
+                worker = competition.reRank(index, worker, winners, num[k][i],challengeType);
                 calculateResult(winners.get(num[k][i]), worker, count);
             }
         }
@@ -84,7 +77,7 @@ public class TaskRecommend {
     public void clusterClassifier(String challengeType, int n) {
         System.out.println("Cluster");
         double[][] features = featureExtract.getFeatures(challengeType);
-        List<String> winners = featureExtract.getWinners();
+        List<String> winners = featureExtract.getWinners(challengeType);
         try {
             List<String> worker;
             int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -96,8 +89,8 @@ public class TaskRecommend {
                     worker = recommendWorker(result);
                     calculateResult(winners.get(num[k][i]), worker, counts);
                     List<Integer> index = cluster.getNeighbors();
-                    worker = reliability.rank(worker, index, winners, winners.get(num[k][i]));
-                    worker = competition.reRank(index, worker, winners, num[k][i]);
+                    worker = reliability.rank(worker, index, winners, challengeType);
+                    worker = competition.reRank(index, worker, winners, num[k][i],challengeType);
                     calculateResult(winners.get(num[k][i]), worker, count);
                 }
             }
@@ -112,7 +105,7 @@ public class TaskRecommend {
     // 原始的分类
     public void classifier(String challengeType) {
         double[][] features = featureExtract.getFeatures(challengeType);
-        List<String> winners = featureExtract.getWinners();
+        List<String> winners = featureExtract.getWinners(challengeType);
         List<String> worker;
         int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -131,12 +124,12 @@ public class TaskRecommend {
                 Map<String, Double> tcResult = tcBayes.getRecommendResult(Constant.CLASSIFIER_DIRECTORY + challengeType + "/" + num[k][i], data, num[k][i], user);
                 worker = recommendWorker(tcResult);
                 calculateResult(winners.get(num[k][i]), worker, counts);
-                worker = reliability.rank(worker, index, winners, winners.get(num[k][i]));
+                worker = reliability.rank(worker, index, winners, challengeType);
                 List<Integer> indexs = new ArrayList<>();
                 for (int j = 0; j < num[k][i]; j++) {
                     indexs.add(j);
                 }
-                worker = competition.reRank(indexs, worker, winners, num[k][i]);
+                worker = competition.reRank(indexs, worker, winners, num[k][i],challengeType);
                 calculateResult(winners.get(num[k][i]), worker, count);
             }
         }
@@ -148,8 +141,8 @@ public class TaskRecommend {
     // 协同过滤
     public void contentBased(String challengeType) {
         double[][] features = featureExtract.getFeatures(challengeType);
-        List<String> winners = featureExtract.getWinners();
-        List<Map<String, Double>> scores = featureExtract.getUserScore();
+        List<String> winners = featureExtract.getWinners(challengeType);
+        List<Map<String, Double>> scores = featureExtract.getUserScore(challengeType);
         List<String> worker;
         int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -164,8 +157,8 @@ public class TaskRecommend {
                 for (int j = 0; j < num[k][i]; j++) {
                     index.add(j);
                 }
-                worker = reliability.rank(worker, index, winners, winners.get(num[k][i]));
-                worker = competition.reRank(index, worker, winners, num[k][i]);
+                worker = reliability.rank(worker, index, winners, challengeType);
+                worker = competition.reRank(index, worker, winners, num[k][i],challengeType);
                 calculateResult(winners.get(num[k][i]), worker, count);
             }
         }
@@ -177,12 +170,12 @@ public class TaskRecommend {
     // 考虑tf-idf后的分类推荐结果
     public void getRecommendBayesUcl(String challengeType) {
         double[][] features = featureExtract.getTimesAndAward(challengeType);
-        List<String> winners = featureExtract.getWinners();
+        List<String> winners = featureExtract.getWinners(challengeType);
         int start = (int) (0.9 * winners.size());
         int[] count = new int[]{0, 0, 0, 0};
         List<String> worker;
         for (int i = start; i < winners.size(); i++) {
-            WordCount[] wordCounts = featureExtract.getWordCount(i);
+            WordCount[] wordCounts = featureExtract.getWordCount(i,challengeType);
             Map<String, Double> result = bayes.getRecommendResultUcl(wordCounts, features, winners, i);
             worker = recommendWorker(result);
             calculateResult(winners.get(i), worker, count);

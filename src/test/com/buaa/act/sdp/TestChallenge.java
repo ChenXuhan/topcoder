@@ -88,7 +88,7 @@ public class TestChallenge {
 
     @Test
     public void testMongodb() {
-        mongodb.dealPLDoc("C:\\Users\\YLT\\Desktop\\开发者搜索\\ProgrammingLanguageList.txt");
+//        mongodb.dealPLDoc("C:\\Users\\YLT\\Desktop\\开发者搜索\\ProgrammingLanguageList.txt");
         // mongodb.genMongodbFile();
     }
 
@@ -124,8 +124,8 @@ public class TestChallenge {
     @Test
     public void testChallenge() {
         featureExtract.getFeatures("Assembly Competition");
-        List<ChallengeItem> items = featureExtract.getItems();
-        List<String> winner = featureExtract.getWinners();
+        List<ChallengeItem> items = featureExtract.getItems("Assembly Competition");
+        List<String> winner = featureExtract.getWinners("Assembly Competition");
         System.out.println(items.size() + "\t" + winner.size());
         Map<String, List<Integer>> map = new HashMap<>();
         for (int i = 0; i < winner.size(); i++) {

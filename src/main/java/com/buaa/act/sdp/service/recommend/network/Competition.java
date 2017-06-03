@@ -21,18 +21,11 @@ public class Competition {
     @Autowired
     private TaskScores taskScores;
 
-    // 所有task得分
-    Map<Integer, Map<String, Double>> getAllWorkerScores() {
-        if (scores == null) {
-            scores = taskScores.getAllWorkerScores();
-        }
-        return scores;
-    }
 
     // 获取当前任务的相似任务中worker的得分，分数多少无限制
-    public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner) {
-        Map<Integer, Map<String, Double>> score = getAllWorkerScores();
-        List<ChallengeItem> items = featureExtract.getItems();
+    public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner,String type) {
+        Map<Integer, Map<String, Double>> score = taskScores.getAllWorkerScores();
+        List<ChallengeItem> items = featureExtract.getItems(type);
         List<Map<String, Double>> list = new ArrayList<>();
         for (int i = 0; i < neighbors.size(); i++) {
             list.add(score.get(items.get(neighbors.get(i)).getChallengeId()));
@@ -42,8 +35,8 @@ public class Competition {
     }
 
     // 获取当前任务的相似任务中worker的得分,只考虑80分以上的
-    public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner) {
-        List<Map<String, Double>> lists = featureExtract.getUserScore();
+    public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner,String type) {
+        List<Map<String, Double>> lists = featureExtract.getUserScore(type);
         List<Map<String, Double>> list = new ArrayList<>();
         for (int i = 0; i < neighbors.size(); i++) {
             list.add(lists.get(neighbors.get(i)));
@@ -54,7 +47,7 @@ public class Competition {
 
     // 获取在当前任务前的所有类型任务中参与的worker，id之前
     public List<Map<String, Double>> getAllTypeWorkers(int challengeId, List<String> winner) {
-        Map<Integer, Map<String, Double>> scores = getAllWorkerScores();
+        Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
         Map<Integer, String> allWinners = taskScores.getWinners();
         List<Map<String, Double>> list = new ArrayList<>();
         for (Map.Entry<Integer, String> entry : allWinners.entrySet()) {
@@ -153,12 +146,12 @@ public class Competition {
     }
 
     // 综合分类推荐拍序和输赢次数排序(下标之和越小)
-    public List<String> indexRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n) {
+    public List<String> indexRank(List<Integer> neighbors, List<String> worker, int n,String type) {
         Map<String, Integer> index = getIndex(worker);
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(neighbors, n);
 //        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
-        List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(), winner);
+        List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems(type).get(n).getChallengeId(), winner);
         int[][] relation = getRelationEdge(index, scores, winner);
         int[][] winTimes = new int[worker.size()][2];
         int t;
@@ -200,11 +193,11 @@ public class Competition {
     }
 
     // 综合分类推荐排序和输赢次数排序
-    public List<String> winTimesRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n) {
+    public List<String> winTimesRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n,String type) {
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(neighbors, n);
 //        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
-        List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(), winner);
+        List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems(type).get(n).getChallengeId(), winner);
         Map<String, Integer> index = getIndex(worker);
         int[][] relation = getRelationEdge(index, scores, winner);
         List<String> result = new ArrayList<>();
@@ -226,10 +219,10 @@ public class Competition {
     }
 
     // 综合分类推荐排序和输赢次数排序,每次只处理一名
-    public List<String> reRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n) {
+    public List<String> reRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n,String type) {
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(neighbors, n);
-        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
+        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner,type);
 //        List<Map<String, Double>> scores=getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(),winner);
         Map<String, Integer> index = getIndex(worker);
         int[][] relation = getRelationEdge(index, scores, winner);
@@ -263,11 +256,11 @@ public class Competition {
     }
 
     //分类的结果利用关系重新排序
-    public List<String> uclRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n) {
+    public List<String> uclRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n,String type) {
         List<String> winner = new ArrayList<>();
 //        List<Integer> neighbor = getNeighbors(neighbors, n);
 //        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
-        List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(), winner);
+        List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems(type).get(n).getChallengeId(), winner);
         Map<String, Integer> index = getIndex(worker);
         int[][] attraction = getRelationEdge(index, scores, winner);
         attraction = getUclAttraction(attraction);

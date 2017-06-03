@@ -21,9 +21,6 @@ public class ProjectMsg {
 
     private Map<Integer, List<Integer>> projectIdToChallengeIds;
     private Map<Integer, Integer> challengeToProject;
-    private List<ChallengeItem> codes;
-    private List<ChallengeItem> assemblys;
-    private List<ChallengeItem> first2finishs;
 
     public ProjectMsg() {
         challengeToProject = new HashMap<>();

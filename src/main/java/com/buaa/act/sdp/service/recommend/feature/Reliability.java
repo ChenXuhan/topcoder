@@ -19,13 +19,9 @@ public class Reliability {
     @Autowired
     private Competition competition;
 
-    public List<String> rank(List<String> worker, List<Integer> neighbors, List<String> winners, String str) {
-        return reliabilityRank(worker, winners, neighbors, str);
-    }
-
-    public List<String> reliabilityRank(List<String> worker, List<String> winners, List<Integer> neighbors, String str) {
+    public List<String> rank(List<String> worker, List<Integer> neighbors, List<String> winners,String type) {
         List<String> winner = new ArrayList<>();
-        List<Map<String, Double>> score = competition.getSameTypeWorkers(neighbors, winners, winner);
+        List<Map<String, Double>> score = competition.getSameTypeWorkers(neighbors, winners, winner,type);
         Map<String, Integer> total = new HashMap<>();
         Map<String, Integer> submissionCount = new HashMap<>();
         Map<String, Integer> winCount = new HashMap<>();
@@ -89,8 +85,8 @@ public class Reliability {
     }
 
     public void timeInterval(String challengeType) {
-        List<ChallengeItem> items = featureExtract.getItems();
-        List<String> winners = featureExtract.getWinners();
+        List<ChallengeItem> items = featureExtract.getItems(challengeType);
+        List<String> winners = featureExtract.getWinners(challengeType);
         Map<String, List<String>> map = new HashMap<>();
         String time;
         for (int i = 0; i < items.size(); i++) {
