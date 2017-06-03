@@ -117,7 +117,7 @@ public class FeatureExtract {
                 set.add(str.toLowerCase());
             }
             index = 0;
-            setWorkerSkills(i, index, skills, skillSet, set);
+            setWorkerSkills(index, skills[i], skillSet, set);
             paymentAndDuration[i][0] = Double.parseDouble(items.get(i).getPrize()[0]);
             paymentAndDuration[i][1] = items.get(i).getDuration();
             temp = items.get(i).getPostingDate().substring(0, 10).split("-");
@@ -151,42 +151,45 @@ public class FeatureExtract {
         return features;
     }
 
+    public double[]generateVector(Set<String>set,ChallengeItem item){
+        int index = 0;
+        double[]feature=new double[set.size() + 5];
+        feature[index++] = item.getDetailedRequirements().length();
+        feature[index++] = item.getChallengeName().length();
+        String[] temp = item.getPostingDate().substring(0, 10).split("-");
+        feature[index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        feature[index++] = item.getDuration();
+        double award = 0;
+        for (String str : item.getPrize()) {
+            award += Double.parseDouble(str);
+            break;
+        }
+        feature[index++] = award;
+        Set<String> skill = new HashSet<>();
+        skill.clear();
+        for (String str : item.getTechnology()) {
+            skill.add(str.toLowerCase());
+        }
+        for (String str : item.getPlatforms()) {
+            skill.add(str.toLowerCase());
+        }
+        setWorkerSkills(index, feature, set, skill);
+        return feature;
+    }
+
     //需求和标题使用的长度,没有处理文本
-    public double[][] generateVector(String type) {
+    public double[][] generateVectors(String type) {
         List<ChallengeItem> items = getItems(type);
         Set<String> set = getSkills();
-        double[][] features = new double[items.size()][set.size() + 5];
-        ChallengeItem item;
-        int index;
-        Set<String> skill = new HashSet<>();
+        double[][] features = new double[items.size()][];
         for (int i = 0; i < features.length; i++) {
-            item = items.get(i);
-            index = 0;
-            features[i][index++] = item.getDetailedRequirements().length();
-            features[i][index++] = item.getChallengeName().length();
-            String[] temp = items.get(i).getPostingDate().substring(0, 10).split("-");
-            features[i][index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-            features[i][index++] = item.getDuration();
-            double award = 0;
-            for (String str : item.getPrize()) {
-                award += Double.parseDouble(str);
-                break;
-            }
-            features[i][index++] = award;
-            skill.clear();
-            for (String str : item.getTechnology()) {
-                skill.add(str.toLowerCase());
-            }
-            for (String str : item.getPlatforms()) {
-                skill.add(str.toLowerCase());
-            }
-            setWorkerSkills(i, index, features, set, skill);
+            features[i]=generateVector(set,items.get(i));
         }
         return features;
     }
 
     // 统计任务中的技能
-    public void setWorkerSkills(int k, int index, double[][] features, Set<String> set, Set<String> skill) {
+    public void setWorkerSkills(int index, double[] feature, Set<String> set, Set<String> skill) {
         boolean flag;
         for (String str : set) {
             flag = false;
@@ -197,9 +200,9 @@ public class FeatureExtract {
                 }
             }
             if (flag) {
-                features[k][index++] = 1.0;
+                feature[index++] = 1.0;
             } else {
-                features[k][index++] = 0;
+                feature[index++] = 0;
             }
         }
     }
@@ -219,7 +222,7 @@ public class FeatureExtract {
     //筛选一部分任务后，获取这些challenge的特征向量
     public double[][] getFeatures(String challengeType) {
 //        return generateVectorUcl();
-        return generateVector(challengeType);
+        return generateVectors(challengeType);
     }
 
 }

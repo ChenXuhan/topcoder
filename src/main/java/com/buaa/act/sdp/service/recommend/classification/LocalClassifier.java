@@ -39,6 +39,5 @@ public class LocalClassifier {
         Maths.copy(features, data, winners, winner, neighbors);
         Maths.normalization(data, 5);
         return tcBayes.getRecommendResult(Constant.LOCAL_DIRECTORY + challengeType + "/" + position, data, k - 1, winner);
-//        return tcJ48.getRecommendResult(Constant.LOCAL_DIRECTORY + challengeType + "/" + position, data, k - 1, winner);
     }
 }

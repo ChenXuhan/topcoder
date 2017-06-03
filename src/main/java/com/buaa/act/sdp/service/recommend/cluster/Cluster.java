@@ -67,20 +67,22 @@ public class Cluster {
         return kMeans;
     }
 
-    public Map<String, Double> getRecommendResult(String challengeType, double[][] features, int position, int num, List<String> winners) {
+    public Map<String, Double> getRecommendResult(String challengeType, double[][] features, double[] feature, int position, int num, List<String> winners) {
         //选取聚类的数据集
         List<Integer> neighbors = new ArrayList<>(position + 1);
-        for (int i = 0; i <= position; i++) {
+        for (int i = 0; i < position; i++) {
             neighbors.add(i);
         }
-        double[][] data = new double[neighbors.size()][features[0].length];
-        List<String> user = new ArrayList<>(neighbors.size());
+        double[][] data = new double[position + 1][features[0].length];
+        List<String> user = new ArrayList<>(position + 1);
         Maths.copy(features, data, winners, user, neighbors);
+        data[position] = feature;
+        user.add("?");
         instances = getInstances(Constant.CLUSTER_DIRECTORY + challengeType, data);
-        SimpleKMeans kMeans = buildCluster(neighbors.size() - 1, num);
+        SimpleKMeans kMeans = buildCluster(position, num);
         int k = 0;
         try {
-            k = kMeans.clusterInstance(instances.instance(neighbors.size() - 1));
+            k = kMeans.clusterInstance(instances.instance(position));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,7 +91,7 @@ public class Cluster {
         List<Integer> list = new ArrayList<>();
         list.addAll(map.get(k));
         neighborIndex = map.get(k);
-        list.add(neighbors.size() - 1);
+        list.add(position);
         return getResult(list, user, data, path);
     }
 
@@ -100,7 +102,5 @@ public class Cluster {
         Maths.copy(feature, data, user, winner, list);
 //        Maths.normalization(data,5);
         return tcBayes.getRecommendResult(path, data, list.size() - 1, winner);
-//        return tcJ48.getRecommendResult(path, data, list.size() - 1, winner);
-//        return tcLibSvm.getRecommendResult(path, data, list.size() - 1, winner);
     }
 }

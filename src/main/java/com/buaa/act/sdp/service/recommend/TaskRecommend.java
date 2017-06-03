@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.service.recommend;
 
 import com.buaa.act.sdp.common.Constant;
+import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.recommend.classification.*;
 import com.buaa.act.sdp.service.recommend.cluster.Cluster;
@@ -8,6 +9,7 @@ import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.feature.Reliability;
 import com.buaa.act.sdp.service.recommend.feature.WordCount;
 import com.buaa.act.sdp.service.recommend.network.Competition;
+import com.buaa.act.sdp.service.recommend.result.TaskResult;
 import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,8 @@ public class TaskRecommend {
     private Competition competition;
     @Autowired
     private Reliability reliability;
+    @Autowired
+    private TaskResult taskResult;
 
     private int[][] testData;
 
@@ -60,11 +64,11 @@ public class TaskRecommend {
         for (int k = 0; k < num.length; k++) {
             for (int i = 0; i < num[0].length; i++) {
                 Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, num[k][i], winners);
-                worker = recommendWorker(tcResult);
+                worker = taskResult.recommendWorker(tcResult);
                 calculateResult(winners.get(num[k][i]), worker, counts);
                 List<Integer> index = localClassifier.getNeighbors();
-                worker = reliability.rank(worker, index, winners,challengeType);
-                worker = competition.reRank(index, worker, winners, num[k][i],challengeType);
+                worker = reliability.rank(worker, index, winners, challengeType);
+                worker = competition.reRank(index, worker, winners, num[k][i], challengeType);
                 calculateResult(winners.get(num[k][i]), worker, count);
             }
         }
@@ -78,6 +82,7 @@ public class TaskRecommend {
         System.out.println("Cluster");
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners(challengeType);
+        List<ChallengeItem> items = featureExtract.getItems(challengeType);
         try {
             List<String> worker;
             int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -85,8 +90,8 @@ public class TaskRecommend {
             int[][] num = testSet(winners.size());
             for (int k = 0; k < num.length; k++) {
                 for (int i = 0; i < num[0].length; i++) {
-                    Map<String, Double> result = cluster.getRecommendResult(challengeType, features, num[k][i], n, winners);
-                    worker = recommendWorker(result);
+                    Map<String, Double> result = cluster.getRecommendResult(challengeType, features,features[num[k][i]], num[k][i], n, winners);
+                    worker = taskResult.recommendWorker(result);
                     calculateResult(winners.get(num[k][i]), worker, counts);
                     List<Integer> index = cluster.getNeighbors();
                     worker = reliability.rank(worker, index, winners, challengeType);
@@ -122,14 +127,14 @@ public class TaskRecommend {
                 Maths.copy(features, data, winners, user, index);
                 Maths.normalization(data, 5);
                 Map<String, Double> tcResult = tcBayes.getRecommendResult(Constant.CLASSIFIER_DIRECTORY + challengeType + "/" + num[k][i], data, num[k][i], user);
-                worker = recommendWorker(tcResult);
+                worker = taskResult.recommendWorker(tcResult);
                 calculateResult(winners.get(num[k][i]), worker, counts);
                 worker = reliability.rank(worker, index, winners, challengeType);
                 List<Integer> indexs = new ArrayList<>();
                 for (int j = 0; j < num[k][i]; j++) {
                     indexs.add(j);
                 }
-                worker = competition.reRank(indexs, worker, winners, num[k][i],challengeType);
+                worker = competition.reRank(indexs, worker, winners, num[k][i], challengeType);
                 calculateResult(winners.get(num[k][i]), worker, count);
             }
         }
@@ -151,14 +156,14 @@ public class TaskRecommend {
         for (int k = 0; k < num.length; k++) {
             for (int i = 0; i < num[0].length; i++) {
                 Map<String, Double> cbmResult = contentBase.getRecommendResult(features, num[k][i], scores, winners);
-                worker = recommendWorker(cbmResult);
+                worker = taskResult.recommendWorker(cbmResult);
                 calculateResult(winners.get(num[k][i]), worker, counts);
                 List<Integer> index = new ArrayList<>();
                 for (int j = 0; j < num[k][i]; j++) {
                     index.add(j);
                 }
                 worker = reliability.rank(worker, index, winners, challengeType);
-                worker = competition.reRank(index, worker, winners, num[k][i],challengeType);
+                worker = competition.reRank(index, worker, winners, num[k][i], challengeType);
                 calculateResult(winners.get(num[k][i]), worker, count);
             }
         }
@@ -175,9 +180,9 @@ public class TaskRecommend {
         int[] count = new int[]{0, 0, 0, 0};
         List<String> worker;
         for (int i = start; i < winners.size(); i++) {
-            WordCount[] wordCounts = featureExtract.getWordCount(i,challengeType);
+            WordCount[] wordCounts = featureExtract.getWordCount(i, challengeType);
             Map<String, Double> result = bayes.getRecommendResultUcl(wordCounts, features, winners, i);
-            worker = recommendWorker(result);
+            worker = taskResult.recommendWorker(result);
             calculateResult(winners.get(i), worker, count);
         }
         for (int i = 0; i < count.length; i++) {
@@ -185,28 +190,11 @@ public class TaskRecommend {
         }
     }
 
-    //分类结果排序
-    public List<String> recommendWorker(Map<String, Double> map) {
-        List<String> workers = new ArrayList<>();
-        List<Map.Entry<String, Double>> list = new ArrayList<>();
-        list.addAll(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
-            @Override
-            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-                return o2.getValue().compareTo(o1.getValue());
-            }
-        });
-        for (int i = 0; i < list.size(); i++) {
-            workers.add(list.get(i).getKey());
-        }
-        return workers;
-    }
-
     public List<String> recommendWorker(List<Map<String, Double>> list) {
         Map<String, Double> result = new HashMap<>();
         Map<String, Integer> count = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
-            List<String> worker = recommendWorker(list.get(i));
+            List<String> worker = taskResult.recommendWorker(list.get(i));
             for (int j = 0; j < worker.size(); j++) {
                 double k = result.getOrDefault(worker.get(j), -1.0);
                 if (k >= 0) {

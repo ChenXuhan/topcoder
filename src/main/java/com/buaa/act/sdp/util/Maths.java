@@ -131,9 +131,7 @@ public class Maths {
             for (int j = 0; j < column; j++) {
                 data[i][j] = features[index.get(i)][j];
             }
-            if (winners != null) {
-                user.add(winners.get(index.get(i)));
-            }
+            user.add(winners.get(index.get(i)));
         }
     }
 }
