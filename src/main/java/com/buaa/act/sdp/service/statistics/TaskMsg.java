@@ -20,7 +20,7 @@ public class TaskMsg {
     @Autowired
     private ChallengeItemDao challengeItemDao;
     @Autowired
-    private TaskFilter taskFilter;
+    private MsgFilter msgFilter;
     @Autowired
     private TaskScores taskScores;
 
@@ -79,6 +79,35 @@ public class TaskMsg {
                 }
             }
         }
+    }
+
+    public List<ChallengeItem>getChallenges(Set<Integer>set){
+        List<ChallengeItem>items=new ArrayList<>(set.size());
+        if(codeItems.isEmpty()){
+            initCode();
+        }
+        for(ChallengeItem item:codeItems){
+            if(set.contains(item.getChallengeId())){
+                items.add(item);
+            }
+        }
+        if(f2fItems.isEmpty()){
+            initF2f();
+        }
+        for(ChallengeItem item:f2fItems){
+            if(set.contains(item.getChallengeId())){
+                items.add(item);
+            }
+        }
+        if(assemblyItems.isEmpty()){
+            initAssembly();
+        }
+        for(ChallengeItem item:assemblyItems){
+            if(set.contains(item.getChallengeId())){
+                items.add(item);
+            }
+        }
+        return items;
     }
 
     public List<ChallengeItem> getItems(String type) {
@@ -157,7 +186,7 @@ public class TaskMsg {
                 }
             } else {
                 challengeItem = challengeItemDao.getChallengeItemById(challengeSubmission.getChallengeID());
-                if (taskFilter.filterChallenge(challengeItem, challengeType)) {
+                if (msgFilter.filterChallenge(challengeItem, challengeType)) {
                     challengeSet.add(challengeItem.getChallengeId());
                     challengeItems.add(challengeItem);
                     if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {

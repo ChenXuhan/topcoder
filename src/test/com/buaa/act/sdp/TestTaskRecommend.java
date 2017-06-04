@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:conf/applicationContext.xml")
-public class TestRecommend {
+public class TestTaskRecommend {
 
     @Autowired
     private FeatureExtract featureExtract;

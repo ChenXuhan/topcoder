@@ -36,18 +36,25 @@ public class ProjectMsg {
     }
 
     public void challengeProjectMapping() {
-        List<Map<String, Integer>> list = challengeItemDao.getProjectId();
+        List<Map<String, Object>> list = challengeItemDao.getProjectId();
         List<Integer> challengeIds;
-        for (Map<String, Integer> map : list) {
-            challengeIds = projectIdToChallengeIds.getOrDefault(map.get("projectId"), null);
-            if (challengeIds != null) {
-                challengeIds.add(map.get("challengeId"));
-            } else {
-                challengeIds = new ArrayList<>();
-                challengeIds.add(map.get("challengeId"));
-                projectIdToChallengeIds.put(map.get("projectId"), challengeIds);
+        int challengeId, projectId;
+        String type;
+        for (Map<String, Object> map : list) {
+            challengeId = Integer.parseInt(map.get("challengeId").toString());
+            projectId = Integer.parseInt(map.get("projectId").toString());
+            type = map.get("challengeType").toString();
+            if (type.equals("Code") || type.equals("First2Finish") || type.equals("Assembly Competition")) {
+                challengeIds = projectIdToChallengeIds.getOrDefault(projectId, null);
+                if (challengeIds != null) {
+                    challengeIds.add(challengeId);
+                } else {
+                    challengeIds = new ArrayList<>();
+                    challengeIds.add(challengeId);
+                    projectIdToChallengeIds.put(projectId, challengeIds);
+                }
             }
-            challengeToProject.put(map.get("challengeId"), map.get("projectId"));
+            challengeToProject.put(challengeId, projectId);
         }
     }
 
@@ -57,6 +64,5 @@ public class ProjectMsg {
         }
         return challengeToProject;
     }
-
 
 }

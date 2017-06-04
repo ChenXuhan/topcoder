@@ -38,7 +38,7 @@ public interface ChallengeItemDao {
 
     double getDifficultyDegree(@Param("challengeId") int challengeId);
 
-    List<Map<String, Integer>> getProjectId();
+    List<Map<String, Object>> getProjectId();
 
     void insertDifficultyDegree(@Param("relationMap") HashMap<Integer, Double> map);
 
