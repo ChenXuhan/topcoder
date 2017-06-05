@@ -45,11 +45,11 @@ public class MsgFilter {
     }
 
     // 获取同一个project所有任务，为计算协作提供数据
-    public List<List<Integer>> getProjectAndChallenges(int project){
+    public List<List<Integer>> getProjectAndChallenges(int projectId){
         List<List<Integer>>list=new ArrayList<>();
         Map<Integer, List<Integer>> projectIdToChallengeIds=projectMsg.getProjectToChallenges();
         for(Map.Entry<Integer,List<Integer>>entry:projectIdToChallengeIds.entrySet()){
-            if(entry.getKey()<project){
+            if(entry.getKey()<projectId){
                 list.add(entry.getValue());
             }
         }

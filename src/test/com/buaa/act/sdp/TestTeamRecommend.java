@@ -1,30 +1,28 @@
 package com.buaa.act.sdp;
 
-import com.buaa.act.sdp.service.recommend.TeamRecommend;
-import com.buaa.act.sdp.service.statistics.ProjectMsg;
+import com.buaa.act.sdp.service.recommend.result.TeamResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by yang on 2017/6/4.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:conf/applicationContext.xml")
-public class TestProject {
+public class TestTeamRecommend {
 
     @Autowired
-    public TeamRecommend teamRecommend;
+    public TeamResult teamResult;
 
     @Test
     public void testProjectId(){
-        double[][]data=teamRecommend.getCollaborations(7282);
-        for(double[]array:data){
-            System.out.println(Arrays.toString(array));
-        }
+        List<String>bestTeam=teamResult.findBestTeam(7282);
+        System.out.println(bestTeam.size());
+        System.out.println(bestTeam);
     }
 }

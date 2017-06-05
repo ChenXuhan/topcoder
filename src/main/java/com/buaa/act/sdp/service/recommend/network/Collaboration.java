@@ -15,20 +15,6 @@ public class Collaboration {
     @Autowired
     private TaskScores taskScores;
 
-    // 候选者下标
-    public Map<String, Integer> getWorkerIndex(List<List<String>> workers) {
-        Map<String, Integer> workerIndex = new HashMap<>();
-        int index = 0;
-        for (List<String> list : workers) {
-            for (String worker : list) {
-                if (!workerIndex.containsKey(worker)) {
-                    workerIndex.put(worker, index++);
-                }
-            }
-        }
-        return workerIndex;
-    }
-
     // 一个project内的协作统计
     public void countCollaboration(Map<String, Integer> index, int[][] colCount, int[] taskCount, double[][] colScores, List<Map<String, Double>> score) {
         Set<String> set = new HashSet<>();
@@ -37,21 +23,23 @@ public class Collaboration {
         for (int i = 0; i < score.size(); i++) {
             map = score.get(i);
             List<String> list = new ArrayList<>();
-            for (Map.Entry<String, Double> entry : map.entrySet()) {
-                if (index.containsKey(entry.getKey())) {
-                    list.add(entry.getKey());
-                    m = index.get(entry.getKey());
-                    taskCount[m]++;
-                    for (String user : set) {
-                        n = index.get(user);
-                        colCount[m][n]++;
-                        colCount[n][m]++;
-                        colScores[m][n] += entry.getValue();
-                        colScores[n][m] += entry.getValue();
+            if (map != null && !map.isEmpty()) {
+                for (Map.Entry<String, Double> entry : map.entrySet()) {
+                    if (index.containsKey(entry.getKey())) {
+                        list.add(entry.getKey());
+                        m = index.get(entry.getKey());
+                        taskCount[m]++;
+                        for (String user : set) {
+                            n = index.get(user);
+                            colCount[m][n]++;
+                            colCount[n][m]++;
+                            colScores[m][n] += entry.getValue();
+                            colScores[n][m] += entry.getValue();
+                        }
                     }
                 }
+                set.addAll(list);
             }
-            set.addAll(list);
         }
     }
 
@@ -62,15 +50,19 @@ public class Collaboration {
         for (int i = 0; i < colCount.length; i++) {
             for (int j = i; j < colCount.length; j++) {
                 sum = taskCount[i] + taskCount[j];
-                result[i][j] = 1.0 * colCount[i][j] / sum + colScores[i][j] / sum / 100;
-                result[j][i] = 1.0 * colCount[i][j] / sum + colScores[i][j] / sum / 100;
+                if (sum != 0) {
+                    result[i][j] = 1.0 * colCount[i][j] / sum + colScores[i][j] / sum / 100;
+                    result[j][i] = 1.0 * colCount[i][j] / sum + colScores[i][j] / sum / 100;
+                } else {
+                    result[i][j] = 0;
+                    result[j][i] = 0;
+                }
             }
         }
         return result;
     }
 
-    public double[][] generateCollaboration(List<List<String>> workers, List<List<Integer>> challenges) {
-        Map<String, Integer> index = getWorkerIndex(workers);
+    public double[][] generateCollaboration(Map<String, Integer> index, List<List<Integer>> challenges) {
         Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
         int[][] colCount = new int[index.size()][index.size()];
         int[] taskCount = new int[index.size()];
