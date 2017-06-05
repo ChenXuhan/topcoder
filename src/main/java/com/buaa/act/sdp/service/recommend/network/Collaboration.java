@@ -2,7 +2,6 @@ package com.buaa.act.sdp.service.recommend.network;
 
 import com.buaa.act.sdp.service.statistics.TaskScores;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -64,6 +63,7 @@ public class Collaboration {
             for (int j = i; j < colCount.length; j++) {
                 sum = taskCount[i] + taskCount[j];
                 result[i][j] = 1.0 * colCount[i][j] / sum + colScores[i][j] / sum / 100;
+                result[j][i] = 1.0 * colCount[i][j] / sum + colScores[i][j] / sum / 100;
             }
         }
         return result;
@@ -78,7 +78,9 @@ public class Collaboration {
         for (List<Integer> list : challenges) {
             List<Map<String, Double>> score = new ArrayList<>(list.size());
             for (int taskId : list) {
-                score.add(scores.get(taskId));
+                if (scores.containsKey(taskId)) {
+                    score.add(scores.get(taskId));
+                }
             }
             countCollaboration(index, colCount, taskCount, colScores, score);
         }

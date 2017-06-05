@@ -28,7 +28,7 @@ public class ProjectMsg {
     }
 
     // 返回所有project中所有的challengeId
-    public Map<Integer, List<Integer>> getProjectToChallenges() {
+    public synchronized Map<Integer, List<Integer>> getProjectToChallenges() {
         if (projectIdToChallengeIds.isEmpty()) {
             challengeProjectMapping();
         }
@@ -58,7 +58,7 @@ public class ProjectMsg {
         }
     }
 
-    public Map<Integer, Integer> getChallengeToProject() {
+    public synchronized Map<Integer, Integer> getChallengeToProject() {
         if (challengeToProject.isEmpty()) {
             challengeProjectMapping();
         }

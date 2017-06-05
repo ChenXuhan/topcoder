@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
+
 /**
  * Created by yang on 2017/6/4.
  */
@@ -20,6 +22,9 @@ public class TestProject {
 
     @Test
     public void testProjectId(){
-        teamRecommend.getCollaborations(8021);
+        double[][]data=teamRecommend.getCollaborations(7282);
+        for(double[]array:data){
+            System.out.println(Arrays.toString(array));
+        }
     }
 }
