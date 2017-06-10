@@ -90,6 +90,8 @@ public class TestChallenge {
     public void testMongodb() {
 //        mongodb.dealPLDoc("C:\\Users\\YLT\\Desktop\\开发者搜索\\ProgrammingLanguageList.txt");
         // mongodb.genMongodbFile();
+        //mongodb.dealPLDoc("C:\\Users\\YLT\\Desktop\\开发者搜索\\ProgrammingLanguageList.txt");
+         mongodb.genMongodbFile();
     }
 
     @Test
