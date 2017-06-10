@@ -10,6 +10,7 @@ import com.buaa.act.sdp.model.user.User;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -58,7 +60,7 @@ public class AbilityFileMongodb {
         ArrayList<User> allUser = (ArrayList<User>) userDao.getAllUsers();
         for (User user : allUser
                 ) {
-            if (user.getSkillDegree() == null) {
+            if (user.getSkillDegree() == null || user.getId() == 21506) {
                 continue;
             }
             collection.insertOne(getEachAbility(user.getId()));
@@ -75,13 +77,22 @@ public class AbilityFileMongodb {
         //profile添加
         Document profileJson = new Document();
         profileJson.append("name", user.getHandle());
+        profileJson.append("mail", "");
         profileJson.append("country", user.getCountry());
         profileJson.append("address", "");
         profileJson.append("url", "https://www.topcoder.com/members/" + user.getHandle() + "/");
         String date = user.getMemberSince().substring(0, user.getMemberSince().indexOf('T'));
         profileJson.append("joinDate", date);
-        profileJson.append("mail", "");
-        profileJson.append("belongTo", 2);
+        profileJson.append("belongTo", 1);
+        profileJson.append("aboutMe", user.getQuote());
+        profileJson.append("age","");
+        profileJson.append("imageUrl",user.getPhotoLink());
+        String[] skills = user.getSkills();
+        if(skills != null && skills[0] !=""){
+        profileJson.append("tagsAppend",new ArrayList<String>(Arrays.asList(skills)));}
+        else{
+            profileJson.append("tagsAppend",new ArrayList<String>());
+        }
         document.append("profile", profileJson);
 
         //skill添加
@@ -198,17 +209,51 @@ public class AbilityFileMongodb {
     *删除项目requirements中的html标签
     * */
     public void HTMLTagDelete() {
-        ArrayList<ChallengeItem> allChallenges = (ArrayList<ChallengeItem>) challengeItemDao.getAllChallenges();
+      /*  ArrayList<ChallengeItem> allChallenges = (ArrayList<ChallengeItem>) challengeItemDao.getAllChallenges();
         for (ChallengeItem challenge : allChallenges
                 ) {
             String str = challenge.getDetailedRequirements();
             if (str != null) {
                 str = str.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
-                        .replaceAll("</[a-zA-Z]+[1-9]?>", "").replaceAll("&nbsp;", "").replaceAll("\n", "").replaceAll("&lt;", "").replaceAll("&gt;", "").replaceAll("&quot;", "").replaceAll("&qpos;", "").replaceAll("&amp;", "");
+                        .replaceAll("</[a-zA-Z]+[1-9]?>", "").replaceAll("&nbsp;", "").replaceAll("\\n", "").replaceAll("&lt;", "").replaceAll("&gt;", "").replaceAll("&quot;", "").replaceAll("&qpos;", "").replaceAll("&amp;", "");
                 System.out.println(challenge.getChallengeId());
                 challengeItemDao.setHandledRequirements(str, challenge.getChallengeId());
+            }
+        }*/
+        String encoding = "GBK";
+        File file = new File("C:\\Users\\YLT\\Desktop\\新建文本文档.txt");
+        if (file.isFile() && file.exists()) { //判断文件是否存在
+            InputStreamReader read = null;//考虑到编码格式
+            try {
+                read = new InputStreamReader(new FileInputStream(file), encoding);
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt = null;
+                while ((lineTxt = bufferedReader.readLine()) != null && lineTxt != "") {
+                    lineTxt = lineTxt.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
+                            .replaceAll("</[a-zA-Z]+[1-9]?>", "").replaceAll("&nbsp;", "").replaceAll("\\\\t","").replaceAll("\\\\n", "").replaceAll("&lt;", "").replaceAll("&gt;", "").replaceAll("&quot;", "").replaceAll("&qpos;", "").replaceAll("&amp;", "");
+                    System.out.println(lineTxt);
+                }
+                read.close();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
+
+    public void updateMongodb(int id){
+        // 连接到 mongodb 服务
+        MongoClient mongoClient = new MongoClient("192.168.7.113", 30000);
+        // 连接到数据库
+        MongoDatabase mongoDatabase = mongoClient.getDatabase("topcoder");
+        MongoCollection collection = mongoDatabase.getCollection("UserInfo");
+
+        Document doc = (Document) collection.find(Filters.eq("userID",4021));
+        collection.updateOne(Filters.eq("userID",4021),new Document("$set",new Document("document",doc.get("document").toString().replaceAll("\\\\t","").replaceAll("\\\\n", ""))));
+
+    }
 }
