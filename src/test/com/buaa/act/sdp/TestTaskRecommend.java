@@ -38,13 +38,11 @@ public class TestTaskRecommend {
 //        Code
 //        First2Finish
 //        Assembly Competition
-        String challengeType = "First2Finish";
-        recommendResult.classifier("Code");
-        recommendResult.contentBased("First2Finish");
-        recommendResult.clusterClassifier("Assembly Competition",3);
-//        recommendResult.clusterClassifier("Code",3);
-//        recommendResult.clusterClassifier("First2Finish",3);
-//        recommendResult.localClassifier("Code");
+        String challengeType = "Assembly Competition";
+//        recommendResult.contentBased(challengeType);
+//        recommendResult.classifier(challengeType);
+        recommendResult.clusterClassifier(challengeType, 4);
+//        recommendResult.localClassifier(challengeType);
     }
 
     @Test
@@ -53,10 +51,10 @@ public class TestTaskRecommend {
     }
 
     @Test
-    public void taskTime(){
-        List<ChallengeItem>items=featureExtract.getItems("First2Finish");
-        List<String>time=new ArrayList<>(items.size());
-        for(ChallengeItem item:items) {
+    public void taskTime() {
+        List<ChallengeItem> items = featureExtract.getItems("First2Finish");
+        List<String> time = new ArrayList<>(items.size());
+        for (ChallengeItem item : items) {
             time.add(item.getPostingDate().substring(0, 10));
         }
 //        Collections.sort(time, new Comparator<String>() {
@@ -73,12 +71,12 @@ public class TestTaskRecommend {
 //                return Integer.parseInt(a[2])-Integer.parseInt(b[2]);
 //            }
 //        });
-        int [][]count=new int[12][12];
-        for(String a:time){
-            count[Integer.parseInt(a.split("-")[0])-2006][Integer.parseInt(a.split("-")[1])-1]++;
+        int[][] count = new int[12][12];
+        for (String a : time) {
+            count[Integer.parseInt(a.split("-")[0]) - 2006][Integer.parseInt(a.split("-")[1]) - 1]++;
         }
-        for(int i=0;i<count.length;i++){
-            System.out.println(2006+i+"\t"+Arrays.toString(count[i]));
+        for (int i = 0; i < count.length; i++) {
+            System.out.println(2006 + i + "\t" + Arrays.toString(count[i]));
         }
     }
 }

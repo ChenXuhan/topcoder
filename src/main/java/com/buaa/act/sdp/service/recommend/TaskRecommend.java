@@ -45,7 +45,7 @@ public class TaskRecommend {
 
     // 测试集如何选取？
     public int[] testDataSet(int n) {
-        int k = n - (int) (0.9 * n);
+        int k = n - (int) (0.5 * n);
         testData = new int[k];
         for (int i = 0; i < k; i++) {
             testData[i] = n - k + i;
@@ -60,20 +60,22 @@ public class TaskRecommend {
         List<String> winners = featureExtract.getWinners(challengeType);
         int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        double[] mpp = new double[20];
+        double[] mpps = new double[20];
         int[] num = testDataSet(winners.size());
         List<String> worker = null;
 
         for (int i = 0; i < num.length; i++) {
             Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, num[i], winners);
             worker = taskResult.recommendWorker(tcResult);
-            calculateResult(winners.get(num[i]), worker, counts);
+            calculateResult(winners.get(num[i]), worker, counts, mpp);
             List<Integer> index = localClassifier.getNeighbors();
-            worker = reliability.rank(worker, index, winners, challengeType);
-            worker = competition.reRank(index, worker, winners, num[i], challengeType);
-            calculateResult(winners.get(num[i]), worker, count);
+            worker = reliability.filter(worker, index, winners, challengeType);
+            worker = competition.refine(index, worker, winners, num[i], challengeType);
+            calculateResult(winners.get(num[i]), worker, count, mpps);
         }
         for (int i = 0; i < counts.length; i++) {
-            System.out.println(1.0 * counts[i] / num.length + "\t" + 1.0 * count[i] / num.length);
+            System.out.println((i + 1) + "\t" + 1.0 * counts[i] / num.length + "\t" + 1.0 * count[i] / num.length + "\t" + mpp[i] / num.length + "\t" + mpps[i] / num.length);
         }
     }
 
@@ -82,23 +84,25 @@ public class TaskRecommend {
         System.out.println("Cluster");
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners(challengeType);
-        List<ChallengeItem> items = featureExtract.getItems(challengeType);
         try {
             List<String> worker;
             int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            double[] mpp = new double[20];
+            double[] mpps = new double[20];
             int[] num = testDataSet(winners.size());
             for (int i = 0; i < num.length; i++) {
                 Map<String, Double> result = cluster.getRecommendResult(challengeType, features, features[num[i]], num[i], n, winners);
                 worker = taskResult.recommendWorker(result);
-                calculateResult(winners.get(num[i]), worker, counts);
+                calculateResult(winners.get(num[i]), worker, counts, mpp);
                 List<Integer> index = cluster.getNeighbors();
-                worker = reliability.rank(worker, index, winners, challengeType);
-                worker = competition.reRank(index, worker, winners, num[i], challengeType);
-                calculateResult(winners.get(num[i]), worker, count);
+                worker = reliability.filter(worker, index, winners, challengeType);
+                worker = competition.refine(index, worker, winners, num[i], challengeType);
+                calculateResult(winners.get(num[i]), worker, count, mpps);
             }
-            for (int j = 0; j < counts.length; j++) {
-                System.out.println(1.0 * counts[j] / num.length + "\t" + 1.0 * count[j] / num.length);
+
+            for (int i = 0; i < counts.length; i++) {
+                System.out.println((i + 1) + "\t" + 1.0 * counts[i] / num.length + "\t" + 1.0 * count[i] / num.length + "\t" + mpp[i] / num.length + "\t" + mpps[i] / num.length);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,6 +116,8 @@ public class TaskRecommend {
         List<String> worker;
         int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        double[] mpp = new double[20];
+        double[] mpps = new double[20];
         int[] num = testDataSet(winners.size());
         System.out.println("UCL");
         for (int i = 0; i < num.length; i++) {
@@ -125,17 +131,18 @@ public class TaskRecommend {
             Maths.normalization(data, 5);
             Map<String, Double> tcResult = tcBayes.getRecommendResult(Constant.CLASSIFIER_DIRECTORY + challengeType + "/" + num[i], data, num[i], user);
             worker = taskResult.recommendWorker(tcResult);
-            calculateResult(winners.get(num[i]), worker, counts);
-            worker = reliability.rank(worker, index, winners, challengeType);
+            calculateResult(winners.get(num[i]), worker, counts, mpp);
+            worker = reliability.filter(worker, index, winners, challengeType);
             List<Integer> indexs = new ArrayList<>();
             for (int j = 0; j < num[i]; j++) {
                 indexs.add(j);
             }
-            worker = competition.reRank(indexs, worker, winners, num[i], challengeType);
-            calculateResult(winners.get(num[i]), worker, count);
+            worker = competition.refine(indexs, worker, winners, num[i], challengeType);
+//            worker = competition.uclRank(indexs, worker, winners, num[i], challengeType);
+            calculateResult(winners.get(num[i]), worker, count, mpps);
         }
         for (int i = 0; i < counts.length; i++) {
-            System.out.println(1.0 * counts[i] / num.length + "\t" + 1.0 * count[i] / num.length);
+            System.out.println((i + 1) + "\t" + 1.0 * counts[i] / num.length + "\t" + 1.0 * count[i] / num.length + "\t" + mpp[i] / num.length + "\t" + mpps[i] / num.length);
         }
     }
 
@@ -147,22 +154,24 @@ public class TaskRecommend {
         List<String> worker;
         int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         int[] counts = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        double[] mpp = new double[20];
+        double[] mpps = new double[20];
         int[] num = testDataSet(winners.size());
         System.out.println("CBM");
         for (int i = 0; i < num.length; i++) {
             Map<String, Double> cbmResult = contentBase.getRecommendResult(features, num[i], scores, winners);
             worker = taskResult.recommendWorker(cbmResult);
-            calculateResult(winners.get(num[i]), worker, counts);
+            calculateResult(winners.get(num[i]), worker, counts, mpp);
             List<Integer> index = new ArrayList<>();
             for (int j = 0; j < num[i]; j++) {
                 index.add(j);
             }
-            worker = reliability.rank(worker, index, winners, challengeType);
-            worker = competition.reRank(index, worker, winners, num[i], challengeType);
-            calculateResult(winners.get(num[i]), worker, count);
+            worker = reliability.filter(worker, index, winners, challengeType);
+            worker = competition.refine(index, worker, winners, num[i], challengeType);
+            calculateResult(winners.get(num[i]), worker, count, mpps);
         }
         for (int i = 0; i < counts.length; i++) {
-            System.out.println(1.0 * counts[i] / num.length + "\t" + 1.0 * count[i] / num.length);
+            System.out.println((i + 1) + "\t" + 1.0 * counts[i] / num.length + "\t" + 1.0 * count[i] / num.length + "\t" + mpp[i] / num.length + "\t" + mpps[i] / num.length);
         }
     }
 
@@ -177,7 +186,7 @@ public class TaskRecommend {
             WordCount[] wordCounts = featureExtract.getWordCount(i, challengeType);
             Map<String, Double> result = bayes.getRecommendResultUcl(wordCounts, features, winners, i);
             worker = taskResult.recommendWorker(result);
-            calculateResult(winners.get(i), worker, count);
+            calculateResult(winners.get(i), worker, count, null);
         }
         for (int i = 0; i < count.length; i++) {
             System.out.println(1.0 * count[i] / (winners.size() - start));
@@ -237,11 +246,12 @@ public class TaskRecommend {
         return workers;
     }
 
-    public void calculateResult(String winner, List<String> worker, int[] count) {
+    public void calculateResult(String winner, List<String> worker, int[] count, double[] mpp) {
         for (int j = 0; j < count.length; j++) {
             for (int k = 0; k < worker.size() && k <= j; k++) {
                 if (winner.equals(worker.get(k))) {
                     count[j]++;
+                    mpp[j] += 1.0 / (k + 1);
                     break;
                 }
             }

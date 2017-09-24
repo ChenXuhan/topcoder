@@ -23,7 +23,7 @@ public class Competition {
 
 
     // 获取当前任务的相似任务中worker的得分，分数多少无限制
-    public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner,String type) {
+    public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
         Map<Integer, Map<String, Double>> score = taskScores.getAllWorkerScores();
         List<ChallengeItem> items = featureExtract.getItems(type);
         List<Map<String, Double>> list = new ArrayList<>();
@@ -35,7 +35,7 @@ public class Competition {
     }
 
     // 获取当前任务的相似任务中worker的得分,只考虑80分以上的
-    public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner,String type) {
+    public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
         List<Map<String, Double>> lists = featureExtract.getUserScore(type);
         List<Map<String, Double>> list = new ArrayList<>();
         for (int i = 0; i < neighbors.size(); i++) {
@@ -101,11 +101,22 @@ public class Competition {
     }
 
     // 赢次数减输的次数
-    public int[][] getAttraction(int[][] attraction) {
-        int[][] attr = new int[attraction.length][attraction.length];
+    public double[][] getAttraction(int[][] attraction) {
+        double[][] attr = new double[attraction.length][attraction.length];
+        int[] edge = new int[attraction.length];
         for (int i = 0; i < attraction.length; i++) {
             for (int j = i + 1; j < attraction.length; j++) {
-                attr[i][j] = attraction[j][i] - attraction[i][j];
+                edge[i] += attraction[i][j] + attraction[j][i];
+                edge[j] += attraction[i][j] + attraction[j][i];
+            }
+        }
+        for (int i = 0; i < attraction.length; i++) {
+            for (int j = i + 1; j < attraction.length; j++) {
+                attr[i][j] = 0;
+                //attr[i][j] = 0.9 * (attraction[j][i] - attraction[i][j]) / (attraction[i][j] + attraction[j][i]) + 0.1 * (attraction[i][j] + attraction[j][i]) / (edge[i] + edge[j]);
+                if ((attraction[i][j] + attraction[j][i]) != 0) {
+                    attr[i][j] = 0.5 * (attraction[j][i] - attraction[i][j]) / (attraction[i][j] + attraction[j][i]) + 0.5 * (attraction[i][j] + attraction[j][i]) / (edge[i] + edge[j]);
+                }
                 attr[j][i] = -attr[i][j];
             }
         }
@@ -146,7 +157,7 @@ public class Competition {
     }
 
     // 综合分类推荐拍序和输赢次数排序(下标之和越小)
-    public List<String> indexRank(List<Integer> neighbors, List<String> worker, int n,String type) {
+    public List<String> indexRank(List<Integer> neighbors, List<String> worker, int n, String type) {
         Map<String, Integer> index = getIndex(worker);
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(neighbors, n);
@@ -193,7 +204,7 @@ public class Competition {
     }
 
     // 综合分类推荐排序和输赢次数排序
-    public List<String> winTimesRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n,String type) {
+    public List<String> winTimesRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n, String type) {
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(neighbors, n);
 //        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
@@ -219,17 +230,17 @@ public class Competition {
     }
 
     // 综合分类推荐排序和输赢次数排序,每次只处理一名
-    public List<String> reRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n,String type) {
+    public List<String> refine(List<Integer> neighbors, List<String> worker, List<String> winners, int n, String type) {
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(neighbors, n);
-        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner,type);
+        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner, type);
 //        List<Map<String, Double>> scores=getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(),winner);
         Map<String, Integer> index = getIndex(worker);
         int[][] relation = getRelationEdge(index, scores, winner);
-        int[][] attraction = getAttraction(relation);
+        double[][] attraction = getAttraction(relation);
         int[][] attr = new int[worker.size()][];
         for (int i = 0; i < worker.size(); i++) {
-            attr[i] = sortAttraction(attraction[i]);
+            attr[i] = sortRelation(attraction[i]);
         }
         List<String> result = new ArrayList<>();
         for (int i = 0; i < worker.size(); i++) {
@@ -241,10 +252,10 @@ public class Competition {
                 num[attr[i][j]] = attr[i][j] + j;
             }
             int count = 0;
-            num = sortAttraction(num);
-            for (int j = num.length - 1; j >= 0; j--) {
-                if (!result.contains(worker.get(num[j]))) {
-                    if (count >= 1) {
+            num = sortWorkerIndex(num);
+            for (int j = 0; j < num.length; j++) {
+                if (num[j] - i <= 5 && !result.contains(worker.get(num[j]))) {
+                    if (count >= 5) {
                         break;
                     }
                     count++;
@@ -256,10 +267,8 @@ public class Competition {
     }
 
     //分类的结果利用关系重新排序
-    public List<String> uclRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n,String type) {
+    public List<String> uclRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n, String type) {
         List<String> winner = new ArrayList<>();
-//        List<Integer> neighbor = getNeighbors(neighbors, n);
-//        List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner);
         List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems(type).get(n).getChallengeId(), winner);
         Map<String, Integer> index = getIndex(worker);
         int[][] attraction = getRelationEdge(index, scores, winner);
@@ -268,8 +277,8 @@ public class Competition {
         int[][] attr = new int[worker.size()][];
         int[][] replu = new int[worker.size()][];
         for (int i = 0; i < worker.size(); i++) {
-            attr[i] = sortAttraction(attraction[i]);
-            replu[i] = sortReplusion(repulsion[i]);
+            attr[i] = sortWorkerIndex(attraction[i]);
+            replu[i] = sortRelation(repulsion[i]);
         }
         List<String> result = new ArrayList<>();
         Set<Integer> set = new HashSet<>();
@@ -285,7 +294,7 @@ public class Competition {
                     set.add(array[j]);
                     count++;
                 }
-                if (count >= 3) {
+                if (count >= 1) {
                     break;
                 }
             }
@@ -304,9 +313,10 @@ public class Competition {
             if (!res.contains(result.get(i))) {
                 res.add(result.get(i));
             }
-            for (int j = 0; j < 2 && j < attr[k].length; j++) {
+            for (int j = attr[k].length - 1; j >= 0; j--) {
                 if (!res.contains(worker.get(attr[k][j]))) {
                     res.add(worker.get(attr[k][j]));
+                    break;
                 }
             }
         }
@@ -314,27 +324,7 @@ public class Competition {
     }
 
     // 吸引力排序
-    public int[] sortAttraction(int[] num) {
-        int[][] array = new int[num.length][2];
-        for (int i = 0; i < num.length; i++) {
-            array[i][0] = i;
-            array[i][1] = num[i];
-        }
-        Arrays.sort(array, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                return o2[1] - o1[1];
-            }
-        });
-        int[] res = new int[num.length];
-        for (int i = 0; i < num.length; i++) {
-            res[i] = array[i][0];
-        }
-        return res;
-    }
-
-    //排斥力排序
-    public int[] sortReplusion(double[] num) {
+    public int[] sortRelation(double[] num) {
         Map<Integer, Double> map = new HashMap<>();
         for (int i = 0; i < num.length; i++) {
             map.put(i, num[i]);
@@ -343,7 +333,7 @@ public class Competition {
         Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>() {
             @Override
             public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
-                return o2.getValue().compareTo(o1.getValue());
+                return Double.compare(o2.getValue(), o1.getValue());
             }
         });
         int[] res = new int[num.length];
@@ -352,4 +342,25 @@ public class Competition {
         }
         return res;
     }
+
+    //最小下标排序
+    public int[] sortWorkerIndex(int[] num) {
+        int[][] nums = new int[num.length][2];
+        for (int i = 0; i < num.length; i++) {
+            nums[i][0] = i;
+            nums[i][1] = num[i];
+        }
+        Arrays.sort(nums, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[1] - o2[1];
+            }
+        });
+        int[] res = new int[num.length];
+        for (int i = 0; i < nums.length; i++) {
+            res[i] = nums[i][0];
+        }
+        return res;
+    }
+
 }

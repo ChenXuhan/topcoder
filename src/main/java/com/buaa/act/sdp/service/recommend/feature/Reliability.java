@@ -19,9 +19,9 @@ public class Reliability {
     @Autowired
     private Competition competition;
 
-    public List<String> rank(List<String> worker, List<Integer> neighbors, List<String> winners,String type) {
+    public List<String> filter(List<String> worker, List<Integer> neighbors, List<String> winners, String type) {
         List<String> winner = new ArrayList<>();
-        List<Map<String, Double>> score = competition.getSameTypeWorkers(neighbors, winners, winner,type);
+        List<Map<String, Double>> score = competition.getSameTypeWorkers(neighbors, winners, winner, type);
         Map<String, Integer> total = new HashMap<>();
         Map<String, Integer> submissionCount = new HashMap<>();
         Map<String, Integer> winCount = new HashMap<>();
@@ -59,16 +59,26 @@ public class Reliability {
         Map<Integer, Double> winRate = new HashMap<>();
         Map<Integer, Double> subRate = new HashMap<>();
         int subTotal = 0, winTotal = 0, regTotal = 0;
+        double avgWinRate = 0, avgSubRate = 0;
         for (int i = 0; i < worker.size(); i++) {
-            if (i < 20) {
-                winTotal += winCount.get(worker.get(i));
-                subTotal += submissionCount.get(worker.get(i));
-                regTotal += total.get(worker.get(i));
-            }
+//            if (i < 20) {
+            winTotal += winCount.get(worker.get(i));
+            subTotal += submissionCount.get(worker.get(i));
+            regTotal += total.get(worker.get(i));
+//            }
             winRate.put(i, 1.0 * winCount.get(worker.get(i)) / submissionCount.get(worker.get(i)));
+            avgWinRate += 1.0 * winCount.get(worker.get(i)) / submissionCount.get(worker.get(i));
             subRate.put(i, 1.0 * submissionCount.get(worker.get(i)) / total.get(worker.get(i)));
+            avgSubRate += 1.0 * submissionCount.get(worker.get(i)) / total.get(worker.get(i));
+//            if(i<20) {
+//                System.out.print(worker.get(i) + ":" + 1.0 * winCount.get(worker.get(i)) / submissionCount.get(worker.get(i)) + ":" + 1.0 * submissionCount.get(worker.get(i)) / total.get(worker.get(i)) + " ");
+//            }
         }
+        avgWinRate /= worker.size();
+        avgSubRate /= worker.size();
         List<String> result = new ArrayList<>();
+        //  System.out.println();
+        // System.out.println(avgWinRate+" "+avgSubRate);
         for (int i = 0; i < worker.size(); i++) {
 //            if (0.15 + winRate.get(i) < 1.0 * winTotal / subTotal) {
 //                filter.add(i);
@@ -76,7 +86,10 @@ public class Reliability {
 //            if (0.3 + subRate.get(i) < 1.0 * subTotal / regTotal) {
 //                filter.add(i);
 //            }
-            if (0.3 + 1.0 * subRate.get(i) < 1.0 * subTotal / regTotal && 0.15 + 1.0 * winRate.get(i) < 1.0 * winTotal / subTotal) {
+//            if (0.3 + 1.0 * subRate.get(i) < 1.0 * subTotal / regTotal && 0.15 + 1.0 * winRate.get(i) < 1.0 * winTotal / subTotal) {
+//                continue;
+//            }
+            if ( winRate.get(i) < avgWinRate && i > 5) {
                 continue;
             }
             result.add(worker.get(i));

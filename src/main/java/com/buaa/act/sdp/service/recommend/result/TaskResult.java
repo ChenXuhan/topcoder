@@ -42,8 +42,8 @@ public class TaskResult {
         double[] feature = featureExtract.generateVector(featureExtract.getSkills(), item);
         List<String> worker = recommendWorker(cluster.getRecommendResult(item.getChallengeType(), features, feature, position + 1, 3, winners));
         List<Integer> index = cluster.getNeighbors();
-        worker = reliability.rank(worker, index, winners, item.getChallengeType());
-        worker = competition.reRank(index, worker, winners, position+1,item.getChallengeType());
+        worker = reliability.filter(worker, index, winners, item.getChallengeType());
+        worker = competition.refine(index, worker, winners, position+1,item.getChallengeType());
         return worker;
     }
 
