@@ -25,10 +25,14 @@ public class TaskScores {
     //challengeId对应的提交人的得分
     private Map<Integer, Map<String, Double>> scores;
     private Map<Integer, String> winners;
+    private Map<Integer, Map<String, Integer>> registerDate;
+    private Map<Integer, Map<String, Integer>> submitDate;
 
     public TaskScores() {
         scores = new HashMap<>();
         winners = new HashMap<>();
+        registerDate = new HashMap<>();
+        submitDate = new HashMap<>();
     }
 
     // 获取task的获胜者
@@ -39,12 +43,27 @@ public class TaskScores {
         return winners;
     }
 
+    public synchronized Map<Integer,Map<String,Integer>>getRegisterDate(){
+        if(registerDate.isEmpty()){
+            getAllWorkerScores();
+        }
+        return registerDate;
+    }
+
+    public synchronized Map<Integer,Map<String,Integer>>getSubmitDate(){
+        if(submitDate.isEmpty()){
+            getAllWorkerScores();
+        }
+        return submitDate;
+    }
 
     // 获得所有开发者的得分
     public synchronized Map<Integer, Map<String, Double>> getAllWorkerScores() {
         if (scores.isEmpty()) {
             List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllRegistrant();
             Map<String, Double> score;
+            Map<String, Integer> time;
+            int date;
             for (ChallengeRegistrant challengeRegistrant : challengeRegistrants) {
                 score = scores.getOrDefault(challengeRegistrant.getChallengeID(), null);
                 if (score != null) {
@@ -54,6 +73,22 @@ public class TaskScores {
                     score.put(challengeRegistrant.getHandle(), 0.0);
                     scores.put(challengeRegistrant.getChallengeID(), score);
                 }
+
+                //记录开发者的注册时间
+                time = registerDate.getOrDefault(challengeRegistrant.getChallengeID(), null);
+                String[] temp = challengeRegistrant.getRegistrationDate().substring(0, 10).split("-");
+                if (temp != null) {
+                    date = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+                } else {
+                    date = 0;
+                }
+                if (time != null) {
+                    time.put(challengeRegistrant.getHandle(), date);
+                } else {
+                    time = new HashMap<>();
+                    time.put(challengeRegistrant.getHandle(), date);
+                    registerDate.put(challengeRegistrant.getChallengeID(), time);
+                }
             }
             updateWorkerScores();
         }
@@ -61,10 +96,12 @@ public class TaskScores {
     }
 
     // 依据submission表更新worker的得分
-    public void updateWorkerScores() {
+    private void updateWorkerScores() {
         List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
+        Map<String, Double> score;
+        Map<String,Integer>time;
+        int date;
         for (ChallengeSubmission challengeSubmission : list) {
-            Map<String, Double> score;
             if (scores.containsKey(challengeSubmission.getChallengeID())) {
                 score = scores.get(challengeSubmission.getChallengeID());
                 if (score.containsKey(challengeSubmission.getHandle()) && score.get(challengeSubmission.getHandle()).doubleValue() >= Double.parseDouble(challengeSubmission.getFinalScore())) {
@@ -76,9 +113,26 @@ public class TaskScores {
                 score = new HashMap<>();
                 score.put(challengeSubmission.getHandle(), Double.parseDouble(challengeSubmission.getFinalScore()));
             }
+
             scores.put(challengeSubmission.getChallengeID(), score);
             if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
                 winners.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
+            }
+
+            // 记录开发者提交时间
+            time=submitDate.getOrDefault(challengeSubmission.getChallengeID(),null);
+            String[] temp = challengeSubmission.getSubmissionDate().substring(0, 10).split("-");
+            if (temp != null) {
+                date = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+            } else {
+                date = 0;
+            }
+            if(time!=null){
+                time.put(challengeSubmission.getHandle(),date);
+            }else {
+                time=new HashMap<>();
+                time.put(challengeSubmission.getHandle(),date);
+                submitDate.put(challengeSubmission.getChallengeID(),time);
             }
         }
     }
