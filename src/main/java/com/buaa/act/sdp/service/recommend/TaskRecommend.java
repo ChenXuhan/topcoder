@@ -7,9 +7,12 @@ import com.buaa.act.sdp.service.recommend.classification.*;
 import com.buaa.act.sdp.service.recommend.cluster.Cluster;
 import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.service.recommend.feature.Reliability;
+import com.buaa.act.sdp.service.recommend.feature.TaskWorkerAttribute;
 import com.buaa.act.sdp.service.recommend.feature.WordCount;
 import com.buaa.act.sdp.service.recommend.network.Competition;
 import com.buaa.act.sdp.service.recommend.result.TaskResult;
+import com.buaa.act.sdp.service.statistics.DynamicMsg;
+import com.buaa.act.sdp.service.statistics.TaskMsg;
 import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,12 @@ public class TaskRecommend {
     private Reliability reliability;
     @Autowired
     private TaskResult taskResult;
+    @Autowired
+    private DynamicMsg dynamicMsg;
+    @Autowired
+    private TaskMsg taskMsg;
+    @Autowired
+    private TaskWorkerAttribute attribute;
 
     private int[] testData;
 
@@ -79,6 +88,52 @@ public class TaskRecommend {
         }
     }
 
+    // ESEM中DCW-DS方法，Bayes分类
+    public void dcw_ds(String challengeType) {
+        System.out.println("DCW_DS");
+        int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        double[] mpp = new double[20];
+        List<ChallengeItem> items = taskMsg.getTasks();
+        List<String> winners = taskMsg.getWinners(challengeType);
+        List<ChallengeItem> tasks = taskMsg.getItems(challengeType);
+        int[] num = testDataSet(winners.size());
+//        List<List<double[]>> features = new ArrayList<>(items.size());
+//        List<List<String>> workers = new ArrayList<>(items.size());
+//        for (int i = 0; i < items.size(); i++) {
+//            System.out.println(items.get(i).getChallengeId());
+//            List<String> worker = new ArrayList<>();
+//            features.add(attribute.generateFeatures(items.get(i), items, worker));
+//            workers.add(worker);
+//        }
+        Set<String> skills = attribute.getAllSkills();
+        for (int i = 0; i < num.length; i++) {
+//            List<List<double[]>> features = new ArrayList<>(items.size());
+//            List<List<String>> workers = new ArrayList<>(items.size());
+            List<double[]> feature = new ArrayList<>();
+            List<String> worker = new ArrayList<>();
+//            int position = attribute.getFeatures(features, feature, workers, worker, tasks.get(num[i]).getChallengeId(), items);
+            attribute.getFeature(feature, worker, tasks.get(num[i]), items);
+            double[] current = new double[skills.size()+9];
+            attribute.generateStaticFeature(skills, tasks.get(num[i]), current);
+            List<String> testWorker = new ArrayList<>();
+            List<double[]> test = dynamicMsg.getDynamicFeatures(items,tasks.get(num[i]), testWorker);
+            int position=feature.size();
+            for (int j = 0; j < test.size(); j++) {
+                double[] temp = new double[skills.size() +15];
+                System.arraycopy(current, 0, temp, 0, skills.size()+6);
+                System.arraycopy(test.get(j), 0, temp, skills.size()+6, 9);
+                feature.add(temp);
+                worker.add(testWorker.get(j));
+            }
+            List<Double> data = tcBayes.getRecommendResult(Constant.DCW_DS + challengeType + "/" + position, feature, position, worker);
+            List<String> result = taskResult.recommendWorker(data, worker.subList(position, worker.size()));
+            calculateResult(winners.get(num[i]), result, count, mpp);
+        }
+        for (int i = 0; i < count.length; i++) {
+            System.out.println((i + 1) + "\t" + 1.0 * count[i] / num.length + "\t" + mpp[i] / num.length);
+        }
+    }
+
     // 先kmeans聚类在某一聚类中分类
     public void clusterClassifier(String challengeType, int n) {
         System.out.println("Cluster");
@@ -100,7 +155,6 @@ public class TaskRecommend {
                 worker = competition.refine(index, worker, winners, num[i], challengeType);
                 calculateResult(winners.get(num[i]), worker, count, mpps);
             }
-
             for (int i = 0; i < counts.length; i++) {
                 System.out.println((i + 1) + "\t" + 1.0 * counts[i] / num.length + "\t" + 1.0 * count[i] / num.length + "\t" + mpp[i] / num.length + "\t" + mpps[i] / num.length);
             }
@@ -191,59 +245,6 @@ public class TaskRecommend {
         for (int i = 0; i < count.length; i++) {
             System.out.println(1.0 * count[i] / (winners.size() - start));
         }
-    }
-
-    public List<String> recommendWorker(List<Map<String, Double>> list) {
-        Map<String, Double> result = new HashMap<>();
-        Map<String, Integer> count = new HashMap<>();
-        for (int i = 0; i < list.size(); i++) {
-            List<String> worker = taskResult.recommendWorker(list.get(i));
-            for (int j = 0; j < worker.size(); j++) {
-                double k = result.getOrDefault(worker.get(j), -1.0);
-                if (k >= 0) {
-                    result.put(worker.get(j), k + j);
-                } else {
-                    result.put(worker.get(j), 1.0 * j);
-                }
-                int m = count.getOrDefault(worker.get(j), -1);
-                if (m >= 0) {
-                    count.put(worker.get(j), m + 1);
-                } else {
-                    count.put(worker.get(j), 1);
-                }
-            }
-        }
-        for (Map.Entry<String, Integer> entry : count.entrySet()) {
-            result.put(entry.getKey(), 1.0 * result.get(entry.getKey()) / entry.getValue());
-        }
-        List<Map.Entry<String, Double>> workers = new ArrayList<>(result.entrySet());
-        Collections.sort(workers, new Comparator<Map.Entry<String, Double>>() {
-            @Override
-            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-                return o1.getValue().compareTo(o2.getValue());
-            }
-        });
-        List<String> worker = new ArrayList<>();
-        for (int i = 0; i < workers.size(); i++) {
-            worker.add(workers.get(i).getKey());
-        }
-        return worker;
-    }
-
-    public List<String> recommendKnnWorker(Map<String, Integer> map) {
-        List<String> workers = new ArrayList<>();
-        List<Map.Entry<String, Integer>> list = new ArrayList<>();
-        list.addAll(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-            @Override
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                return o2.getValue().compareTo(o1.getValue());
-            }
-        });
-        for (int i = 0; i < list.size() && i < 20; i++) {
-            workers.add(list.get(i).getKey());
-        }
-        return workers;
     }
 
     public void calculateResult(String winner, List<String> worker, int[] count, double[] mpp) {

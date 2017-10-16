@@ -4,7 +4,6 @@ import com.buaa.act.sdp.dao.*;
 import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.model.challenge.ChallengeSubmission;
 import com.buaa.act.sdp.model.user.UserSkill;
-import com.buaa.act.sdp.service.api.Neo4jConn;
 import com.csvreader.CsvReader;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -93,26 +92,6 @@ public class UserAbility {
             }
         }
         return jsonObject.toString();
-    }
-
-    public void userAbilityInsert() {
-        List<String> userList = userDao.getUsers();
-        //Connection con = neo4j.getTry();
-        for (String user : userList) {
-            String skill = getAbility(user);
-            userDao.insertSkillDegree(user, skill);
-            System.out.println(user);
-            /*String cypher = "MATCH (n:User{handle:{1}}) SET n.skillDegree = {2}";
-            PreparedStatement stmt = null;
-            try {
-                stmt = con.prepareStatement(cypher);
-                stmt.setString(1, user);
-                stmt.setString(2, skill);
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }*/
-        }
     }
 
     public JSONObject getContribution(String handle) {
@@ -270,44 +249,5 @@ public class UserAbility {
             e.printStackTrace();
         }
         System.out.println("ok");
-        // userSkillDao.insert(skillList);
-        //从neo4j中取出数据，得到分隔的技能值。但是neo4j的连接老是出问题
-        /*String query = "MATCH (u:User) RETURN u.handle";
-        Connection con = neo4j.getTry();
-        List<UserSkill> skillList = new ArrayList<UserSkill>();
-
-        try {
-            PreparedStatement stmt = con.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-
-                String handle = rs.getString("u.handle");
-                System.out.println(handle + "++++++++++++++++++++++++++");
-                String queryEach = "MATCH (u:User) where u.handle = {1} RETURN u.skillDegree";
-                PreparedStatement stmtEach = con.prepareStatement(queryEach);
-                stmtEach.setString(1, handle);
-                ResultSet rsEach = stmtEach.executeQuery();
-
-                rsEach.next();
-                String str = rsEach.getString("u.skillDegree");
-                JSONObject json = new JSONObject(str);
-                JSONObject skillJson = (JSONObject) json.get("skill");
-                Iterator iter = skillJson.keys();
-                while (iter.hasNext()) {
-                    String key = (String) iter.next();
-                    String value = skillJson.get(key).toString();
-                    if (value.equals("0")) {
-                        continue;
-                    }
-                    skillList.add(new UserSkill(handle, key, value.toString()));
-                    System.out.println(handle + "   " + key + "   " + value.toString());
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        System.out.println("ok");
-        userSkillDao.insert(skillList);*/
     }
 }

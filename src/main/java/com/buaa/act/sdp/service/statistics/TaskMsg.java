@@ -55,7 +55,7 @@ public class TaskMsg {
         if (codeItems.isEmpty()) {
             synchronized (codeItems) {
                 if (codeItems.isEmpty()) {
-                    getWinnersAndScores("Code",codeItems,codeWinners,codeScore);
+                    getWinnersAndScores("Code", codeItems, codeWinners, codeScore);
                 }
             }
         }
@@ -65,7 +65,7 @@ public class TaskMsg {
         if (f2fItems.isEmpty()) {
             synchronized (f2fItems) {
                 if (f2fItems.isEmpty()) {
-                    getWinnersAndScores("First2Finish",f2fItems,f2fWinners,f2fScore);
+                    getWinnersAndScores("First2Finish", f2fItems, f2fWinners, f2fScore);
                 }
             }
         }
@@ -75,35 +75,35 @@ public class TaskMsg {
         if (assemblyItems.isEmpty()) {
             synchronized (assemblyItems) {
                 if (assemblyItems.isEmpty()) {
-                    getWinnersAndScores("Assembly Competition",assemblyItems,assemblyWinners,assemblyScore);
+                    getWinnersAndScores("Assembly Competition", assemblyItems, assemblyWinners, assemblyScore);
                 }
             }
         }
     }
 
-    public List<ChallengeItem>getChallenges(Set<Integer>set){
-        List<ChallengeItem>items=new ArrayList<>(set.size());
-        if(codeItems.isEmpty()){
+    public List<ChallengeItem> getChallenges(Set<Integer> set) {
+        List<ChallengeItem> items = new ArrayList<>(set.size());
+        if (codeItems.isEmpty()) {
             initCode();
         }
-        for(ChallengeItem item:codeItems){
-            if(set.contains(item.getChallengeId())){
+        for (ChallengeItem item : codeItems) {
+            if (set.contains(item.getChallengeId())) {
                 items.add(item);
             }
         }
-        if(f2fItems.isEmpty()){
+        if (f2fItems.isEmpty()) {
             initF2f();
         }
-        for(ChallengeItem item:f2fItems){
-            if(set.contains(item.getChallengeId())){
+        for (ChallengeItem item : f2fItems) {
+            if (set.contains(item.getChallengeId())) {
                 items.add(item);
             }
         }
-        if(assemblyItems.isEmpty()){
+        if (assemblyItems.isEmpty()) {
             initAssembly();
         }
-        for(ChallengeItem item:assemblyItems){
-            if(set.contains(item.getChallengeId())){
+        for (ChallengeItem item : assemblyItems) {
+            if (set.contains(item.getChallengeId())) {
                 items.add(item);
             }
         }
@@ -168,7 +168,7 @@ public class TaskMsg {
     }
 
     // 从所有的任务中进行筛选，过滤出一部分任务，计算winner、tasks，以及开发者所得分数
-    public void getWinnersAndScores(String challengeType,List<ChallengeItem>items,List<String>winners,List<Map<String, Double>>userScore) {
+    public void getWinnersAndScores(String challengeType, List<ChallengeItem> items, List<String> winners, List<Map<String, Double>> userScore) {
         List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
         Map<String, Integer> map = new HashMap<>();
         Set<Integer> challengeSet = new HashSet<>();
@@ -215,6 +215,20 @@ public class TaskMsg {
         }
         Set<String> sets = new HashSet<>(winners);
         System.out.println(winners.size() + "\t" + sets.size());
+    }
+
+    public List<ChallengeItem> getTasks() {
+        List<ChallengeItem> list = new ArrayList<>();
+        list.addAll(getItems("Code"));
+        list.addAll(getItems("First2Finish"));
+        list.addAll(getItems("Assembly Competition"));
+        Collections.sort(list, new Comparator<ChallengeItem>() {
+            @Override
+            public int compare(ChallengeItem o1, ChallengeItem o2) {
+                return o1.getChallengeId() - o2.getChallengeId();
+            }
+        });
+        return list;
     }
 
 }

@@ -221,7 +221,6 @@ public class FeatureExtract {
 
     //筛选一部分任务后，获取这些challenge的特征向量
     public double[][] getFeatures(String challengeType) {
-//        return generateVectorUcl();
         return generateVectors(challengeType);
     }
 

@@ -164,14 +164,6 @@ public class ChallengeDifficulty {
                     prize += Integer.parseInt(prizeStr[j]);
                 }
             }
-           /* if (item.getNumRegistrants() != 0) {
-                percent = (double) item.getNumSubmissions() / item.getNumRegistrants();
-                if (percent > 1) {
-                    percent = 1;
-                }
-            } else {
-                percent = 0;
-            }*/
             scores.put(item.getChallengeId(), numProcess((int) item.getReliabilityBonus(), prize, item.getNumRegistrants(), item.getDuration(), min1, max1, min2, max2, min3, max3, min4, max4));
         }
         for (int i = (int) (Math.ceil(allChallenges.size() * percentage)); i < allChallenges.size(); i++) {

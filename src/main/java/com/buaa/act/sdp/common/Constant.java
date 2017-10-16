@@ -6,6 +6,11 @@ import java.util.HashSet;
  * Created by yang on 2016/11/24.
  */
 public class Constant {
+
+    public static final int QUITTER=0;
+    public static final int WINNER=2;
+    public static final int SUBMITTER=1;
+
     public static final HashSet<String> PL;
     public static final String[] TECH = {
             ".net",
@@ -431,6 +436,7 @@ public class Constant {
     public static final String CLASSIFIER_DIRECTORY = "F:/arff/classifier/";
     public static final String CLUSTER_DIRECTORY = "F:/arff/cluster/";
     public static final String LOCAL_DIRECTORY = "F:/arff/local/";
+    public static final String DCW_DS = "F:/arff/dcwds/";
 
     static {
         PL = new HashSet<String>();

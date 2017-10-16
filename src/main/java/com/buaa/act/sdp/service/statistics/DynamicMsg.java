@@ -1,8 +1,8 @@
 package com.buaa.act.sdp.service.statistics;
 
+import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.model.user.WorkerDynamicMsg;
-import com.buaa.act.sdp.util.Maths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,41 +15,29 @@ import java.util.*;
 public class DynamicMsg {
 
     @Autowired
-    private TaskMsg taskMsg;
-    @Autowired
     private TaskScores taskScore;
 
-    public List<ChallengeItem> getTasks() {
-        List<ChallengeItem> list = new ArrayList<>();
-        list.addAll(taskMsg.getItems("Code"));
-        list.addAll(taskMsg.getItems("First2Finish"));
-        list.addAll(taskMsg.getItems("Assembly Competition"));
-        Collections.sort(list, new Comparator<ChallengeItem>() {
-            @Override
-            public int compare(ChallengeItem o1, ChallengeItem o2) {
-                return o1.getChallengeId() - o2.getChallengeId();
-            }
-        });
-        return list;
+    private Map<Integer, Map<String, WorkerDynamicMsg>> msgMap;
+
+    public DynamicMsg() {
+        msgMap = new HashMap<>();
     }
 
-    public List<List<double[]>> getWorkerDynamicFeature(ChallengeItem challengeItem, List<List<String>> workers) {
-        Map<String, WorkerDynamicMsg> map = new HashMap<>();
-        List<ChallengeItem> list = getTasks();
+    public List<double[]> getWorkerDynamicFeature(List<ChallengeItem> list, ChallengeItem challengeItem, List<String> workers) {
+        Map<String, WorkerDynamicMsg> map = msgMap.get(challengeItem.getChallengeId());
         Map<Integer, Map<String, Double>> scores = taskScore.getAllWorkerScores();
+        Map<String, Double> score = scores.get(challengeItem.getChallengeId());
         Map<Integer, String> winners = taskScore.getWinners();
-        Map<String, Double> score;
-        WorkerDynamicMsg msg;
-        List<List<double[]>> features = new ArrayList<>();
-        for (ChallengeItem item : list) {
-            if (item.getChallengeId() >= challengeItem.getChallengeId()) {
-                break;
-            }
-            score = scores.get(item.getChallengeId());
-            if (score != null) {
-                List<String> worker = new ArrayList<>(score.size());
-                List<double[]> feature = new ArrayList<>(score.size());
-                for (Map.Entry<String, Double> entry : score.entrySet()) {
+        List<double[]> feature = new ArrayList<>();
+        if (map == null) {
+            map = new HashMap<>();
+            WorkerDynamicMsg msg;
+            for (ChallengeItem item : list) {
+                if (item.getChallengeId() >= challengeItem.getChallengeId()) {
+                    break;
+                }
+                Map<String, Double> temp = scores.get(item.getChallengeId());
+                for (Map.Entry<String, Double> entry : temp.entrySet()) {
                     msg = map.getOrDefault(entry.getKey(), null);
                     if (msg == null) {
                         msg = new WorkerDynamicMsg();
@@ -80,27 +68,55 @@ public class DynamicMsg {
                         msg.addPriceTotal(price);
                     }
                     map.put(entry.getKey(), msg);
-                    worker.add(entry.getKey());
-                    double[] temp = new double[8];
-                    generateDynamicFeature(msg,temp);
-                    feature.add(temp);
                 }
-                workers.add(worker);
-                features.add(feature);
             }
+            msgMap.put(challengeItem.getChallengeId(), map);
         }
-        return features;
+        for (Map.Entry<String, Double> entry : score.entrySet()) {
+            double[] temp = new double[9];
+            if (map.containsKey(entry.getKey())) {
+                generateDynamicFeature(map.get(entry.getKey()), temp);
+                if (winners.get(challengeItem.getChallengeId()).equals(entry.getKey())) {
+                    temp[8] = Constant.WINNER;
+                } else if (score.get(entry.getKey()) > 0) {
+                    temp[8] = Constant.SUBMITTER;
+                } else {
+                    temp[8] = Constant.QUITTER;
+                }
+            }
+            feature.add(temp);
+            workers.add(entry.getKey());
+        }
+        return feature;
     }
 
-    public void generateDynamicFeature(WorkerDynamicMsg msg,double[]feature){
-        feature[0]=1.0*msg.getNumSubTask()/msg.getNumRegTask();
-        feature[1]=1.0*msg.getNumSubTaskSimilar()/msg.getNumRegTaskSimilar();
-        feature[2]=msg.getScoreTotal()/msg.getNumRegTaskSimilar();
-        feature[3]=msg.getNumRegTask();
-        feature[4]=msg.getNumRegTaskTDays();
-        feature[5]=msg.getNumSubTaskTDays();
-        feature[6]=msg.getNumWinTaskTDays();
-        feature[7]=msg.getPriceTotal()/msg.getNumRegTaskTDays();
+    public List<double[]> getDynamicFeatures(List<ChallengeItem> list, ChallengeItem item, List<String> worker) {
+        Map<String, WorkerDynamicMsg> map = msgMap.get(item.getChallengeId());
+        if (map == null) {
+            getWorkerDynamicFeature(list, item, new ArrayList<>());
+            map = msgMap.get(item.getChallengeId());
+        }
+        List<double[]> feature = new ArrayList<>(map.size());
+        for (Map.Entry<String, WorkerDynamicMsg> entry : map.entrySet()) {
+            double[] temp = new double[9];
+            generateDynamicFeature(entry.getValue(), temp);
+            temp[8] = 0;
+            feature.add(temp);
+            worker.add(entry.getKey());
+        }
+        return feature;
+    }
+
+
+    public void generateDynamicFeature(WorkerDynamicMsg msg, double[] feature) {
+        feature[0] = msg.getNumRegTask() == 0 ? 0 : 1.0 * msg.getNumSubTask() / msg.getNumRegTask();
+        feature[1] = msg.getNumRegTaskSimilar() == 0 ? 0 : 1.0 * msg.getNumSubTaskSimilar() / msg.getNumRegTaskSimilar();
+        feature[2] = msg.getNumRegTaskSimilar() == 0 ? 0 : msg.getScoreTotal() / msg.getNumRegTaskSimilar();
+        feature[3] = msg.getNumRegTask();
+        feature[4] = msg.getNumRegTaskTDays();
+        feature[5] = msg.getNumSubTaskTDays();
+        feature[6] = msg.getNumWinTaskTDays();
+        feature[7] = msg.getNumRegTaskTDays() == 0 ? 0 : msg.getPriceTotal() / msg.getNumRegTaskTDays();
     }
 
     public boolean isSimilar(ChallengeItem one, ChallengeItem two) {
@@ -129,15 +145,33 @@ public class DynamicMsg {
             }
         }
         similar += 1.0 * count / Math.max(one.getPlatforms().length, two.getPlatforms().length);
-        String[] temp = one.getRegistrationStartDate().substring(0, 10).split("-");
-        int a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        temp = two.getRegistrationStartDate().substring(0, 10).split("-");
-        int b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        String[] temp;
+        int a, b;
+        if (one.getRegistrationStartDate() != null) {
+            temp = one.getRegistrationStartDate().substring(0, 10).split("-");
+            a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            a = 0;
+        }
+        if (two.getRegistrationStartDate() != null) {
+            temp = two.getRegistrationStartDate().substring(0, 10).split("-");
+            b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            b = 0;
+        }
         similar += (a - b) / 5 / 365;
-        temp = one.getSubmissionEndDate().substring(0, 10).split("-");
-        a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        temp = two.getSubmissionEndDate().substring(0, 10).split("-");
-        b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        if (one.getSubmissionEndDate() != null) {
+            temp = one.getSubmissionEndDate().substring(0, 10).split("-");
+            a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            a = 0;
+        }
+        if (two.getSubmissionEndDate() != null) {
+            temp = two.getSubmissionEndDate().substring(0, 10).split("-");
+            b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            b = 0;
+        }
         similar += (a - b) / 5 / 365;
         double c = 0, d = 0;
         for (String str : one.getPrize()) {
@@ -154,10 +188,21 @@ public class DynamicMsg {
     }
 
     public int dataDistance(ChallengeItem one, ChallengeItem two) {
-        String[] temp = one.getPostingDate().substring(0, 10).split("-");
-        int a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        temp = two.getPostingDate().substring(0, 10).split("-");
-        int b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        String[] temp;
+        int a, b;
+        if (one.getPostingDate() != null) {
+            temp = one.getPostingDate().substring(0, 10).split("-");
+            a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            a = 0;
+        }
+        if (two.getPostingDate() != null) {
+            temp = two.getPostingDate().substring(0, 10).split("-");
+            b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            b = 0;
+        }
         return Math.abs(a - b);
     }
+
 }

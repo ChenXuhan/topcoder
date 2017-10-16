@@ -43,7 +43,7 @@ public class TaskResult {
         List<String> worker = recommendWorker(cluster.getRecommendResult(item.getChallengeType(), features, feature, position + 1, 3, winners));
         List<Integer> index = cluster.getNeighbors();
         worker = reliability.filter(worker, index, winners, item.getChallengeType());
-        worker = competition.refine(index, worker, winners, position+1,item.getChallengeType());
+        worker = competition.refine(index, worker, winners, position + 1, item.getChallengeType());
         return worker;
     }
 
@@ -64,4 +64,22 @@ public class TaskResult {
         return workers;
     }
 
+    public List<String> recommendWorker(List<Double> data, List<String> workers) {
+        Map<String, Double> map = new HashMap<>(workers.size());
+        for (int i = 0; i < workers.size(); i++) {
+            map.put(workers.get(i), data.get(i));
+        }
+        List<Map.Entry<String, Double>> list = new ArrayList<>();
+        list.addAll(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
+            @Override
+            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        for (int i = 0; i < list.size(); i++) {
+            workers.add(list.get(i).getKey());
+        }
+        return workers;
+    }
 }

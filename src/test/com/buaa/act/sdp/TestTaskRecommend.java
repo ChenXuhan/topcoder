@@ -41,8 +41,9 @@ public class TestTaskRecommend {
         String challengeType = "Assembly Competition";
 //        recommendResult.contentBased(challengeType);
 //        recommendResult.classifier(challengeType);
-        recommendResult.clusterClassifier(challengeType, 4);
+//        recommendResult.clusterClassifier(challengeType, 4);
 //        recommendResult.localClassifier(challengeType);
+        recommendResult.dcw_ds(challengeType);
     }
 
     @Test

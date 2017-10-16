@@ -2,13 +2,13 @@ package com.buaa.act.sdp.service.recommend.feature;
 
 import com.buaa.act.sdp.common.Constant;
 import com.buaa.act.sdp.model.challenge.ChallengeItem;
-import com.buaa.act.sdp.service.statistics.TaskMsg;
+import com.buaa.act.sdp.service.statistics.DynamicMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -18,25 +18,59 @@ import java.util.Set;
 public class TaskWorkerAttribute {
 
     @Autowired
-    private TaskMsg taskMsg;
+    private DynamicMsg dynamicMsg;
 
-    public List<ChallengeItem> getItems(String type) {
-        return taskMsg.getItems(type);
+    // 某一个任务前的所有任务的特征向量
+    public int getFeatures(List<List<double[]>> features, List<double[]> feature, List<List<String>> workers, List<String> worker, int challengeId, List<ChallengeItem> items) {
+        ChallengeItem item;
+        int result = 0;
+        for (int i = 0; i < items.size(); i++) {
+            item = items.get(i);
+            if (item.getChallengeId() < challengeId) {
+                feature.addAll(features.get(i));
+                worker.addAll(workers.get(i));
+                result += features.get(i).size();
+            } else if (item.getChallengeId() == challengeId) {
+                break;
+            }
+        }
+        return result;
     }
 
-    public List<String> getTaskWinners(String type) {
-        return taskMsg.getWinners(type);
+    // 某一个任务前的所有任务的特征向量
+    public void getFeature(List<double[]> features, List<String> workers, ChallengeItem item, List<ChallengeItem> items) {
+        ChallengeItem challenge;
+        for (int i = 0; i < items.size(); i++) {
+            challenge = items.get(i);
+            if (challenge.getChallengeId() < item.getChallengeId()) {
+                List<String>worker=new ArrayList<>();
+                List<double[]>feature=generateFeatures(challenge,items,worker);
+                features.addAll(feature);
+                workers.addAll(worker);
+            } else if (item.getChallengeId() == challenge.getChallengeId()) {
+                break;
+            }
+        }
     }
 
-    public double[] generateFeature(Set<String> set, ChallengeItem item) {
+    // 某一个任务的静态特征
+    public void generateStaticFeature(Set<String> set, ChallengeItem item, double[] feature) {
         int index = 0;
-        double[] feature = new double[set.size() + 5];
         feature[index++] = item.getDetailedRequirements().length();
         feature[index++] = item.getChallengeName().length();
-        String[] temp = item.getRegistrationStartDate().substring(0, 10).split("-");
-        feature[index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        temp = item.getSubmissionEndDate().substring(0, 10).split("-");
-        feature[index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        String[] temp;
+        if (item.getRegistrationStartDate() != null) {
+            temp = item.getRegistrationStartDate().substring(0, 10).split("-");
+            feature[index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            feature[index++] = 0;
+        }
+        if (item.getSubmissionEndDate() != null) {
+            temp = item.getSubmissionEndDate().substring(0, 10).split("-");
+            feature[index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            feature[index++] = 0;
+        }
         double award = 0;
         for (String str : item.getPrize()) {
             award += Double.parseDouble(str);
@@ -51,7 +85,27 @@ public class TaskWorkerAttribute {
             skill.add(str.toLowerCase());
         }
         setWorkerSkills(index, feature, set, skill);
-        return feature;
+    }
+
+    // 增加动态特征到特征向量
+    public void generateDynamicFeature(int index, double[] feature, double[] dynamic) {
+        System.arraycopy(dynamic, 0, feature, index, 9);
+    }
+
+    // 某一个任务所有注册者的特征向量
+    public List<double[]> generateFeatures(ChallengeItem item, List<ChallengeItem> items, List<String> workers) {
+        Set<String> set = getAllSkills();
+        List<double[]> dynamicFeatures = dynamicMsg.getWorkerDynamicFeature(items, item, workers);
+        double[] feature = new double[set.size()+6];
+        generateStaticFeature(set, item, feature);
+        List<double[]> features = new ArrayList<>(dynamicFeatures.size());
+        for (int i = 0; i < dynamicFeatures.size(); i++) {
+            double[]temp=new double[set.size()+15];
+            System.arraycopy(feature,0,temp,0,set.size()+6);
+            generateDynamicFeature(set.size()+6, temp, dynamicFeatures.get(i));
+            features.add(temp);
+        }
+        return features;
     }
 
     public Set<String> getAllSkills() {
@@ -83,4 +137,5 @@ public class TaskWorkerAttribute {
         }
         return 3;
     }
+
 }

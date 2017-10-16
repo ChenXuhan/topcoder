@@ -133,7 +133,6 @@ public class WordCount {
         for (Map.Entry<String, Integer> entry : allWords.entrySet()) {
             map = taskWordCount.get(index);
             if (map.containsKey(entry.getKey())) {
-//                tf[k++] = 1.0 * map.get(entry.getKey()) / taskWords.get(index);
                 tf[k++] = 1 + Math.log(map.get(entry.getKey()));
             } else {
                 tf[k++] = 1;

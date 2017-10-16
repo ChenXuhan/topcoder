@@ -209,17 +209,6 @@ public class AbilityFileMongodb {
     *删除项目requirements中的html标签
     * */
     public void HTMLTagDelete() {
-      /*  ArrayList<ChallengeItem> allChallenges = (ArrayList<ChallengeItem>) challengeItemDao.getAllChallenges();
-        for (ChallengeItem challenge : allChallenges
-                ) {
-            String str = challenge.getDetailedRequirements();
-            if (str != null) {
-                str = str.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
-                        .replaceAll("</[a-zA-Z]+[1-9]?>", "").replaceAll("&nbsp;", "").replaceAll("\\n", "").replaceAll("&lt;", "").replaceAll("&gt;", "").replaceAll("&quot;", "").replaceAll("&qpos;", "").replaceAll("&amp;", "");
-                System.out.println(challenge.getChallengeId());
-                challengeItemDao.setHandledRequirements(str, challenge.getChallengeId());
-            }
-        }*/
         String encoding = "GBK";
         File file = new File("C:\\Users\\YLT\\Desktop\\新建文本文档.txt");
         if (file.isFile() && file.exists()) { //判断文件是否存在
@@ -254,6 +243,5 @@ public class AbilityFileMongodb {
 
         Document doc = (Document) collection.find(Filters.eq("userID",4021));
         collection.updateOne(Filters.eq("userID",4021),new Document("$set",new Document("document",doc.get("document").toString().replaceAll("\\\\t","").replaceAll("\\\\n", ""))));
-
     }
 }
