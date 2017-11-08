@@ -138,7 +138,13 @@ public class WekaArffUtil {
         return instances;
     }
 
-    // weka分类器类别对应的下标
+    /**
+     * weka分类器类别对应的下标
+     * @param winner
+     * @param len
+     * @param <T>
+     * @return
+     */
     public static <T> Map<Double, T> getWinnerIndex(List<T> winner, int len) {
         Map<Double, T> map = new HashMap<>();
         Set<T> set = new LinkedHashSet<>();

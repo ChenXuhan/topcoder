@@ -52,7 +52,11 @@ public class TaskRecommend {
 
     private int[] testData;
 
-    // 测试集如何选取？
+    /**
+     * 测试集选取
+     * @param n
+     * @return
+     */
     public int[] testDataSet(int n) {
         int k = n - (int) (0.5 * n);
         testData = new int[k];
@@ -62,7 +66,10 @@ public class TaskRecommend {
         return testData;
     }
 
-    //  寻找k个邻居，局部的分类器
+    /**
+     * 寻找k个邻居，局部的分类器
+     * @param challengeType
+     */
     public void localClassifier(String challengeType) {
         System.out.println("Local");
         double[][] features = featureExtract.getFeatures(challengeType);
@@ -73,7 +80,6 @@ public class TaskRecommend {
         double[] mpps = new double[20];
         int[] num = testDataSet(winners.size());
         List<String> worker = null;
-
         for (int i = 0; i < num.length; i++) {
             Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, num[i], winners);
             worker = taskResult.recommendWorker(tcResult);
@@ -88,7 +94,10 @@ public class TaskRecommend {
         }
     }
 
-    // ESEM中DCW-DS方法，Bayes分类
+    /**
+     * ESEM中DCW-DS方法，用Bayes分类
+     * @param challengeType
+     */
     public void dcw_ds(String challengeType) {
         System.out.println("DCW_DS");
         int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -134,7 +143,11 @@ public class TaskRecommend {
         }
     }
 
-    // 先kmeans聚类在某一聚类中分类
+    /**
+     * 先kmeans聚类在某一聚类中分类
+     * @param challengeType
+     * @param n
+     */
     public void clusterClassifier(String challengeType, int n) {
         System.out.println("Cluster");
         double[][] features = featureExtract.getFeatures(challengeType);
@@ -163,7 +176,10 @@ public class TaskRecommend {
         }
     }
 
-    // 原始的分类
+    /**
+     * 直接分类
+     * @param challengeType
+     */
     public void classifier(String challengeType) {
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners(challengeType);
@@ -192,7 +208,6 @@ public class TaskRecommend {
                 indexs.add(j);
             }
             worker = competition.refine(indexs, worker, winners, num[i], challengeType);
-//            worker = competition.uclRank(indexs, worker, winners, num[i], challengeType);
             calculateResult(winners.get(num[i]), worker, count, mpps);
         }
         for (int i = 0; i < counts.length; i++) {
@@ -200,7 +215,10 @@ public class TaskRecommend {
         }
     }
 
-    // 协同过滤
+    /**
+     * 协同过滤算法
+     * @param challengeType
+     */
     public void contentBased(String challengeType) {
         double[][] features = featureExtract.getFeatures(challengeType);
         List<String> winners = featureExtract.getWinners(challengeType);
@@ -229,7 +247,10 @@ public class TaskRecommend {
         }
     }
 
-    // 考虑tf-idf后的分类推荐结果
+    /**
+     * 使用tf-idf计算后推荐结果
+     * @param challengeType
+     */
     public void getRecommendBayesUcl(String challengeType) {
         double[][] features = featureExtract.getTimesAndAward(challengeType);
         List<String> winners = featureExtract.getWinners(challengeType);
@@ -247,6 +268,13 @@ public class TaskRecommend {
         }
     }
 
+    /**
+     * 计算所有推荐任务的accuracy和mpp
+     * @param winner
+     * @param worker
+     * @param count
+     * @param mpp
+     */
     public void calculateResult(String winner, List<String> worker, int[] count, double[] mpp) {
         for (int j = 0; j < count.length; j++) {
             for (int k = 0; k < worker.size() && k <= j; k++) {

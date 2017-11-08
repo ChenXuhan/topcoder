@@ -61,24 +61,17 @@ public class Reliability {
         int subTotal = 0, winTotal = 0, regTotal = 0;
         double avgWinRate = 0, avgSubRate = 0;
         for (int i = 0; i < worker.size(); i++) {
-//            if (i < 20) {
             winTotal += winCount.get(worker.get(i));
             subTotal += submissionCount.get(worker.get(i));
             regTotal += total.get(worker.get(i));
-//            }
             winRate.put(i, 1.0 * winCount.get(worker.get(i)) / submissionCount.get(worker.get(i)));
             avgWinRate += 1.0 * winCount.get(worker.get(i)) / submissionCount.get(worker.get(i));
             subRate.put(i, 1.0 * submissionCount.get(worker.get(i)) / total.get(worker.get(i)));
             avgSubRate += 1.0 * submissionCount.get(worker.get(i)) / total.get(worker.get(i));
-//            if(i<20) {
-//                System.out.print(worker.get(i) + ":" + 1.0 * winCount.get(worker.get(i)) / submissionCount.get(worker.get(i)) + ":" + 1.0 * submissionCount.get(worker.get(i)) / total.get(worker.get(i)) + " ");
-//            }
         }
         avgWinRate /= worker.size();
         avgSubRate /= worker.size();
         List<String> result = new ArrayList<>();
-        //  System.out.println();
-        // System.out.println(avgWinRate+" "+avgSubRate);
         for (int i = 0; i < worker.size(); i++) {
 //            if (0.15 + winRate.get(i) < 1.0 * winTotal / subTotal) {
 //                filter.add(i);

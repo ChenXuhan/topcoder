@@ -13,13 +13,15 @@ import java.util.*;
  */
 public class WordCount {
 
-    //待处理的文本
+    /**
+     * 待处理的文本
+     * 所有的单词及次数
+     * 每一个任务的单词数量
+     * 每一个任务中每一个单词的数量
+     */
     private String[] texts;
-    //所有的单词及次数
     private Map<String, Integer> allWords;
-    //每一个任务的单词数量
     private List<Integer> taskWords;
-    //每一个任务中每一个单词的数量
     private List<Map<String, Integer>> taskWordCount;
 
 
@@ -58,7 +60,11 @@ public class WordCount {
         return allWords.size();
     }
 
-    // 分词，去除停顿词，获取所有的单词
+    /**
+     * 分词，去除停顿词，获取所有的单词
+     *
+     * @return
+     */
     public List<String>[] getWordsFromText() {
         Analyzer analyzer = new StandardAnalyzer();
         TokenStream tokenStream = null;
@@ -82,7 +88,11 @@ public class WordCount {
         return words;
     }
 
-    // 预处理，分别统计每段话的单词类别数及其数量
+    /**
+     * 预处理，分别统计每段话的单词类别数及其数量
+     *
+     * @param start
+     */
     public void init(int start) {
         List<String>[] words = getWordsFromText();
         List<String> word;
@@ -125,7 +135,12 @@ public class WordCount {
         }
     }
 
-    // 计算某一token的tf
+    /**
+     * 计算某一token的tf
+     *
+     * @param index
+     * @return
+     */
     public double[] getTf(int index) {
         double[] tf = new double[allWords.size()];
         int k = 0;
@@ -141,7 +156,11 @@ public class WordCount {
         return tf;
     }
 
-    // 计算idf
+    /**
+     * 计算idf
+     *
+     * @return
+     */
     public double[] getIdf() {
         double[] idf = new double[allWords.size()];
         int index = 0, num;
@@ -152,7 +171,11 @@ public class WordCount {
         return idf;
     }
 
-    // 计算tf-idf
+    /**
+     * 计算tf-idf
+     *
+     * @return
+     */
     public List<double[]> getTfIdf() {
         List<double[]> tfIdf = new ArrayList<>();
         double[] idf = getIdf();

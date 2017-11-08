@@ -20,7 +20,16 @@ public class TaskWorkerAttribute {
     @Autowired
     private DynamicMsg dynamicMsg;
 
-    // 某一个任务前的所有任务的特征向量
+    /**
+     * 某一个任务前的所有任务的特征向量
+     * @param features 所有特征向量
+     * @param feature 需要得到的特征向量
+     * @param workers 所有开发者
+     * @param worker 需要的得到的开发者
+     * @param challengeId 当前任务
+     * @param items 所有任务
+     * @return
+     */
     public int getFeatures(List<List<double[]>> features, List<double[]> feature, List<List<String>> workers, List<String> worker, int challengeId, List<ChallengeItem> items) {
         ChallengeItem item;
         int result = 0;
@@ -37,7 +46,13 @@ public class TaskWorkerAttribute {
         return result;
     }
 
-    // 某一个任务前的所有任务的特征向量
+    /**
+     * 某一个任务前的所有任务的特征向量
+     * @param features
+     * @param workers
+     * @param item
+     * @param items
+     */
     public void getFeature(List<double[]> features, List<String> workers, ChallengeItem item, List<ChallengeItem> items) {
         ChallengeItem challenge;
         for (int i = 0; i < items.size(); i++) {
@@ -53,7 +68,12 @@ public class TaskWorkerAttribute {
         }
     }
 
-    // 某一个任务的静态特征
+    /**
+     * 提取任务的静态特征
+     * @param set
+     * @param item
+     * @param feature
+     */
     public void generateStaticFeature(Set<String> set, ChallengeItem item, double[] feature) {
         int index = 0;
         feature[index++] = item.getDetailedRequirements().length();
@@ -87,12 +107,23 @@ public class TaskWorkerAttribute {
         setWorkerSkills(index, feature, set, skill);
     }
 
-    // 增加动态特征到特征向量
+    /**
+     * 增加动态特征到特征向量
+     * @param index
+     * @param feature 特征向量
+     * @param dynamic 动态特征
+     */
     public void generateDynamicFeature(int index, double[] feature, double[] dynamic) {
         System.arraycopy(dynamic, 0, feature, index, 9);
     }
 
-    // 某一个任务所有注册者的特征向量
+    /**
+     * 某一个任务所有注册者的特征向量
+     * @param item 当前任务
+     * @param items 所有任务
+     * @param workers 开发者
+     * @return
+     */
     public List<double[]> generateFeatures(ChallengeItem item, List<ChallengeItem> items, List<String> workers) {
         Set<String> set = getAllSkills();
         List<double[]> dynamicFeatures = dynamicMsg.getWorkerDynamicFeature(items, item, workers);

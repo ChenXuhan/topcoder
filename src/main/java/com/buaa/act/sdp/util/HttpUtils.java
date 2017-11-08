@@ -13,6 +13,11 @@ import java.io.IOException;
  * Created by yang on 2016/10/16.
  */
 public class HttpUtils {
+    /**
+     * http get请求
+     * @param url
+     * @return
+     */
     public static String httpGet(String url) {
         String result = null;
         HttpClient httpClient = new DefaultHttpClient();

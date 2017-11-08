@@ -22,7 +22,9 @@ public class TaskScores {
     @Autowired
     private ChallengeSubmissionDao challengeSubmissionDao;
 
-    //challengeId对应的提交人的得分
+    /**
+     * 任务的开发者得分及获胜者信息
+     */
     private Map<Integer, Map<String, Double>> scores;
     private Map<Integer, String> winners;
     private Map<Integer, Map<String, Integer>> registerDate;
@@ -35,7 +37,6 @@ public class TaskScores {
         submitDate = new HashMap<>();
     }
 
-    // 获取task的获胜者
     public synchronized Map<Integer, String> getWinners() {
         if (winners.isEmpty()) {
             getAllWorkerScores();
@@ -57,7 +58,10 @@ public class TaskScores {
         return submitDate;
     }
 
-    // 获得所有开发者的得分
+    /**
+     * 每一个任务的开发者得分
+     * @return
+     */
     public synchronized Map<Integer, Map<String, Double>> getAllWorkerScores() {
         if (scores.isEmpty()) {
             List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllRegistrant();
@@ -74,7 +78,9 @@ public class TaskScores {
                     scores.put(challengeRegistrant.getChallengeID(), score);
                 }
 
-                //记录开发者的注册时间
+                /**
+                 * 记录开发者的注册时间
+                 */
                 time = registerDate.getOrDefault(challengeRegistrant.getChallengeID(), null);
                 String[] temp;
                 if (challengeRegistrant.getRegistrationDate() != null && (temp = challengeRegistrant.getRegistrationDate().substring(0, 10).split("-")) != null) {
@@ -95,7 +101,9 @@ public class TaskScores {
         return scores;
     }
 
-    // 依据submission表更新worker的得分
+    /**
+     * 依据submission表更新worker的得分
+     */
     private void updateWorkerScores() {
         List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
         Map<String, Double> score;
@@ -119,7 +127,9 @@ public class TaskScores {
                 winners.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
             }
 
-            // 记录开发者提交时间
+            /**
+             * 记录开发者提交时间
+             */
             time = submitDate.getOrDefault(challengeSubmission.getChallengeID(), null);
             String[] temp;
             if (challengeSubmission.getSubmissionDate()!=null&&(temp= challengeSubmission.getSubmissionDate().substring(0, 10).split("-"))!= null) {

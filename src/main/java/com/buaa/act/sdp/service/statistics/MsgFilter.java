@@ -17,7 +17,12 @@ public class MsgFilter {
     @Autowired
     private ProjectMsg projectMsg;
 
-    //对challenge进行过滤
+    /**
+     *  对challenge进行过滤
+     * @param challengeItem
+     * @param challengeType
+     * @return
+     */
     public boolean filterChallenge(ChallengeItem challengeItem, String challengeType) {
         if (!challengeItem.getCurrentStatus().equals("Completed")) {
             return false;
@@ -44,7 +49,11 @@ public class MsgFilter {
         return true;
     }
 
-    // 获取同一个project所有任务，为计算协作提供数据
+    /**
+     * 获取一个project之前的project任务，只需要三种类型任务
+     * @param projectId
+     * @return
+     */
     public List<List<Integer>> getProjectAndChallenges(int projectId){
         List<List<Integer>>list=new ArrayList<>();
         Map<Integer, List<Integer>> projectIdToChallengeIds=projectMsg.getProjectToChallenges();

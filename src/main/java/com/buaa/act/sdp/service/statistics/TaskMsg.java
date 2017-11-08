@@ -24,17 +24,23 @@ public class TaskMsg {
     @Autowired
     private TaskScores taskScores;
 
-    //不同类型的challenges
+    /**
+     * 3种不同类型的challenges
+     */
     private List<ChallengeItem> codeItems;
     private List<ChallengeItem> assemblyItems;
     private List<ChallengeItem> f2fItems;
 
-    //不同类型challenge 对应的winner
+    /**
+     * 不同类型challenge 对应的winner
+     */
     private List<String> codeWinners;
     private List<String> assemblyWinners;
     private List<String> f2fWinners;
 
-    // 选取任务的worker得分情况
+    /**
+     * 不同类型任务的worker得分情况
+     */
     private List<Map<String, Double>> codeScore;
     private List<Map<String, Double>> assemblyScore;
     private List<Map<String, Double>> f2fScore;
@@ -167,7 +173,13 @@ public class TaskMsg {
         }
     }
 
-    // 从所有的任务中进行筛选，过滤出一部分任务，计算winner、tasks，以及开发者所得分数
+    /**
+     * 从所有的任务中进行筛选，过滤出一部分任务，计算winner、tasks，以及开发者所得分数
+     * @param challengeType
+     * @param items
+     * @param winners
+     * @param userScore
+     */
     public void getWinnersAndScores(String challengeType, List<ChallengeItem> items, List<String> winners, List<Map<String, Double>> userScore) {
         List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
         Map<String, Integer> map = new HashMap<>();
@@ -217,6 +229,10 @@ public class TaskMsg {
         System.out.println(winners.size() + "\t" + sets.size());
     }
 
+    /**
+     * 按照task id升序获取所有的任务
+     * @return
+     */
     public List<ChallengeItem> getTasks() {
         List<ChallengeItem> list = new ArrayList<>();
         list.addAll(getItems("Code"));

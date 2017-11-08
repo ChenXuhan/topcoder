@@ -21,8 +21,14 @@ public class Competition {
     @Autowired
     private TaskScores taskScores;
 
-
-    // 获取当前任务的相似任务中worker的得分，分数多少无限制
+    /**
+     * 获取当前任务的相似任务中worker的得分，分数多少无限制
+     * @param neighbors 相似的任务
+     * @param winners 获胜者
+     * @param winner
+     * @param type 任务类型
+     * @return
+     */
     public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
         Map<Integer, Map<String, Double>> score = taskScores.getAllWorkerScores();
         List<ChallengeItem> items = featureExtract.getItems(type);
@@ -34,7 +40,14 @@ public class Competition {
         return list;
     }
 
-    // 获取当前任务的相似任务中worker的得分,只考虑80分以上的
+    /**
+     * 获取当前任务的相似任务中worker的得分,只考虑80分以上的
+     * @param neighbors
+     * @param winners
+     * @param winner
+     * @param type
+     * @return
+     */
     public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
         List<Map<String, Double>> lists = featureExtract.getUserScore(type);
         List<Map<String, Double>> list = new ArrayList<>();
@@ -45,7 +58,12 @@ public class Competition {
         return list;
     }
 
-    // 获取在当前任务前的所有类型任务中参与的worker，id之前
+    /**
+     * 获取在当前任务前的所有类型任务中参与的worker，id之前
+     * @param challengeId 任务的id
+     * @param winner 获胜者
+     * @return
+     */
     public List<Map<String, Double>> getAllTypeWorkers(int challengeId, List<String> winner) {
         Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
         Map<Integer, String> allWinners = taskScores.getWinners();
@@ -69,7 +87,6 @@ public class Competition {
     }
 
     public List<Integer> getNeighbors(List<Integer> list, int n) {
-//        return list;
         List<Integer> result = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             result.add(i);
@@ -77,7 +94,13 @@ public class Competition {
         return result;
     }
 
-    // 有向边,worker和worker之间的输赢边
+    /**
+     * 有向边,worker和worker之间的输赢边
+     * @param index 开发者的下标序号
+     * @param scores 开发者得分
+     * @param winners 任务获胜者
+     * @return
+     */
     public int[][] getRelationEdge(Map<String, Integer> index, List<Map<String, Double>> scores, List<String> winners) {
         int[][] attraction = new int[index.size()][index.size()];
         int one, two;
@@ -100,7 +123,11 @@ public class Competition {
         return attraction;
     }
 
-    // 赢次数减输的次数
+    /**
+     * 赢次数减输的次数
+     * @param attraction
+     * @return
+     */
     public double[][] getAttraction(int[][] attraction) {
         double[][] attr = new double[attraction.length][attraction.length];
         int[] edge = new int[attraction.length];
@@ -123,7 +150,11 @@ public class Competition {
         return attr;
     }
 
-    // worker吸引力(worker之间边的和)
+    /**
+     * worker吸引力(worker之间边的和)
+     * @param attraction
+     * @return
+     */
     public int[][] getUclAttraction(int[][] attraction) {
         int[][] attr = new int[attraction.length][attraction.length];
         for (int i = 0; i < attraction.length; i++) {
@@ -135,9 +166,12 @@ public class Competition {
         return attr;
     }
 
-    // worker排斥关系计算
+    /**
+     * worker排斥关系计算
+     * @param attraction
+     * @return
+     */
     public double[][] getWorkerRepulsion(int[][] attraction) {
-        // worker的边数量
         int[] deg = new int[attraction.length];
         for (int i = 0; i < attraction.length; i++) {
             int one = 0;
@@ -156,12 +190,19 @@ public class Competition {
         return repulsion;
     }
 
-    // 综合分类推荐排序和输赢次数排序,每次只处理一名
+    /**
+     * 综合分类推荐排序和输赢次数排序,每次只处理一名
+     * @param neighbors 相似的任务
+     * @param worker
+     * @param winners 获胜的开发者
+     * @param n 选取n个相似的任务
+     * @param type 任务类型
+     * @return
+     */
     public List<String> refine(List<Integer> neighbors, List<String> worker, List<String> winners, int n, String type) {
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(neighbors, n);
         List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner, type);
-//        List<Map<String, Double>> scores=getAllTypeWorkers(featureExtract.getItems().get(n).getChallengeId(),winner);
         Map<String, Integer> index = getIndex(worker);
         int[][] relation = getRelationEdge(index, scores, winner);
         double[][] attraction = getAttraction(relation);
@@ -193,8 +234,14 @@ public class Competition {
         return result;
     }
 
-    //分类的结果利用关系重新排序
-    public List<String> uclRank(List<Integer> neighbors, List<String> worker, List<String> winners, int n, String type) {
+    /**
+     * 分类的结果利用关系重新排序
+     * @param worker 开发者
+     * @param n
+     * @param type 类型
+     * @return
+     */
+    public List<String> uclRank(List<String> worker,int n, String type) {
         List<String> winner = new ArrayList<>();
         List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems(type).get(n).getChallengeId(), winner);
         Map<String, Integer> index = getIndex(worker);
@@ -209,7 +256,9 @@ public class Competition {
         }
         List<String> result = new ArrayList<>();
         Set<Integer> set = new HashSet<>();
-        // 删除worker后面排斥力大的前几名worker
+        /**
+         *  删除worker后面排斥力大的前几名worker
+         */
         for (int i = 0; i < worker.size(); i++) {
             if (set.contains(i)) {
                 continue;
@@ -234,7 +283,9 @@ public class Competition {
         }
         List<String> res = new ArrayList<>();
         res.addAll(result);
-        // 添加worker吸引力大的worker
+        /**
+         * 添加worker吸引力大的worker
+         */
         for (int i = 0; i < result.size(); i++) {
             int k = index.get(result.get(i));
             if (!res.contains(result.get(i))) {
@@ -250,7 +301,11 @@ public class Competition {
         return res;
     }
 
-    // 吸引力排序
+    /**
+     * 吸引力排序
+     * @param num
+     * @return
+     */
     public int[] sortRelation(double[] num) {
         Map<Integer, Double> map = new HashMap<>();
         for (int i = 0; i < num.length; i++) {
@@ -270,7 +325,11 @@ public class Competition {
         return res;
     }
 
-    //最小下标排序
+    /**
+     * 最小下标排序
+     * @param num
+     * @return
+     */
     public int[] sortWorkerIndex(int[] num) {
         int[][] nums = new int[num.length][2];
         for (int i = 0; i < num.length; i++) {

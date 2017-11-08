@@ -31,7 +31,12 @@ public class Cluster {
     @Autowired
     private TcLibSvm tcLibSvm;
 
-    // 获取训练数据集
+    /**
+     * 获取训练数据集
+     * @param path
+     * @param features
+     * @return
+     */
     public Instances getInstances(String path, double[][] features) {
         WekaArffUtil.writeToArffCluster(path, features);
         instances = WekaArffUtil.getInstances(path);
@@ -68,7 +73,9 @@ public class Cluster {
     }
 
     public Map<String, Double> getRecommendResult(String challengeType, double[][] features, double[] feature, int position, int num, List<String> winners) {
-        //选取聚类的数据集
+        /**
+         * 选取聚类的数据集
+         */
         List<Integer> neighbors = new ArrayList<>(position + 1);
         for (int i = 0; i < position; i++) {
             neighbors.add(i);
@@ -87,7 +94,9 @@ public class Cluster {
             e.printStackTrace();
         }
         String path = Constant.CLUSTER_DIRECTORY + challengeType + "/" + position;
-        // 在聚类中进行分类
+        /**
+         * 在聚类中进行分类
+         */
         List<Integer> list = new ArrayList<>();
         list.addAll(map.get(k));
         neighborIndex = map.get(k);
@@ -95,12 +104,19 @@ public class Cluster {
         return getResult(list, user, data, path);
     }
 
-    // 聚类后，使用bayes进行分类
+    /**
+     * 先聚类后，使用bayes进行分类
+     * @param list
+     * @param user
+     * @param feature
+     * @param path
+     * @return
+     */
     public Map<String, Double> getResult(List<Integer> list, List<String> user, double[][] feature, String path) {
         double[][] data = new double[list.size()][feature[0].length];
         List<String> winner = new ArrayList<>(list.size());
         Maths.copy(feature, data, user, winner, list);
-//        Maths.normalization(data,5);
+        Maths.normalization(data,5);
         return tcBayes.getRecommendResult(path, data, list.size() - 1, winner);
     }
 }

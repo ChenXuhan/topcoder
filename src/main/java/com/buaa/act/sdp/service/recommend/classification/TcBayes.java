@@ -20,7 +20,14 @@ public class TcBayes extends NaiveBayes {
 
     private Instances instances;
 
-    // 按概率对分类结果排序
+    /**
+     * 按概率对分类结果排序
+     * @param path arff文件路径
+     * @param features 特征
+     * @param position
+     * @param winners
+     * @return
+     */
     public Map<String, Double> getRecommendResult(String path, double[][] features, int position, List<String> winners) {
         Map<Double, String> winnerIndex = WekaArffUtil.<String>getWinnerIndex(winners, position);
         Map<String, Double> map = new HashMap<>();
@@ -51,7 +58,14 @@ public class TcBayes extends NaiveBayes {
         return map;
     }
 
-    // Bayes找出最大可能性的开发者及其概率：DCW-DS
+    /**
+     * 找出最大可能性的开发者及其概率：DCW-DS
+     * @param path
+     * @param features
+     * @param position
+     * @param workers
+     * @return
+     */
     public List<Double> getRecommendResult(String path, List<double[]> features, int position, List<String> workers) {
         List<Double> result = new ArrayList<>(features.size()-position);
         try {

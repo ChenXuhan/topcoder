@@ -16,7 +16,15 @@ public class UclKnn {
     @Autowired
     private FeatureExtract featureExtract;
 
-    // 选择n个最近的排序，取前K个
+    /**
+     * 选择n个最近的排序，取前K个
+     * @param features
+     * @param feature
+     * @param k
+     * @param start
+     * @param winners
+     * @return
+     */
     public Map<String, Integer> getRecommendWorker(double[][] features, double[] feature, int k, int start, List<String> winners) {
         Map<Integer, Double> map = new HashMap<>(start);
         for (int i = 0; i < start; i++) {
@@ -43,6 +51,14 @@ public class UclKnn {
         return sortMap;
     }
 
+    /**
+     * 推荐的开发者获胜概率
+     * @param features
+     * @param k
+     * @param start
+     * @param winners
+     * @return
+     */
     public List<Map<String, Integer>> getRecommendResult(double[][] features, int k, int start, List<String> winners) {
         List<Map<String, Integer>> result = new ArrayList<>();
         for (int i = start; i < features.length; i++) {
@@ -51,7 +67,12 @@ public class UclKnn {
         return result;
     }
 
-    //KNN自定义的距离公式
+    /**
+     * KNN自定义的距离公式
+     * @param vectorOne
+     * @param vectorTwo
+     * @return
+     */
     public double similarity(double[] vectorOne, double[] vectorTwo) {
         BigDecimal bigDecimal = BigDecimal.valueOf(0.0);
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(Math.abs(vectorOne[0] - vectorTwo[0])));
@@ -73,7 +94,14 @@ public class UclKnn {
         return bigDecimal.doubleValue();
     }
 
-    //余弦相似度
+    /**
+     * 余弦相似度
+     * @param one
+     * @param two
+     * @param start
+     * @param end
+     * @return
+     */
     public double cosSimilarity(double[] one, double[] two, int start, int end) {
         double sum = 0, a = 0, b = 0;
         for (int i = start; i < end; i++) {

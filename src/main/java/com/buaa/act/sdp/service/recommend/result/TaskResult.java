@@ -25,6 +25,11 @@ public class TaskResult {
     @Autowired
     private Competition competition;
 
+    /**
+     * 为单个任务推荐开发者
+     * @param item
+     * @return
+     */
     public List<String> recommendWorkers(ChallengeItem item) {
         if (item == null) {
             return null;
@@ -47,7 +52,11 @@ public class TaskResult {
         return worker;
     }
 
-    //分类结果排序
+    /**
+     * 分类结果排序
+     * @param map
+     * @return
+     */
     public List<String> recommendWorker(Map<String, Double> map) {
         List<String> workers = new ArrayList<>();
         List<Map.Entry<String, Double>> list = new ArrayList<>();
@@ -64,6 +73,12 @@ public class TaskResult {
         return workers;
     }
 
+    /**
+     * 开发者按概率排序
+     * @param data
+     * @param workers
+     * @return
+     */
     public List<String> recommendWorker(List<Double> data, List<String> workers) {
         Map<String, Double> map = new HashMap<>(workers.size());
         for (int i = 0; i < workers.size(); i++) {

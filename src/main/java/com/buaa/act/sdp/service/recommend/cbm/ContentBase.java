@@ -11,7 +11,12 @@ import java.util.*;
 @Service
 public class ContentBase {
 
-    // 获取相似任务中所有的获胜者handle
+    /**
+     * 获取相似任务中所有的获胜者handle
+     * @param winner 所有的获胜者
+     * @param neighbors 相似的任务
+     * @return
+     */
     public Set<String> getWinner(List<String> winner, List<Integer> neighbors) {
         Set<String> set = new HashSet<>();
         for (int i = 0; i < neighbors.size(); i++) {
@@ -20,7 +25,13 @@ public class ContentBase {
         return set;
     }
 
-    // 计算当前任务与其相似任务之间的相似度，并按照相似度排序
+    /**
+     * 计算当前任务与其相似任务之间的相似度，并按照相似度排序
+     * @param features 特征向量
+     * @param index 当前任务下标
+     * @param neighborIndex 相似的任务
+     * @return
+     */
     public double[][] getSimilarityTasks(double[][] features, int index, List<Integer> neighborIndex) {
         double[][] similarity = new double[neighborIndex.size()][2];
         for (int i = 0; i < neighborIndex.size(); i++) {
@@ -36,7 +47,14 @@ public class ContentBase {
         return similarity;
     }
 
-    // 取前20个相似任务,item-based推荐
+    /**
+     * 取前20个相似任务,item-based推荐
+     * @param features 特征向量
+     * @param index 任务小标
+     * @param scores 开发者得分
+     * @param winner 开发者获胜者
+     * @return
+     */
     public Map<String, Double> getRecommendResult(double[][] features, int index, List<Map<String, Double>> scores, List<String> winner) {
         Map<String, List<Double>> map = new HashMap<>();
         List<Integer> neighborIndex = Maths.getSimilarityChallenges(features, index);

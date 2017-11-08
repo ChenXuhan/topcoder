@@ -48,7 +48,12 @@ public class FeatureExtract {
         return taskMsg.getUserScore(type);
     }
 
-    // 文本分词统计
+    /**
+     * 文本分词统计
+     * @param start
+     * @param type
+     * @return
+     */
     public WordCount[] getWordCount(int start,String type) {
         List<ChallengeItem> items = getItems(type);
         String[] requirements = new String[items.size()];
@@ -81,7 +86,11 @@ public class FeatureExtract {
         return wordCounts;
     }
 
-    // 只获取任务的时间和奖金
+    /**
+     * 只获取任务的时间和奖金
+     * @param challengeType
+     * @return
+     */
     public double[][] getTimesAndAward(String challengeType) {
         List<ChallengeItem> items = getItems(challengeType);
         double[][] features = new double[items.size()][2];
@@ -97,7 +106,11 @@ public class FeatureExtract {
         return features;
     }
 
-    //UCL中KNN分类器特征
+    /**
+     * UCL中KNN分类器特征
+     * @param type
+     * @return
+     */
     public double[][] generateVectorUcl(String type) {
         List<ChallengeItem> items = getItems(type);
         double[][] paymentAndDuration = new double[items.size()][3];
@@ -177,7 +190,11 @@ public class FeatureExtract {
         return feature;
     }
 
-    //需求和标题使用的长度,没有处理文本
+    /**
+     * 需求和标题使用的长度,没有处理文本
+     * @param type
+     * @return
+     */
     public double[][] generateVectors(String type) {
         List<ChallengeItem> items = getItems(type);
         Set<String> set = getSkills();
@@ -188,7 +205,14 @@ public class FeatureExtract {
         return features;
     }
 
-    // 统计任务中的技能
+    /**
+     * 统计任务中的技能
+
+     * @param index
+     * @param feature
+     * @param set
+     * @param skill
+     */
     public void setWorkerSkills(int index, double[] feature, Set<String> set, Set<String> skill) {
         boolean flag;
         for (String str : set) {
@@ -207,7 +231,10 @@ public class FeatureExtract {
         }
     }
 
-    // 所有技能的集合
+    /**
+     * 任务技能集合
+     * @return
+     */
     public Set<String> getSkills() {
         Set<String> skills = new HashSet<>();
         for (String str : Constant.TECHNOLOGIES) {
@@ -219,7 +246,6 @@ public class FeatureExtract {
         return skills;
     }
 
-    //筛选一部分任务后，获取这些challenge的特征向量
     public double[][] getFeatures(String challengeType) {
         return generateVectors(challengeType);
     }

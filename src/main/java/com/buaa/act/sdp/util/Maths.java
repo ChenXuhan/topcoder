@@ -7,7 +7,12 @@ import java.util.*;
  */
 public class Maths {
 
-    // 余弦相似度计算
+    /**
+     * 余弦相似度计算
+     * @param vectorOne
+     * @param vectorTwo
+     * @return
+     */
     public static double taskSimilariry(double[] vectorOne, double[] vectorTwo) {
         double num = 0, a = 0, b = 0;
         for (int i = 0; i < vectorOne.length; i++) {
@@ -63,7 +68,12 @@ public class Maths {
         return list;
     }
 
-    // 获取某一任务较为相似的任务
+    /**
+     * 获取某一任务较为相似的任务
+     * @param features
+     * @param index
+     * @return
+     */
     public static List<Integer> getSimilarityChallenges(double[][] features, int index) {
         Map<Integer, Double> map = new HashMap<>();
         double k, sum1, sum2;
@@ -86,7 +96,6 @@ public class Maths {
                 }
             }
             if (k >= 1.0) {
-//                map.put(i, k/sum);
                 map.put(i, k / Math.sqrt(sum1 * sum2));
             }
         }
@@ -104,7 +113,11 @@ public class Maths {
         return result;
     }
 
-    // 向量归一化处理,[0-1]
+    /**
+     * 向量归一化处理,[0-1]
+     * @param features
+     * @param k
+     */
     public static void normalization(double[][] features, int k) {
         double max, min;
         for (int i = 0; i < k; i++) {
@@ -124,7 +137,14 @@ public class Maths {
         }
     }
 
-    // 从全部向量中复制出需要的子数据进行分类
+    /**
+     * 从全部向量中复制出需要的部分数据进行分类
+     * @param features
+     * @param data
+     * @param winners
+     * @param user
+     * @param index
+     */
     public static void copy(double[][] features, double[][] data, List<String> winners, List<String> user, List<Integer> index) {
         int row = index.size(), column = features[0].length;
         for (int i = 0; i < row; i++) {

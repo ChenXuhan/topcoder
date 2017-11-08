@@ -27,7 +27,10 @@ public class ProjectMsg {
         projectIdToChallengeIds = new HashMap<>();
     }
 
-    // 返回所有project中所有的challengeId
+    /**
+     * project中所有的challengeId
+     * @return
+     */
     public synchronized Map<Integer, List<Integer>> getProjectToChallenges() {
         if (projectIdToChallengeIds.isEmpty()) {
             challengeProjectMapping();
@@ -35,6 +38,9 @@ public class ProjectMsg {
         return projectIdToChallengeIds;
     }
 
+    /**
+     * challenge和project对应关系
+     */
     public void challengeProjectMapping() {
         List<Map<String, Object>> list = challengeItemDao.getProjectId();
         List<Integer> challengeIds;
@@ -58,6 +64,10 @@ public class ProjectMsg {
         }
     }
 
+    /**
+     * challenge对应的项目
+     * @return
+     */
     public synchronized Map<Integer, Integer> getChallengeToProject() {
         if (challengeToProject.isEmpty()) {
             challengeProjectMapping();

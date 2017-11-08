@@ -67,7 +67,14 @@ public class Distince extends EuclideanDistance {
         return distance(first, second, cutOffValue, null);
     }
 
-    //自定义距离公式
+    /**
+     * 自定义距离公式
+     * @param first
+     * @param second
+     * @param cutOffValue
+     * @param stats
+     * @return
+     */
     @Override
     public double distance(Instance first, Instance second, double cutOffValue, PerformanceStats stats) {
         double distance = 0, a = 0, b = 0, c = 0;
@@ -101,6 +108,7 @@ public class Distince extends EuclideanDistance {
         m_Data = new Instances(m_Data, 0);
     }
 
+    @Override
     protected double updateDistance(double currDist, double diff) {
         return currDist + diff;
     }

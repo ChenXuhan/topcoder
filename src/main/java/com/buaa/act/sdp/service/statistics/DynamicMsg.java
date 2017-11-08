@@ -23,6 +23,13 @@ public class DynamicMsg {
         msgMap = new HashMap<>();
     }
 
+    /**
+     * 获取某一个任务中注册开发者的动态特征 ESEM
+     * @param list 当前任务先前的任务
+     * @param challengeItem 当前任务
+     * @param workers 参与的开发者
+     * @return
+     */
     public List<double[]> getWorkerDynamicFeature(List<ChallengeItem> list, ChallengeItem challengeItem, List<String> workers) {
         Map<String, WorkerDynamicMsg> map = msgMap.get(challengeItem.getChallengeId());
         Map<Integer, Map<String, Double>> scores = taskScore.getAllWorkerScores();
@@ -90,6 +97,13 @@ public class DynamicMsg {
         return feature;
     }
 
+    /**
+     * 获取开发者动态特征
+     * @param list 当前任务先前的任务
+     * @param item 当前任务
+     * @param worker 参与的开发者
+     * @return
+     */
     public List<double[]> getDynamicFeatures(List<ChallengeItem> list, ChallengeItem item, List<String> worker) {
         Map<String, WorkerDynamicMsg> map = msgMap.get(item.getChallengeId());
         if (map == null) {
@@ -107,7 +121,11 @@ public class DynamicMsg {
         return feature;
     }
 
-
+    /**
+     * 计算开发者动态特征
+     * @param msg 特征信息
+     * @param feature 特征向量
+     */
     public void generateDynamicFeature(WorkerDynamicMsg msg, double[] feature) {
         feature[0] = msg.getNumRegTask() == 0 ? 0 : 1.0 * msg.getNumSubTask() / msg.getNumRegTask();
         feature[1] = msg.getNumRegTaskSimilar() == 0 ? 0 : 1.0 * msg.getNumSubTaskSimilar() / msg.getNumRegTaskSimilar();
@@ -119,6 +137,12 @@ public class DynamicMsg {
         feature[7] = msg.getNumRegTaskTDays() == 0 ? 0 : msg.getPriceTotal() / msg.getNumRegTaskTDays();
     }
 
+    /**
+     *  判断任务是否相似
+     * @param one
+     * @param two
+     * @return
+     */
     public boolean isSimilar(ChallengeItem one, ChallengeItem two) {
         if (one.getChallengeType().equals(two.getChallengeType())) {
             return true;
@@ -187,6 +211,12 @@ public class DynamicMsg {
         return false;
     }
 
+    /**
+     * 任务的发布时间距离
+     * @param one
+     * @param two
+     * @return
+     */
     public int dataDistance(ChallengeItem one, ChallengeItem two) {
         String[] temp;
         int a, b;

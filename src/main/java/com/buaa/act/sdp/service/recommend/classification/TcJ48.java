@@ -20,7 +20,14 @@ public class TcJ48 extends J48 {
 
     private Instances instances;
 
-    // 按概率对分类结果排序
+    /**
+     * 按概率对分类结果排序
+     * @param path
+     * @param features
+     * @param position
+     * @param winners
+     * @return
+     */
     public Map<String, Double> getRecommendResult(String path, double[][] features, int position, List<String> winners) {
         Map<Double, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners, position);
         Map<String, Double> map = new HashMap<>();

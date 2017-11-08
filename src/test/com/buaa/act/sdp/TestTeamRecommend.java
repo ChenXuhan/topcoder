@@ -21,7 +21,7 @@ public class TestTeamRecommend {
 
     @Test
     public void testProjectId(){
-        List<String>bestTeam=teamResult.findBestTeam(7282);
+        List<String>bestTeam=teamResult.findBestTeamMaxLogit(7282);
         System.out.println(bestTeam.size());
         System.out.println(bestTeam);
     }

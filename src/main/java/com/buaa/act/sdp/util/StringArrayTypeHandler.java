@@ -49,8 +49,9 @@ public class StringArrayTypeHandler extends BaseTypeHandler<String[]> {
     }
 
     private String[] getStringArray(String columnValue) {
-        if (columnValue == null)
+        if (columnValue == null) {
             return null;
+        }
         return columnValue.split(",");
     }
 }

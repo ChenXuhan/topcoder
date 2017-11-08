@@ -15,6 +15,14 @@ import java.util.Map;
 @Component
 public class Bayes {
 
+    /**
+     * 计算划分到某一类的概率
+     * @param features
+     * @param feature
+     * @param type
+     * @param lableIndexMap
+     * @return
+     */
     public BigDecimal getClassProbality(double[][] features, double[] feature, String type, Map<String, List<Integer>> lableIndexMap) {
         List<Integer> list = lableIndexMap.get(type);
         double[] vector;
@@ -38,6 +46,13 @@ public class Bayes {
         return result;
     }
 
+    /**
+     * 分别计算所有类别的概率
+     * @param features
+     * @param index
+     * @param lableIndexMap
+     * @return
+     */
     public Map<String, Double> getAllClassProbality(double[][] features, int index, Map<String, List<Integer>> lableIndexMap) {
         Map<String, BigDecimal> map = new HashMap<>();
         BigDecimal bigDecimal = BigDecimal.valueOf(0.0), temp;
@@ -57,7 +72,13 @@ public class Bayes {
         return workerMap;
     }
 
-    //只计算需求长度、不使用tf-idf
+    /**
+     * 计算需求长度、不使用tf-idf
+     * @param features
+     * @param winners
+     * @param index
+     * @return
+     */
     public Map<String, Double> getRecommendResult(double[][] features, List<String> winners, int index) {
         Map<String, List<Integer>> lableIndexMap = getLableIndexMap(winners, index);
         return getAllClassProbality(features, index, lableIndexMap);
@@ -77,7 +98,14 @@ public class Bayes {
         return lableIndexMap;
     }
 
-    //UCL论文中推荐方法、使用tf-idf处理需求文本
+    /**
+     * UCL论文中推荐方法、使用tf-idf处理需求文本
+     * @param wordCounts
+     * @param features
+     * @param winners
+     * @param index
+     * @return
+     */
     public Map<String, Double> getRecommendResultUcl(WordCount[] wordCounts, double[][] features, List<String> winners, int index) {
         Map<String, List<Integer>> indexMap = getLableIndexMap(winners, index);
         return getTypeProbalityUcl(wordCounts, features, indexMap, index);
@@ -125,7 +153,6 @@ public class Bayes {
                 sum += taskWords.get(index);
             }
             BigDecimal decimal = BigDecimal.valueOf(1.0 * (count + 1) / (sum + allWords.size()));
-//            BigDecimal decimal = BigDecimal.valueOf(1.0 * count / sum);
             for (int j = 0; j < entry.getValue(); j++) {
                 bigDecimal = bigDecimal.multiply(decimal);
             }

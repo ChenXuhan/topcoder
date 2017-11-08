@@ -17,10 +17,14 @@ public class LocalClassifier {
 
     @Autowired
     private TcBayes tcBayes;
-    @Autowired
-    private TcJ48 tcJ48;
     private List<Integer> neighborIndex;
 
+    /**
+     * 获取相似的任务
+     * @param features 特征向量
+     * @param position 当前任务下标
+     * @return
+     */
     public List<Integer> getNeighborIndex(double[][] features, int position) {
         neighborIndex = Maths.getSimilarityChallenges(features, position);
         return neighborIndex;
@@ -30,6 +34,14 @@ public class LocalClassifier {
         return neighborIndex;
     }
 
+    /**
+     * 待推荐任务的开发者获胜概率
+     * @param challengeType 任务类型
+     * @param features 特性
+     * @param position 当前任务下标
+     * @param winners 所有的获胜者
+     * @return
+     */
     public Map<String, Double> getRecommendResult(String challengeType, double[][] features, int position, List<String> winners) {
         List<Integer> neighbors = new ArrayList<>(getNeighborIndex(features, position));
         neighbors.add(position);
