@@ -27,6 +27,9 @@ public class TeamResult {
     @Autowired
     private Collaboration collaboration;
 
+    /*
+
+     */
     // 候选者下标
     public Map<String, Integer> getWorkerIndex(List<List<String>> workers,List<String>allWorkers) {
         Map<String, Integer> workerIndex = new HashMap<>();

@@ -49,12 +49,6 @@ public class TestUser {
         userApi.saveAllUsers();
     }
 
-
-    @Test
-    public void getNumber() {
-        //userApi.getNumbers();
-    }
-
     @Test
     public void updateUsers() {
         userStatistics.updateUsers();

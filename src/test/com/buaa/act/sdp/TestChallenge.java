@@ -7,14 +7,10 @@ import com.buaa.act.sdp.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.model.challenge.ChallengeRegistrant;
 import com.buaa.act.sdp.model.challenge.ChallengeSubmission;
-import com.buaa.act.sdp.service.ability.AbilityExp;
-import com.buaa.act.sdp.service.ability.ChallengeDifficulty;
-import com.buaa.act.sdp.service.ability.AbilityFileMongodb;
 import com.buaa.act.sdp.service.api.ChallengeApi;
 import com.buaa.act.sdp.service.recommend.TaskRecommend;
 import com.buaa.act.sdp.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.service.recommend.feature.FeatureExtract;
-import com.buaa.act.sdp.service.recommend.network.Competition;
 import com.buaa.act.sdp.service.statistics.ProjectMsg;
 import com.buaa.act.sdp.service.statistics.TaskScores;
 import com.buaa.act.sdp.service.update.ChallengeStatistics;
@@ -52,9 +48,6 @@ public class TestChallenge {
     private TaskRecommend recommendResult;
 
     @Autowired
-    private AbilityExp exp;
-
-    @Autowired
     private FeatureExtract featureExtract;
 
     @Autowired
@@ -65,31 +58,7 @@ public class TestChallenge {
     private ChallengeRegistrantDao challengeRegistrantDao;
 
     @Autowired
-    private relationGen gen;
-
-    @Autowired
-    private Neo4jConn neo4j;
-
-    @Autowired
-    private TechTagHandle hand;
-
-    @Autowired
-    private ChallengeDifficulty databaseOpe;
-
-    @Autowired
     private TaskScores taskScores;
-    private Competition competition;
-
-    @Autowired
-    private AbilityFileMongodb mongodb;
-
-    @Test
-    public void testMongodb() {
-//        mongodb.dealPLDoc("C:\\Users\\YLT\\Desktop\\开发者搜索\\ProgrammingLanguageList.txt");
-        // mongodb.genMongodbFile();
-        //mongodb.dealPLDoc("C:\\Users\\YLT\\Desktop\\开发者搜索\\ProgrammingLanguageList.txt");
-         mongodb.genMongodbFile();
-    }
 
     @Test
     public void testProjectId() {
@@ -107,18 +76,6 @@ public class TestChallenge {
         }
         System.out.println(taskScores.getAllWorkerScores().size());
     }
-
-
-    @Test
-    public void testRelationGen() {
-    }
-
-
-    @Test
-    public void testCsv() {
-        gen.collaborationGen();
-    }
-
 
     @Test
     public void testChallenge() {
@@ -158,34 +115,6 @@ public class TestChallenge {
     @Test
     public void updateChallenges() {
         challengeStatistics.updateChallenges();
-    }
-
-    @Test
-    public void teat1() {
-        databaseOpe.run();
-        /*ability.ope.run();
-        ability.getAbility("nomo_kazza","CSS");*/
-        //exp.getTech(30054047);
-        // exp.userAbility.ope.run();
-        //exp.getCoder(30050505);
-        //exp.userAbility.getUserAllAbility("ksladkov");
-        //exp.userAbility.getAbility("ksladkov","CSS");
-        /*int sun = 0;
-        for(int i = 0; i < Constant.TECH.length -1;i ++){
-            for(int j = i+1; j <Constant.TECH.length;j++){
-                if(Constant.TECH[i]==Constant.TECH[j]){
-                    sun++;
-                    System.out.println(Constant.TECH[i]);
-                }
-            }
-        }
-        System.out.println(sun);*/
-        //System.out.println(Constant.TECH.length);
-        //System.out.println(exp.userAbility.getAbility("-jacob-"));
-        //neo4j.getTry();
-        //exp.userAbility.ttt();
-      /* String str =  exp.userAbility.getAbility("12778");
-        System.out.println(str);*/
     }
 
     @Test
