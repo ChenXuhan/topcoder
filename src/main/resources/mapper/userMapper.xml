@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.buaa.act.sdp.dao.UserDao">
-    <insert id="insert" parameterType="com.buaa.act.sdp.model.user.User" useGeneratedKeys="true" keyProperty="id">
+<mapper namespace="com.buaa.act.sdp.topcoder.dao.UserDao">
+    <insert id="insert" parameterType="com.buaa.act.sdp.topcoder.model.user.User" useGeneratedKeys="true" keyProperty="id">
         insert into user(handle,country,memberSince,quote,photoLink,copilot,skills)
         values(#{handle},#{country},#{memberSince},#{quote},#{photoLink},#{copilot},
         #{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR})
     </insert>
 
-    <select id="getUserByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.model.user.User">
+    <select id="getUserByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.topcoder.model.user.User">
         select * from user where handle=#{name}
     </select>
 
-    <select id="getUserById" parameterType="java.lang.Integer" resultType="com.buaa.act.sdp.model.user.User">
+    <select id="getUserById" parameterType="java.lang.Integer" resultType="com.buaa.act.sdp.topcoder.model.user.User">
         select * from user where id=#{id}
     </select>
 
@@ -19,11 +19,11 @@
         select DISTINCT handle from user
     </select>
 
-    <select id="getAllUsers" resultType="com.buaa.act.sdp.model.user.User">
+    <select id="getAllUsers" resultType="com.buaa.act.sdp.topcoder.model.user.User">
         SELECT * from user;
     </select>
 
-    <update id="updateUsers" parameterType="com.buaa.act.sdp.model.user.User">
+    <update id="updateUsers" parameterType="com.buaa.act.sdp.topcoder.model.user.User">
             UPDATE user set competitionNums=#{competitionNums},submissionNums=#{submissionNums},winNums=#{winNums} where handle=#{handle}
     </update>
 

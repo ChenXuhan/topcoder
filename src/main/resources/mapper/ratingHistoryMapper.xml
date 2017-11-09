@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.buaa.act.sdp.dao.RatingHistoryDao">
-    <insert id="insert" parameterType="com.buaa.act.sdp.model.user.RatingHistory" useGeneratedKeys="true"
+<mapper namespace="com.buaa.act.sdp.topcoder.dao.RatingHistoryDao">
+    <insert id="insert" parameterType="com.buaa.act.sdp.topcoder.model.user.RatingHistory" useGeneratedKeys="true"
             keyProperty="id">
         insert into rating_history(handle,developType,challengeId,challengeName,date,rating) values
         <foreach collection="array" item="item" index="index" separator=",">
