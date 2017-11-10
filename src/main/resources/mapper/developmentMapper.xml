@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.act.sdp.topcoder.dao.DevelopmentDao">
-    <insert id="insert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
         insert into development(
         handle,
         developType,
@@ -33,4 +33,20 @@
         </foreach>
     </insert>
 
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=",">
+            UPDATE development set
+            rating=#{item.rating},
+            reliability=#{item.reliability},
+            activePercentile=#{item.activePercentile},
+            activeRank=#{item.activeRank},
+            activeCountryRank=#{item.activeCountryRank},
+            activeSchoolRank=#{item.activeSchoolRank},
+            overallPercentile=#{item.overallPercentile},
+            overallRank=#{item.overallRank},
+            overallCountryRank=#{item.overallCountryRank},
+            overallSchoolRank=#{item.overallSchoolRank},
+            volatility=#{item.volatility} where handle=#{item.handle} and developType=#{ietm.developType}
+        </foreach>
+    </update>
 </mapper>

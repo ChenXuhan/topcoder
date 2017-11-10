@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.act.sdp.topcoder.dao.ChallengeSubmissionDao">
 
-    <insert id="insert" parameterType="com.buaa.act.sdp.model.challenge.ChallengeSubmission" useGeneratedKeys="true"
+    <insert id="insertBatch" parameterType="com.buaa.act.sdp.model.challenge.ChallengeSubmission" useGeneratedKeys="true"
             keyProperty="id">
         insert into
         challenge_submission(challengeID,handle,placement,submissionDate,submissionStatus,points,finalScore,screeningScore,initialScore,submissionDownloadLink)
@@ -12,34 +12,12 @@
         </foreach>
     </insert>
 
-    <select id="getChallengeSubmission" parameterType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission"
-            resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission">
-        select * from challenge_submission where challengeID = #{challengeID} AND handle = #{handle};
-    </select>
-
-    <select id="getUserSubmissons" resultType="java.util.Map">
-        select handle,group_concat(CAST(challengeID as char)) as challengeIds,group_concat(finalScore) as scores from challenge_submission group by handle having count(DISTINCT  challengeID)>=10;
-    </select>
-
     <select id="getChallengeSubmissionCount" resultType="java.lang.Integer">
         SELECT count(DISTINCT handle) from challenge_submission where challengeID=#{challengeId};
     </select>
 
-    <select id="getChallengeWinner" resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission">
+    <select id="getChallengeSubmissionMsg" resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission">
         SELECT handle,challengeId,finalScore,placement,submissionStatus from  challenge_submission ORDER BY challengeID ASC;
-    </select>
-
-    <select id="getSubmissionByHandle" parameterType="java.lang.String"
-            resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission">
-        select * from challenge_submission where handle = #{handle}
-    </select>
-
-    <select id="getUserSubers" resultType="java.lang.Integer">
-        select count(DISTINCT challengeID) from challenge_submission where handle=#{handle}
-    </select>
-
-    <select id="getUserWiners" resultType="java.lang.Integer">
-        select count(DISTINCT challengeID) from challenge_submission where handle=#{handle} AND placement= 1
     </select>
 
 </mapper>

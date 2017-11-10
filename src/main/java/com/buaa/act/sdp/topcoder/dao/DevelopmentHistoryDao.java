@@ -10,7 +10,9 @@ import java.util.List;
  */
 public interface DevelopmentHistoryDao {
 
-    void insert(List<DevelopmentHistory> list);
+    void insertBatch(List<DevelopmentHistory> list);
 
-    List<DevelopmentHistory> getChallengeCountByHandle(@Param("handle") String handle);
+    void updateBatch(List<DevelopmentHistory>list);
+
+    List<DevelopmentHistory> getDevelopmentHistoryByHandle(@Param("handle") String handle);
 }

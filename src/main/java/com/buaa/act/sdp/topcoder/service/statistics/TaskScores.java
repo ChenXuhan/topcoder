@@ -64,7 +64,7 @@ public class TaskScores {
      */
     public synchronized Map<Integer, Map<String, Double>> getAllWorkerScores() {
         if (scores.isEmpty()) {
-            List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllRegistrant();
+            List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllChallengeRegistrants();
             Map<String, Double> score;
             Map<String, Integer> time;
             int date;
@@ -105,7 +105,7 @@ public class TaskScores {
      * 依据submission表更新worker的得分
      */
     private void updateWorkerScores() {
-        List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
+        List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeSubmissionMsg();
         Map<String, Double> score;
         Map<String, Integer> time;
         int date;

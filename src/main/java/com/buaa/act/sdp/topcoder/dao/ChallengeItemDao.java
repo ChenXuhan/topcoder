@@ -17,33 +17,12 @@ public interface ChallengeItemDao {
 
     ChallengeItem getChallengeItemById(@Param("challengeId") int challengeId);
 
-    String getChallengeItemRequirementById(@Param("challengeId") int challengeId);
-
-    void setHandledRequirements(@Param("requirements") String requirements, @Param("challengeId") int challengeId);
-
-    List<Integer> getChallenges();
+    List<Integer> getChallengeIds();
 
     List<ChallengeItem> getAllChallenges();
 
-    void updateChallenges(ChallengeItem item);
-
-    String[] getAllPrizes();
-
-    Integer[] getAllReliabilityBonus();
-
-    Integer[] getAllDuration();
-
-    Integer[] getAllNumRegistrants();
-
-    Integer[] getAllNumSubmissions();
-
-    double getDifficultyDegree(@Param("challengeId") int challengeId);
+    void updateChallenge(ChallengeItem item);
 
     List<Map<String, Object>> getProjectId();
 
-    void insertDifficultyDegree(@Param("relationMap") HashMap<Integer, Double> map);
-
-    String[] getAllPlatforms();
-
-    String[] getAllTechnology();
 }

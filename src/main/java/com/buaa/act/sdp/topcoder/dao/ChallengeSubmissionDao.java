@@ -11,19 +11,10 @@ import java.util.Map;
  */
 public interface ChallengeSubmissionDao {
 
-    void insert(ChallengeSubmission[] challengeSubmission);
-
-    ChallengeSubmission[] getChallengeSubmission(ChallengeSubmission challengeSubmission);
-
-    List<Map<String, String>> getUserSubmissons();
+    void insertBatch(ChallengeSubmission[] challengeSubmission);
 
     int getChallengeSubmissionCount(@Param("challengeId") int challengeId);
 
-    List<ChallengeSubmission> getChallengeWinner();
+    List<ChallengeSubmission> getChallengeSubmissionMsg();
 
-    ChallengeSubmission[] getSubmissionByHandle(@Param("handle") String handle);
-
-    int getUserSubers(String handle);
-
-    int getUserWiners(String handle);
 }

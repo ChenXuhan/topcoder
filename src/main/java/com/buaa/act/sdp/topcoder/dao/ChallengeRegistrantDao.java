@@ -10,19 +10,12 @@ import java.util.List;
  */
 public interface ChallengeRegistrantDao {
 
-    void insert(ChallengeRegistrant[] challengeRegistrants);
+    void insertBatch(ChallengeRegistrant[] challengeRegistrants);
 
-    ChallengeRegistrant[] getChallengeRegistrant(ChallengeRegistrant challengeRegistrant);
+    int getRegistrantCountByTaskId(@Param("challengeId") int challengeId);
 
-    String[] getUsers();
+    List<ChallengeRegistrant> getAllChallengeRegistrants();
 
-    int getRegistrantCountById(@Param("challengeId") int challengeId);
+    int getUserRegistrantTimes(String handle);
 
-    ChallengeRegistrant[] getRegistrantById(@Param("challengeId") int challengeId);
-
-    List<ChallengeRegistrant> getAllRegistrant();
-
-    int getUserRegers(String handle);
-
-    ChallengeRegistrant[] getRegistrantByHandle(@Param("handle") String handle);
 }

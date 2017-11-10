@@ -229,4 +229,8 @@ public class Constant {
      * team 推荐启发式算法迭代次数
      */
     public static final int ITERATIONS = 1000;
+
+    public static final int PAGESIZE=50;
+
+    public static final int RETRY_TIMES=10;
 }

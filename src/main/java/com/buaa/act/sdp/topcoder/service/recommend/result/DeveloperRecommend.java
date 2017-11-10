@@ -14,7 +14,7 @@ import java.util.*;
  * Created by yang on 2017/6/3.
  */
 @Service
-public class TaskResult {
+public class DeveloperRecommend {
 
     @Autowired
     private FeatureExtract featureExtract;
@@ -84,17 +84,6 @@ public class TaskResult {
         for (int i = 0; i < workers.size(); i++) {
             map.put(workers.get(i), data.get(i));
         }
-        List<Map.Entry<String, Double>> list = new ArrayList<>();
-        list.addAll(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
-            @Override
-            public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-                return o2.getValue().compareTo(o1.getValue());
-            }
-        });
-        for (int i = 0; i < list.size(); i++) {
-            workers.add(list.get(i).getKey());
-        }
-        return workers;
+        return recommendWorker(map);
     }
 }

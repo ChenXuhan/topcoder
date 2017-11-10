@@ -63,11 +63,7 @@
         select * from challenge_item where challengeId = #{challengeId}
     </select>
 
-    <select id="getChallengeItemRequirementById" parameterType="int" resultType="java.lang.String">
-        select detailedRequirements from challenge_item where challengeId = #{challengeId}
-    </select>
-
-    <select id="getChallenges" resultType="java.lang.Integer">
+    <select id="getChallengeIds" resultType="java.lang.Integer">
         select challengeId from challenge_item
     </select>
 
@@ -75,53 +71,12 @@
         select * from challenge_item
     </select>
 
-    <update id="updateChallenges" parameterType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem">
+    <update id="updateChallenge" parameterType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem">
           UPDATE challenge_item SET duration=#{duration} , numSubmissions=#{numSubmissions} , numRegistrants=#{numRegistrants} ,languages=#{languages} where challengeId=#{challengeId}
     </update>
-
-    <select id="getAllPrizes" resultType="java.lang.String">
-        select prize from challenge_item
-    </select>
-
-    <select id="getAllReliabilityBonus" resultType="java.lang.Integer">
-        select reliabilityBonus from challenge_item
-    </select>
-
-    <select id="getAllDuration" resultType="java.lang.Integer">
-        select duration from challenge_item
-    </select>
-
-    <select id="getAllNumRegistrants" resultType="java.lang.Integer">
-        select numRegistrants from challenge_item
-    </select>
-
-    <select id="getAllNumSubmissions" resultType="java.lang.Integer">
-        select numSubmissions from challenge_item
-    </select>
 
     <select id="getProjectId" resultType="java.util.Map">
         SELECT challengeId,projectId,challengeType from challenge_item where projectId>0
     </select>
 
-    <select id="getDifficultyDegree" resultType="java.lang.Double">
-        SELECT difficultyDegree from challenge_item where challengeId=#{challengeId}
-    </select>
-
-    <update id="insertDifficultyDegree">
-        <foreach collection="relationMap" index="key1" item="value1" separator=";">
-            UPDATE challenge_item set diff=#{value1} where challengeId=#{key1}
-        </foreach>
-    </update>
-
-    <update id="setHandledRequirements">
-        UPDATE challenge_item set requirements=#{requirements} where challengeId=#{challengeId}
-    </update>
-
-    <select id="getAllPlatforms" resultType="java.lang.String">
-        SELECT platforms from challenge_item
-    </select>
-
-    <select id="getAllTechnology" resultType="java.lang.String">
-        SELECT technology from challenge_item
-    </select>
 </mapper>

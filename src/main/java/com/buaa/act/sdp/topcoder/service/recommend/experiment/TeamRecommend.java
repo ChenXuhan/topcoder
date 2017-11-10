@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.topcoder.service.recommend;
+package com.buaa.act.sdp.topcoder.service.recommend.experiment;
 
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.buaa.act.sdp.topcoder;
 
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
-import com.buaa.act.sdp.topcoder.service.recommend.TaskRecommend;
+import com.buaa.act.sdp.topcoder.service.recommend.experiment.TaskRecommend;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.Reliability;
 import org.junit.Test;

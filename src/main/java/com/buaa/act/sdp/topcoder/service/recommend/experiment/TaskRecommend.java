@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.topcoder.service.recommend;
+package com.buaa.act.sdp.topcoder.service.recommend.experiment;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
@@ -10,7 +10,7 @@ import com.buaa.act.sdp.topcoder.service.recommend.feature.Reliability;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.TaskWorkerAttribute;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.WordCount;
 import com.buaa.act.sdp.topcoder.service.recommend.network.Competition;
-import com.buaa.act.sdp.topcoder.service.recommend.result.TaskResult;
+import com.buaa.act.sdp.topcoder.service.recommend.result.DeveloperRecommend;
 import com.buaa.act.sdp.topcoder.service.statistics.DynamicMsg;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
 import com.buaa.act.sdp.topcoder.service.recommend.classification.Bayes;
@@ -44,7 +44,7 @@ public class TaskRecommend {
     @Autowired
     private Reliability reliability;
     @Autowired
-    private TaskResult taskResult;
+    private DeveloperRecommend developerRecommend;
     @Autowired
     private DynamicMsg dynamicMsg;
     @Autowired
@@ -84,7 +84,7 @@ public class TaskRecommend {
         List<String> worker = null;
         for (int i = 0; i < num.length; i++) {
             Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, num[i], winners);
-            worker = taskResult.recommendWorker(tcResult);
+            worker = developerRecommend.recommendWorker(tcResult);
             calculateResult(winners.get(num[i]), worker, counts, mpp);
             List<Integer> index = localClassifier.getNeighbors();
             worker = reliability.filter(worker, index, winners, challengeType);
@@ -137,7 +137,7 @@ public class TaskRecommend {
                 worker.add(testWorker.get(j));
             }
             List<Double> data = tcBayes.getRecommendResult(Constant.DCW_DS + challengeType + "/" + position, feature, position, worker);
-            List<String> result = taskResult.recommendWorker(data, worker.subList(position, worker.size()));
+            List<String> result = developerRecommend.recommendWorker(data, worker.subList(position, worker.size()));
             calculateResult(winners.get(num[i]), result, count, mpp);
         }
         for (int i = 0; i < count.length; i++) {
@@ -163,7 +163,7 @@ public class TaskRecommend {
             int[] num = testDataSet(winners.size());
             for (int i = 0; i < num.length; i++) {
                 Map<String, Double> result = cluster.getRecommendResult(challengeType, features, features[num[i]], num[i], n, winners);
-                worker = taskResult.recommendWorker(result);
+                worker = developerRecommend.recommendWorker(result);
                 calculateResult(winners.get(num[i]), worker, counts, mpp);
                 List<Integer> index = cluster.getNeighbors();
                 worker = reliability.filter(worker, index, winners, challengeType);
@@ -202,7 +202,7 @@ public class TaskRecommend {
             Maths.copy(features, data, winners, user, index);
             Maths.normalization(data, 5);
             Map<String, Double> tcResult = tcBayes.getRecommendResult(Constant.CLASSIFIER_DIRECTORY + challengeType + "/" + num[i], data, num[i], user);
-            worker = taskResult.recommendWorker(tcResult);
+            worker = developerRecommend.recommendWorker(tcResult);
             calculateResult(winners.get(num[i]), worker, counts, mpp);
             worker = reliability.filter(worker, index, winners, challengeType);
             List<Integer> indexs = new ArrayList<>();
@@ -234,7 +234,7 @@ public class TaskRecommend {
         System.out.println("CBM");
         for (int i = 0; i < num.length; i++) {
             Map<String, Double> cbmResult = contentBase.getRecommendResult(features, num[i], scores, winners);
-            worker = taskResult.recommendWorker(cbmResult);
+            worker = developerRecommend.recommendWorker(cbmResult);
             calculateResult(winners.get(num[i]), worker, counts, mpp);
             List<Integer> index = new ArrayList<>();
             for (int j = 0; j < num[i]; j++) {
@@ -262,7 +262,7 @@ public class TaskRecommend {
         for (int i = start; i < winners.size(); i++) {
             WordCount[] wordCounts = featureExtract.getWordCount(i, challengeType);
             Map<String, Double> result = bayes.getRecommendResultUcl(wordCounts, features, winners, i);
-            worker = taskResult.recommendWorker(result);
+            worker = developerRecommend.recommendWorker(result);
             calculateResult(winners.get(i), worker, count, null);
         }
         for (int i = 0; i < count.length; i++) {

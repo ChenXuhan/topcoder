@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.act.sdp.topcoder.dao.ChallengeRegistrantDao">
 
-    <insert id="insert" parameterType="com.buaa.act.sdp.model.challenge.ChallengeRegistrant" useGeneratedKeys="true"
+    <insert id="insertBatch" parameterType="com.buaa.act.sdp.model.challenge.ChallengeRegistrant" useGeneratedKeys="true"
             keyProperty="id">
         insert into challenge_registrant(challengeID,handle,reliability,registrationDate,submissionDate,rating) values
         <foreach collection="array" item="item" index="index" separator=",">
@@ -10,33 +10,15 @@
         </foreach>
     </insert>
 
-    <select id="getChallengeRegistrant" parameterType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant"
-            resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant">
-        select * from challenge_registrant where challengeID = #{challengeID} AND handle = #{handle}
-    </select>
-
-    <select id="getRegistrantByHandle" parameterType="java.lang.String"
-            resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant">
-        select * from challenge_registrant where handle = #{handle}
-    </select>
-
-    <select id="getUsers" resultType="java.lang.String">
-        select DISTINCT handle from challenge_registrant
-    </select>
-
-    <select id="getRegistrantCountById" resultType="java.lang.Integer">
+    <select id="getRegistrantCountByTaskId" resultType="java.lang.Integer">
         select count(DISTINCT handle) from challenge_registrant where challengeID=#{challengeId}
     </select>
 
-    <select id="getRegistrantById" resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant">
-        select * from challenge_registrant where challengeID=#{challengeId}
-    </select>
-
-    <select id="getAllRegistrant" resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant">
+    <select id="getAllChallengeRegistrants" resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant">
         SELECT  challengeID ,handle from challenge_registrant;
     </select>
 
-    <select id="getUserRegers" resultType="java.lang.Integer">
+    <select id="getUserRegistrantTimes" resultType="java.lang.Integer">
         select count(DISTINCT challengeID) from challenge_registrant where handle=#{handle}
     </select>
 </mapper>

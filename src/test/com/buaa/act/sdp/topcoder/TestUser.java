@@ -1,7 +1,7 @@
 package com.buaa.act.sdp.topcoder;
 
 import com.buaa.act.sdp.topcoder.service.api.UserApi;
-import com.buaa.act.sdp.topcoder.service.update.UserStatistics;
+import com.buaa.act.sdp.topcoder.service.api.statistics.UserStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

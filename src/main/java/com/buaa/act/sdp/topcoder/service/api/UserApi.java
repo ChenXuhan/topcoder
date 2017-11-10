@@ -1,5 +1,6 @@
 package com.buaa.act.sdp.topcoder.service.api;
 
+import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.dao.*;
 import com.buaa.act.sdp.topcoder.model.user.*;
 import com.buaa.act.sdp.topcoder.util.HttpUtils;
@@ -10,6 +11,7 @@ import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +37,10 @@ public class UserApi {
 
     /**
      * 爬取开发者信息
+     *
      * @param userName
      */
-    public void getUserByName(String userName) {
+    public User getUserByName(String userName) {
         String json = null;
         try {
             json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName);
@@ -51,19 +54,40 @@ public class UserApi {
             if (skills != null) {
                 user.setSkills(skills);
             }
+            return user;
+        }
+        return null;
+    }
+
+    /**
+     * 保存或更新开发者的基本信息
+     *
+     * @param userName
+     */
+    public void saveUserBasicInformation(String userName) {
+        User user = getUserByName(userName);
+        if (user != null) {
             userDao.insert(user);
+        }
+    }
+
+    public void updateUserBasicInformation(String userName) {
+        User user = getUserByName(userName);
+        if (user != null) {
+            userDao.update(user);
         }
     }
 
     /**
      * 获取用户的技能信息
+     *
      * @param userName
      * @return
      */
     public String[] getUserSkills(String userName) {
         String json = null;
         try {
-            for (int i = 0; i < 10 && json == null; i++) {
+            for (int i = 0; i < Constant.RETRY_TIMES && json == null; i++) {
                 json = HttpUtils.httpGet("http://api.topcoder.com/v3/members/" + userName + "/skills");
             }
         } catch (Exception e) {
@@ -88,75 +112,116 @@ public class UserApi {
         return null;
     }
 
-    public void handUserDevelopmentInfo(String handle, String json) {
+    /**
+     * 从json解析开发者的development相关信息
+     * @param handle
+     * @param json
+     * @return
+     */
+    public List<Development> paserDevelopmentMsg(String handle, String json) {
         JsonElement jsonElement = JsonUtil.getJsonElement(json, "Tracks");
+        List<Development> lists = new ArrayList<>();
         if (jsonElement != null) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             Map<String, Development> map = JsonUtil.jsonToMap(jsonObject, Development.class);
-            List<Development> lists = new ArrayList<>();
             for (Map.Entry<String, Development> entry : map.entrySet()) {
                 Development development = entry.getValue();
                 development.setDevelopType(entry.getKey());
                 development.setHandle(handle);
                 lists.add(development);
             }
-            if (lists.size() > 0) {
-                developmentDao.insert(lists);
-            }
         }
-        jsonElement = JsonUtil.getJsonElement(json, "CompetitionHistory");
+        return lists;
+    }
+
+    public List<DevelopmentHistory> paserDevelopmentHistoryMsg(String handle, String json) {
+        JsonElement jsonElement = JsonUtil.getJsonElement(json, "CompetitionHistory");
+        List<DevelopmentHistory> lists = new ArrayList<>();
         if (jsonElement != null) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             Map<String, DevelopmentHistory> map = JsonUtil.jsonToMap(jsonObject, DevelopmentHistory.class);
-            List<DevelopmentHistory> lists = new ArrayList<>();
             for (Map.Entry<String, DevelopmentHistory> entry : map.entrySet()) {
                 DevelopmentHistory developmentHistory = entry.getValue();
                 developmentHistory.setDevelopType(entry.getKey());
                 developmentHistory.setHandle(handle);
                 lists.add(developmentHistory);
             }
-            if (lists.size() > 0) {
-                developmentHistoryDao.insert(lists);
+        }
+        return lists;
+    }
+
+    /**
+     * 保存或更新开发者的development相关信息
+     *
+     * @param userName
+     */
+    public void saveUserDevelopmentMsg(String userName) {
+        String json = getUserDevelopmentStatistics(userName);
+        if (json != null) {
+            List<Development> developments = paserDevelopmentMsg(userName, json);
+            if (developments.size() > 0) {
+                developmentDao.insertBatch(developments);
+            }
+            List<DevelopmentHistory> developmentHistories = paserDevelopmentHistoryMsg(userName, json);
+            if (developmentHistories.size() > 0) {
+                developmentHistoryDao.insertBatch(developmentHistories);
+            }
+        }
+    }
+
+    public void updateUserDevelopmentMsg(String userName) {
+        String json = getUserDevelopmentStatistics(userName);
+        if (json != null) {
+            List<Development> developments = paserDevelopmentMsg(userName, json);
+            if (developments.size() > 0) {
+                developmentDao.updateBatch(developments);
+            }
+            List<DevelopmentHistory> developmentHistories = paserDevelopmentHistoryMsg(userName, json);
+            if (developmentHistories.size() > 0) {
+                developmentHistoryDao.updateBatch(developmentHistories);
             }
         }
     }
 
     /**
-     * 获取开发者develop相关信息
+     * 获取开发者development相关的信息
+     *
      * @param userName
      */
-    public void getUserStatistics(String userName) {
-        String string = null;
+    public String getUserDevelopmentStatistics(String userName) {
+        String json = null;
         try {
-            string = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/update/develop");
+            json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/statistics/develop");
         } catch (Exception e) {
-            System.err.println("time out update " + userName);
-            timeOutDao.insertTimeOutData("update", userName);
+            System.err.println("time out statistics " + userName);
+            timeOutDao.insertTimeOutData("statistics", userName);
         }
-        if (string != null) {
-            handUserDevelopmentInfo(userName, string);
+        if (json != null) {
+            return json;
         }
+        return null;
     }
 
     /**
-     * 获取开发者某一类型任务的信息
+     * 获取开发者某一类型任务的积分信息
+     *
      * @param userName
      * @param challengeType
      */
-    public void getUserChallengeHistory(String userName, String challengeType) {
+    public void saveUserRatingHistory(String userName, String challengeType) {
         String json = null;
         try {
-            json = RequestUtil.request("http://api.topcoder.com/v2/develop/update/" + userName + "/" + challengeType);
+            json = RequestUtil.request("http://api.topcoder.com/v2/develop/statistics/" + userName + "/" + challengeType);
         } catch (Exception e) {
             System.err.println("time out history " + userName + "_" + challengeType);
             timeOutDao.insertTimeOutData("history", userName + "_" + challengeType);
         }
         if (json != null) {
-            handUserRatingHistory(userName, challengeType, json);
+            parseAndSaveUserRatingHistory(userName, challengeType, json);
         }
     }
 
-    public void handUserRatingHistory(String userName, String challengeType, String json) {
+    public void parseAndSaveUserRatingHistory(String userName, String challengeType, String json) {
         JsonElement jsonElement = JsonUtil.getJsonElement(json, "history");
         if (jsonElement != null) {
             RatingHistory[] ratingHistories = JsonUtil.fromJson(jsonElement, RatingHistory[].class);
@@ -165,38 +230,46 @@ public class UserApi {
                     ratingHistories[i].setHandle(userName);
                     ratingHistories[i].setDevelopType(challengeType);
                 }
-                ratingHistoryDao.insert(ratingHistories);
+                ratingHistoryDao.insertBatch(ratingHistories);
             }
         }
     }
 
-    public void saveUserMessages(String handle) {
-        getUserByName(handle);
-        getUserStatistics(handle);
-        getUserChallengeHistory(handle, "design");
-        getUserChallengeHistory(handle, "development");
-        getUserChallengeHistory(handle, "specification");
-        getUserChallengeHistory(handle, "architecture");
-        getUserChallengeHistory(handle, "bug_hunt");
-        getUserChallengeHistory(handle, "test_suites");
-        getUserChallengeHistory(handle, "ui_prototypes");
-        getUserChallengeHistory(handle, "conceptualization");
-        getUserChallengeHistory(handle, "ria_build");
-        getUserChallengeHistory(handle, "ria_component");
-        getUserChallengeHistory(handle, "test_scenarios");
-        getUserChallengeHistory(handle, "copilot_posting");
-        getUserChallengeHistory(handle, "content_creation");
-        getUserChallengeHistory(handle, "first2finish");
-        getUserChallengeHistory(handle, "code");
+    /**
+     * 保存或更新开发者所有信息
+     * @param handle
+     */
+    public void saveUserMsg(String handle) {
+        saveUserBasicInformation(handle);
+        saveUserDevelopmentMsg(handle);
+        saveUserRatingMsg(handle);
+    }
+
+    public void updateUserMsg(String handle){
+        updateUserBasicInformation(handle);
+        updateUserDevelopmentMsg(handle);
+        saveUserRatingMsg(handle);
     }
 
     /**
-     * 根据任务的注册者，来获取开发者信息
+     * 开发者的积分历史信息
+     * @param handle
      */
-    public void getUsersByTasks() {
-        String[] names = challengeRegistrantDao.getUsers();
-        for (int i = 0; i < names.length; i++) {
-            saveUserMessages(names[i]);
-        }
+    public void saveUserRatingMsg(String handle){
+        saveUserRatingHistory(handle, "design");
+        saveUserRatingHistory(handle, "development");
+        saveUserRatingHistory(handle, "specification");
+        saveUserRatingHistory(handle, "architecture");
+        saveUserRatingHistory(handle, "bug_hunt");
+        saveUserRatingHistory(handle, "test_suites");
+        saveUserRatingHistory(handle, "ui_prototypes");
+        saveUserRatingHistory(handle, "conceptualization");
+        saveUserRatingHistory(handle, "ria_build");
+        saveUserRatingHistory(handle, "ria_component");
+        saveUserRatingHistory(handle, "test_scenarios");
+        saveUserRatingHistory(handle, "copilot_posting");
+        saveUserRatingHistory(handle, "content_creation");
+        saveUserRatingHistory(handle, "first2finish");
+        saveUserRatingHistory(handle, "code");
     }
 }

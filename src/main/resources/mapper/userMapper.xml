@@ -7,15 +7,11 @@
         #{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR})
     </insert>
 
-    <select id="getUserByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.topcoder.model.user.User">
-        select * from user where handle=#{name}
-    </select>
+    <update id="update" parameterType="com.buaa.act.sdp.topcoder.model.user.User">
+        update user SET country=#{country}, quote=#{quote},photoLink=#{photoLink}, copilot=#{copilot}, skills=#{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR} where handle=#{handle}
+    </update>
 
-    <select id="getUserById" parameterType="java.lang.Integer" resultType="com.buaa.act.sdp.topcoder.model.user.User">
-        select * from user where id=#{id}
-    </select>
-
-    <select id="getUsers" resultType="java.lang.String">
+    <select id="getDistinctUsers" resultType="java.lang.String">
         select DISTINCT handle from user
     </select>
 
@@ -23,18 +19,8 @@
         SELECT * from user;
     </select>
 
-    <update id="updateUsers" parameterType="com.buaa.act.sdp.topcoder.model.user.User">
+    <update id="updateUser" parameterType="com.buaa.act.sdp.topcoder.model.user.User">
             UPDATE user set competitionNums=#{competitionNums},submissionNums=#{submissionNums},winNums=#{winNums} where handle=#{handle}
-    </update>
-
-    <update id="insertSkillDegree">
-        UPDATE user set skillDegree=#{skillDegree} where handle=#{handle}
-    </update>
-
-    <update id="insertSkillDegreeBatch">
-        <foreach collection="relationMap" index="key1" item="value1" separator=";">
-            UPDATE user set skillDegree=#{value1} where handle=#{key1}
-        </foreach>
     </update>
 
 </mapper>

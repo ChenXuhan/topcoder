@@ -15,7 +15,7 @@ import java.util.*;
  * Created by yang on 2017/6/5.
  */
 @Service
-public class TeamResult {
+public class TeamRecommend {
 
     @Autowired
     private ProjectMsg projectMsg;
@@ -24,7 +24,7 @@ public class TeamResult {
     @Autowired
     private TaskMsg taskMsg;
     @Autowired
-    private TaskResult taskResult;
+    private DeveloperRecommend developerRecommend;
     @Autowired
     private Collaboration collaboration;
 
@@ -55,14 +55,14 @@ public class TeamResult {
      * @param projectId
      * @return
      */
-    public List<List<String>> recommendWorkers(int projectId) {
+    public List<List<String>> recommendWorkersForEachTask(int projectId) {
         List<Integer> ids = projectMsg.getProjectToChallenges().get(projectId);
         Set<Integer> sets = new HashSet(ids.size());
         sets.addAll(ids);
         List<List<String>> workers = new ArrayList<>(ids.size());
         List<ChallengeItem> items = taskMsg.getChallenges(sets);
         for (ChallengeItem item : items) {
-            workers.add(taskResult.recommendWorkers(item));
+            workers.add(developerRecommend.recommendWorkers(item));
         }
         return workers;
     }
@@ -216,7 +216,7 @@ public class TeamResult {
      */
     public List<String> findBestTeamMaxLogit(int projectId) {
         List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
-        List<List<String>> workers = recommendWorkers(projectId);
+        List<List<String>> workers = recommendWorkersForEachTask(projectId);
         List<String> allWorkers = new ArrayList<>();
         Map<String, Integer> workerIndex = getWorkerIndex(workers, allWorkers);
         double[][] collaboration = getCollaborations(taskIds, workerIndex);
@@ -237,7 +237,7 @@ public class TeamResult {
      */
     public List<String> findBestTeamMaxCollaboration(int projectId) {
         List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
-        List<List<String>> workers = recommendWorkers(projectId);
+        List<List<String>> workers = recommendWorkersForEachTask(projectId);
         List<String> allWorkers = new ArrayList<>();
         Map<String, Integer> workerIndex = getWorkerIndex(workers, allWorkers);
         double[][] collaboration = getCollaborations(taskIds, workerIndex);

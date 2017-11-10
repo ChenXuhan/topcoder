@@ -12,8 +12,6 @@ import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -120,123 +118,36 @@ public class ChallengeApi {
     }
 
     /**
-     * 获取当前已经完成的任务
-     * @return
-     */
-    public int getCompleteChallengeCount() {
-        String str = null;
-        try {
-            str = RequestUtil.request("http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=1&pageSize=50");
-        } catch (Exception e) {
-            System.err.println("time out getChallengeCount");
-            timeOutDao.insertTimeOutData("challengeCount", "");
-        }
-        JsonElement jsonElement = JsonUtil.getJsonElement(str, "total");
-        if (jsonElement.isJsonPrimitive()) {
-            System.out.print(jsonElement.getAsInt());
-            return jsonElement.getAsInt();
-        }
-        return 0;
-    }
-
-    /**
-     * 分页获取历史完成任务
-     * @param pageIndex
-     * @param pageSize
-     * @return
-     */
-    public PastChallenge[] getPastChallenges(int pageIndex, int pageSize) {
-        String str = null;
-        try {
-            str = RequestUtil.request("http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=" + pageIndex + "&pageSize=" + pageSize);
-        } catch (Exception e) {
-            System.err.println("time out getPastChallenges");
-            timeOutDao.insertTimeOutData("pastChallenges", pageIndex + "_" + pageSize);
-        }
-        if (str != null) {
-            JsonElement jsonElement = JsonUtil.getJsonElement(str, "data");
-            if (jsonElement != null) {
-                PastChallenge[] pastChallenges = JsonUtil.fromJson(jsonElement, PastChallenge[].class);
-                return pastChallenges;
-            }
-        }
-        return null;
-    }
-
-    public boolean challengeExistOrNot(int challengeId) {
-        ChallengeItem item = challengeItemDao.getChallengeItemById(challengeId);
-        if (item != null) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 增量保存所有完成的task
-     */
-    public void savePastChallenge() {
-        int count = getCompleteChallengeCount();
-        int pages = count / 50;
-        if (count % 50 != 0) {
-            pages++;
-        }
-        List<String> userList = userDao.getUsers();
-        Set<String> userSet = new HashSet<>();
-        userSet.addAll(userList);
-        List<Integer> challengeList = challengeItemDao.getChallenges();
-        Set<Integer> challengeSet = new HashSet<>();
-        challengeSet.addAll(challengeList);
-        PastChallenge[] pastChallenges;
-        ChallengeItem challengeItem;
-        int challengeId;
-        for (int i = 1; i <= pages; i++) {
-            pastChallenges = getPastChallenges(i, 50);
-            if (pastChallenges == null || pastChallenges.length == 0) {
-                continue;
-            }
-            for (int j = 0; j < pastChallenges.length; j++) {
-                challengeId = pastChallenges[j].getChallengeId();
-                if (!challengeSet.contains(challengeId)) {
-                    challengeItem = getChallengeById(challengeId);
-                    if (challengeItem != null) {
-                        challengeItemGenerate(challengeItem, pastChallenges[j]);
-                        handChallenge(challengeItem, userSet);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * 获取task及task相关的开发者信息
      * @param challengeItem
      * @param username
      */
-    public void handChallenge(ChallengeItem challengeItem, Set<String> username) {
+    public void saveFinishedChallenge(ChallengeItem challengeItem, Set<String> username) {
         challengeItemDao.insert(challengeItem);
         int challengeId = challengeItem.getChallengeId();
         System.out.println(challengeId);
         ChallengeRegistrant[] challengeRegistrant = getChallengeRegistrantsById(challengeId);
         if (challengeRegistrant != null && challengeRegistrant.length != 0) {
             challengeRegistrantGenerate(challengeId, challengeRegistrant);
-            challengeRegistrantDao.insert(challengeRegistrant);
+            challengeRegistrantDao.insertBatch(challengeRegistrant);
             for (int i = 0; i < challengeRegistrant.length; i++) {
                 if (!username.contains(challengeRegistrant[i].getHandle())) {
                     username.add(challengeRegistrant[i].getHandle());
-                    userApi.saveUserMessages(challengeRegistrant[i].getHandle());
-                    System.out.println("\t" + challengeRegistrant[i].getHandle());
+                    userApi.saveUserMsg(challengeRegistrant[i].getHandle());
+                }else {
+                    userApi.updateUserMsg(challengeRegistrant[i].getHandle());
                 }
             }
         }
         ChallengeSubmission[] challengeSubmissions = getChallengeSubmissionsById(challengeId);
         if (challengeSubmissions != null && challengeSubmissions.length != 0) {
             challengeSubmissionGenerate(challengeId, challengeSubmissions);
-            challengeSubmissionDao.insert(challengeSubmissions);
+            challengeSubmissionDao.insertBatch(challengeSubmissions);
         }
         ChallengePhase[] challengePhases = getChallengePhasesById(challengeId);
         if (challengePhases != null && challengePhases.length != 0) {
             challengePhaseGenerate(challengeId, challengePhases);
-            challengePhaseDao.insert(challengePhases);
+            challengePhaseDao.insertBatch(challengePhases);
         }
     }
 
@@ -261,33 +172,6 @@ public class ChallengeApi {
     public void challengePhaseGenerate(int challengeId, ChallengePhase[] challengePhases) {
         for (int i = 0; i < challengePhases.length; i++) {
             challengePhases[i].setChallengeID(challengeId);
-        }
-    }
-
-    /**
-     * 获取失败的task
-     * @param startId
-     */
-    public void getMissedChallenges(int startId) {
-        int min = 30000000;
-        List<String> userList = userDao.getUsers();
-        Set<String> userSet = new HashSet<>();
-        userSet.addAll(userList);
-        List<Integer> challengeList = challengeItemDao.getChallenges();
-        Set<Integer> challengeSet = new HashSet<>();
-        challengeSet.addAll(challengeList);
-        ChallengeItem challengeItem;
-        while (startId >= min) {
-            if (!challengeSet.contains(startId)) {
-                challengeSet.add(startId);
-                challengeItem = getChallengeById(startId);
-                if (challengeItem != null) {
-                    handChallenge(challengeItem, userSet);
-                } else {
-                    System.out.println(startId + " failed");
-                }
-            }
-            startId--;
         }
     }
 

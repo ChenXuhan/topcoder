@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.topcoder.service.update;
+package com.buaa.act.sdp.topcoder.service.api.statistics;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.dao.ChallengeItemDao;
@@ -27,6 +27,9 @@ public class ChallengeStatistics {
     @Autowired
     private ChallengeSubmissionDao challengeSubmissionDao;
 
+    /**
+     * 任务的注册开发者统计
+     */
     public void updateChallenges() {
         List<ChallengeItem> items = challengeItemDao.getAllChallenges();
         String[] strings, string;
@@ -39,7 +42,7 @@ public class ChallengeStatistics {
                 item.setDuration(num);
             }
             if (item.getNumRegistrants() == 0) {
-                num = challengeRegistrantDao.getRegistrantCountById(item.getChallengeId());
+                num = challengeRegistrantDao.getRegistrantCountByTaskId(item.getChallengeId());
                 item.setNumRegistrants(num);
             }
             if (item.getNumSubmissions() == 0) {
@@ -47,10 +50,15 @@ public class ChallengeStatistics {
                 item.setNumSubmissions(num);
             }
             item.setLanguages(getLanguages(item));
-            challengeItemDao.updateChallenges(item);
+            challengeItemDao.updateChallenge(item);
         }
     }
 
+    /**
+     * 任务的语言统计
+     * @param item
+     * @return
+     */
     public String[] getLanguages(ChallengeItem item) {
         String[] tech = item.getTechnology();
         if (tech == null || tech.length == 0) {

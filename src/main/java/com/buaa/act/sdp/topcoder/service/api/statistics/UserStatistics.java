@@ -1,4 +1,4 @@
-package com.buaa.act.sdp.topcoder.service.update;
+package com.buaa.act.sdp.topcoder.service.api.statistics;
 
 import com.buaa.act.sdp.topcoder.dao.DevelopmentHistoryDao;
 import com.buaa.act.sdp.topcoder.dao.UserDao;
@@ -21,12 +21,15 @@ public class UserStatistics {
     @Autowired
     private DevelopmentHistoryDao developmentHistoryDao;
 
+    /**
+     * 计算开发者的竞争、提交、获胜数目
+     */
     public void updateUsers() {
         List<User> list = userDao.getAllUsers();
         List<DevelopmentHistory> developmentHistories;
         int count, submission, win;
         for (User user : list) {
-            developmentHistories = developmentHistoryDao.getChallengeCountByHandle(user.getHandle());
+            developmentHistories = developmentHistoryDao.getDevelopmentHistoryByHandle(user.getHandle());
             count = 0;
             win = 0;
             submission = 0;
@@ -38,7 +41,7 @@ public class UserStatistics {
             user.setCompetitionNums(count);
             user.setSubmissionNums(submission);
             user.setWinNums(win);
-            userDao.updateUsers(user);
+            userDao.updateUser(user);
         }
     }
 

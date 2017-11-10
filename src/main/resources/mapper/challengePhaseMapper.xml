@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.act.sdp.topcoder.dao.ChallengePhaseDao">
 
-    <insert id="insert" parameterType="com.buaa.act.sdp.model.challenge.ChallengePhase" useGeneratedKeys="true"
+    <insert id="insertBatch" parameterType="com.buaa.act.sdp.model.challenge.ChallengePhase" useGeneratedKeys="true"
             keyProperty="id">
         insert into
         challenge_phase(challengeID,type,status,scheduledStartTime,actualStartTime,scheduledEndTime,actualendTime)
@@ -11,10 +11,5 @@
             (#{item.challengeID},#{item.type},#{item.status},#{item.scheduledStartTime},#{item.actualStartTime},#{item.scheduledEndTime},#{item.actualendTime})
         </foreach>
     </insert>
-
-    <select id="getChallengePhase" parameterType="com.buaa.act.sdp.topcoder.model.challenge.ChallengePhase"
-            resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengePhase">
-        select * from challenge_phase where challengeID = #{challengeID} AND type = #{type}
-    </select>
 
 </mapper>

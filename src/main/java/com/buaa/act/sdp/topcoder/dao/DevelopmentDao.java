@@ -9,6 +9,7 @@ import java.util.List;
  */
 public interface DevelopmentDao {
 
-    void insert(List<Development> list);
+    void insertBatch(List<Development> list);
 
+    void updateBatch(List<Development> list);
 }

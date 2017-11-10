@@ -7,5 +7,5 @@ import com.buaa.act.sdp.topcoder.model.user.RatingHistory;
  */
 public interface RatingHistoryDao {
 
-    void insert(RatingHistory[] ratingHistories);
+    void insertBatch(RatingHistory[] ratingHistories);
 }

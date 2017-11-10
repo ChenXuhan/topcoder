@@ -181,7 +181,7 @@ public class TaskMsg {
      * @param userScore
      */
     public void getWinnersAndScores(String challengeType, List<ChallengeItem> items, List<String> winners, List<Map<String, Double>> userScore) {
-        List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeWinner();
+        List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeSubmissionMsg();
         Map<String, Integer> map = new HashMap<>();
         Set<Integer> challengeSet = new HashSet<>();
         Map<Integer, String> user = new HashMap<>();
@@ -216,6 +216,12 @@ public class TaskMsg {
                 map.put(entry.getValue(), 1);
             }
         }
+        Collections.sort(challengeItems, new Comparator<ChallengeItem>() {
+            @Override
+            public int compare(ChallengeItem o1, ChallengeItem o2) {
+                return o1.getChallengeId()-o2.getChallengeId();
+            }
+        });
         Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
         for (int i = 0; i < challengeItems.size(); i++) {
             String win = user.get(challengeItems.get(i).getChallengeId());

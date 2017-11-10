@@ -13,17 +13,12 @@ public interface UserDao {
 
     void insert(User user);
 
-    User getUserByName(@Param("name") String name);
+    void update(User user);
 
-    User getUserById(@Param("id") int userId);
-
-    List<String> getUsers();
+    List<String> getDistinctUsers();
 
     List<User> getAllUsers();
 
-    void updateUsers(User user);
+    void updateUser(User user);
 
-    void insertSkillDegree(@Param("handle") String handle, @Param("skillDegree") String skillDegree);
-
-    void insertSkillDegreeBatch(@Param("relationMap") HashMap<String, String> map);
 }

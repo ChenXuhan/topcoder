@@ -7,8 +7,6 @@ import com.buaa.act.sdp.topcoder.model.challenge.ChallengePhase;
  */
 public interface ChallengePhaseDao {
 
-    void insert(ChallengePhase[] challengePhases);
-
-    ChallengePhase[] getChallengePhase(ChallengePhase challengePhase);
+    void insertBatch(ChallengePhase[] challengePhases);
 
 }
