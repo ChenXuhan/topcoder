@@ -2,6 +2,7 @@ package com.buaa.act.sdp.topcoder.service.recommend.classification;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Instances;
@@ -14,10 +15,8 @@ import java.util.Map;
 /**
  * Created by yang on 2017/3/9.
  */
-@Service
+@Component
 public class TcBayes extends NaiveBayes {
-
-    private Instances instances;
 
     /**
      * 按概率对分类结果排序
@@ -39,7 +38,7 @@ public class TcBayes extends NaiveBayes {
             return map;
         }
         try {
-            instances = WekaArffUtil.getInstances(path, features, winners);
+           Instances instances = WekaArffUtil.getInstances(path, features, winners);
             buildClassifier(new Instances(instances, 0, position));
             double[] dist = distributionForInstance(instances.instance(position));
             if (dist == null) {
@@ -69,7 +68,7 @@ public class TcBayes extends NaiveBayes {
         List<Double> result = new ArrayList<>(features.size()-position);
         try {
             Map<Integer, Double> winnerIndex = new HashMap<>();
-            instances = WekaArffUtil.getInstances(path, features, workers, winnerIndex);
+            Instances instances = WekaArffUtil.getInstances(path, features, workers, winnerIndex);
             if (winnerIndex.size() == 0) {
                 for (int i = 0; i < result.size(); i++) {
                     result.add(0.0);

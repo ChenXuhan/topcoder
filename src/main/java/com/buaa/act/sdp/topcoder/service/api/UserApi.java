@@ -23,8 +23,6 @@ import java.util.Map;
 public class UserApi {
 
     @Autowired
-    private ChallengeRegistrantDao challengeRegistrantDao;
-    @Autowired
     private UserDao userDao;
     @Autowired
     private DevelopmentDao developmentDao;

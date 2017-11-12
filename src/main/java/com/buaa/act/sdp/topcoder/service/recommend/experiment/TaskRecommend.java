@@ -56,6 +56,7 @@ public class TaskRecommend {
 
     /**
      * 测试集选取
+     *
      * @param n
      * @return
      */
@@ -70,6 +71,7 @@ public class TaskRecommend {
 
     /**
      * 寻找k个邻居，局部的分类器
+     *
      * @param challengeType
      */
     public void localClassifier(String challengeType) {
@@ -83,10 +85,10 @@ public class TaskRecommend {
         int[] num = testDataSet(winners.size());
         List<String> worker = null;
         for (int i = 0; i < num.length; i++) {
-            Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, num[i], winners);
+            List<Integer> index = localClassifier.getNeighbor(features, num[i]);
+            Map<String, Double> tcResult = localClassifier.getRecommendResult(challengeType, features, num[i], winners, index);
             worker = developerRecommend.recommendWorker(tcResult);
             calculateResult(winners.get(num[i]), worker, counts, mpp);
-            List<Integer> index = localClassifier.getNeighbors();
             worker = reliability.filter(worker, index, winners, challengeType);
             worker = competition.refine(index, worker, winners, num[i], challengeType);
             calculateResult(winners.get(num[i]), worker, count, mpps);
@@ -98,6 +100,7 @@ public class TaskRecommend {
 
     /**
      * ESEM中DCW-DS方法，用Bayes分类
+     *
      * @param challengeType
      */
     public void dcw_ds(String challengeType) {
@@ -124,15 +127,15 @@ public class TaskRecommend {
             List<String> worker = new ArrayList<>();
 //            int position = attribute.getFeatures(features, feature, workers, worker, tasks.get(num[i]).getChallengeId(), items);
             attribute.getFeature(feature, worker, tasks.get(num[i]), items);
-            double[] current = new double[skills.size()+9];
+            double[] current = new double[skills.size() + 9];
             attribute.generateStaticFeature(skills, tasks.get(num[i]), current);
             List<String> testWorker = new ArrayList<>();
-            List<double[]> test = dynamicMsg.getDynamicFeatures(items,tasks.get(num[i]), testWorker);
-            int position=feature.size();
+            List<double[]> test = dynamicMsg.getDynamicFeatures(items, tasks.get(num[i]), testWorker);
+            int position = feature.size();
             for (int j = 0; j < test.size(); j++) {
-                double[] temp = new double[skills.size() +15];
-                System.arraycopy(current, 0, temp, 0, skills.size()+6);
-                System.arraycopy(test.get(j), 0, temp, skills.size()+6, 9);
+                double[] temp = new double[skills.size() + 15];
+                System.arraycopy(current, 0, temp, 0, skills.size() + 6);
+                System.arraycopy(test.get(j), 0, temp, skills.size() + 6, 9);
                 feature.add(temp);
                 worker.add(testWorker.get(j));
             }
@@ -147,6 +150,7 @@ public class TaskRecommend {
 
     /**
      * 先kmeans聚类在某一聚类中分类
+     *
      * @param challengeType
      * @param n
      */
@@ -162,10 +166,10 @@ public class TaskRecommend {
             double[] mpps = new double[20];
             int[] num = testDataSet(winners.size());
             for (int i = 0; i < num.length; i++) {
-                Map<String, Double> result = cluster.getRecommendResult(challengeType, features, features[num[i]], num[i], n, winners);
+                List<Integer> index = new ArrayList<>();
+                Map<String, Double> result = cluster.getRecommendResult(challengeType, features, features[num[i]], num[i], n, winners, index);
                 worker = developerRecommend.recommendWorker(result);
                 calculateResult(winners.get(num[i]), worker, counts, mpp);
-                List<Integer> index = cluster.getNeighbors();
                 worker = reliability.filter(worker, index, winners, challengeType);
                 worker = competition.refine(index, worker, winners, num[i], challengeType);
                 calculateResult(winners.get(num[i]), worker, count, mpps);
@@ -180,6 +184,7 @@ public class TaskRecommend {
 
     /**
      * 直接分类
+     *
      * @param challengeType
      */
     public void classifier(String challengeType) {
@@ -219,6 +224,7 @@ public class TaskRecommend {
 
     /**
      * 协同过滤算法
+     *
      * @param challengeType
      */
     public void contentBased(String challengeType) {
@@ -251,6 +257,7 @@ public class TaskRecommend {
 
     /**
      * 使用tf-idf计算后推荐结果
+     *
      * @param challengeType
      */
     public void getRecommendBayesUcl(String challengeType) {
@@ -272,6 +279,7 @@ public class TaskRecommend {
 
     /**
      * 计算所有推荐任务的accuracy和mpp
+     *
      * @param winner
      * @param worker
      * @param count

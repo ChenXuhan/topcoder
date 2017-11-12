@@ -27,16 +27,6 @@ public class TestUser {
     }
 
     @Test
-    public void testInsertDevelopment() {
-        userApi.getUserStatistics("lifeloner");
-    }
-
-    @Test
-    public void testInsertRatingHistory() {
-        userApi.getUserChallengeHistory("lifeloner", "development");
-    }
-
-    @Test
     public void testSaveUser() {
         //userApi.getUserStatistics("arthurjlp");
         // userApi.getUserByName("arthurjlp");

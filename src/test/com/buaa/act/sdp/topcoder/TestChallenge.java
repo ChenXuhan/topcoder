@@ -104,11 +104,6 @@ public class TestChallenge {
     }
 
     @Test
-    public void testGetMissedChallenge() {
-        challengeApi.getMissedChallenges(30012813);
-    }
-
-    @Test
     public void testPhrase() {
     }
 
@@ -150,8 +145,8 @@ public class TestChallenge {
     public void testNoSubmission() {
         Map<Integer, Set<String>> submissionMap = new HashMap<>();
         Map<Integer, Set<String>> registerMap = new HashMap<>();
-        List<ChallengeSubmission> submissions = challengeSubmissionDao.getChallengeWinner();
-        List<ChallengeRegistrant> registrants = challengeRegistrantDao.getAllRegistrant();
+        List<ChallengeSubmission> submissions = challengeSubmissionDao.getChallengeSubmissionMsg();
+        List<ChallengeRegistrant> registrants = challengeRegistrantDao.getAllChallengeRegistrants();
         for (ChallengeSubmission challengeSubmission : submissions) {
             if (submissionMap.containsKey(challengeSubmission.getChallengeID())) {
                 submissionMap.get(challengeSubmission.getChallengeID()).add(challengeSubmission.getHandle());

@@ -29,14 +29,13 @@ public class ChallengeApi {
     @Autowired
     private ChallengeRegistrantDao challengeRegistrantDao;
     @Autowired
-    private UserDao userDao;
-    @Autowired
     private UserApi userApi;
     @Autowired
     private TimeOutDao timeOutDao;
 
     /**
      * 获取task基本信息
+     *
      * @param challengeId
      * @return
      */
@@ -56,6 +55,7 @@ public class ChallengeApi {
 
     /**
      * 获取task的注册开发者信息
+     *
      * @param challengeId
      * @return
      */
@@ -75,6 +75,7 @@ public class ChallengeApi {
 
     /**
      * 获取task的发布时间信息
+     *
      * @param challengeId
      * @return
      */
@@ -97,6 +98,7 @@ public class ChallengeApi {
 
     /**
      * 获取task的提交信息
+     *
      * @param challengeId
      * @return
      */
@@ -119,6 +121,7 @@ public class ChallengeApi {
 
     /**
      * 获取task及task相关的开发者信息
+     *
      * @param challengeItem
      * @param username
      */
@@ -134,7 +137,7 @@ public class ChallengeApi {
                 if (!username.contains(challengeRegistrant[i].getHandle())) {
                     username.add(challengeRegistrant[i].getHandle());
                     userApi.saveUserMsg(challengeRegistrant[i].getHandle());
-                }else {
+                } else {
                     userApi.updateUserMsg(challengeRegistrant[i].getHandle());
                 }
             }

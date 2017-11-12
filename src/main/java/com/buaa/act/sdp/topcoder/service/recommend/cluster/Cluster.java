@@ -7,6 +7,7 @@ import com.buaa.act.sdp.topcoder.service.recommend.classification.TcLibSvm;
 import com.buaa.act.sdp.topcoder.util.Maths;
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import weka.clusterers.SimpleKMeans;
 import weka.core.Instances;
@@ -19,37 +20,27 @@ import java.util.Map;
 /**
  * Created by yang on 2017/3/13.
  */
-@Service
+@Component
 public class Cluster {
-    private Instances instances;
-    private Map<Integer, List<Integer>> map;
-    private List<Integer> neighborIndex;
+
     @Autowired
     private TcBayes tcBayes;
-    @Autowired
-    private TcJ48 tcJ48;
-    @Autowired
-    private TcLibSvm tcLibSvm;
 
     /**
      * 获取训练数据集
+     *
      * @param path
      * @param features
      * @return
      */
     public Instances getInstances(String path, double[][] features) {
         WekaArffUtil.writeToArffCluster(path, features);
-        instances = WekaArffUtil.getInstances(path);
+        Instances instances = WekaArffUtil.getInstances(path);
         return instances;
     }
 
-    public List<Integer> getNeighbors() {
-        return neighborIndex;
-    }
-
-    public SimpleKMeans buildCluster(int position, int clusterNum) {
+    public SimpleKMeans buildCluster(Instances instances, int position, int clusterNum, Map<Integer, List<Integer>> map) {
         SimpleKMeans kMeans = null;
-        map = new HashMap<>();
         try {
             kMeans = new SimpleKMeans();
             kMeans.setDistanceFunction(new Distince());
@@ -72,11 +63,29 @@ public class Cluster {
         return kMeans;
     }
 
-    public Map<String, Double> getRecommendResult(String challengeType, double[][] features, double[] feature, int position, int num, List<String> winners) {
+    /**
+     * 先聚类后，使用bayes进行分类
+     *
+     * @param list
+     * @param user
+     * @param feature
+     * @param path
+     * @return
+     */
+    public Map<String, Double> getResult(List<Integer> list, List<String> user, double[][] feature, String path) {
+        double[][] data = new double[list.size()][feature[0].length];
+        List<String> winner = new ArrayList<>(list.size());
+        Maths.copy(feature, data, user, winner, list);
+        Maths.normalization(data, 5);
+        return tcBayes.getRecommendResult(path, data, list.size() - 1, winner);
+    }
+
+    public Map<String, Double> getRecommendResult(String challengeType, double[][] features, double[] feature, int position, int num, List<String> winners, List<Integer> neighbor) {
         /**
          * 选取聚类的数据集
          */
         List<Integer> neighbors = new ArrayList<>(position + 1);
+        Map<Integer, List<Integer>> map = new HashMap<>();
         for (int i = 0; i < position; i++) {
             neighbors.add(i);
         }
@@ -85,8 +94,8 @@ public class Cluster {
         Maths.copy(features, data, winners, user, neighbors);
         data[position] = feature;
         user.add("?");
-        instances = getInstances(Constant.CLUSTER_DIRECTORY + challengeType, data);
-        SimpleKMeans kMeans = buildCluster(position, num);
+        Instances instances = getInstances(Constant.CLUSTER_DIRECTORY + challengeType, data);
+        SimpleKMeans kMeans = buildCluster(instances, position, num, map);
         int k = 0;
         try {
             k = kMeans.clusterInstance(instances.instance(position));
@@ -99,24 +108,9 @@ public class Cluster {
          */
         List<Integer> list = new ArrayList<>();
         list.addAll(map.get(k));
-        neighborIndex = map.get(k);
+        neighbor.addAll(map.get(k));
         list.add(position);
         return getResult(list, user, data, path);
     }
 
-    /**
-     * 先聚类后，使用bayes进行分类
-     * @param list
-     * @param user
-     * @param feature
-     * @param path
-     * @return
-     */
-    public Map<String, Double> getResult(List<Integer> list, List<String> user, double[][] feature, String path) {
-        double[][] data = new double[list.size()][feature[0].length];
-        List<String> winner = new ArrayList<>(list.size());
-        Maths.copy(feature, data, user, winner, list);
-        Maths.normalization(data,5);
-        return tcBayes.getRecommendResult(path, data, list.size() - 1, winner);
-    }
 }

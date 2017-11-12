@@ -6,5 +6,6 @@
 
     <import resource="classpath:conf/spring-mybatis.xml"/>
     <import resource="classpath:conf/spring-service.xml"/>
+    <import resource="classpath:conf/spring-quartz.xml"/>
 
 </beans>

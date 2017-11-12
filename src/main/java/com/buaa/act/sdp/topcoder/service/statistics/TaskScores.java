@@ -146,4 +146,12 @@ public class TaskScores {
             }
         }
     }
+
+    public synchronized void update(){
+        scores.clear();
+        winners.clear();
+        registerDate.clear();
+        submitDate.clear();
+        getAllWorkerScores();
+    }
 }

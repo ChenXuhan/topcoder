@@ -2,6 +2,7 @@ package com.buaa.act.sdp.topcoder.service.recommend.classification;
 
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -10,7 +11,7 @@ import java.util.*;
 /**
  * Created by fuyang on 2017/3/1.
  */
-@Service
+@Component
 public class UclKnn {
 
     @Autowired

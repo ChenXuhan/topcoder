@@ -14,8 +14,6 @@ import java.util.*;
 @Component
 public class Competition {
 
-    private Map<Integer, Map<String, Double>> scores;
-
     @Autowired
     private FeatureExtract featureExtract;
     @Autowired

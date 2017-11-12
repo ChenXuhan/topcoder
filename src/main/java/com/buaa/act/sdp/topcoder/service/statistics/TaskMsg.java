@@ -253,4 +253,18 @@ public class TaskMsg {
         return list;
     }
 
+    public synchronized void update(){
+        codeItems.clear();
+        codeWinners.clear();
+        codeScore.clear();
+        f2fItems.clear();
+        f2fWinners.clear();
+        f2fScore.clear();
+        assemblyItems.clear();
+        assemblyWinners.clear();
+        assemblyScore.clear();
+        initF2f();
+        initCode();
+        initAssembly();
+    }
 }

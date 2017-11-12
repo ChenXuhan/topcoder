@@ -3,6 +3,7 @@ package com.buaa.act.sdp.topcoder.service.recommend.feature;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.service.recommend.network.Competition;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -10,7 +11,7 @@ import java.util.*;
 /**
  * Created by yang on 2017/4/18.
  */
-@Service
+@Component
 public class Reliability {
 
     @Autowired

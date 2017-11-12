@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.act.sdp.topcoder.dao.ChallengeRegistrantDao">
 
-    <insert id="insertBatch" parameterType="com.buaa.act.sdp.model.challenge.ChallengeRegistrant" useGeneratedKeys="true"
+    <insert id="insertBatch" parameterType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant" useGeneratedKeys="true"
             keyProperty="id">
         insert into challenge_registrant(challengeID,handle,reliability,registrationDate,submissionDate,rating) values
         <foreach collection="array" item="item" index="index" separator=",">

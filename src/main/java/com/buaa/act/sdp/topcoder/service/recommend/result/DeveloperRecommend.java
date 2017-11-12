@@ -27,6 +27,7 @@ public class DeveloperRecommend {
 
     /**
      * 为单个任务推荐开发者
+     *
      * @param item
      * @return
      */
@@ -45,8 +46,8 @@ public class DeveloperRecommend {
             }
         }
         double[] feature = featureExtract.generateVector(featureExtract.getSkills(), item);
-        List<String> worker = recommendWorker(cluster.getRecommendResult(item.getChallengeType(), features, feature, position + 1, 3, winners));
-        List<Integer> index = cluster.getNeighbors();
+        List<Integer> index = new ArrayList<>();
+        List<String> worker = recommendWorker(cluster.getRecommendResult(item.getChallengeType(), features, feature, position + 1, 3, winners, index));
         worker = reliability.filter(worker, index, winners, item.getChallengeType());
         worker = competition.refine(index, worker, winners, position + 1, item.getChallengeType());
         return worker;
@@ -54,6 +55,7 @@ public class DeveloperRecommend {
 
     /**
      * 分类结果排序
+     *
      * @param map
      * @return
      */
@@ -75,6 +77,7 @@ public class DeveloperRecommend {
 
     /**
      * 开发者按概率排序
+     *
      * @param data
      * @param workers
      * @return

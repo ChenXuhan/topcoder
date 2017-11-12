@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.topcoder.service.recommend.cbm;
 
 import com.buaa.act.sdp.topcoder.util.Maths;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -8,7 +9,7 @@ import java.util.*;
 /**
  * Created by yang on 2017/2/23.
  */
-@Service
+@Component
 public class ContentBase {
 
     /**

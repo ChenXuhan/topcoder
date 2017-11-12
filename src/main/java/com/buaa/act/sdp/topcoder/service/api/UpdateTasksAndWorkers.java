@@ -10,6 +10,9 @@ import com.buaa.act.sdp.topcoder.util.JsonUtil;
 import com.buaa.act.sdp.topcoder.util.RequestUtil;
 import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -19,7 +22,7 @@ import java.util.Set;
 /**
  * Created by yang on 2017/11/10.
  */
-@Service
+@Component
 public class UpdateTasksAndWorkers {
 
     @Autowired

@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.topcoder.service.recommend.classification;
 
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.j48.ClassifierTree;
@@ -15,10 +16,8 @@ import java.util.Map;
 /**
  * Created by yang on 2017/3/9.
  */
-@Service
+@Component
 public class TcJ48 extends J48 {
-
-    private Instances instances;
 
     /**
      * 按概率对分类结果排序
@@ -43,7 +42,7 @@ public class TcJ48 extends J48 {
             Class treeClassfier = ClassifierTree.class;
             Method method = treeClassfier.getDeclaredMethod("getProbs", int.class, Instance.class, double.class);
             method.setAccessible(true);
-            instances = WekaArffUtil.getInstances(path, features, winners);
+            Instances instances = WekaArffUtil.getInstances(path, features, winners);
             buildClassifier(new Instances(instances, 0, position));
             for (int j = 0; j < instances.numClasses(); j++) {
                 index = j;

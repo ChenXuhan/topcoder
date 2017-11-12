@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.topcoder.service.recommend.classification;
 
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import weka.classifiers.functions.LibSVM;
 import weka.core.Instances;
@@ -12,10 +13,8 @@ import java.util.Map;
 /**
  * Created by yang on 2017/3/9.
  */
-@Service
+@Component
 public class TcLibSvm extends LibSVM {
-
-    private Instances instances;
 
     public Map<String, Double> getRecommendResult(String path, double[][] features, int position, List<String> winners) {
         Map<Double, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners, position);
@@ -29,7 +28,7 @@ public class TcLibSvm extends LibSVM {
             return map;
         }
         try {
-            instances = WekaArffUtil.getInstances(path, features, winners);
+            Instances instances = WekaArffUtil.getInstances(path, features, winners);
             buildClassifier(new Instances(instances, 0, position));
             double[] dist = distributionForInstance(instances.instance(position));
             if (dist == null) {

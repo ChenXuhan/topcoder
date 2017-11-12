@@ -74,4 +74,9 @@ public class ProjectMsg {
         return challengeToProject;
     }
 
+    public synchronized void update(){
+        projectIdToChallengeIds.clear();
+        challengeToProject.clear();
+        challengeProjectMapping();
+    }
 }
