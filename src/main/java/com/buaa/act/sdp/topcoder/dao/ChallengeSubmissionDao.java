@@ -4,7 +4,6 @@ import com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by yang on 2016/10/19.

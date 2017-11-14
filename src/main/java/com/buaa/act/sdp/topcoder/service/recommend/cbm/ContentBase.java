@@ -2,7 +2,6 @@ package com.buaa.act.sdp.topcoder.service.recommend.cbm;
 
 import com.buaa.act.sdp.topcoder.util.Maths;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -14,7 +13,8 @@ public class ContentBase {
 
     /**
      * 获取相似任务中所有的获胜者handle
-     * @param winner 所有的获胜者
+     *
+     * @param winner    所有的获胜者
      * @param neighbors 相似的任务
      * @return
      */
@@ -28,8 +28,9 @@ public class ContentBase {
 
     /**
      * 计算当前任务与其相似任务之间的相似度，并按照相似度排序
-     * @param features 特征向量
-     * @param index 当前任务下标
+     *
+     * @param features      特征向量
+     * @param index         当前任务下标
      * @param neighborIndex 相似的任务
      * @return
      */
@@ -50,10 +51,11 @@ public class ContentBase {
 
     /**
      * 取前20个相似任务,item-based推荐
+     *
      * @param features 特征向量
-     * @param index 任务小标
-     * @param scores 开发者得分
-     * @param winner 开发者获胜者
+     * @param index    任务小标
+     * @param scores   开发者得分
+     * @param winner   开发者获胜者
      * @return
      */
     public Map<String, Double> getRecommendResult(double[][] features, int index, List<Map<String, Double>> scores, List<String> winner) {

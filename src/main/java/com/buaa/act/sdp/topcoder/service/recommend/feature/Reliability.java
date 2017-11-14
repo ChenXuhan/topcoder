@@ -4,7 +4,6 @@ import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.service.recommend.network.Competition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -20,6 +19,15 @@ public class Reliability {
     @Autowired
     private Competition competition;
 
+    /**
+     * 计算初步推荐开发者的可靠性
+     *
+     * @param worker    候选集
+     * @param neighbors 相似任务
+     * @param winners   获胜者
+     * @param type      任务类型
+     * @return
+     */
     public List<String> filter(List<String> worker, List<Integer> neighbors, List<String> winners, String type) {
         List<String> winner = new ArrayList<>();
         List<Map<String, Double>> score = competition.getSameTypeWorkers(neighbors, winners, winner, type);
@@ -59,31 +67,27 @@ public class Reliability {
         }
         Map<Integer, Double> winRate = new HashMap<>();
         Map<Integer, Double> subRate = new HashMap<>();
-        int subTotal = 0, winTotal = 0, regTotal = 0;
         double avgWinRate = 0, avgSubRate = 0;
+        String developer;
+        int a, b, c;
+        double num;
         for (int i = 0; i < worker.size(); i++) {
-            winTotal += winCount.get(worker.get(i));
-            subTotal += submissionCount.get(worker.get(i));
-            regTotal += total.get(worker.get(i));
-            winRate.put(i, 1.0 * winCount.get(worker.get(i)) / submissionCount.get(worker.get(i)));
-            avgWinRate += 1.0 * winCount.get(worker.get(i)) / submissionCount.get(worker.get(i));
-            subRate.put(i, 1.0 * submissionCount.get(worker.get(i)) / total.get(worker.get(i)));
-            avgSubRate += 1.0 * submissionCount.get(worker.get(i)) / total.get(worker.get(i));
+            developer = worker.get(i);
+            a = winCount.getOrDefault(developer, 0);
+            b = submissionCount.getOrDefault(developer, 0);
+            c = total.getOrDefault(developer, 0);
+            num = b > 0 ? 1.0 * a / b : 0;
+            winRate.put(i, num);
+            avgWinRate += num;
+            num = c > 0 ? 1.0 * b / c : 0;
+            subRate.put(i, num);
+            avgSubRate += num;
         }
         avgWinRate /= worker.size();
         avgSubRate /= worker.size();
         List<String> result = new ArrayList<>();
         for (int i = 0; i < worker.size(); i++) {
-//            if (0.15 + winRate.get(i) < 1.0 * winTotal / subTotal) {
-//                filter.add(i);
-//            }
-//            if (0.3 + subRate.get(i) < 1.0 * subTotal / regTotal) {
-//                filter.add(i);
-//            }
-//            if (0.3 + 1.0 * subRate.get(i) < 1.0 * subTotal / regTotal && 0.15 + 1.0 * winRate.get(i) < 1.0 * winTotal / subTotal) {
-//                continue;
-//            }
-            if ( winRate.get(i) < avgWinRate && i > 5) {
+            if (winRate.get(i) < avgWinRate && subRate.get(i) < avgSubRate && i > 6) {
                 continue;
             }
             result.add(worker.get(i));
@@ -91,6 +95,11 @@ public class Reliability {
         return result;
     }
 
+    /**
+     * 任务的时间间隔
+     *
+     * @param challengeType
+     */
     public void timeInterval(String challengeType) {
         List<ChallengeItem> items = featureExtract.getItems(challengeType);
         List<String> winners = featureExtract.getWinners(challengeType);

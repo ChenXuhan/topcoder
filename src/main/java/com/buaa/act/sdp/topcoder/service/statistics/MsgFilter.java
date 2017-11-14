@@ -18,7 +18,8 @@ public class MsgFilter {
     private ProjectMsg projectMsg;
 
     /**
-     *  对challenge进行过滤
+     * 对challenge进行过滤
+     *
      * @param challengeItem
      * @param challengeType
      * @return
@@ -51,14 +52,15 @@ public class MsgFilter {
 
     /**
      * 获取一个project之前的project任务，只需要三种类型任务
+     *
      * @param projectId
      * @return
      */
-    public List<List<Integer>> getProjectAndChallenges(int projectId){
-        List<List<Integer>>list=new ArrayList<>();
-        Map<Integer, List<Integer>> projectIdToChallengeIds=projectMsg.getProjectToChallenges();
-        for(Map.Entry<Integer,List<Integer>>entry:projectIdToChallengeIds.entrySet()){
-            if(entry.getKey()<projectId){
+    public List<List<Integer>> getProjectAndChallenges(int projectId) {
+        List<List<Integer>> list = new ArrayList<>();
+        Map<Integer, List<Integer>> projectIdToChallengeIds = projectMsg.getProjectToChallenges();
+        for (Map.Entry<Integer, List<Integer>> entry : projectIdToChallengeIds.entrySet()) {
+            if (entry.getKey() < projectId) {
                 list.add(entry.getValue());
             }
         }

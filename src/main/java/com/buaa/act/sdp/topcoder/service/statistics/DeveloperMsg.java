@@ -20,6 +20,7 @@ public class DeveloperMsg {
 
     /**
      * 计算并保存开发者的动态特征
+     *
      * @param scores
      * @param winners
      * @param list
@@ -74,9 +75,10 @@ public class DeveloperMsg {
         return map;
     }
 
-    public Map<String, WorkerDynamicMsg> getDeveloperDynamicMsg(int challengeId){
+    public Map<String, WorkerDynamicMsg> getDeveloperDynamicMsg(int challengeId) {
         return msgMap.get(challengeId);
     }
+
     /**
      * 判断任务是否相似
      *

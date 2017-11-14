@@ -1,14 +1,10 @@
 package com.buaa.act.sdp.topcoder.service.recommend.cluster;
 
-import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.service.recommend.classification.TcBayes;
-import com.buaa.act.sdp.topcoder.service.recommend.classification.TcJ48;
-import com.buaa.act.sdp.topcoder.service.recommend.classification.TcLibSvm;
 import com.buaa.act.sdp.topcoder.util.Maths;
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import weka.clusterers.SimpleKMeans;
 import weka.core.Instances;
 
@@ -25,19 +21,6 @@ public class Cluster {
 
     @Autowired
     private TcBayes tcBayes;
-
-    /**
-     * 获取训练数据集
-     *
-     * @param path
-     * @param features
-     * @return
-     */
-    public Instances getInstances(String path, double[][] features) {
-        WekaArffUtil.writeToArffCluster(path, features);
-        Instances instances = WekaArffUtil.getInstances(path);
-        return instances;
-    }
 
     public SimpleKMeans buildCluster(Instances instances, int position, int clusterNum, Map<Integer, List<Integer>> map) {
         SimpleKMeans kMeans = null;
@@ -69,18 +52,17 @@ public class Cluster {
      * @param list
      * @param user
      * @param feature
-     * @param path
      * @return
      */
-    public Map<String, Double> getResult(List<Integer> list, List<String> user, double[][] feature, String path) {
+    public Map<String, Double> getClassifierResult(List<Integer> list, List<String> user, double[][] feature) {
         double[][] data = new double[list.size()][feature[0].length];
         List<String> winner = new ArrayList<>(list.size());
         Maths.copy(feature, data, user, winner, list);
         Maths.normalization(data, 5);
-        return tcBayes.getRecommendResult(path, data, list.size() - 1, winner);
+        return tcBayes.getRecommendResult(data, list.size() - 1, winner);
     }
 
-    public Map<String, Double> getRecommendResult(String challengeType, double[][] features, double[] feature, int position, int num, List<String> winners, List<Integer> neighbor) {
+    public Map<String, Double> getRecommendResult(double[][] features, double[] feature, int position, int num, List<String> winners, List<Integer> neighbor) {
         /**
          * 选取聚类的数据集
          */
@@ -93,8 +75,8 @@ public class Cluster {
         List<String> user = new ArrayList<>(position + 1);
         Maths.copy(features, data, winners, user, neighbors);
         data[position] = feature;
-        user.add("?");
-        Instances instances = getInstances(Constant.CLUSTER_DIRECTORY + challengeType, data);
+        user.add(winners.get(position));
+        Instances instances = WekaArffUtil.getInstances(data);
         SimpleKMeans kMeans = buildCluster(instances, position, num, map);
         int k = 0;
         try {
@@ -102,7 +84,6 @@ public class Cluster {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String path = Constant.CLUSTER_DIRECTORY + challengeType + "/" + position;
         /**
          * 在聚类中进行分类
          */
@@ -110,7 +91,7 @@ public class Cluster {
         list.addAll(map.get(k));
         neighbor.addAll(map.get(k));
         list.add(position);
-        return getResult(list, user, data, path);
+        return getClassifierResult(list, user, data);
     }
 
 }

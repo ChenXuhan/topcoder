@@ -9,6 +9,7 @@ public class Maths {
 
     /**
      * 余弦相似度计算
+     *
      * @param vectorOne
      * @param vectorTwo
      * @return
@@ -70,6 +71,7 @@ public class Maths {
 
     /**
      * 获取某一任务较为相似的任务
+     *
      * @param features
      * @param index
      * @return
@@ -115,6 +117,7 @@ public class Maths {
 
     /**
      * 向量归一化处理,[0-1]
+     *
      * @param features
      * @param k
      */
@@ -139,6 +142,7 @@ public class Maths {
 
     /**
      * 从全部向量中复制出需要的部分数据进行分类
+     *
      * @param features
      * @param data
      * @param winners

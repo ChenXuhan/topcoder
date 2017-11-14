@@ -50,11 +50,12 @@ public class FeatureExtract {
 
     /**
      * 文本分词统计
+     *
      * @param start
      * @param type
      * @return
      */
-    public WordCount[] getWordCount(int start,String type) {
+    public WordCount[] getWordCount(int start, String type) {
         List<ChallengeItem> items = getItems(type);
         String[] requirements = new String[items.size()];
         String[] skills = new String[items.size()];
@@ -88,6 +89,7 @@ public class FeatureExtract {
 
     /**
      * 只获取任务的时间和奖金
+     *
      * @param challengeType
      * @return
      */
@@ -108,6 +110,7 @@ public class FeatureExtract {
 
     /**
      * UCL中KNN分类器特征
+     *
      * @param type
      * @return
      */
@@ -138,7 +141,7 @@ public class FeatureExtract {
         }
         List<String> winners = getWinners(type);
         int start = (int) (0.9 * winners.size());
-        WordCount[] wordCounts = getWordCount(start,type);
+        WordCount[] wordCounts = getWordCount(start, type);
         requirementTfIdf = wordCounts[0].getTfIdf();
         requirementWordSize = wordCounts[0].getWordSize();
         titleTfIdf = wordCounts[1].getTfIdf();
@@ -164,9 +167,9 @@ public class FeatureExtract {
         return features;
     }
 
-    public double[]generateVector(Set<String>set,ChallengeItem item){
+    public double[] generateVector(Set<String> set, ChallengeItem item) {
         int index = 0;
-        double[]feature=new double[set.size() + 5];
+        double[] feature = new double[set.size() + 5];
         feature[index++] = item.getDetailedRequirements().length();
         feature[index++] = item.getChallengeName().length();
         String[] temp = item.getPostingDate().substring(0, 10).split("-");
@@ -192,6 +195,7 @@ public class FeatureExtract {
 
     /**
      * 需求和标题使用的长度,没有处理文本
+     *
      * @param type
      * @return
      */
@@ -200,14 +204,14 @@ public class FeatureExtract {
         Set<String> set = getSkills();
         double[][] features = new double[items.size()][];
         for (int i = 0; i < features.length; i++) {
-            features[i]=generateVector(set,items.get(i));
+            features[i] = generateVector(set, items.get(i));
         }
         return features;
     }
 
     /**
      * 统计任务中的技能
-
+     *
      * @param index
      * @param feature
      * @param set
@@ -233,6 +237,7 @@ public class FeatureExtract {
 
     /**
      * 任务技能集合
+     *
      * @return
      */
     public Set<String> getSkills() {

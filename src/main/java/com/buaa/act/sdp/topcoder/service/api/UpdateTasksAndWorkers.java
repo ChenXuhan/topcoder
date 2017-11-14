@@ -10,10 +10,7 @@ import com.buaa.act.sdp.topcoder.util.JsonUtil;
 import com.buaa.act.sdp.topcoder.util.RequestUtil;
 import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
@@ -39,6 +36,7 @@ public class UpdateTasksAndWorkers {
 
     /**
      * 获取当前已经完成的任务数量
+     *
      * @return
      */
     public int getCompletedChallengeCount() {
@@ -59,6 +57,7 @@ public class UpdateTasksAndWorkers {
 
     /**
      * 分页获取历史完成任务
+     *
      * @param pageIndex
      * @param pageSize
      * @return
@@ -85,8 +84,8 @@ public class UpdateTasksAndWorkers {
      * 增量保存所有完成的task
      */
     public void updateFinishedChallenges() {
-        int count =getCompletedChallengeCount();
-        int pageSize= Constant.PAGESIZE;
+        int count = getCompletedChallengeCount();
+        int pageSize = Constant.PAGE_SIZE;
         int pages = count / pageSize;
         if (count % pageSize != 0) {
             pages++;

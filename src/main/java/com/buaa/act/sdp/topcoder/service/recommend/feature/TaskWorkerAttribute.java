@@ -22,44 +22,19 @@ public class TaskWorkerAttribute {
 
     /**
      * 某一个任务前的所有任务的特征向量
-     * @param features 所有特征向量
-     * @param feature 需要得到的特征向量
-     * @param workers 所有开发者
-     * @param worker 需要的得到的开发者
-     * @param challengeId 当前任务
-     * @param items 所有任务
-     * @return
-     */
-    public int getFeatures(List<List<double[]>> features, List<double[]> feature, List<List<String>> workers, List<String> worker, int challengeId, List<ChallengeItem> items) {
-        ChallengeItem item;
-        int result = 0;
-        for (int i = 0; i < items.size(); i++) {
-            item = items.get(i);
-            if (item.getChallengeId() < challengeId) {
-                feature.addAll(features.get(i));
-                worker.addAll(workers.get(i));
-                result += features.get(i).size();
-            } else if (item.getChallengeId() == challengeId) {
-                break;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * 某一个任务前的所有任务的特征向量
+     *
      * @param features
      * @param workers
      * @param item
      * @param items
      */
-    public void getFeature(List<double[]> features, List<String> workers, ChallengeItem item, List<ChallengeItem> items) {
+    public void getFeatures(List<double[]> features, List<String> workers, ChallengeItem item, List<ChallengeItem> items) {
         ChallengeItem challenge;
         for (int i = 0; i < items.size(); i++) {
             challenge = items.get(i);
             if (challenge.getChallengeId() < item.getChallengeId()) {
-                List<String>worker=new ArrayList<>();
-                List<double[]>feature=generateFeatures(challenge,items,worker);
+                List<String> worker = new ArrayList<>();
+                List<double[]> feature = generateFeatures(challenge, items, worker);
                 features.addAll(feature);
                 workers.addAll(worker);
             } else if (item.getChallengeId() == challenge.getChallengeId()) {
@@ -70,6 +45,7 @@ public class TaskWorkerAttribute {
 
     /**
      * 提取任务的静态特征
+     *
      * @param set
      * @param item
      * @param feature
@@ -109,31 +85,33 @@ public class TaskWorkerAttribute {
 
     /**
      * 增加动态特征到特征向量
+     *
      * @param index
      * @param feature 特征向量
      * @param dynamic 动态特征
      */
     public void generateDynamicFeature(int index, double[] feature, double[] dynamic) {
-        System.arraycopy(dynamic, 0, feature, index, 9);
+        System.arraycopy(dynamic, 0, feature, index, 10);
     }
 
     /**
      * 某一个任务所有注册者的特征向量
-     * @param item 当前任务
-     * @param items 所有任务
+     *
+     * @param item    当前任务
+     * @param items   所有任务
      * @param workers 开发者
      * @return
      */
     public List<double[]> generateFeatures(ChallengeItem item, List<ChallengeItem> items, List<String> workers) {
         Set<String> set = getAllSkills();
         List<double[]> dynamicFeatures = dynamicMsg.getWorkerDynamicFeature(items, item, workers);
-        double[] feature = new double[set.size()+6];
+        double[] feature = new double[set.size() + 6];
         generateStaticFeature(set, item, feature);
         List<double[]> features = new ArrayList<>(dynamicFeatures.size());
         for (int i = 0; i < dynamicFeatures.size(); i++) {
-            double[]temp=new double[set.size()+15];
-            System.arraycopy(feature,0,temp,0,set.size()+6);
-            generateDynamicFeature(set.size()+6, temp, dynamicFeatures.get(i));
+            double[] temp = new double[set.size() + 16];
+            System.arraycopy(feature, 0, temp, 0, set.size() + 6);
+            generateDynamicFeature(set.size() + 6, temp, dynamicFeatures.get(i));
             features.add(temp);
         }
         return features;

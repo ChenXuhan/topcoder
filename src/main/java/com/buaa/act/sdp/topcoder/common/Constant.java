@@ -9,8 +9,8 @@ public class Constant {
      * ESEM 开发者的角色
      */
     public static final int QUITTER = 0;
-    public static final int WINNER = 2;
     public static final int SUBMITTER = 1;
+    public static final int WINNER = 2;
 
     public static final String[] TECHNOLOGIES = {
             ".NET",
@@ -218,19 +218,11 @@ public class Constant {
             "iOS"};
 
     /**
-     * weka arff文件目录
-     */
-    public static final String CLASSIFIER_DIRECTORY = "F:/arff/classifier/";
-    public static final String CLUSTER_DIRECTORY = "F:/arff/cluster/";
-    public static final String LOCAL_DIRECTORY = "F:/arff/local/";
-    public static final String DCW_DS = "F:/arff/dcwds/";
-
-    /**
      * team 推荐启发式算法迭代次数
      */
     public static final int ITERATIONS = 1000;
 
-    public static final int PAGESIZE=50;
+    public static final int PAGE_SIZE = 50;
 
-    public static final int RETRY_TIMES=10;
+    public static final int RETRY_TIMES = 10;
 }

@@ -3,7 +3,6 @@ package com.buaa.act.sdp.topcoder.service.recommend.classification;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -19,6 +18,7 @@ public class UclKnn {
 
     /**
      * 选择n个最近的排序，取前K个
+     *
      * @param features
      * @param feature
      * @param k
@@ -54,6 +54,7 @@ public class UclKnn {
 
     /**
      * 推荐的开发者获胜概率
+     *
      * @param features
      * @param k
      * @param start
@@ -70,6 +71,7 @@ public class UclKnn {
 
     /**
      * KNN自定义的距离公式
+     *
      * @param vectorOne
      * @param vectorTwo
      * @return
@@ -97,6 +99,7 @@ public class UclKnn {
 
     /**
      * 余弦相似度
+     *
      * @param one
      * @param two
      * @param start

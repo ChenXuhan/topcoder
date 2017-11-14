@@ -3,7 +3,6 @@ package com.buaa.act.sdp.topcoder.service.recommend.classification;
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Instances;
 
@@ -20,14 +19,14 @@ public class TcBayes extends NaiveBayes {
 
     /**
      * 按概率对分类结果排序
-     * @param path arff文件路径
+     *
      * @param features 特征
      * @param position
      * @param winners
      * @return
      */
-    public Map<String, Double> getRecommendResult(String path, double[][] features, int position, List<String> winners) {
-        Map<Double, String> winnerIndex = WekaArffUtil.<String>getWinnerIndex(winners, position);
+    public Map<String, Double> getRecommendResult(double[][] features, int position, List<String> winners) {
+        Map<Integer, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners);
         Map<String, Double> map = new HashMap<>();
         double index = 0;
         if (winnerIndex.size() == 0) {
@@ -38,16 +37,15 @@ public class TcBayes extends NaiveBayes {
             return map;
         }
         try {
-           Instances instances = WekaArffUtil.getInstances(path, features, winners);
+            Instances instances = WekaArffUtil.getInstances(features, winners);
             buildClassifier(new Instances(instances, 0, position));
             double[] dist = distributionForInstance(instances.instance(position));
             if (dist == null) {
                 throw new Exception("Null distribution predicted");
             }
             for (int j = 0; j < dist.length; j++) {
-                index = j;
-                if (winnerIndex.containsKey(index)) {
-                    map.put(winnerIndex.get(index), dist[j]);
+                if (winnerIndex.containsKey(j)) {
+                    map.put(winnerIndex.get(j), dist[j]);
                 }
             }
         } catch (Exception e) {
@@ -58,17 +56,32 @@ public class TcBayes extends NaiveBayes {
 
     /**
      * 找出最大可能性的开发者及其概率：DCW-DS
-     * @param path
+     *
      * @param features
      * @param position
      * @param workers
      * @return
      */
-    public List<Double> getRecommendResult(String path, List<double[]> features, int position, List<String> workers) {
-        List<Double> result = new ArrayList<>(features.size()-position);
+    public List<Double> getRecommendResultDcwds(List<double[]> features, int position, List<String> workers) {
+        List<Double> result = new ArrayList<>(features.size() - position);
         try {
-            Map<Integer, Double> winnerIndex = new HashMap<>();
-            Instances instances = WekaArffUtil.getInstances(path, features, workers, winnerIndex);
+            Map<String, Integer> workerIndex = new HashMap<>();
+            int index = 0;
+            for (String worker : workers) {
+                if (!workerIndex.containsKey(worker)) {
+                    workerIndex.put(worker, index++);
+                }
+            }
+            index = features.get(0).length - 2;
+            List<String> winners = new ArrayList<>(workers.size());
+            double[][] data = new double[features.size()][];
+            for (int i = 0; i < features.size(); i++) {
+                features.get(i)[index] = workerIndex.get(workers.get(i));
+                winners.add("" + features.get(i)[index + 1]);
+                data[i] = features.get(i);
+            }
+            Map<Integer, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners);
+            Instances instances = WekaArffUtil.getInstances(data, winners);
             if (winnerIndex.size() == 0) {
                 for (int i = 0; i < result.size(); i++) {
                     result.add(0.0);
@@ -82,13 +95,13 @@ public class TcBayes extends NaiveBayes {
                 return result;
             }
             buildClassifier(new Instances(instances, 0, position));
-            for (int i = 0; i < features.size()-position; i++) {
+            for (int i = 0; i < features.size() - position; i++) {
                 double[] dist = distributionForInstance(instances.instance(position + i));
                 if (dist == null) {
                     throw new Exception("Null distribution predicted");
                 }
-                for(int j=0;j<dist.length;j++) {
-                    if (winnerIndex.get(j)== Constant.WINNER) {
+                for (int j = 0; j < dist.length; j++) {
+                    if (Double.parseDouble(winnerIndex.get(j)) > Constant.SUBMITTER) {
                         result.add(dist[j]);
                         break;
                     }

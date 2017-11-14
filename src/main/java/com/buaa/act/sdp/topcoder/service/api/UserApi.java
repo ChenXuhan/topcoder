@@ -11,7 +11,6 @@ import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -112,6 +111,7 @@ public class UserApi {
 
     /**
      * 从json解析开发者的development相关信息
+     *
      * @param handle
      * @param json
      * @return
@@ -235,6 +235,7 @@ public class UserApi {
 
     /**
      * 保存或更新开发者所有信息
+     *
      * @param handle
      */
     public void saveUserMsg(String handle) {
@@ -243,7 +244,7 @@ public class UserApi {
         saveUserRatingMsg(handle);
     }
 
-    public void updateUserMsg(String handle){
+    public void updateUserMsg(String handle) {
         updateUserBasicInformation(handle);
         updateUserDevelopmentMsg(handle);
         saveUserRatingMsg(handle);
@@ -251,9 +252,10 @@ public class UserApi {
 
     /**
      * 开发者的积分历史信息
+     *
      * @param handle
      */
-    public void saveUserRatingMsg(String handle){
+    public void saveUserRatingMsg(String handle) {
         saveUserRatingHistory(handle, "design");
         saveUserRatingHistory(handle, "development");
         saveUserRatingHistory(handle, "specification");

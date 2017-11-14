@@ -132,7 +132,8 @@ public class TeamRecommend {
 
     /**
      * 寻找最佳Team，迭代maxLogit算法
-     * @param bestIndex 项目中每个任务的开发者
+     *
+     * @param bestIndex     项目中每个任务的开发者
      * @param workerIndex   开发者名字-下标映射关系
      * @param workers       每一个任务的开发者候选集
      * @param collaboration 开发者协作值
@@ -167,9 +168,9 @@ public class TeamRecommend {
     }
 
     /**
-     * @param bestIndex 项目中每个任务的开发者
-     * @param workerIndex 开发者名字-下标映射关系
-     * @param workers 每一个任务的开发者候选集
+     * @param bestIndex     项目中每个任务的开发者
+     * @param workerIndex   开发者名字-下标映射关系
+     * @param workers       每一个任务的开发者候选集
      * @param collaboration 开发者协作值
      * @return
      */
@@ -232,6 +233,7 @@ public class TeamRecommend {
 
     /**
      * 为项目寻找最佳团队开发者：每次寻找最大的协作值，记录相应的任务和对应替换开发者
+     *
      * @param projectId
      * @return
      */

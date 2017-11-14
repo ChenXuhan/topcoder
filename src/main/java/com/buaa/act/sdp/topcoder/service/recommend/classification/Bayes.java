@@ -17,6 +17,7 @@ public class Bayes {
 
     /**
      * 计算划分到某一类的概率
+     *
      * @param features
      * @param feature
      * @param type
@@ -48,6 +49,7 @@ public class Bayes {
 
     /**
      * 分别计算所有类别的概率
+     *
      * @param features
      * @param index
      * @param lableIndexMap
@@ -74,6 +76,7 @@ public class Bayes {
 
     /**
      * 计算需求长度、不使用tf-idf
+     *
      * @param features
      * @param winners
      * @param index
@@ -100,6 +103,7 @@ public class Bayes {
 
     /**
      * UCL论文中推荐方法、使用tf-idf处理需求文本
+     *
      * @param wordCounts
      * @param features
      * @param winners

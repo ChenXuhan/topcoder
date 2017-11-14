@@ -17,11 +17,12 @@ public class Collaboration {
 
     /**
      * 一个project内的协作统计
+     *
      * @param workerIndex 开发者下标
-     * @param colCount 开发者之间协作次数
-     * @param taskCount 完成任务数量
-     * @param colScores 协作开发者得分
-     * @param score 一个项目内每个任务的开发者得分信息
+     * @param colCount    开发者之间协作次数
+     * @param taskCount   完成任务数量
+     * @param colScores   协作开发者得分
+     * @param score       一个项目内每个任务的开发者得分信息
      */
     public void collaborationInProject(Map<String, Integer> workerIndex, int[][] colCount, int[] taskCount, double[][] colScores, List<Map<String, Double>> score) {
         Set<String> set = new HashSet<>();
@@ -52,6 +53,7 @@ public class Collaboration {
 
     /**
      * 根据 统计的任务数量及得分情况，计算worker之间协作强度
+     *
      * @param colCount
      * @param taskCount
      * @param colScores
@@ -77,6 +79,7 @@ public class Collaboration {
 
     /**
      * 根据历史任务，计算开发者之间的协作强度
+     *
      * @param workerIndex
      * @param challenges
      * @return

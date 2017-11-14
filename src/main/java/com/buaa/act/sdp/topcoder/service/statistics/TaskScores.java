@@ -60,6 +60,7 @@ public class TaskScores {
 
     /**
      * 每一个任务的开发者得分
+     *
      * @return
      */
     public synchronized Map<Integer, Map<String, Double>> getAllWorkerScores() {
@@ -132,7 +133,7 @@ public class TaskScores {
              */
             time = submitDate.getOrDefault(challengeSubmission.getChallengeID(), null);
             String[] temp;
-            if (challengeSubmission.getSubmissionDate()!=null&&(temp= challengeSubmission.getSubmissionDate().substring(0, 10).split("-"))!= null) {
+            if (challengeSubmission.getSubmissionDate() != null && (temp = challengeSubmission.getSubmissionDate().substring(0, 10).split("-")) != null) {
                 date = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
             } else {
                 date = 0;
@@ -147,7 +148,7 @@ public class TaskScores {
         }
     }
 
-    public synchronized void update(){
+    public synchronized void update() {
         scores.clear();
         winners.clear();
         registerDate.clear();

@@ -1,9 +1,7 @@
 package com.buaa.act.sdp.topcoder.dao;
 
 import com.buaa.act.sdp.topcoder.model.user.User;
-import org.apache.ibatis.annotations.Param;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**

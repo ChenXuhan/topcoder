@@ -175,6 +175,7 @@ public class TaskMsg {
 
     /**
      * 从所有的任务中进行筛选，过滤出一部分任务，计算winner、tasks，以及开发者所得分数
+     *
      * @param challengeType
      * @param items
      * @param winners
@@ -219,7 +220,7 @@ public class TaskMsg {
         Collections.sort(challengeItems, new Comparator<ChallengeItem>() {
             @Override
             public int compare(ChallengeItem o1, ChallengeItem o2) {
-                return o1.getChallengeId()-o2.getChallengeId();
+                return o1.getChallengeId() - o2.getChallengeId();
             }
         });
         Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
@@ -237,6 +238,7 @@ public class TaskMsg {
 
     /**
      * 按照task id升序获取所有的任务
+     *
      * @return
      */
     public List<ChallengeItem> getTasks() {
@@ -253,7 +255,7 @@ public class TaskMsg {
         return list;
     }
 
-    public synchronized void update(){
+    public synchronized void update() {
         codeItems.clear();
         codeWinners.clear();
         codeScore.clear();

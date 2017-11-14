@@ -15,7 +15,7 @@ public class UpdateData {
     @Autowired
     private TaskScores taskScores;
 
-    public void update(){
+    public void update() {
         projectMsg.update();
         taskScores.update();
         taskMsg.update();

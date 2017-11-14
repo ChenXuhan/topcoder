@@ -16,6 +16,7 @@ public class StringArrayTypeHandler extends BaseTypeHandler<String[]> {
 
     /**
      * mybatis数组和string转换
+     *
      * @param preparedStatement
      * @param i
      * @param strings

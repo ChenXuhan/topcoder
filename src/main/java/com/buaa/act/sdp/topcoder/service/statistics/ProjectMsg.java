@@ -28,6 +28,7 @@ public class ProjectMsg {
 
     /**
      * project中所有的challengeId
+     *
      * @return
      */
     public synchronized Map<Integer, List<Integer>> getProjectToChallenges() {
@@ -65,6 +66,7 @@ public class ProjectMsg {
 
     /**
      * challenge对应的项目
+     *
      * @return
      */
     public synchronized Map<Integer, Integer> getChallengeToProject() {
@@ -74,7 +76,7 @@ public class ProjectMsg {
         return challengeToProject;
     }
 
-    public synchronized void update(){
+    public synchronized void update() {
         projectIdToChallengeIds.clear();
         challengeToProject.clear();
         challengeProjectMapping();

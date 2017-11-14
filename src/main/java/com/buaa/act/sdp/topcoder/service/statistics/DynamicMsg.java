@@ -6,7 +6,9 @@ import com.buaa.act.sdp.topcoder.model.user.WorkerDynamicMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yang on 2017/9/26.
@@ -36,17 +38,17 @@ public class DynamicMsg {
         Map<Integer, Map<String, Double>> scores = taskScore.getAllWorkerScores();
         Map<String, Double> score = scores.get(challengeItem.getChallengeId());
         Map<Integer, String> winners = taskScore.getWinners();
-        Map<String, WorkerDynamicMsg> map =developerMsg.getDeveloperDynamicMsg(scores,winners,list,challengeItem);
+        Map<String, WorkerDynamicMsg> map = developerMsg.getDeveloperDynamicMsg(scores, winners, list, challengeItem);
         for (Map.Entry<String, Double> entry : score.entrySet()) {
-            double[] temp = new double[9];
+            double[] temp = new double[10];
             if (map.containsKey(entry.getKey())) {
                 generateDynamicFeature(map.get(entry.getKey()), temp);
                 if (winners.get(challengeItem.getChallengeId()).equals(entry.getKey())) {
-                    temp[8] = Constant.WINNER;
+                    temp[9] = Constant.WINNER;
                 } else if (score.get(entry.getKey()) > 0) {
-                    temp[8] = Constant.SUBMITTER;
+                    temp[9] = Constant.SUBMITTER;
                 } else {
-                    temp[8] = Constant.QUITTER;
+                    temp[9] = Constant.QUITTER;
                 }
             }
             feature.add(temp);
@@ -71,9 +73,9 @@ public class DynamicMsg {
         }
         List<double[]> feature = new ArrayList<>(map.size());
         for (Map.Entry<String, WorkerDynamicMsg> entry : map.entrySet()) {
-            double[] temp = new double[9];
+            double[] temp = new double[10];
             generateDynamicFeature(entry.getValue(), temp);
-            temp[8] = 0;
+            temp[9] = 0;
             feature.add(temp);
             worker.add(entry.getKey());
         }

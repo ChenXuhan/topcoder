@@ -2,7 +2,6 @@ package com.buaa.act.sdp.topcoder.service.recommend.classification;
 
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import weka.classifiers.functions.LibSVM;
 import weka.core.Instances;
 
@@ -16,10 +15,10 @@ import java.util.Map;
 @Component
 public class TcLibSvm extends LibSVM {
 
-    public Map<String, Double> getRecommendResult(String path, double[][] features, int position, List<String> winners) {
-        Map<Double, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners, position);
+    public Map<String, Double> getRecommendResult(double[][] features, int position, List<String> winners) {
+        Map<Integer, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners);
         Map<String, Double> map = new HashMap<>();
-        double index = 0;
+        int index = 0;
         if (winnerIndex.size() == 0) {
             return map;
         }
@@ -28,16 +27,15 @@ public class TcLibSvm extends LibSVM {
             return map;
         }
         try {
-            Instances instances = WekaArffUtil.getInstances(path, features, winners);
+            Instances instances = WekaArffUtil.getInstances(features, winners);
             buildClassifier(new Instances(instances, 0, position));
             double[] dist = distributionForInstance(instances.instance(position));
             if (dist == null) {
                 return map;
             }
             for (int j = 0; j < dist.length; j++) {
-                index = j;
-                if (winnerIndex.containsKey(index)) {
-                    map.put(winnerIndex.get(index), dist[j]);
+                if (winnerIndex.containsKey(j)) {
+                    map.put(winnerIndex.get(j), dist[j]);
                 }
             }
         } catch (Exception e) {

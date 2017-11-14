@@ -24,7 +24,7 @@ public class WorkerDynamicMsg {
     }
 
     public void addNumRegTask() {
-        numRegTask+=1;
+        numRegTask += 1;
     }
 
     public int getNumSubTask() {
@@ -32,7 +32,7 @@ public class WorkerDynamicMsg {
     }
 
     public void addNumsSubTask() {
-        this.numSubTask +=1;
+        this.numSubTask += 1;
     }
 
     public int getNumRegTaskSimilar() {
@@ -40,7 +40,7 @@ public class WorkerDynamicMsg {
     }
 
     public void addNumRegTaskSimilar() {
-        this.numRegTaskSimilar +=1;
+        this.numRegTaskSimilar += 1;
     }
 
     public int getNumSubTaskSimilar() {
@@ -64,7 +64,7 @@ public class WorkerDynamicMsg {
     }
 
     public void addNumSubTaskTDays() {
-        this.numSubTaskTDays +=1;
+        this.numSubTaskTDays += 1;
     }
 
     public int getNumWinTaskTDays() {
@@ -72,7 +72,7 @@ public class WorkerDynamicMsg {
     }
 
     public void addNumsWinTaskTDays() {
-        this.numWinTaskTDays +=1;
+        this.numWinTaskTDays += 1;
     }
 
     public double getPriceTotal() {

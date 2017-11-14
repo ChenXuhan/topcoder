@@ -38,12 +38,12 @@ public class TestTaskRecommend {
 //        Code
 //        First2Finish
 //        Assembly Competition
-        String challengeType = "Assembly Competition";
+        String challengeType = "Code";
 //        recommendResult.contentBased(challengeType);
 //        recommendResult.classifier(challengeType);
-//        recommendResult.clusterClassifier(challengeType, 4);
+        recommendResult.clusterClassifier(challengeType, 3);
 //        recommendResult.localClassifier(challengeType);
-        recommendResult.dcw_ds(challengeType);
+//        recommendResult.dcw_ds(challengeType);
     }
 
     @Test

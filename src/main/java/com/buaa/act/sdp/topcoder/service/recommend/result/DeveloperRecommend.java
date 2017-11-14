@@ -47,7 +47,7 @@ public class DeveloperRecommend {
         }
         double[] feature = featureExtract.generateVector(featureExtract.getSkills(), item);
         List<Integer> index = new ArrayList<>();
-        List<String> worker = recommendWorker(cluster.getRecommendResult(item.getChallengeType(), features, feature, position + 1, 3, winners, index));
+        List<String> worker = recommendWorker(cluster.getRecommendResult(features, feature, position + 1, 3, winners, index));
         worker = reliability.filter(worker, index, winners, item.getChallengeType());
         worker = competition.refine(index, worker, winners, position + 1, item.getChallengeType());
         return worker;

@@ -15,6 +15,7 @@ import java.io.IOException;
 public class HttpUtils {
     /**
      * http get请求
+     *
      * @param url
      * @return
      */

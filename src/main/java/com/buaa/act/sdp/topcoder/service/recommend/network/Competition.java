@@ -21,10 +21,11 @@ public class Competition {
 
     /**
      * 获取当前任务的相似任务中worker的得分，分数多少无限制
+     *
      * @param neighbors 相似的任务
-     * @param winners 获胜者
+     * @param winners   获胜者
      * @param winner
-     * @param type 任务类型
+     * @param type      任务类型
      * @return
      */
     public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
@@ -40,6 +41,7 @@ public class Competition {
 
     /**
      * 获取当前任务的相似任务中worker的得分,只考虑80分以上的
+     *
      * @param neighbors
      * @param winners
      * @param winner
@@ -58,8 +60,9 @@ public class Competition {
 
     /**
      * 获取在当前任务前的所有类型任务中参与的worker，id之前
+     *
      * @param challengeId 任务的id
-     * @param winner 获胜者
+     * @param winner      获胜者
      * @return
      */
     public List<Map<String, Double>> getAllTypeWorkers(int challengeId, List<String> winner) {
@@ -94,8 +97,9 @@ public class Competition {
 
     /**
      * 有向边,worker和worker之间的输赢边
-     * @param index 开发者的下标序号
-     * @param scores 开发者得分
+     *
+     * @param index   开发者的下标序号
+     * @param scores  开发者得分
      * @param winners 任务获胜者
      * @return
      */
@@ -123,6 +127,7 @@ public class Competition {
 
     /**
      * 赢次数减输的次数
+     *
      * @param attraction
      * @return
      */
@@ -138,7 +143,6 @@ public class Competition {
         for (int i = 0; i < attraction.length; i++) {
             for (int j = i + 1; j < attraction.length; j++) {
                 attr[i][j] = 0;
-                //attr[i][j] = 0.9 * (attraction[j][i] - attraction[i][j]) / (attraction[i][j] + attraction[j][i]) + 0.1 * (attraction[i][j] + attraction[j][i]) / (edge[i] + edge[j]);
                 if ((attraction[i][j] + attraction[j][i]) != 0) {
                     attr[i][j] = 0.5 * (attraction[j][i] - attraction[i][j]) / (attraction[i][j] + attraction[j][i]) + 0.5 * (attraction[i][j] + attraction[j][i]) / (edge[i] + edge[j]);
                 }
@@ -150,6 +154,7 @@ public class Competition {
 
     /**
      * worker吸引力(worker之间边的和)
+     *
      * @param attraction
      * @return
      */
@@ -166,6 +171,7 @@ public class Competition {
 
     /**
      * worker排斥关系计算
+     *
      * @param attraction
      * @return
      */
@@ -190,11 +196,12 @@ public class Competition {
 
     /**
      * 综合分类推荐排序和输赢次数排序,每次只处理一名
+     *
      * @param neighbors 相似的任务
      * @param worker
-     * @param winners 获胜的开发者
-     * @param n 选取n个相似的任务
-     * @param type 任务类型
+     * @param winners   获胜的开发者
+     * @param n         选取n个相似的任务
+     * @param type      任务类型
      * @return
      */
     public List<String> refine(List<Integer> neighbors, List<String> worker, List<String> winners, int n, String type) {
@@ -234,12 +241,13 @@ public class Competition {
 
     /**
      * 分类的结果利用关系重新排序
+     *
      * @param worker 开发者
      * @param n
-     * @param type 类型
+     * @param type   类型
      * @return
      */
-    public List<String> uclRank(List<String> worker,int n, String type) {
+    public List<String> uclRank(List<String> worker, int n, String type) {
         List<String> winner = new ArrayList<>();
         List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems(type).get(n).getChallengeId(), winner);
         Map<String, Integer> index = getIndex(worker);
@@ -301,6 +309,7 @@ public class Competition {
 
     /**
      * 吸引力排序
+     *
      * @param num
      * @return
      */
@@ -325,6 +334,7 @@ public class Competition {
 
     /**
      * 最小下标排序
+     *
      * @param num
      * @return
      */

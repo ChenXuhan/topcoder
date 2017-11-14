@@ -69,6 +69,7 @@ public class Distince extends EuclideanDistance {
 
     /**
      * 自定义距离公式
+     *
      * @param first
      * @param second
      * @param cutOffValue
