@@ -28,7 +28,7 @@ public class StringArrayTypeHandler extends BaseTypeHandler<String[]> {
         if (strings == null) {
             preparedStatement.setNull(i, Types.VARCHAR);
         } else {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             for (String value : strings) {
                 result.append(value).append(",");
             }

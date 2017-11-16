@@ -84,7 +84,8 @@ public class TaskScores {
                  */
                 time = registerDate.getOrDefault(challengeRegistrant.getChallengeID(), null);
                 String[] temp;
-                if (challengeRegistrant.getRegistrationDate() != null && (temp = challengeRegistrant.getRegistrationDate().substring(0, 10).split("-")) != null) {
+                if (challengeRegistrant.getRegistrationDate() != null) {
+                    temp = challengeRegistrant.getRegistrationDate().substring(0, 10).split("-");
                     date = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
                 } else {
                     date = 0;
@@ -113,7 +114,7 @@ public class TaskScores {
         for (ChallengeSubmission challengeSubmission : list) {
             if (scores.containsKey(challengeSubmission.getChallengeID())) {
                 score = scores.get(challengeSubmission.getChallengeID());
-                if (score.containsKey(challengeSubmission.getHandle()) && score.get(challengeSubmission.getHandle()).doubleValue() >= Double.parseDouble(challengeSubmission.getFinalScore())) {
+                if (score.containsKey(challengeSubmission.getHandle()) && score.get(challengeSubmission.getHandle()) >= Double.parseDouble(challengeSubmission.getFinalScore())) {
                     continue;
                 } else {
                     score.put(challengeSubmission.getHandle(), Double.parseDouble(challengeSubmission.getFinalScore()));
@@ -133,7 +134,8 @@ public class TaskScores {
              */
             time = submitDate.getOrDefault(challengeSubmission.getChallengeID(), null);
             String[] temp;
-            if (challengeSubmission.getSubmissionDate() != null && (temp = challengeSubmission.getSubmissionDate().substring(0, 10).split("-")) != null) {
+            if (challengeSubmission.getSubmissionDate() != null) {
+                temp = challengeSubmission.getSubmissionDate().substring(0, 10).split("-");
                 date = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
             } else {
                 date = 0;

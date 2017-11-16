@@ -67,7 +67,7 @@ public class WordCount {
      */
     public List<String>[] getWordsFromText() {
         Analyzer analyzer = new StandardAnalyzer();
-        TokenStream tokenStream = null;
+        TokenStream tokenStream;
         List<String>[] words = new List[texts.length];
         try {
             for (int i = 0; i < texts.length; i++) {
@@ -96,21 +96,20 @@ public class WordCount {
     public void init(int start) {
         List<String>[] words = getWordsFromText();
         List<String> word;
+        int len = 10;
         for (int i = 0; i < texts.length; i++) {
             word = words[i];
             taskWords.add(word.size());
             Map<String, Integer> map = new HashMap<>();
-            if (word != null) {
-                for (String s : word) {
-                    if (map.containsKey(s)) {
-                        map.put(s, map.get(s) + 1);
+            for (String s : word) {
+                if (map.containsKey(s)) {
+                    map.put(s, map.get(s) + 1);
+                } else {
+                    map.put(s, 1);
+                    if (allWords.containsKey(s)) {
+                        allWords.put(s, allWords.get(s) + 1);
                     } else {
-                        map.put(s, 1);
-//                        if (allWords.containsKey(s)) {
-//                            allWords.put(s, allWords.get(s) + 1);
-//                        } else {
-//                            allWords.put(s, 1);
-//                        }
+                        allWords.put(s, 1);
                     }
                 }
                 if (i < start) {
@@ -122,7 +121,7 @@ public class WordCount {
                             return o2.getValue() - o1.getValue();
                         }
                     });
-                    for (int j = 0; j < 10 && j < list.size(); j++) {
+                    for (int j = 0; j < len && j < list.size(); j++) {
                         if (allWords.containsKey(list.get(j).getKey())) {
                             allWords.put(list.get(j).getKey(), allWords.get(list.get(j).getKey()) + 1);
                         } else {

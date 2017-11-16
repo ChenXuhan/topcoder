@@ -159,7 +159,7 @@ public class TaskRecommend {
         double[] mpp = new double[20];
         double[] mpps = new double[20];
         int[] num = getTestDataSet(winners.size());
-        List<String> worker = null;
+        List<String> worker;
         for (int i = 0; i < num.length; i++) {
             List<Integer> index = localClassifier.getNeighbor(features, num[i]);
             Map<String, Double> tcResult = localClassifier.getRecommendResult(features, winners, index);

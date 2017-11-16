@@ -57,7 +57,7 @@ public class TeamRecommend {
      */
     public List<List<String>> recommendWorkersForEachTask(int projectId) {
         List<Integer> ids = projectMsg.getProjectToChallenges().get(projectId);
-        Set<Integer> sets = new HashSet(ids.size());
+        Set<Integer> sets = new HashSet(ids == null ? 0 : ids.size());
         sets.addAll(ids);
         List<List<String>> workers = new ArrayList<>(ids.size());
         List<ChallengeItem> items = taskMsg.getChallenges(sets);
@@ -158,9 +158,7 @@ public class TeamRecommend {
                 teamStrength = newTeamStrength;
                 if (teamStrength > bestTeamStrength) {
                     bestTeamStrength = teamStrength;
-                    for (int t = 0; t < index.length; t++) {
-                        bestIndex[t] = index[t];
-                    }
+                    System.arraycopy(index, 0, bestIndex, 0, index.length);
                 }
             }
         }

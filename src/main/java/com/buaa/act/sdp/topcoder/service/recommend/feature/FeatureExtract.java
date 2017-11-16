@@ -67,11 +67,13 @@ public class FeatureExtract {
             temp = items.get(i).getTechnology();
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : temp) {
-                stringBuilder.append(s + ' ');
+                stringBuilder.append(s);
+                stringBuilder.append(' ');
             }
             temp = items.get(i).getPlatforms();
             for (String s : temp) {
-                stringBuilder.append(s + ' ');
+                stringBuilder.append(s);
+                stringBuilder.append(' ');
             }
             skills[i] = stringBuilder.toString();
         }
@@ -176,9 +178,8 @@ public class FeatureExtract {
         feature[index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
         feature[index++] = item.getDuration();
         double award = 0;
-        for (String str : item.getPrize()) {
-            award += Double.parseDouble(str);
-            break;
+        if (item.getPrize().length > 0) {
+            award += Double.parseDouble(item.getPrize()[0]);
         }
         feature[index++] = award;
         Set<String> skill = new HashSet<>();

@@ -63,7 +63,7 @@ public class ContentBase {
         List<Integer> neighborIndex = Maths.getSimilarityChallenges(features, index);
         double[][] similarity = getSimilarityTasks(features, index, neighborIndex);
         Set<String> winnerSet = getWinner(winner, neighborIndex);
-        for (int i = 0; i < 20 && i < neighborIndex.size(); i++) {
+        for (int i = 0; i < neighborIndex.size(); i++) {
             for (Map.Entry<String, Double> entry : scores.get((int) similarity[i][0]).entrySet()) {
                 if (winnerSet.contains(entry.getKey())) {
                     if (map.containsKey(entry.getKey())) {

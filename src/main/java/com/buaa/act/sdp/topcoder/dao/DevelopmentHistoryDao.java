@@ -12,7 +12,7 @@ public interface DevelopmentHistoryDao {
 
     void insertBatch(List<DevelopmentHistory> list);
 
-    void updateBatch(List<DevelopmentHistory>list);
+    void updateBatch(List<DevelopmentHistory> list);
 
     List<DevelopmentHistory> getDevelopmentHistoryByHandle(@Param("handle") String handle);
 }

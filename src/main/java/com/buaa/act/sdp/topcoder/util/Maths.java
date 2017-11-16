@@ -1,5 +1,8 @@
 package com.buaa.act.sdp.topcoder.util;
 
+import com.buaa.act.sdp.topcoder.common.Constant;
+import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+
 import java.util.*;
 
 /**
@@ -24,49 +27,76 @@ public class Maths {
         return num / Math.sqrt(a * b);
     }
 
-    public static double taskSimilariry1(double[] vectorOne, double[] vectorTwo) {
-        double similarity = 0;
-        for (int i = 0; i < vectorOne.length; i++) {
-            similarity += (vectorOne[i] - vectorTwo[i]) * (vectorOne[i] - vectorTwo[i]);
+    /**
+     * 判断任务是否相似
+     *
+     * @param one
+     * @param two
+     * @return
+     */
+    public static boolean isSimilar(ChallengeItem one, ChallengeItem two) {
+        if (one.getChallengeType().equals(two.getChallengeType())) {
+            return true;
         }
-        return similarity;
-    }
-
-    public static List<Map.Entry<Integer, Double>> findNeighbor(int index, double[][] features) {
-        Map<Integer, Double> similarity = new HashMap<>();
-        for (int i = 0; i < index; i++) {
-            similarity.put(i, taskSimilariry(features[index], features[i]));
+        int count = 0;
+        Set<String> skills = new HashSet<>();
+        for (String str : one.getTechnology()) {
+            skills.add(str.toLowerCase());
         }
-        List<Map.Entry<Integer, Double>> lists = new ArrayList<>();
-        lists.addAll(similarity.entrySet());
-        Collections.sort(lists, new Comparator<Map.Entry<Integer, Double>>() {
-            @Override
-            public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
-                return o2.getValue().compareTo(o1.getValue());
+        for (String str : two.getTechnology()) {
+            if (skills.contains(str.toLowerCase())) {
+                count++;
             }
-        });
-        return lists;
-    }
-
-    public static List<Integer> getNeighbors(double[][] features, int index, int k) {
-        Map<Integer, Double> similarity = new HashMap<>();
-        for (int i = 0; i < index; i++) {
-            similarity.put(i, taskSimilariry(features[index], features[i]));
         }
-        List<Map.Entry<Integer, Double>> lists = new ArrayList<>();
-        lists.addAll(similarity.entrySet());
-        Collections.sort(lists, new Comparator<Map.Entry<Integer, Double>>() {
-            @Override
-            public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
-                return o2.getValue().compareTo(o1.getValue());
+        double similar = 1.0 * count / Math.max(one.getTechnology().length, two.getTechnology().length);
+        skills.clear();
+        count = 0;
+        for (String str : one.getPlatforms()) {
+            skills.add(str.toLowerCase());
+        }
+        for (String str : two.getPlatforms()) {
+            if (skills.contains(str.toLowerCase())) {
+                count++;
             }
-        });
-        List<Integer> list = new ArrayList<>(k + 1);
-        for (int i = 0; i < k; i++) {
-            list.add(lists.get(i).getKey());
         }
-        list.add(index);
-        return list;
+        similar += 1.0 * count / Math.max(one.getPlatforms().length, two.getPlatforms().length);
+        String[] temp;
+        int a, b;
+        if (one.getRegistrationStartDate() != null) {
+            temp = one.getRegistrationStartDate().substring(0, 10).split("-");
+            a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            a = 0;
+        }
+        if (two.getRegistrationStartDate() != null) {
+            temp = two.getRegistrationStartDate().substring(0, 10).split("-");
+            b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            b = 0;
+        }
+        similar += (a - b) / 5 / 365;
+        if (one.getSubmissionEndDate() != null) {
+            temp = one.getSubmissionEndDate().substring(0, 10).split("-");
+            a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            a = 0;
+        }
+        if (two.getSubmissionEndDate() != null) {
+            temp = two.getSubmissionEndDate().substring(0, 10).split("-");
+            b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            b = 0;
+        }
+        similar += (a - b) / 5 / 365;
+        double c = 0, d = 0;
+        for (String str : one.getPrize()) {
+            c += Double.parseDouble(str);
+        }
+        for (String str : two.getPrize()) {
+            d += Double.parseDouble(str);
+        }
+        similar += Math.abs(c - d) / (c + d);
+        return similar >= Constant.TASK_SIMILARITY;
     }
 
     /**
@@ -109,10 +139,35 @@ public class Maths {
             }
         });
         List<Integer> result = new ArrayList<>(list.size());
-        for (int i = 0; i < 8 * list.size() / 10; i++) {
+        for (int i = 0; i < list.size(); i++) {
             result.add(list.get(i).getKey());
         }
         return result;
+    }
+
+    /**
+     * 任务的发布时间距离
+     *
+     * @param one
+     * @param two
+     * @return
+     */
+    public static int dataDistance(ChallengeItem one, ChallengeItem two) {
+        String[] temp;
+        int a, b;
+        if (one.getPostingDate() != null) {
+            temp = one.getPostingDate().substring(0, 10).split("-");
+            a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            a = 0;
+        }
+        if (two.getPostingDate() != null) {
+            temp = two.getPostingDate().substring(0, 10).split("-");
+            b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
+        } else {
+            b = 0;
+        }
+        return Math.abs(a - b);
     }
 
     /**

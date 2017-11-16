@@ -29,19 +29,18 @@ public class TcJ48 extends J48 {
     public Map<String, Double> getRecommendResult(double[][] features, int position, List<String> winners) {
         Map<Integer, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners);
         Map<String, Double> map = new HashMap<>();
-        double index = 0;
         if (winnerIndex.size() == 0) {
             return map;
         }
         if (winnerIndex.size() == 1) {
-            map.put(winnerIndex.get(index), 1.0);
+            map.put(winnerIndex.get(0), 1.0);
             return map;
         }
         try {
             Class treeClassfier = ClassifierTree.class;
             Method method = treeClassfier.getDeclaredMethod("getProbs", int.class, Instance.class, double.class);
             method.setAccessible(true);
-            Instances instances = WekaArffUtil.getInstances(features, winners);
+            Instances instances = WekaArffUtil.getClassifierInstances(features, winners);
             buildClassifier(new Instances(instances, 0, position));
             for (int j = 0; j < instances.numClasses(); j++) {
                 if (winnerIndex.containsKey(j)) {

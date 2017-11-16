@@ -4,6 +4,8 @@ import com.buaa.act.sdp.topcoder.service.api.UserApi;
 import com.buaa.act.sdp.topcoder.service.api.statistics.UserStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = "classpath:conf/applicationContext.xml")
 public class TestUser {
 
+    private static final Logger logger= LoggerFactory.getLogger(TestUser.class);
     @Autowired
     private UserApi userApi;
 
@@ -28,10 +31,12 @@ public class TestUser {
 
     @Test
     public void testSaveUser() {
-        //userApi.getUserStatistics("arthurjlp");
-        // userApi.getUserByName("arthurjlp");
-        //linerRegression.getDate("30055549");
-        //userApi.saveUser("iRabbit");
+        logger.debug("debug");
+        logger.warn("warn");
+        logger.error("error");
+        logger.info("info");
+        System.out.println("hello topcoder!");
+
     }
 
     @Test

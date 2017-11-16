@@ -87,7 +87,7 @@ public class Competition {
         return index;
     }
 
-    public List<Integer> getNeighbors(List<Integer> list, int n) {
+    public List<Integer> getNeighbors(int n) {
         List<Integer> result = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             result.add(i);
@@ -206,7 +206,7 @@ public class Competition {
      */
     public List<String> refine(List<Integer> neighbors, List<String> worker, List<String> winners, int n, String type) {
         List<String> winner = new ArrayList<>();
-        List<Integer> neighbor = getNeighbors(neighbors, n);
+        List<Integer> neighbor = getNeighbors(n);
         List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner, type);
         Map<String, Integer> index = getIndex(worker);
         int[][] relation = getRelationEdge(index, scores, winner);

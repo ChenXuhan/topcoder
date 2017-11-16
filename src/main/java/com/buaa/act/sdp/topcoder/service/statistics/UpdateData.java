@@ -15,6 +15,9 @@ public class UpdateData {
     @Autowired
     private TaskScores taskScores;
 
+    /**
+     * 更新缓存数据
+     */
     public void update() {
         projectMsg.update();
         taskScores.update();

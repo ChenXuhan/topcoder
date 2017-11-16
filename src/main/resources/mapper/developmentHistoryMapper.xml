@@ -45,7 +45,7 @@
 
     <update id="updateBatch" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" separator=",">
-            UPDATE development_history set 
+            UPDATE development_history set
             competitions=#{item.competitions},
             submissions=#{item.submissions},
             submissionRate=#{item.submissionRate},

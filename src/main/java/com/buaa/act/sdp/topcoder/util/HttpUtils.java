@@ -1,5 +1,6 @@
 package com.buaa.act.sdp.topcoder.util;
 
+import com.buaa.act.sdp.topcoder.common.Constant;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -23,10 +24,10 @@ public class HttpUtils {
         String result = null;
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
-        HttpResponse response = null;
+        HttpResponse response;
         try {
             response = httpClient.execute(httpGet);
-            if (response.getStatusLine().getStatusCode() == 200) {
+            if (response.getStatusLine().getStatusCode() == Constant.HTTP_SUCCESS) {
                 result = EntityUtils.toString(response.getEntity(), "utf-8");
             }
         } catch (ClientProtocolException e) {

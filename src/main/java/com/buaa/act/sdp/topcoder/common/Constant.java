@@ -225,4 +225,10 @@ public class Constant {
     public static final int PAGE_SIZE = 50;
 
     public static final int RETRY_TIMES = 10;
+
+    public static final double TASK_SIMILARITY = 0.8;
+
+    public static final int HTTP_SUCCESS = 200;
+
+    public static final int YEAR = 366;
 }

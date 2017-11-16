@@ -19,7 +19,7 @@ public class WekaArffUtil {
      * @param winners
      * @return
      */
-    public static Instances getInstances(double[][] features, List<String> winners) {
+    public static Instances getClassifierInstances(double[][] features, List<String> winners) {
         int len = 0;
         if (features.length > 0) {
             len = features[0].length + 1;
@@ -54,7 +54,7 @@ public class WekaArffUtil {
      * @param features
      * @return
      */
-    public static Instances getInstances(double[][] features) {
+    public static Instances getClusterInstances(double[][] features) {
         int len = 0;
         if (features.length > 0) {
             len = features[0].length;

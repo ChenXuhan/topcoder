@@ -76,7 +76,7 @@ public class Cluster {
         Maths.copy(features, data, winners, user, neighbors);
         data[position] = feature;
         user.add(winners.get(position));
-        Instances instances = WekaArffUtil.getInstances(data);
+        Instances instances = WekaArffUtil.getClusterInstances(data);
         SimpleKMeans kMeans = buildCluster(instances, position, num, map);
         int k = 0;
         try {

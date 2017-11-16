@@ -1,7 +1,9 @@
 package com.buaa.act.sdp.topcoder.service.statistics;
 
+import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.user.WorkerDynamicMsg;
+import com.buaa.act.sdp.topcoder.util.Maths;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -46,14 +48,14 @@ public class DeveloperMsg {
                     if (entry.getValue() > 0) {
                         msg.addNumsSubTask();
                     }
-                    if (isSimilar(challengeItem, item)) {
+                    if (Maths.isSimilar(challengeItem, item)) {
                         msg.addNumRegTaskSimilar();
                         if (entry.getValue() > 0) {
                             msg.addNumSubTaskSimilar();
                         }
                         msg.addScoreTotal(entry.getValue());
                     }
-                    if (dataDistance(challengeItem, item) <= 30) {
+                    if (Maths.dataDistance(challengeItem, item) <= 30) {
                         msg.addNumRegTaskTDays();
                         if (entry.getValue() > 0) {
                             msg.addNumSubTaskTDays();
@@ -77,106 +79,6 @@ public class DeveloperMsg {
 
     public Map<String, WorkerDynamicMsg> getDeveloperDynamicMsg(int challengeId) {
         return msgMap.get(challengeId);
-    }
-
-    /**
-     * 判断任务是否相似
-     *
-     * @param one
-     * @param two
-     * @return
-     */
-    public boolean isSimilar(ChallengeItem one, ChallengeItem two) {
-        if (one.getChallengeType().equals(two.getChallengeType())) {
-            return true;
-        }
-        int count = 0;
-        Set<String> skills = new HashSet<>();
-        for (String str : one.getTechnology()) {
-            skills.add(str.toLowerCase());
-        }
-        for (String str : two.getTechnology()) {
-            if (skills.contains(str.toLowerCase())) {
-                count++;
-            }
-        }
-        double similar = 1.0 * count / Math.max(one.getTechnology().length, two.getTechnology().length);
-        skills.clear();
-        count = 0;
-        for (String str : one.getPlatforms()) {
-            skills.add(str.toLowerCase());
-        }
-        for (String str : two.getPlatforms()) {
-            if (skills.contains(str.toLowerCase())) {
-                count++;
-            }
-        }
-        similar += 1.0 * count / Math.max(one.getPlatforms().length, two.getPlatforms().length);
-        String[] temp;
-        int a, b;
-        if (one.getRegistrationStartDate() != null) {
-            temp = one.getRegistrationStartDate().substring(0, 10).split("-");
-            a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        } else {
-            a = 0;
-        }
-        if (two.getRegistrationStartDate() != null) {
-            temp = two.getRegistrationStartDate().substring(0, 10).split("-");
-            b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        } else {
-            b = 0;
-        }
-        similar += (a - b) / 5 / 365;
-        if (one.getSubmissionEndDate() != null) {
-            temp = one.getSubmissionEndDate().substring(0, 10).split("-");
-            a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        } else {
-            a = 0;
-        }
-        if (two.getSubmissionEndDate() != null) {
-            temp = two.getSubmissionEndDate().substring(0, 10).split("-");
-            b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        } else {
-            b = 0;
-        }
-        similar += (a - b) / 5 / 365;
-        double c = 0, d = 0;
-        for (String str : one.getPrize()) {
-            c += Double.parseDouble(str);
-        }
-        for (String str : two.getPrize()) {
-            d += Double.parseDouble(str);
-        }
-        similar += Math.abs(c - d) / (c + d);
-        if (similar >= 0.8) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 任务的发布时间距离
-     *
-     * @param one
-     * @param two
-     * @return
-     */
-    public int dataDistance(ChallengeItem one, ChallengeItem two) {
-        String[] temp;
-        int a, b;
-        if (one.getPostingDate() != null) {
-            temp = one.getPostingDate().substring(0, 10).split("-");
-            a = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        } else {
-            a = 0;
-        }
-        if (two.getPostingDate() != null) {
-            temp = two.getPostingDate().substring(0, 10).split("-");
-            b = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        } else {
-            b = 0;
-        }
-        return Math.abs(a - b);
     }
 
 }

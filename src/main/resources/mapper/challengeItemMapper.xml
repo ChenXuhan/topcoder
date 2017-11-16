@@ -59,7 +59,8 @@
                         #{numRegistrants})
     </insert>
 
-    <select id="getChallengeItemById" parameterType="int" resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem">
+    <select id="getChallengeItemById" parameterType="int"
+            resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem">
         select * from challenge_item where challengeId = #{challengeId}
     </select>
 

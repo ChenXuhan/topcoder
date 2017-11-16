@@ -1,5 +1,6 @@
 package com.buaa.act.sdp.topcoder.service.recommend.cluster;
 
+import com.buaa.act.sdp.topcoder.common.Constant;
 import weka.core.EuclideanDistance;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -78,11 +79,12 @@ public class Distince extends EuclideanDistance {
      */
     @Override
     public double distance(Instance first, Instance second, double cutOffValue, PerformanceStats stats) {
-        double distance = 0, a = 0, b = 0, c = 0;
+        double distance, a = 0, b = 0, c = 0;
         int firstNumValues = first.numValues();
         distance = Math.abs(first.valueSparse(2) - second.valueSparse(2));
-        if (distance > 366) {
-            distance = distance / 366;
+        int days = Constant.YEAR;
+        if (distance > days) {
+            distance = distance / days;
         } else {
             distance = 0;
         }
