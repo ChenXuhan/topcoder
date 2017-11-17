@@ -80,4 +80,12 @@
         SELECT challengeId,projectId,challengeType from challenge_item where projectId>0
     </select>
 
+    <select id="projectExist" resultType="int">
+        SELECT count(*) from challenge_item where projectId=#{projectId}
+    </select>
+
+    <select id="getProjectTasks" resultType="java.lang.Integer">
+        SELECT challengeId from challenge_item where projectId=#{projectId}
+    </select>
+
 </mapper>

@@ -24,4 +24,7 @@ public interface ChallengeItemDao {
 
     List<Map<String, Object>> getProjectId();
 
+    int projectExist(@Param("projectId") int projectId);
+
+    List<Integer> getProjectTasks(@Param("projectId") int projectId);
 }

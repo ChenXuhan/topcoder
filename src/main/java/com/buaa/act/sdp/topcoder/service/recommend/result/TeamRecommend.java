@@ -235,7 +235,7 @@ public class TeamRecommend {
      * @param projectId
      * @return
      */
-    public List<String> findBestTeamMaxCollaboration(int projectId) {
+    public List<String> teamRecommend(int projectId) {
         List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
         List<List<String>> workers = recommendWorkersForEachTask(projectId);
         List<String> allWorkers = new ArrayList<>();

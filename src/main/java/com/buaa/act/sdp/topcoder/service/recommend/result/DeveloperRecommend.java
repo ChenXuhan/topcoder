@@ -32,9 +32,6 @@ public class DeveloperRecommend {
      * @return
      */
     public List<String> recommendWorkers(ChallengeItem item) {
-        if (item == null) {
-            return null;
-        }
         double[][] features = featureExtract.getFeatures(item.getChallengeType());
         List<ChallengeItem> items = featureExtract.getItems(item.getChallengeType());
         List<String> winners = featureExtract.getWinners(item.getChallengeType());

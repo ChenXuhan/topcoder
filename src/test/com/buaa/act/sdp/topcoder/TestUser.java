@@ -1,5 +1,6 @@
 package com.buaa.act.sdp.topcoder;
 
+import com.buaa.act.sdp.topcoder.controller.UserController;
 import com.buaa.act.sdp.topcoder.service.api.UserApi;
 import com.buaa.act.sdp.topcoder.service.api.statistics.UserStatistics;
 import org.junit.Test;
@@ -24,19 +25,12 @@ public class TestUser {
     @Autowired
     private UserStatistics userStatistics;
 
+    @Autowired
+    private UserController userController;
+
     @Test
     public void testInsertUser() {
         userApi.getUserByName("iRabbit");
-    }
-
-    @Test
-    public void testSaveUser() {
-        logger.debug("debug");
-        logger.warn("warn");
-        logger.error("error");
-        logger.info("info");
-        System.out.println("hello topcoder!");
-
     }
 
     @Test

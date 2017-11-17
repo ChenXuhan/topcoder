@@ -8,6 +8,7 @@ import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission;
 import com.buaa.act.sdp.topcoder.service.api.ChallengeApi;
+import com.buaa.act.sdp.topcoder.service.basic.TaskService;
 import com.buaa.act.sdp.topcoder.service.recommend.experiment.TaskRecommend;
 import com.buaa.act.sdp.topcoder.service.recommend.cbm.ContentBase;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
@@ -60,10 +61,12 @@ public class TestChallenge {
     @Autowired
     private TaskScores taskScores;
 
+    @Autowired
+    private TaskService taskService;
+
     @Test
     public void testProjectId() {
-        System.out.println(projectMsg.getProjectToChallenges());
-        System.out.println(projectMsg.getProjectToChallenges().size());
+        System.out.println(taskService.getProjectTasks(-2).size());
     }
 
     @Test
