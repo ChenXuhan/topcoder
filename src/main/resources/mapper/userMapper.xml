@@ -3,12 +3,10 @@
 <mapper namespace="com.buaa.act.sdp.topcoder.dao.UserDao">
     <insert id="insert" parameterType="com.buaa.act.sdp.topcoder.model.user.User" useGeneratedKeys="true"
             keyProperty="id">
-        insert into user(handle,country,memberSince,quote,photoLink,copilot,skills)
-        values(#{handle},#{country},#{memberSince},#{quote},#{photoLink},#{copilot},
-        #{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR})
+        insert into user(handle,country,memberSince,quote,photoLink,copilot,skills) values(#{handle},#{country},#{memberSince},#{quote},#{photoLink},#{copilot},#{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR})
     </insert>
 
-    <update id="update" parameterType="com.buaa.act.sdp.topcoder.model.user.User">
+    <update id="updateBasic" parameterType="com.buaa.act.sdp.topcoder.model.user.User">
         update user SET country=#{country}, quote=#{quote},photoLink=#{photoLink}, copilot=#{copilot}, skills=#{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR} where handle=#{handle}
     </update>
 
@@ -20,8 +18,12 @@
         SELECT * from user;
     </select>
 
-    <update id="updateUser" parameterType="com.buaa.act.sdp.topcoder.model.user.User">
-            UPDATE user set competitionNums=#{competitionNums},submissionNums=#{submissionNums},winNums=#{winNums} where handle=#{handle}
+    <update id="updateTask">
+            UPDATE user SET competitionNums=#{competitionNums},submissionNums=#{submissionNums},winNums=#{winNums} where
+            handle=#{handle}
     </update>
 
+    <select id="getUserByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.topcoder.model.user.User">
+        SELECT * from user where handle=#{userName}
+    </select>
 </mapper>

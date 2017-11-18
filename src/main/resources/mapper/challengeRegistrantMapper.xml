@@ -19,7 +19,8 @@
         SELECT  challengeID ,handle from challenge_registrant;
     </select>
 
-    <select id="getUserRegistrantTimes" resultType="java.lang.Integer">
-        select count(DISTINCT challengeID) from challenge_registrant where handle=#{handle}
+    <select id="getUserRegistrantTasks" resultType="java.lang.Integer">
+        select DISTINCT challengeID from challenge_registrant where handle=#{handle}
     </select>
+
 </mapper>

@@ -19,7 +19,7 @@ import java.util.List;
  * Created by yang on 2017/11/17.
  */
 @Controller
-@RequestMapping("/task/recommend/")
+@RequestMapping("/recommend")
 public class TaskRecommendController {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskRecommendController.class);
@@ -32,6 +32,7 @@ public class TaskRecommendController {
     private TeamRecommend teamRecommend;
 
     @ResponseBody
+    @RequestMapping("/task")
     public TCResponse<List<String>> developerRecommend(@RequestParam("challengeId") int challengeId) {
         logger.info("task recommend，taskId" + challengeId);
         TCResponse<List<String>> response = new TCResponse<>();
@@ -53,6 +54,7 @@ public class TaskRecommendController {
     }
 
     @ResponseBody
+    @RequestMapping("/team")
     public TCResponse<List<String>> teamRcommend(@RequestParam("projectId") int projectId) {
         logger.info("team recommend，projectId" + projectId);
         TCResponse<List<String>> response = new TCResponse<>();

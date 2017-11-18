@@ -71,7 +71,7 @@ public class UserApi {
     public void updateUserBasicInformation(String userName) {
         User user = getUserByName(userName);
         if (user != null) {
-            userDao.update(user);
+            userDao.updateBasic(user);
         }
     }
 

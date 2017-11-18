@@ -24,7 +24,7 @@ public class UserStatistics {
     /**
      * 计算开发者的竞争、提交、获胜数目
      */
-    public void updateUsers() {
+    public void updateTaskCount() {
         List<User> list = userDao.getAllUsers();
         List<DevelopmentHistory> developmentHistories;
         int count, submission, win;
@@ -41,7 +41,7 @@ public class UserStatistics {
             user.setCompetitionNums(count);
             user.setSubmissionNums(submission);
             user.setWinNums(win);
-            userDao.updateUser(user);
+            userDao.updateTask(user);
         }
     }
 

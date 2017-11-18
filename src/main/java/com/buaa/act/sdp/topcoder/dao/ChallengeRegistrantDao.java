@@ -16,6 +16,6 @@ public interface ChallengeRegistrantDao {
 
     List<ChallengeRegistrant> getAllChallengeRegistrants();
 
-    int getUserRegistrantTimes(String handle);
+    List<Integer> getUserRegistrantTasks(@Param("handle") String handle);
 
 }

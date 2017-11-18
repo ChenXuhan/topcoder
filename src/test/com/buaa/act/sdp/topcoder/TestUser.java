@@ -25,9 +25,6 @@ public class TestUser {
     @Autowired
     private UserStatistics userStatistics;
 
-    @Autowired
-    private UserController userController;
-
     @Test
     public void testInsertUser() {
         userApi.getUserByName("iRabbit");
@@ -35,6 +32,6 @@ public class TestUser {
 
     @Test
     public void updateUsers() {
-        userStatistics.updateUsers();
+        userStatistics.updateTaskCount();
     }
 }

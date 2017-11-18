@@ -27,8 +27,8 @@ public class TaskScores {
      */
     private Map<Integer, Map<String, Double>> scores;
     private Map<Integer, String> winners;
-    private Map<Integer, Map<String, Integer>> registerDate;
-    private Map<Integer, Map<String, Integer>> submitDate;
+    private Map<Integer, Map<String, String>> registerDate;
+    private Map<Integer, Map<String, String>> submitDate;
 
     public TaskScores() {
         scores = new HashMap<>();
@@ -37,21 +37,21 @@ public class TaskScores {
         submitDate = new HashMap<>();
     }
 
-    public synchronized Map<Integer, String> getWinners() {
+    public Map<Integer, String> getWinners() {
         if (winners.isEmpty()) {
             getAllWorkerScores();
         }
         return winners;
     }
 
-    public synchronized Map<Integer, Map<String, Integer>> getRegisterDate() {
+    public Map<Integer, Map<String, String>> getRegisterDate() {
         if (registerDate.isEmpty()) {
             getAllWorkerScores();
         }
         return registerDate;
     }
 
-    public synchronized Map<Integer, Map<String, Integer>> getSubmitDate() {
+    public Map<Integer, Map<String, String>> getSubmitDate() {
         if (submitDate.isEmpty()) {
             getAllWorkerScores();
         }
@@ -67,8 +67,7 @@ public class TaskScores {
         if (scores.isEmpty()) {
             List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllChallengeRegistrants();
             Map<String, Double> score;
-            Map<String, Integer> time;
-            int date;
+            Map<String, String> time;
             for (ChallengeRegistrant challengeRegistrant : challengeRegistrants) {
                 score = scores.getOrDefault(challengeRegistrant.getChallengeID(), null);
                 if (score != null) {
@@ -83,19 +82,16 @@ public class TaskScores {
                  * 记录开发者的注册时间
                  */
                 time = registerDate.getOrDefault(challengeRegistrant.getChallengeID(), null);
-                String[] temp;
+                String date = null;
                 if (challengeRegistrant.getRegistrationDate() != null) {
-                    temp = challengeRegistrant.getRegistrationDate().substring(0, 10).split("-");
-                    date = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-                } else {
-                    date = 0;
+                    date = challengeRegistrant.getRegistrationDate().substring(0, 10);
                 }
-                if (time != null) {
-                    time.put(challengeRegistrant.getHandle(), date);
-                } else {
+                if (time == null) {
                     time = new HashMap<>();
                     time.put(challengeRegistrant.getHandle(), date);
                     registerDate.put(challengeRegistrant.getChallengeID(), time);
+                } else {
+                    time.put(challengeRegistrant.getHandle(), date);
                 }
             }
             updateWorkerScores();
@@ -109,8 +105,7 @@ public class TaskScores {
     private void updateWorkerScores() {
         List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeSubmissionMsg();
         Map<String, Double> score;
-        Map<String, Integer> time;
-        int date;
+        Map<String, String> date;
         for (ChallengeSubmission challengeSubmission : list) {
             if (scores.containsKey(challengeSubmission.getChallengeID())) {
                 score = scores.get(challengeSubmission.getChallengeID());
@@ -132,20 +127,17 @@ public class TaskScores {
             /**
              * 记录开发者提交时间
              */
-            time = submitDate.getOrDefault(challengeSubmission.getChallengeID(), null);
-            String[] temp;
+            date = submitDate.getOrDefault(challengeSubmission.getChallengeID(), null);
+            String time = null;
             if (challengeSubmission.getSubmissionDate() != null) {
-                temp = challengeSubmission.getSubmissionDate().substring(0, 10).split("-");
-                date = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-            } else {
-                date = 0;
+                time = challengeSubmission.getSubmissionDate().substring(0, 10);
             }
-            if (time != null) {
-                time.put(challengeSubmission.getHandle(), date);
+            if (date == null) {
+                date = new HashMap<>();
+                date.put(challengeSubmission.getHandle(), time);
+                submitDate.put(challengeSubmission.getChallengeID(), date);
             } else {
-                time = new HashMap<>();
-                time.put(challengeSubmission.getHandle(), date);
-                submitDate.put(challengeSubmission.getChallengeID(), time);
+                date.put(challengeSubmission.getHandle(), time);
             }
         }
     }
@@ -156,5 +148,33 @@ public class TaskScores {
         registerDate.clear();
         submitDate.clear();
         getAllWorkerScores();
+    }
+
+    public Map<String, Double> getTaskScore(int challengeId) {
+        if (scores.isEmpty()) {
+            getAllWorkerScores();
+        }
+        return scores.get(challengeId);
+    }
+
+    public String getWinner(int challengeId) {
+        if (scores.isEmpty()) {
+            getAllWorkerScores();
+        }
+        return winners.get(challengeId);
+    }
+
+    public Map<String, String> getRegisterDate(int challengeId) {
+        if (scores.isEmpty()) {
+            getAllWorkerScores();
+        }
+        return registerDate.get(challengeId);
+    }
+
+    public Map<String, String> getSubmitDate(int challengeId) {
+        if (scores.isEmpty()) {
+            getAllWorkerScores();
+        }
+        return submitDate.get(challengeId);
     }
 }

@@ -72,8 +72,9 @@
         select * from challenge_item
     </select>
 
-    <update id="updateChallenge" parameterType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem">
-          UPDATE challenge_item SET duration=#{duration} , numSubmissions=#{numSubmissions} , numRegistrants=#{numRegistrants} ,languages=#{languages} where challengeId=#{challengeId}
+    <update id="update" parameterType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem">
+            UPDATE challenge_item SET duration=#{duration} , numSubmissions=#{numSubmissions} ,
+            numRegistrants=#{numRegistrants} ,languages=#{languages} where challengeId=#{challengeId}
     </update>
 
     <select id="getProjectId" resultType="java.util.Map">

@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.topcoder.dao;
 
 import com.buaa.act.sdp.topcoder.model.user.Development;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface DevelopmentDao {
     void insertBatch(List<Development> list);
 
     void updateBatch(List<Development> list);
+
+    List<Development> getDeveloperDevelopment(@Param("userName") String userName);
 }

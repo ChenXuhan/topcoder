@@ -20,7 +20,6 @@ public class User {
     private int competitionNums;
     private int submissionNums;
     private int winNums;
-    private String skillDegree;
 
     public int getSubmissionNums() {
         return submissionNums;
@@ -108,14 +107,6 @@ public class User {
 
     public void setCopilot(boolean copilot) {
         this.copilot = copilot;
-    }
-
-    public String getSkillDegree() {
-        return skillDegree;
-    }
-
-    public void setSkillDegree(String skillDegree) {
-        this.skillDegree = skillDegree;
     }
 
 }

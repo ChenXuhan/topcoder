@@ -11,12 +11,13 @@ public interface UserDao {
 
     void insert(User user);
 
-    void update(User user);
+    void updateBasic(User user);
 
     List<String> getDistinctUsers();
 
     List<User> getAllUsers();
 
-    void updateUser(User user);
+    void updateTask(User user);
 
+    User getUserByName(String userName);
 }

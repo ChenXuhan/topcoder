@@ -34,7 +34,7 @@
     </insert>
 
     <update id="updateBatch" parameterType="java.util.List">
-        <foreach collection="list" item="item" index="index" separator=",">
+        <foreach collection="list" item="item" index="index" separator=";">
             UPDATE development set
             rating=#{item.rating},
             reliability=#{item.reliability},
@@ -49,4 +49,8 @@
             volatility=#{item.volatility} where handle=#{item.handle} and developType=#{ietm.developType}
         </foreach>
     </update>
+
+    <select id="getDeveloperDevelopment" resultType="com.buaa.act.sdp.topcoder.model.user.Development" parameterType="java.lang.String">
+        SELECT * from development where handle=#{userName}
+    </select>
 </mapper>

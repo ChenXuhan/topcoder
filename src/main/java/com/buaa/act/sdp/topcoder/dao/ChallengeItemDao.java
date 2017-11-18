@@ -20,7 +20,7 @@ public interface ChallengeItemDao {
 
     List<ChallengeItem> getAllChallenges();
 
-    void updateChallenge(ChallengeItem item);
+    void update(ChallengeItem item);
 
     List<Map<String, Object>> getProjectId();
 

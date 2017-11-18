@@ -50,7 +50,7 @@ public class ChallengeStatistics {
                 item.setNumSubmissions(num);
             }
             item.setLanguages(getLanguages(item));
-            challengeItemDao.updateChallenge(item);
+            challengeItemDao.update(item);
         }
     }
 

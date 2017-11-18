@@ -6,6 +6,8 @@ import com.buaa.act.sdp.topcoder.dao.TimeOutDao;
 import com.buaa.act.sdp.topcoder.dao.UserDao;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.challenge.PastChallenge;
+import com.buaa.act.sdp.topcoder.service.api.statistics.ChallengeStatistics;
+import com.buaa.act.sdp.topcoder.service.api.statistics.UserStatistics;
 import com.buaa.act.sdp.topcoder.util.JsonUtil;
 import com.buaa.act.sdp.topcoder.util.RequestUtil;
 import com.google.gson.JsonElement;
@@ -30,6 +32,12 @@ public class UpdateTasksAndWorkers {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private UserStatistics userStatistics;
+
+    @Autowired
+    private ChallengeStatistics challengeStatistics;
 
     @Autowired
     private TimeOutDao timeOutDao;
@@ -81,7 +89,7 @@ public class UpdateTasksAndWorkers {
     }
 
     /**
-     * 增量保存所有完成的task
+     * 增量保存所有完成的task,更新开发者参与任务数
      */
     public void updateFinishedChallenges() {
         int count = getCompletedChallengeCount();
@@ -115,6 +123,11 @@ public class UpdateTasksAndWorkers {
                 }
             }
         }
+        /**
+         * 更新任务注册人数及开发者参与任务数
+         */
+        userStatistics.updateTaskCount();
+        challengeStatistics.updateChallenges();
     }
 
 }
