@@ -96,7 +96,7 @@ public class TaskRecommend {
                 index.add(j);
             }
             worker = reliability.filter(worker, index, winners, challengeType);
-            worker = competition.refine(index, worker, winners, num[i], challengeType);
+            worker = competition.refine(worker, winners, num[i], challengeType);
             calculateMetircs(winners.get(num[i]), worker, count, mpps);
         }
         for (int i = 0; i < counts.length; i++) {
@@ -137,7 +137,7 @@ public class TaskRecommend {
             for (int j = 0; j < num[i]; j++) {
                 indexs.add(j);
             }
-            worker = competition.refine(indexs, worker, winners, num[i], challengeType);
+            worker = competition.refine(worker, winners, num[i], challengeType);
             calculateMetircs(winners.get(num[i]), worker, count, mpps);
         }
         for (int i = 0; i < counts.length; i++) {
@@ -166,7 +166,7 @@ public class TaskRecommend {
             worker = developerRecommend.recommendWorker(tcResult);
             calculateMetircs(winners.get(num[i]), worker, counts, mpp);
             worker = reliability.filter(worker, index, winners, challengeType);
-            worker = competition.refine(index, worker, winners, num[i], challengeType);
+            worker = competition.refine(worker, winners, num[i], challengeType);
             calculateMetircs(winners.get(num[i]), worker, count, mpps);
         }
         for (int i = 0; i < counts.length; i++) {
@@ -197,7 +197,7 @@ public class TaskRecommend {
                 worker = developerRecommend.recommendWorker(result);
                 calculateMetircs(winners.get(num[i]), worker, counts, mpp);
                 worker = reliability.filter(worker, index, winners, challengeType);
-                worker = competition.refine(index, worker, winners, num[i], challengeType);
+                worker = competition.refine( worker, winners, num[i], challengeType);
                 calculateMetircs(winners.get(num[i]), worker, count, mpps);
             }
             for (int i = 0; i < counts.length; i++) {

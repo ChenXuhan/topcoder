@@ -1,6 +1,8 @@
 package com.buaa.act.sdp.topcoder.service.recommend.network;
 
 import com.buaa.act.sdp.topcoder.service.statistics.TaskScores;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,8 @@ import java.util.*;
  */
 @Component
 public class Collaboration {
+
+    private static final Logger logger = LoggerFactory.getLogger(Collaboration.class);
 
     @Autowired
     private TaskScores taskScores;
@@ -25,6 +29,7 @@ public class Collaboration {
      * @param score       一个项目内每个任务的开发者得分信息
      */
     public void collaborationInProject(Map<String, Integer> workerIndex, int[][] colCount, int[] taskCount, double[][] colScores, List<Map<String, Double>> score) {
+        logger.info("compute the collaboration edges between developers in a project");
         Set<String> set = new HashSet<>();
         Map<String, Double> map;
         int m, n;
@@ -60,6 +65,7 @@ public class Collaboration {
      * @return
      */
     public double[][] calCollaboration(int[][] colCount, int[] taskCount, double[][] colScores) {
+        logger.info("compute the collaboration between developers");
         double[][] result = new double[colCount.length][colCount.length];
         int sum;
         for (int i = 0; i < colCount.length; i++) {
@@ -85,6 +91,7 @@ public class Collaboration {
      * @return
      */
     public double[][] generateCollaboration(Map<String, Integer> workerIndex, List<List<Integer>> challenges) {
+        logger.info("generate the collaboration between developers in a project");
         Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
         int[][] colCount = new int[workerIndex.size()][workerIndex.size()];
         int[] taskCount = new int[workerIndex.size()];

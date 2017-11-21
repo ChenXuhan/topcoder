@@ -1,6 +1,8 @@
 package com.buaa.act.sdp.topcoder.service.statistics;
 
 import com.buaa.act.sdp.topcoder.dao.ChallengeItemDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,8 @@ import java.util.Map;
  */
 @Component
 public class ProjectMsg {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProjectMsg.class);
 
     @Autowired
     private ChallengeItemDao challengeItemDao;
@@ -42,6 +46,7 @@ public class ProjectMsg {
      * challenge和project对应关系
      */
     public void challengeProjectMapping() {
+        logger.info("match task and the corresponding project");
         List<Map<String, Object>> list = challengeItemDao.getProjectId();
         List<Integer> challengeIds;
         int challengeId, projectId;
@@ -77,6 +82,7 @@ public class ProjectMsg {
     }
 
     public synchronized void update() {
+        logger.info("update the cache,task-project matching");
         projectIdToChallengeIds.clear();
         challengeToProject.clear();
         challengeProjectMapping();

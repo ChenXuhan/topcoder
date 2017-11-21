@@ -2,6 +2,8 @@ package com.buaa.act.sdp.topcoder.service.recommend.classification;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Instances;
@@ -17,6 +19,8 @@ import java.util.Map;
 @Component
 public class TcBayes extends NaiveBayes {
 
+    private static final Logger logger = LoggerFactory.getLogger(TcBayes.class);
+
     /**
      * 按概率对分类结果排序
      *
@@ -26,6 +30,7 @@ public class TcBayes extends NaiveBayes {
      * @return
      */
     public Map<String, Double> getRecommendResult(double[][] features, int position, List<String> winners) {
+        logger.info("recommend developers for new task using naive bayes");
         Map<Integer, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners);
         Map<String, Double> map = new HashMap<>();
         if (winnerIndex.size() == 0) {
@@ -62,6 +67,7 @@ public class TcBayes extends NaiveBayes {
      * @return
      */
     public List<Double> getRecommendResultDcwds(List<double[]> features, int position, List<String> workers) {
+        logger.info("recommend developers for new task consider workers' dynamic features using dcw-dw ");
         List<Double> result = new ArrayList<>(features.size() - position);
         try {
             Map<String, Integer> workerIndex = new HashMap<>();

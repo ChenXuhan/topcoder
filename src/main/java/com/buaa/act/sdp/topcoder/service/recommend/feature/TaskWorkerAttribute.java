@@ -3,6 +3,8 @@ package com.buaa.act.sdp.topcoder.service.recommend.feature;
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.service.statistics.DynamicMsg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,8 @@ import java.util.Set;
 @Component
 public class TaskWorkerAttribute {
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskWorkerAttribute.class);
+
     @Autowired
     private DynamicMsg dynamicMsg;
 
@@ -29,6 +33,7 @@ public class TaskWorkerAttribute {
      * @param items
      */
     public void getFeatures(List<double[]> features, List<String> workers, ChallengeItem item, List<ChallengeItem> items) {
+        logger.info("get training tasks' features before the test task,taskId=" + item.getChallengeId());
         ChallengeItem challenge;
         for (int i = 0; i < items.size(); i++) {
             challenge = items.get(i);
@@ -103,6 +108,7 @@ public class TaskWorkerAttribute {
      * @return
      */
     public List<double[]> generateFeatures(ChallengeItem item, List<ChallengeItem> items, List<String> workers) {
+        logger.info("get the specific task's features and developers' dynamic feature vector,taskId=" + item.getChallengeId());
         Set<String> set = getAllSkills();
         List<double[]> dynamicFeatures = dynamicMsg.getWorkerDynamicFeature(items, item, workers);
         double[] feature = new double[set.size() + 6];

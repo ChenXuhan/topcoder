@@ -4,6 +4,8 @@ import com.buaa.act.sdp.topcoder.dao.ChallengeItemDao;
 import com.buaa.act.sdp.topcoder.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,8 @@ import java.util.*;
  */
 @Component
 public class TaskMsg {
+
+    private static final Logger logger = LoggerFactory.getLogger(TaskMsg.class);
 
     @Autowired
     private ChallengeSubmissionDao challengeSubmissionDao;
@@ -58,6 +62,7 @@ public class TaskMsg {
     }
 
     public void initCode() {
+        logger.info("init code type tasks");
         if (codeItems.isEmpty()) {
             synchronized (codeItems) {
                 if (codeItems.isEmpty()) {
@@ -68,6 +73,7 @@ public class TaskMsg {
     }
 
     public void initF2f() {
+        logger.info("init first2finish type tasks");
         if (f2fItems.isEmpty()) {
             synchronized (f2fItems) {
                 if (f2fItems.isEmpty()) {
@@ -78,6 +84,7 @@ public class TaskMsg {
     }
 
     public void initAssembly() {
+        logger.info("init assembly type tasks");
         if (assemblyItems.isEmpty()) {
             synchronized (assemblyItems) {
                 if (assemblyItems.isEmpty()) {
@@ -182,6 +189,7 @@ public class TaskMsg {
      * @param userScore
      */
     public void getWinnersAndScores(String challengeType, List<ChallengeItem> items, List<String> winners, List<Map<String, Double>> userScore) {
+        logger.info("get a specific type tasks and the winners, developers' scores");
         List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeSubmissionMsg();
         Map<String, Integer> map = new HashMap<>();
         Set<Integer> challengeSet = new HashSet<>();
@@ -232,8 +240,6 @@ public class TaskMsg {
                 userScore.add(scores.get(challengeItems.get(i).getChallengeId()));
             }
         }
-        Set<String> sets = new HashSet<>(winners);
-        System.out.println(winners.size() + "\t" + sets.size());
     }
 
     /**
@@ -242,6 +248,7 @@ public class TaskMsg {
      * @return
      */
     public List<ChallengeItem> getTasks() {
+        logger.info("get all 3 type tasks");
         List<ChallengeItem> list = new ArrayList<>();
         list.addAll(getItems("Code"));
         list.addAll(getItems("First2Finish"));
@@ -256,6 +263,7 @@ public class TaskMsg {
     }
 
     public synchronized void update() {
+        logger.info("update get 3 type tasks");
         codeItems.clear();
         codeWinners.clear();
         codeScore.clear();

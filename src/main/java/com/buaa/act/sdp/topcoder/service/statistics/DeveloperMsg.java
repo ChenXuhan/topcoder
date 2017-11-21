@@ -1,12 +1,15 @@
 package com.buaa.act.sdp.topcoder.service.statistics;
 
-import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.user.WorkerDynamicMsg;
 import com.buaa.act.sdp.topcoder.util.Maths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yang on 2017/11/12.
@@ -14,11 +17,14 @@ import java.util.*;
 @Component
 public class DeveloperMsg {
 
+    private static final Logger logger = LoggerFactory.getLogger(DeveloperMsg.class);
+
     private Map<Integer, Map<String, WorkerDynamicMsg>> msgMap;
 
     public DeveloperMsg() {
         msgMap = new HashMap<>();
     }
+
 
     /**
      * 计算并保存开发者的动态特征
@@ -30,6 +36,7 @@ public class DeveloperMsg {
      * @return
      */
     public Map<String, WorkerDynamicMsg> getDeveloperDynamicMsg(Map<Integer, Map<String, Double>> scores, Map<Integer, String> winners, List<ChallengeItem> list, ChallengeItem challengeItem) {
+        logger.info("get and cache developers' dynamic msg");
         Map<String, WorkerDynamicMsg> map = msgMap.get(challengeItem.getChallengeId());
         if (map == null) {
             map = new HashMap<>();

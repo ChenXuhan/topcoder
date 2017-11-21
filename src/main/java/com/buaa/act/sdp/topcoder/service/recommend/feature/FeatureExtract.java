@@ -4,6 +4,8 @@ import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
 import com.buaa.act.sdp.topcoder.util.Maths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,11 +20,12 @@ import java.util.Set;
 @Component
 public class FeatureExtract {
 
+    private static final Logger logger = LoggerFactory.getLogger(FeatureExtract.class);
+
     @Autowired
     private TaskMsg taskMsg;
 
     private int requirementWordSize;
-    private int titleWordSize;
 
     public FeatureExtract() {
         requirementWordSize = 0;
@@ -39,11 +42,7 @@ public class FeatureExtract {
     public int getChallengeRequirementSize() {
         return requirementWordSize;
     }
-
-    public int getTitleWordSize() {
-        return titleWordSize;
-    }
-
+    
     public List<Map<String, Double>> getUserScore(String type) {
         return taskMsg.getUserScore(type);
     }
@@ -56,6 +55,7 @@ public class FeatureExtract {
      * @return
      */
     public WordCount[] getWordCount(int start, String type) {
+        logger.info("get the word vector using tf-idf");
         List<ChallengeItem> items = getItems(type);
         String[] requirements = new String[items.size()];
         String[] skills = new String[items.size()];
@@ -110,66 +110,8 @@ public class FeatureExtract {
         return features;
     }
 
-    /**
-     * UCL中KNN分类器特征
-     *
-     * @param type
-     * @return
-     */
-    public double[][] generateVectorUcl(String type) {
-        List<ChallengeItem> items = getItems(type);
-        double[][] paymentAndDuration = new double[items.size()][3];
-        Set<String> skillSet = getSkills();
-        double[][] skills = new double[items.size()][skillSet.size()];
-        String[] temp;
-        int index;
-        List<double[]> requirementTfIdf, titleTfIdf;
-        for (int i = 0; i < items.size(); i++) {
-            temp = items.get(i).getTechnology();
-            Set<String> set = new HashSet<>();
-            for (String str : temp) {
-                set.add(str.toLowerCase());
-            }
-            temp = items.get(i).getPlatforms();
-            for (String str : temp) {
-                set.add(str.toLowerCase());
-            }
-            index = 0;
-            setWorkerSkills(index, skills[i], skillSet, set);
-            paymentAndDuration[i][0] = Double.parseDouble(items.get(i).getPrize()[0]);
-            paymentAndDuration[i][1] = items.get(i).getDuration();
-            temp = items.get(i).getPostingDate().substring(0, 10).split("-");
-            paymentAndDuration[i][2] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        }
-        List<String> winners = getWinners(type);
-        int start = (int) (0.9 * winners.size());
-        WordCount[] wordCounts = getWordCount(start, type);
-        requirementTfIdf = wordCounts[0].getTfIdf();
-        requirementWordSize = wordCounts[0].getWordSize();
-        titleTfIdf = wordCounts[1].getTfIdf();
-        titleWordSize = wordCounts[1].getWordSize();
-        int length = requirementWordSize + titleWordSize + skillSet.size() + 3;
-        double[][] features = new double[items.size()][length];
-        Maths.normalization(paymentAndDuration, 3);
-        for (int i = 0; i < features.length; i++) {
-            index = 0;
-            features[i][index++] = paymentAndDuration[i][0];
-            features[i][index++] = paymentAndDuration[i][1];
-            features[i][index++] = paymentAndDuration[i][2];
-            for (int j = 0; j < skillSet.size(); j++) {
-                features[i][index++] = skills[i][j];
-            }
-            for (int j = 0; j < requirementWordSize; j++) {
-                features[i][index++] = requirementTfIdf.get(i)[j];
-            }
-            for (int j = 0; j < titleWordSize; j++) {
-                features[i][index++] = titleTfIdf.get(i)[j];
-            }
-        }
-        return features;
-    }
-
     public double[] generateVector(Set<String> set, ChallengeItem item) {
+        logger.info("get the task's feature vectors,taskId=" + item.getChallengeId());
         int index = 0;
         double[] feature = new double[set.size() + 5];
         feature[index++] = item.getDetailedRequirements().length();

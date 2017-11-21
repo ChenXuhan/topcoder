@@ -4,6 +4,8 @@ import com.buaa.act.sdp.topcoder.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.topcoder.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,8 @@ import java.util.Map;
  */
 @Component
 public class TaskScores {
+
+    private static final Logger logger = LoggerFactory.getLogger(TaskScores.class);
 
     @Autowired
     private ChallengeRegistrantDao challengeRegistrantDao;
@@ -64,6 +68,7 @@ public class TaskScores {
      * @return
      */
     public synchronized Map<Integer, Map<String, Double>> getAllWorkerScores() {
+        logger.info("get developers' scores on all tasks");
         if (scores.isEmpty()) {
             List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllChallengeRegistrants();
             Map<String, Double> score;
@@ -143,6 +148,7 @@ public class TaskScores {
     }
 
     public synchronized void update() {
+        logger.info("update cache, get developers' scores");
         scores.clear();
         winners.clear();
         registerDate.clear();

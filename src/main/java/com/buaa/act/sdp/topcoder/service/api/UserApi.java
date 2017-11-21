@@ -1,13 +1,18 @@
 package com.buaa.act.sdp.topcoder.service.api;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
-import com.buaa.act.sdp.topcoder.dao.*;
+import com.buaa.act.sdp.topcoder.dao.DevelopmentDao;
+import com.buaa.act.sdp.topcoder.dao.DevelopmentHistoryDao;
+import com.buaa.act.sdp.topcoder.dao.RatingHistoryDao;
+import com.buaa.act.sdp.topcoder.dao.UserDao;
 import com.buaa.act.sdp.topcoder.model.user.*;
 import com.buaa.act.sdp.topcoder.util.HttpUtils;
 import com.buaa.act.sdp.topcoder.util.JsonUtil;
 import com.buaa.act.sdp.topcoder.util.RequestUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +34,12 @@ public class UserApi {
     private DevelopmentHistoryDao developmentHistoryDao;
     @Autowired
     private RatingHistoryDao ratingHistoryDao;
-    @Autowired
-    private TimeOutDao timeOutDao;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserApi.class);
+
+    private static final String USER_URL_PREFIX = "http://api.topcoder.com/v2/users/";
+    private static final String SKILL_URL_PREFIX = "http://api.topcoder.com/v3/members/";
+    private static final String RATING_HISTORIES_URL = "http://api.topcoder.com/v2/develop/statistics/";
 
     /**
      * 爬取开发者信息
@@ -38,12 +47,12 @@ public class UserApi {
      * @param userName
      */
     public User getUserByName(String userName) {
+        logger.info("get developer from topcoder,userName=" + userName);
         String json = null;
         try {
-            json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName);
+            json = RequestUtil.request(USER_URL_PREFIX + userName);
         } catch (Exception e) {
-            System.err.println("time out getUser " + userName);
-            timeOutDao.insertTimeOutData("user ", userName);
+            logger.error("error occurred in getting developer,userName=" + userName, e);
         }
         if (json != null) {
             User user = JsonUtil.fromJson(json, User.class);
@@ -82,14 +91,14 @@ public class UserApi {
      * @return
      */
     public String[] getUserSkills(String userName) {
+        logger.info("get developer skills from topcoder,userName=" + userName);
         String json = null;
         try {
             for (int i = 0; i < Constant.RETRY_TIMES && json == null; i++) {
-                json = HttpUtils.httpGet("http://api.topcoder.com/v3/members/" + userName + "/skills");
+                json = HttpUtils.httpGet(SKILL_URL_PREFIX + userName + "/skills");
             }
         } catch (Exception e) {
-            System.err.println("time out skills " + userName);
-            timeOutDao.insertTimeOutData("skills ", userName);
+            logger.error("error occurred in getting developer skills,userName=" + userName, e);
         }
         if (json != null) {
             List<JsonElement> list = JsonUtil.getJsonElement(json, new String[]{"result", "content", "skills"});
@@ -187,12 +196,12 @@ public class UserApi {
      * @param userName
      */
     public String getUserDevelopmentStatistics(String userName) {
+        logger.info("get developer development statistics,userName=" + userName);
         String json = null;
         try {
-            json = RequestUtil.request("http://api.topcoder.com/v2/users/" + userName + "/statistics/develop");
+            json = RequestUtil.request(USER_URL_PREFIX + userName + "/statistics/develop");
         } catch (Exception e) {
-            System.err.println("time out statistics " + userName);
-            timeOutDao.insertTimeOutData("statistics", userName);
+            logger.error("error occurred in getting developer statistics,userName=" + userName, e);
         }
         if (json != null) {
             return json;
@@ -207,12 +216,12 @@ public class UserApi {
      * @param challengeType
      */
     public void saveUserRatingHistory(String userName, String challengeType) {
+        logger.info("get developer rating histories,userName=" + userName);
         String json = null;
         try {
-            json = RequestUtil.request("http://api.topcoder.com/v2/develop/statistics/" + userName + "/" + challengeType);
+            json = RequestUtil.request(RATING_HISTORIES_URL + userName + "/" + challengeType);
         } catch (Exception e) {
-            System.err.println("time out history " + userName + "_" + challengeType);
-            timeOutDao.insertTimeOutData("history", userName + "_" + challengeType);
+            logger.error("error occurred in getting developer rating histories,userName=" + userName, e);
         }
         if (json != null) {
             parseAndSaveUserRatingHistory(userName, challengeType, json);
@@ -239,12 +248,14 @@ public class UserApi {
      * @param handle
      */
     public void saveUserMsg(String handle) {
+        logger.info("save developer information,userName=" + handle);
         saveUserBasicInformation(handle);
         saveUserDevelopmentMsg(handle);
         saveUserRatingMsg(handle);
     }
 
     public void updateUserMsg(String handle) {
+        logger.info("update developer information,userName=" + handle);
         updateUserBasicInformation(handle);
         updateUserDevelopmentMsg(handle);
         saveUserRatingMsg(handle);

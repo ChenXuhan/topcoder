@@ -1,6 +1,8 @@
 package com.buaa.act.sdp.topcoder.service.recommend.classification;
 
 import com.buaa.act.sdp.topcoder.util.Maths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,8 @@ import java.util.Map;
 @Component
 public class LocalClassifier {
 
+    private static final Logger logger = LoggerFactory.getLogger(LocalClassifier.class);
+
     @Autowired
     private TcBayes tcBayes;
 
@@ -25,6 +29,7 @@ public class LocalClassifier {
      * @return
      */
     public List<Integer> getNeighbor(double[][] features, int position) {
+        logger.info("get the similar tasks for new task");
         List<Integer> neighborIndex = Maths.getSimilarityChallenges(features, position);
         neighborIndex.add(position);
         return neighborIndex;
@@ -38,6 +43,7 @@ public class LocalClassifier {
      * @return
      */
     public Map<String, Double> getRecommendResult(double[][] features, List<String> winners, List<Integer> neighbors) {
+        logger.info("recommend developers for new task using local classifier");
         int k = neighbors.size();
         double[][] data = new double[k][features[0].length];
         List<String> winner = new ArrayList<>(k);

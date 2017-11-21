@@ -5,6 +5,8 @@ import com.buaa.act.sdp.topcoder.dao.ChallengeItemDao;
 import com.buaa.act.sdp.topcoder.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.topcoder.dao.ChallengeSubmissionDao;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,31 +29,24 @@ public class ChallengeStatistics {
     @Autowired
     private ChallengeSubmissionDao challengeSubmissionDao;
 
+    private static final Logger logger = LoggerFactory.getLogger(ChallengeStatistics.class);
+
     /**
      * 任务的注册开发者统计
      */
-    public void updateChallenges() {
-        List<ChallengeItem> items = challengeItemDao.getAllChallenges();
+    public void updateChallenge(ChallengeItem item, int resigterCount, int submissionCount) {
+        logger.info("update the task's registrant and submission count,taskId=" + item.getChallengeId());
         String[] strings, string;
         int num;
-        for (ChallengeItem item : items) {
-            strings = item.getSubmissionEndDate().substring(0, 10).split("-");
-            string = item.getPostingDate().substring(0, 10).split("-");
-            if (strings != null && strings.length > 0 && string != null && string.length > 0) {
-                num = (Integer.parseInt(strings[0]) - Integer.parseInt(string[0])) * 365 + (Integer.parseInt(strings[1]) - Integer.parseInt(string[1])) * 30 + (Integer.parseInt(strings[2]) - Integer.parseInt(string[2]));
-                item.setDuration(num);
-            }
-            if (item.getNumRegistrants() == 0) {
-                num = challengeRegistrantDao.getRegistrantCountByTaskId(item.getChallengeId());
-                item.setNumRegistrants(num);
-            }
-            if (item.getNumSubmissions() == 0) {
-                num = challengeSubmissionDao.getChallengeSubmissionCount(item.getChallengeId());
-                item.setNumSubmissions(num);
-            }
-            item.setLanguages(getLanguages(item));
-            challengeItemDao.update(item);
+        strings = item.getSubmissionEndDate().substring(0, 10).split("-");
+        string = item.getPostingDate().substring(0, 10).split("-");
+        if (strings != null && strings.length > 0 && string != null && string.length > 0) {
+            num = (Integer.parseInt(strings[0]) - Integer.parseInt(string[0])) * 365 + (Integer.parseInt(strings[1]) - Integer.parseInt(string[1])) * 30 + (Integer.parseInt(strings[2]) - Integer.parseInt(string[2]));
+            item.setDuration(num);
         }
+        item.setNumRegistrants(resigterCount);
+        item.setNumSubmissions(submissionCount);
+        item.setLanguages(getLanguages(item));
     }
 
     /**

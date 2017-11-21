@@ -3,6 +3,8 @@ package com.buaa.act.sdp.topcoder.service.recommend.network;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskScores;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,8 @@ import java.util.*;
  */
 @Component
 public class Competition {
+
+    private static final Logger logger = LoggerFactory.getLogger(Competition.class);
 
     @Autowired
     private FeatureExtract featureExtract;
@@ -29,6 +33,7 @@ public class Competition {
      * @return
      */
     public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
+        logger.info("get the same tasks' developers scores");
         Map<Integer, Map<String, Double>> score = taskScores.getAllWorkerScores();
         List<ChallengeItem> items = featureExtract.getItems(type);
         List<Map<String, Double>> list = new ArrayList<>();
@@ -49,6 +54,7 @@ public class Competition {
      * @return
      */
     public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
+        logger.info("get the same tasks' developers scores,score > 80.");
         List<Map<String, Double>> lists = featureExtract.getUserScore(type);
         List<Map<String, Double>> list = new ArrayList<>();
         for (int i = 0; i < neighbors.size(); i++) {
@@ -66,6 +72,7 @@ public class Competition {
      * @return
      */
     public List<Map<String, Double>> getAllTypeWorkers(int challengeId, List<String> winner) {
+        logger.info("get the winners in all tasks before a new task,taskId" + challengeId);
         Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
         Map<Integer, String> allWinners = taskScores.getWinners();
         List<Map<String, Double>> list = new ArrayList<>();
@@ -104,6 +111,7 @@ public class Competition {
      * @return
      */
     public int[][] getRelationEdge(Map<String, Integer> index, List<Map<String, Double>> scores, List<String> winners) {
+        logger.info("compute the win or lose times between developers");
         int[][] attraction = new int[index.size()][index.size()];
         int one, two;
         String winner;
@@ -132,6 +140,7 @@ public class Competition {
      * @return
      */
     public double[][] getAttraction(int[][] attraction) {
+        logger.info("compute the attraction between developers");
         double[][] attr = new double[attraction.length][attraction.length];
         int[] edge = new int[attraction.length];
         for (int i = 0; i < attraction.length; i++) {
@@ -176,6 +185,7 @@ public class Competition {
      * @return
      */
     public double[][] getWorkerRepulsion(int[][] attraction) {
+        logger.info("compute the repulsion between developers");
         int[] deg = new int[attraction.length];
         for (int i = 0; i < attraction.length; i++) {
             int one = 0;
@@ -197,14 +207,14 @@ public class Competition {
     /**
      * 综合分类推荐排序和输赢次数排序,每次只处理一名
      *
-     * @param neighbors 相似的任务
      * @param worker
-     * @param winners   获胜的开发者
-     * @param n         选取n个相似的任务
-     * @param type      任务类型
+     * @param winners 获胜的开发者
+     * @param n       选取n个相似的任务
+     * @param type    任务类型
      * @return
      */
-    public List<String> refine(List<Integer> neighbors, List<String> worker, List<String> winners, int n, String type) {
+    public List<String> refine(List<String> worker, List<String> winners, int n, String type) {
+        logger.info("using attraction to refine the init recommended developers");
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(n);
         List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner, type);
@@ -248,6 +258,7 @@ public class Competition {
      * @return
      */
     public List<String> uclRank(List<String> worker, int n, String type) {
+        logger.info("refine the developers using attraction and repulsion");
         List<String> winner = new ArrayList<>();
         List<Map<String, Double>> scores = getAllTypeWorkers(featureExtract.getItems(type).get(n).getChallengeId(), winner);
         Map<String, Integer> index = getIndex(worker);
@@ -314,6 +325,7 @@ public class Competition {
      * @return
      */
     public int[] sortRelation(double[] num) {
+        logger.info("sort developers using relationship");
         Map<Integer, Double> map = new HashMap<>();
         for (int i = 0; i < num.length; i++) {
             map.put(i, num[i]);

@@ -4,6 +4,8 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -12,6 +14,8 @@ import java.util.*;
  * Created by yang on 2017/2/16.
  */
 public class WordCount {
+
+    private static final Logger logger = LoggerFactory.getLogger(WordCount.class);
 
     /**
      * 待处理的文本
@@ -66,6 +70,7 @@ public class WordCount {
      * @return
      */
     public List<String>[] getWordsFromText() {
+        logger.info("break down the text and get the tokens");
         Analyzer analyzer = new StandardAnalyzer();
         TokenStream tokenStream;
         List<String>[] words = new List[texts.length];
@@ -141,6 +146,7 @@ public class WordCount {
      * @return
      */
     public double[] getTf(int index) {
+        logger.info("get the text tf");
         double[] tf = new double[allWords.size()];
         int k = 0;
         Map<String, Integer> map;
@@ -161,6 +167,7 @@ public class WordCount {
      * @return
      */
     public double[] getIdf() {
+        logger.info("get the text idf");
         double[] idf = new double[allWords.size()];
         int index = 0, num;
         for (Map.Entry<String, Integer> entry : allWords.entrySet()) {
@@ -176,6 +183,7 @@ public class WordCount {
      * @return
      */
     public List<double[]> getTfIdf() {
+        logger.info("get the text tf-idf");
         List<double[]> tfIdf = new ArrayList<>();
         double[] idf = getIdf();
         for (int i = 0; i < texts.length; i++) {

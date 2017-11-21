@@ -1,6 +1,8 @@
 package com.buaa.act.sdp.topcoder.service.recommend.classification;
 
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.j48.ClassifierTree;
@@ -18,6 +20,8 @@ import java.util.Map;
 @Component
 public class TcJ48 extends J48 {
 
+    private static final Logger logger= LoggerFactory.getLogger(TcJ48.class);
+
     /**
      * 按概率对分类结果排序
      *
@@ -27,6 +31,7 @@ public class TcJ48 extends J48 {
      * @return
      */
     public Map<String, Double> getRecommendResult(double[][] features, int position, List<String> winners) {
+        logger.info("recommend developers for new task using J48");
         Map<Integer, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners);
         Map<String, Double> map = new HashMap<>();
         if (winnerIndex.size() == 0) {

@@ -1,6 +1,8 @@
 package com.buaa.act.sdp.topcoder.service.recommend.classification;
 
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import weka.classifiers.functions.LibSVM;
 import weka.core.Instances;
@@ -15,7 +17,10 @@ import java.util.Map;
 @Component
 public class TcLibSvm extends LibSVM {
 
+    private static final Logger logger= LoggerFactory.getLogger(TcLibSvm.class);
+
     public Map<String, Double> getRecommendResult(double[][] features, int position, List<String> winners) {
+        logger.info("recommend developers for new task using svm");
         Map<Integer, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners);
         Map<String, Double> map = new HashMap<>();
         if (winnerIndex.size() == 0) {

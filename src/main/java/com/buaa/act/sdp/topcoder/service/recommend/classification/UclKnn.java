@@ -1,6 +1,8 @@
 package com.buaa.act.sdp.topcoder.service.recommend.classification;
 
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,8 @@ import java.util.*;
  */
 @Component
 public class UclKnn {
+
+    private static final Logger logger = LoggerFactory.getLogger(UclKnn.class);
 
     @Autowired
     private FeatureExtract featureExtract;
@@ -27,6 +31,7 @@ public class UclKnn {
      * @return
      */
     public Map<String, Integer> getRecommendWorker(double[][] features, double[] feature, int k, int start, List<String> winners) {
+        logger.info("select the top k developers for new task");
         Map<Integer, Double> map = new HashMap<>(start);
         for (int i = 0; i < start; i++) {
             map.put(i, similarity(features[i], feature));
@@ -62,6 +67,7 @@ public class UclKnn {
      * @return
      */
     public List<Map<String, Integer>> getRecommendResult(double[][] features, int k, int start, List<String> winners) {
+        logger.info("recommend developers for new task using knn");
         List<Map<String, Integer>> result = new ArrayList<>();
         for (int i = start; i < features.length; i++) {
             result.add(getRecommendWorker(features, features[i], k, start, winners));
@@ -92,7 +98,7 @@ public class UclKnn {
         length = featureExtract.getChallengeRequirementSize();
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(cosSimilarity(vectorOne, vectorTwo, start, start + length)));
         start = start + length;
-        length = featureExtract.getTitleWordSize();
+        length = 0;
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(cosSimilarity(vectorOne, vectorTwo, start, start + length)));
         return bigDecimal.doubleValue();
     }

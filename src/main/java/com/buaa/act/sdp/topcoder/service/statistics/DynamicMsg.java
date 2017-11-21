@@ -3,6 +3,8 @@ package com.buaa.act.sdp.topcoder.service.statistics;
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.user.WorkerDynamicMsg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,8 @@ import java.util.Map;
  */
 @Component
 public class DynamicMsg {
+
+    public static final Logger logger = LoggerFactory.getLogger(DynamicMsg.class);
 
     @Autowired
     private TaskScores taskScore;
@@ -34,6 +38,7 @@ public class DynamicMsg {
      * @return
      */
     public List<double[]> getWorkerDynamicFeature(List<ChallengeItem> list, ChallengeItem challengeItem, List<String> workers) {
+        logger.info("get developers' dynamic features,taskId" + challengeItem.getChallengeId());
         List<double[]> feature = new ArrayList<>();
         Map<Integer, Map<String, Double>> scores = taskScore.getAllWorkerScores();
         Map<String, Double> score = scores.get(challengeItem.getChallengeId());
@@ -66,6 +71,7 @@ public class DynamicMsg {
      * @return
      */
     public List<double[]> getDynamicFeatures(List<ChallengeItem> list, ChallengeItem item, List<String> worker) {
+        logger.info("get developers' dynamic features before a new task,taskId" + item.getChallengeId());
         Map<String, WorkerDynamicMsg> map = developerMsg.getDeveloperDynamicMsg(item.getChallengeId());
         if (map == null) {
             getWorkerDynamicFeature(list, item, new ArrayList<>());

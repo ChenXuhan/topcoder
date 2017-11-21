@@ -1,6 +1,9 @@
 package com.buaa.act.sdp.topcoder.service.recommend.cbm;
 
+import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
 import com.buaa.act.sdp.topcoder.util.Maths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -11,6 +14,8 @@ import java.util.*;
 @Component
 public class ContentBase {
 
+    private static final Logger logger = LoggerFactory.getLogger(ContentBase.class);
+
     /**
      * 获取相似任务中所有的获胜者handle
      *
@@ -19,6 +24,7 @@ public class ContentBase {
      * @return
      */
     public Set<String> getWinner(List<String> winner, List<Integer> neighbors) {
+        logger.info("get the winners in the similar tasks");
         Set<String> set = new HashSet<>();
         for (int i = 0; i < neighbors.size(); i++) {
             set.add(winner.get(neighbors.get(i)));
@@ -35,6 +41,7 @@ public class ContentBase {
      * @return
      */
     public double[][] getSimilarityTasks(double[][] features, int index, List<Integer> neighborIndex) {
+        logger.info("get the similar tasks for a new task");
         double[][] similarity = new double[neighborIndex.size()][2];
         for (int i = 0; i < neighborIndex.size(); i++) {
             similarity[i][0] = neighborIndex.get(i);
@@ -59,6 +66,7 @@ public class ContentBase {
      * @return
      */
     public Map<String, Double> getRecommendResult(double[][] features, int index, List<Map<String, Double>> scores, List<String> winner) {
+        logger.info("get the recommended developers for new task using CF");
         Map<String, List<Double>> map = new HashMap<>();
         List<Integer> neighborIndex = Maths.getSimilarityChallenges(features, index);
         double[][] similarity = getSimilarityTasks(features, index, neighborIndex);

@@ -5,6 +5,8 @@ import com.buaa.act.sdp.topcoder.service.recommend.cluster.Cluster;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.Reliability;
 import com.buaa.act.sdp.topcoder.service.recommend.network.Competition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.*;
  */
 @Service
 public class DeveloperRecommend {
+
+    private static final Logger logger = LoggerFactory.getLogger(DeveloperRecommend.class);
 
     @Autowired
     private FeatureExtract featureExtract;
@@ -32,6 +36,7 @@ public class DeveloperRecommend {
      * @return
      */
     public List<String> recommendWorkers(ChallengeItem item) {
+        logger.info("recommend developers for a new task,taskId=" + item.getChallengeId());
         double[][] features = featureExtract.getFeatures(item.getChallengeType());
         List<ChallengeItem> items = featureExtract.getItems(item.getChallengeType());
         List<String> winners = featureExtract.getWinners(item.getChallengeType());
@@ -46,7 +51,7 @@ public class DeveloperRecommend {
         List<Integer> index = new ArrayList<>();
         List<String> worker = recommendWorker(cluster.getRecommendResult(features, feature, position + 1, 3, winners, index));
         worker = reliability.filter(worker, index, winners, item.getChallengeType());
-        worker = competition.refine(index, worker, winners, position + 1, item.getChallengeType());
+        worker = competition.refine(worker, winners, position + 1, item.getChallengeType());
         return worker;
     }
 
@@ -57,6 +62,7 @@ public class DeveloperRecommend {
      * @return
      */
     public List<String> recommendWorker(Map<String, Double> map) {
+        logger.info("sort the developers according winning probability");
         List<String> workers = new ArrayList<>();
         List<Map.Entry<String, Double>> list = new ArrayList<>();
         list.addAll(map.entrySet());

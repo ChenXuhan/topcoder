@@ -1,6 +1,8 @@
 package com.buaa.act.sdp.topcoder.service.statistics;
 
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,8 @@ import java.util.Map;
  */
 @Component
 public class MsgFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(MsgFilter.class);
 
     @Autowired
     private ProjectMsg projectMsg;
@@ -57,6 +61,7 @@ public class MsgFilter {
      * @return
      */
     public List<List<Integer>> getProjectAndChallenges(int projectId) {
+        logger.info("get tasks in project before new project,projectId=" + projectId);
         List<List<Integer>> list = new ArrayList<>();
         Map<Integer, List<Integer>> projectIdToChallengeIds = projectMsg.getProjectToChallenges();
         for (Map.Entry<Integer, List<Integer>> entry : projectIdToChallengeIds.entrySet()) {

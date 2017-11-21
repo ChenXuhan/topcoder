@@ -3,6 +3,8 @@ package com.buaa.act.sdp.topcoder.service.recommend.cluster;
 import com.buaa.act.sdp.topcoder.service.recommend.classification.TcBayes;
 import com.buaa.act.sdp.topcoder.util.Maths;
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import weka.clusterers.SimpleKMeans;
@@ -19,10 +21,13 @@ import java.util.Map;
 @Component
 public class Cluster {
 
+    private static final Logger logger = LoggerFactory.getLogger(Cluster.class);
+
     @Autowired
     private TcBayes tcBayes;
 
     public SimpleKMeans buildCluster(Instances instances, int position, int clusterNum, Map<Integer, List<Integer>> map) {
+        logger.info("build cluster...");
         SimpleKMeans kMeans = null;
         try {
             kMeans = new SimpleKMeans();
@@ -63,6 +68,7 @@ public class Cluster {
     }
 
     public Map<String, Double> getRecommendResult(double[][] features, double[] feature, int position, int num, List<String> winners, List<Integer> neighbor) {
+        logger.info("recommend developers for new tasks using cluster based classifier");
         /**
          * 选取聚类的数据集
          */

@@ -2,7 +2,6 @@ package com.buaa.act.sdp.topcoder.service.api;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.dao.ChallengeItemDao;
-import com.buaa.act.sdp.topcoder.dao.TimeOutDao;
 import com.buaa.act.sdp.topcoder.dao.UserDao;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.challenge.PastChallenge;
@@ -11,6 +10,8 @@ import com.buaa.act.sdp.topcoder.service.api.statistics.UserStatistics;
 import com.buaa.act.sdp.topcoder.util.JsonUtil;
 import com.buaa.act.sdp.topcoder.util.RequestUtil;
 import com.google.gson.JsonElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,8 +40,10 @@ public class UpdateTasksAndWorkers {
     @Autowired
     private ChallengeStatistics challengeStatistics;
 
-    @Autowired
-    private TimeOutDao timeOutDao;
+    private static final Logger logger = LoggerFactory.getLogger(UpdateTasksAndWorkers.class);
+
+    private static final String CHALLENGE_COUNT_URL = "http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=1&pageSize=50";
+    private static final String GET_COMPELETED_TASK_URL = "http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=";
 
     /**
      * 获取当前已经完成的任务数量
@@ -48,12 +51,12 @@ public class UpdateTasksAndWorkers {
      * @return
      */
     public int getCompletedChallengeCount() {
+        logger.info("get completed tasks count from topcoder");
         String str = null;
         try {
-            str = RequestUtil.request("http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=1&pageSize=50");
+            str = RequestUtil.request(CHALLENGE_COUNT_URL);
         } catch (Exception e) {
-            System.err.println("time out getChallengeCount");
-            timeOutDao.insertTimeOutData("challengeCount", "");
+            logger.error("error occurred in getting finished task count", e);
         }
         JsonElement jsonElement = JsonUtil.getJsonElement(str, "total");
         if (jsonElement.isJsonPrimitive()) {
@@ -71,12 +74,12 @@ public class UpdateTasksAndWorkers {
      * @return
      */
     public PastChallenge[] getPastChallenges(int pageIndex, int pageSize) {
+        logger.info("get completed tasks from topcoder");
         String str = null;
         try {
-            str = RequestUtil.request("http://api.topcoder.com/v2/challenges/past?type=develop&pageIndex=" + pageIndex + "&pageSize=" + pageSize);
+            str = RequestUtil.request(GET_COMPELETED_TASK_URL + pageIndex + "&pageSize=" + pageSize);
         } catch (Exception e) {
-            System.err.println("time out getPastChallenges");
-            timeOutDao.insertTimeOutData("pastChallenges", pageIndex + "_" + pageSize);
+            logger.error("error occurred in getting finished tasks");
         }
         if (str != null) {
             JsonElement jsonElement = JsonUtil.getJsonElement(str, "data");
@@ -92,6 +95,7 @@ public class UpdateTasksAndWorkers {
      * 增量保存所有完成的task,更新开发者参与任务数
      */
     public void updateFinishedChallenges() {
+        logger.info("update completed tasks,evey one week");
         int count = getCompletedChallengeCount();
         int pageSize = Constant.PAGE_SIZE;
         int pages = count / pageSize;
@@ -107,6 +111,7 @@ public class UpdateTasksAndWorkers {
         PastChallenge[] pastChallenges;
         ChallengeItem challengeItem;
         int challengeId;
+        count = 0;
         for (int i = 1; i <= pages; i++) {
             pastChallenges = getPastChallenges(i, pageSize);
             if (pastChallenges == null || pastChallenges.length == 0) {
@@ -117,17 +122,14 @@ public class UpdateTasksAndWorkers {
                 if (!challengeSet.contains(challengeId)) {
                     challengeItem = challengeApi.getChallengeById(challengeId);
                     if (challengeItem != null) {
+                        count++;
                         challengeApi.challengeItemGenerate(challengeItem, pastChallenges[j]);
                         challengeApi.saveFinishedChallenge(challengeItem, userSet);
                     }
                 }
             }
         }
-        /**
-         * 更新任务注册人数及开发者参与任务数
-         */
-        userStatistics.updateTaskCount();
-        challengeStatistics.updateChallenges();
+        logger.info(count + " new tasks have been saved");
     }
 
 }

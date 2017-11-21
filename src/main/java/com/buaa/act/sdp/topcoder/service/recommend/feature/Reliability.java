@@ -2,6 +2,8 @@ package com.buaa.act.sdp.topcoder.service.recommend.feature;
 
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.service.recommend.network.Competition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,8 @@ import java.util.*;
  */
 @Component
 public class Reliability {
+
+    private static final Logger logger = LoggerFactory.getLogger(Reliability.class);
 
     @Autowired
     private FeatureExtract featureExtract;
@@ -29,6 +33,7 @@ public class Reliability {
      * @return
      */
     public List<String> filter(List<String> worker, List<Integer> neighbors, List<String> winners, String type) {
+        logger.info("compute and filter the developers with low reliability");
         List<String> winner = new ArrayList<>();
         List<Map<String, Double>> score = competition.getSameTypeWorkers(neighbors, winners, winner, type);
         Map<String, Integer> total = new HashMap<>();

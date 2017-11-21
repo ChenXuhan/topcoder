@@ -6,6 +6,8 @@ import com.buaa.act.sdp.topcoder.service.recommend.network.Collaboration;
 import com.buaa.act.sdp.topcoder.service.statistics.MsgFilter;
 import com.buaa.act.sdp.topcoder.service.statistics.ProjectMsg;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import java.util.*;
  */
 @Service
 public class TeamRecommend {
+
+    private static final Logger logger = LoggerFactory.getLogger(TeamRecommend.class);
 
     @Autowired
     private ProjectMsg projectMsg;
@@ -56,6 +60,7 @@ public class TeamRecommend {
      * @return
      */
     public List<List<String>> recommendWorkersForEachTask(int projectId) {
+        logger.info("recommend developers for each task in a project,proejctId=" + projectId);
         List<Integer> ids = projectMsg.getProjectToChallenges().get(projectId);
         Set<Integer> sets = new HashSet(ids == null ? 0 : ids.size());
         sets.addAll(ids);
@@ -99,6 +104,7 @@ public class TeamRecommend {
      * @return
      */
     public double calTeamCollaboration(int[] workerIndex, double[][] collaboration) {
+        logger.info("compute the team strength in a team");
         double result = 0.0;
         for (int i = 0; i < workerIndex.length; i++) {
             for (int j = i + 1; j < workerIndex.length; j++) {
@@ -173,6 +179,7 @@ public class TeamRecommend {
      * @return
      */
     public double searchForMaxCollaboration(int[] bestIndex, Map<String, Integer> workerIndex, List<List<String>> workers, double[][] collaboration) {
+        logger.info("recommend a team for a project by finding the best role each step");
         Random random = new Random();
         int[] index = new int[workers.size()];
         int t, m, position, role;
@@ -214,6 +221,7 @@ public class TeamRecommend {
      * @return
      */
     public List<String> findBestTeamMaxLogit(int projectId) {
+        logger.info("using max-logit to recommend a team for a project,projectId"+projectId);
         List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
         List<List<String>> workers = recommendWorkersForEachTask(projectId);
         List<String> allWorkers = new ArrayList<>();
@@ -236,6 +244,7 @@ public class TeamRecommend {
      * @return
      */
     public List<String> teamRecommend(int projectId) {
+        logger.info("recommend a team for project using heuristic algorithm");
         List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
         List<List<String>> workers = recommendWorkersForEachTask(projectId);
         List<String> allWorkers = new ArrayList<>();
