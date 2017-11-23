@@ -4,7 +4,12 @@ import com.buaa.act.sdp.topcoder.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.topcoder.dao.DevelopmentDao;
 import com.buaa.act.sdp.topcoder.dao.DevelopmentHistoryDao;
 import com.buaa.act.sdp.topcoder.dao.UserDao;
-import com.buaa.act.sdp.topcoder.model.user.*;
+import com.buaa.act.sdp.topcoder.model.user.Development;
+import com.buaa.act.sdp.topcoder.model.user.DevelopmentHistory;
+import com.buaa.act.sdp.topcoder.model.user.User;
+import com.buaa.act.sdp.topcoder.model.user.UserInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +20,8 @@ import java.util.List;
  */
 @Service
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserDao userDao;
@@ -38,6 +45,7 @@ public class UserService {
     }
 
     public UserInfo getDeveloperInfo(String userName) {
+        logger.info("get developer's development info,userName=" + userName);
         User user = getUserByName(userName);
         if (user == null) {
             return null;
@@ -47,7 +55,8 @@ public class UserService {
         return new UserInfo(user, developments, developmentHistories);
     }
 
-    public List<Integer> getUserRegistrantTasks(String userName){
+    public List<Integer> getUserRegistrantTasks(String userName) {
+        logger.info("get developer's registered tasks,userName=" + userName);
         return challengeRegistrantDao.getUserRegistrantTasks(userName);
     }
 }

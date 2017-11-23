@@ -83,6 +83,7 @@ public class UclKnn {
      * @return
      */
     public double similarity(double[] vectorOne, double[] vectorTwo) {
+        logger.info("calculate the similarity between two tasks");
         BigDecimal bigDecimal = BigDecimal.valueOf(0.0);
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(Math.abs(vectorOne[0] - vectorTwo[0])));
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(Math.abs(vectorOne[1] - vectorTwo[1])));

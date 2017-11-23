@@ -33,8 +33,8 @@ public class TaskRecommendController {
 
     @ResponseBody
     @RequestMapping("/task")
-    public TCResponse<List<String>> developerRecommend(@RequestParam("challengeId") int challengeId) {
-        logger.info("task recommend，taskId" + challengeId);
+    public TCResponse<List<String>> recommendDevelopersForTask(@RequestParam("challengeId") int challengeId) {
+        logger.info("recommend developers for a task，taskId" + challengeId);
         TCResponse<List<String>> response = new TCResponse<>();
         try {
             ChallengeItem item = taskService.getChallengeById(challengeId);
@@ -56,7 +56,7 @@ public class TaskRecommendController {
     @ResponseBody
     @RequestMapping("/team")
     public TCResponse<List<String>> teamRcommend(@RequestParam("projectId") int projectId) {
-        logger.info("team recommend，projectId" + projectId);
+        logger.info("recommend team for a project，projectId" + projectId);
         TCResponse<List<String>> response = new TCResponse<>();
         try {
             boolean exist = taskService.projectExist(projectId);

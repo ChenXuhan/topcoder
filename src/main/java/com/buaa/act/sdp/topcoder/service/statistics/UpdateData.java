@@ -24,7 +24,7 @@ public class UpdateData {
      * 更新缓存数据
      */
     public void update() {
-        logger.info("update cache every week...");
+        logger.info("update all data cache, every week...");
         projectMsg.update();
         taskScores.update();
         taskMsg.update();

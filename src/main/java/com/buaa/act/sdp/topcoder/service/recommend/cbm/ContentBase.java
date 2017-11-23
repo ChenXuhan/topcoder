@@ -1,6 +1,5 @@
 package com.buaa.act.sdp.topcoder.service.recommend.cbm;
 
-import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
 import com.buaa.act.sdp.topcoder.util.Maths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,7 @@ public class ContentBase {
      * @return
      */
     public double[][] getSimilarityTasks(double[][] features, int index, List<Integer> neighborIndex) {
-        logger.info("get the similar tasks for a new task");
+        logger.info("get the similar tasks' feature vector for a new task");
         double[][] similarity = new double[neighborIndex.size()][2];
         for (int i = 0; i < neighborIndex.size(); i++) {
             similarity[i][0] = neighborIndex.get(i);

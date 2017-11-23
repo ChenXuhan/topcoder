@@ -53,12 +53,12 @@ public class ChallengeApi {
      * @return
      */
     public ChallengeItem getChallengeById(int challengeId) {
-        logger.info("get task from topcoder,taskId=" + challengeId);
+        logger.info("get task from topcoder api,taskId=" + challengeId);
         String str = null;
         try {
             str = RequestUtil.request(TASK_URL_PREFIX + challengeId);
         } catch (Exception e) {
-            logger.error("error occurred in getting task,taskId=" + challengeId, e);
+            logger.error("error occurred in getting task through api,taskId=" + challengeId, e);
         }
         if (str != null) {
             return JsonUtil.fromJson(str, ChallengeItem.class);
@@ -73,12 +73,12 @@ public class ChallengeApi {
      * @return
      */
     public ChallengeRegistrant[] getChallengeRegistrantsById(int challengeId) {
-        logger.info("get task registrants from topcoder,taskId=" + challengeId);
+        logger.info("get task's registrants from topcoder api,taskId=" + challengeId);
         String str = null;
         try {
             str = RequestUtil.request(REGISTRANT_URL_PREFIX + challengeId);
         } catch (Exception e) {
-            logger.error("error occurred in getting task registrants,taskId=" + challengeId, e);
+            logger.error("error occurred in getting task's registrants,taskId=" + challengeId, e);
         }
         if (str != null) {
             return JsonUtil.fromJson(str, ChallengeRegistrant[].class);
@@ -93,12 +93,12 @@ public class ChallengeApi {
      * @return
      */
     public ChallengePhase[] getChallengePhasesById(int challengeId) {
-        logger.info("get task phrase from topcoder,taskId=" + challengeId);
+        logger.info("get task's phrase from topcoder api,taskId=" + challengeId);
         String str = null;
         try {
             str = RequestUtil.request(PHRASE_URL_PREFIX + challengeId);
         } catch (Exception e) {
-            logger.error("error occurred in getting task phrase,taskId=" + challengeId, e);
+            logger.error("error occurred in getting task's phrase,taskId=" + challengeId, e);
         }
         if (str != null) {
             JsonElement jsonElement = JsonUtil.getJsonElement(str, "phases");
@@ -116,12 +116,12 @@ public class ChallengeApi {
      * @return
      */
     public ChallengeSubmission[] getChallengeSubmissionsById(int challengeId) {
-        logger.info("get task submission from topcoder,taskId=" + challengeId);
+        logger.info("get task's submission from topcoder api,taskId=" + challengeId);
         String str = null;
         try {
             str = RequestUtil.request(SUBMISSION_URL_PREFIX + challengeId);
         } catch (Exception e) {
-            logger.error("error occurred in getting task submission,taskId=" + challengeId, e);
+            logger.error("error occurred in getting task's submission,taskId=" + challengeId, e);
         }
         if (str != null) {
             JsonElement jsonElement = JsonUtil.getJsonElement(str, "results");
@@ -139,12 +139,12 @@ public class ChallengeApi {
      * @param username
      */
     public void saveFinishedChallenge(ChallengeItem challengeItem, Set<String> username) {
-        logger.info("save new task's and developer's information,taskId=" + challengeItem.getChallengeId());
+        logger.info("save new task and developer's information into db,taskId=" + challengeItem.getChallengeId());
         int challengeId = challengeItem.getChallengeId();
         int registerCount = 0, submissionCount = 0;
         ChallengeRegistrant[] challengeRegistrant = getChallengeRegistrantsById(challengeId);
         if (challengeRegistrant != null && challengeRegistrant.length != 0) {
-            logger.info("save new task's registrants,taskId=" + challengeItem.getChallengeId());
+            logger.info("save new task's registrants into db,taskId=" + challengeItem.getChallengeId());
             challengeRegistrantGenerate(challengeId, challengeRegistrant);
             challengeRegistrantDao.insertBatch(challengeRegistrant);
             for (int i = 0; i < challengeRegistrant.length; i++) {
@@ -160,14 +160,14 @@ public class ChallengeApi {
         }
         ChallengeSubmission[] challengeSubmissions = getChallengeSubmissionsById(challengeId);
         if (challengeSubmissions != null && challengeSubmissions.length != 0) {
-            logger.info("save new task's submission,taskId=" + challengeItem.getChallengeId());
+            logger.info("save new task's submission into db,taskId=" + challengeItem.getChallengeId());
             challengeSubmissionGenerate(challengeId, challengeSubmissions);
             challengeSubmissionDao.insertBatch(challengeSubmissions);
             submissionCount = challengeSubmissions.length;
         }
         ChallengePhase[] challengePhases = getChallengePhasesById(challengeId);
         if (challengePhases != null && challengePhases.length != 0) {
-            logger.info("save new task's phrase,taskId=" + challengeItem.getChallengeId());
+            logger.info("save new task's phrase into db,taskId=" + challengeItem.getChallengeId());
             challengePhaseGenerate(challengeId, challengePhases);
             challengePhaseDao.insertBatch(challengePhases);
         }

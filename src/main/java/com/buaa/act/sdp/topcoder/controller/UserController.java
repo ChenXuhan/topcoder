@@ -28,7 +28,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping("/info")
     public TCResponse<UserInfo> getDeveloperInfo(@RequestParam("userName") String userName) {
-        logger.info("get developer info, name=" + userName);
+        logger.info("get developer profile, name=" + userName);
         TCResponse<UserInfo> response = new TCResponse<>();
         try {
             UserInfo info = userService.getDeveloperInfo(userName);
@@ -38,7 +38,7 @@ public class UserController {
             }
             response.setSuccessResponse(info);
         } catch (Exception e) {
-            logger.error("error occurred in getting developer info,name=" + userName, e);
+            logger.error("error occurred in getting developer profile,name=" + userName, e);
             response.setErrorResponse();
         }
         return response;
@@ -47,7 +47,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping("/tasks")
     public TCResponse<List<Integer>> getDeveloperRegisterTasks(@RequestParam("userName") String userName) {
-        logger.info("get tasks developers registered");
+        logger.info("get developer's registered tasks, userName=" + userName);
         TCResponse<List<Integer>> response = new TCResponse<>();
         try {
             List<Integer> data = userService.getUserRegistrantTasks(userName);
@@ -57,7 +57,7 @@ public class UserController {
             }
             response.setSuccessResponse(data);
         } catch (Exception e) {
-            logger.error("error occurred in getting developer's registering tasks, name=" + userName, e);
+            logger.error("error occurred in getting developer's registered tasks, name=" + userName, e);
             response.setErrorResponse();
         }
         return response;

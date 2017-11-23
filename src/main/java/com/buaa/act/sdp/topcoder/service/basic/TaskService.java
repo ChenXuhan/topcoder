@@ -4,6 +4,8 @@ import com.buaa.act.sdp.topcoder.dao.ChallengeItemDao;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.user.Registrant;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskScores;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,14 @@ import java.util.Map;
 @Service
 public class TaskService {
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
     @Autowired
     private ChallengeItemDao challengeItemDao;
     @Autowired
     private TaskScores taskScores;
 
     public ChallengeItem getChallengeById(int challengeId) {
+        logger.info("get task's detail from db,taskId=" + challengeId);
         return challengeItemDao.getChallengeItemById(challengeId);
     }
 
@@ -35,6 +39,7 @@ public class TaskService {
     }
 
     public List<Integer> getProjectTasks(int projectId) {
+        logger.info("get project's tasks,projectId=" + projectId);
         if (projectId <= 0) {
             return new ArrayList<>();
         }
@@ -42,10 +47,12 @@ public class TaskService {
     }
 
     public List<Integer> getAllTasks() {
+        logger.info("get all tasks' id from db");
         return challengeItemDao.getChallengeIds();
     }
 
     public List<Registrant> getTaskRegistrants(int challengeId) {
+        logger.info("get task's registrants from db,taskId=" + challengeId);
         Map<String, Double> score = taskScores.getTaskScore(challengeId);
         Map<String, String> registerTime = taskScores.getRegisterDate(challengeId);
         Map<String, String> submitTime = taskScores.getSubmitDate(challengeId);

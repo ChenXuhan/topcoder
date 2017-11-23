@@ -62,7 +62,7 @@ public class DeveloperRecommend {
      * @return
      */
     public List<String> recommendWorker(Map<String, Double> map) {
-        logger.info("sort the developers according winning probability");
+        logger.info("sort the developers according their winning probability");
         List<String> workers = new ArrayList<>();
         List<Map.Entry<String, Double>> list = new ArrayList<>();
         list.addAll(map.entrySet());

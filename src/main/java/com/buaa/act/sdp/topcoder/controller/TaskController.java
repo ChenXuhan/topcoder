@@ -29,7 +29,7 @@ public class TaskController {
     @ResponseBody
     @RequestMapping("/detail")
     public TCResponse<ChallengeItem> getTaskById(@RequestParam("taskId") int taskId) {
-        logger.info("get task,taskId=" + taskId);
+        logger.info("get task detail,taskId=" + taskId);
         TCResponse<ChallengeItem> response = new TCResponse<>();
         try {
             ChallengeItem item = taskService.getChallengeById(taskId);
@@ -39,7 +39,7 @@ public class TaskController {
             }
             response.setSuccessResponse(item);
         } catch (Exception e) {
-            logger.error("error occurred when get task,taskId=" + taskId, e);
+            logger.error("error occurred when getting task,taskId=" + taskId, e);
             response.setErrorResponse();
         }
         return response;
@@ -58,7 +58,7 @@ public class TaskController {
             }
             response.setSuccessResponse(tasks);
         } catch (Exception e) {
-            logger.error("error occurred when get tasks for a project, projectId=" + projectId);
+            logger.error("error occurred when get tasks in a project, projectId=" + projectId);
             response.setErrorResponse();
         }
         return response;
@@ -68,14 +68,14 @@ public class TaskController {
     @ResponseBody
     @RequestMapping("/all")
     public TCResponse<List<Integer>> getAllTasks() {
-        logger.info("get all tasks");
+        logger.info("get all tasks in db");
         TCResponse<List<Integer>> response = new TCResponse<>();
         try {
             List<Integer> data = taskService.getAllTasks();
             response.setSuccessResponse(data);
         } catch (Exception e) {
             response.setErrorResponse();
-            logger.error("error occurred in getAllTasks", e);
+            logger.error("error occurred in getting all tasks", e);
         }
         return response;
     }
@@ -83,7 +83,7 @@ public class TaskController {
     @RequestMapping("/register")
     @ResponseBody
     public TCResponse<List<Registrant>> getTaskRegistrant(@RequestParam("challengeId") int challengeId) {
-        logger.info("get task registrants");
+        logger.info("get a task registrants");
         TCResponse<List<Registrant>> response = new TCResponse<>();
         try {
             List<Registrant> data = taskService.getTaskRegistrants(challengeId);
@@ -94,7 +94,7 @@ public class TaskController {
             response.setSuccessResponse(data);
         } catch (Exception e) {
             response.setErrorResponse();
-            logger.error("error occurred in getting task registrants");
+            logger.error("error occurred in getting a task registrants");
         }
         return response;
     }

@@ -33,7 +33,7 @@ public class Competition {
      * @return
      */
     public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
-        logger.info("get the same tasks' developers scores");
+        logger.info("get the similar tasks' developers' scores");
         Map<Integer, Map<String, Double>> score = taskScores.getAllWorkerScores();
         List<ChallengeItem> items = featureExtract.getItems(type);
         List<Map<String, Double>> list = new ArrayList<>();
@@ -54,7 +54,7 @@ public class Competition {
      * @return
      */
     public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
-        logger.info("get the same tasks' developers scores,score > 80.");
+        logger.info("get the similar tasks' developers' scores,score > 80.");
         List<Map<String, Double>> lists = featureExtract.getUserScore(type);
         List<Map<String, Double>> list = new ArrayList<>();
         for (int i = 0; i < neighbors.size(); i++) {
@@ -325,7 +325,7 @@ public class Competition {
      * @return
      */
     public int[] sortRelation(double[] num) {
-        logger.info("sort developers using relationship");
+        logger.info("sort developers by using attractive relationship");
         Map<Integer, Double> map = new HashMap<>();
         for (int i = 0; i < num.length; i++) {
             map.put(i, num[i]);

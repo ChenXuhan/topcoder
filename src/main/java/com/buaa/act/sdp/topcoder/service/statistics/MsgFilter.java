@@ -61,7 +61,7 @@ public class MsgFilter {
      * @return
      */
     public List<List<Integer>> getProjectAndChallenges(int projectId) {
-        logger.info("get tasks in project before new project,projectId=" + projectId);
+        logger.info("get all tasks id in projects before new project,projectId=" + projectId);
         List<List<Integer>> list = new ArrayList<>();
         Map<Integer, List<Integer>> projectIdToChallengeIds = projectMsg.getProjectToChallenges();
         for (Map.Entry<Integer, List<Integer>> entry : projectIdToChallengeIds.entrySet()) {

@@ -29,7 +29,7 @@ public class LocalClassifier {
      * @return
      */
     public List<Integer> getNeighbor(double[][] features, int position) {
-        logger.info("get the similar tasks for new task");
+        logger.info("get the similar tasks for a new task");
         List<Integer> neighborIndex = Maths.getSimilarityChallenges(features, position);
         neighborIndex.add(position);
         return neighborIndex;
@@ -43,7 +43,7 @@ public class LocalClassifier {
      * @return
      */
     public Map<String, Double> getRecommendResult(double[][] features, List<String> winners, List<Integer> neighbors) {
-        logger.info("recommend developers for new task using local classifier");
+        logger.info("recommend developers for a new task using local classifier");
         int k = neighbors.size();
         double[][] data = new double[k][features[0].length];
         List<String> winner = new ArrayList<>(k);

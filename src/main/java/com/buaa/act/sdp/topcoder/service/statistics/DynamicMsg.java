@@ -38,7 +38,7 @@ public class DynamicMsg {
      * @return
      */
     public List<double[]> getWorkerDynamicFeature(List<ChallengeItem> list, ChallengeItem challengeItem, List<String> workers) {
-        logger.info("get developers' dynamic features,taskId" + challengeItem.getChallengeId());
+        logger.info("get task's registrants' dynamic features,taskId" + challengeItem.getChallengeId());
         List<double[]> feature = new ArrayList<>();
         Map<Integer, Map<String, Double>> scores = taskScore.getAllWorkerScores();
         Map<String, Double> score = scores.get(challengeItem.getChallengeId());

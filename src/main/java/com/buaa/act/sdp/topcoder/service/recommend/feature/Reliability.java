@@ -33,7 +33,7 @@ public class Reliability {
      * @return
      */
     public List<String> filter(List<String> worker, List<Integer> neighbors, List<String> winners, String type) {
-        logger.info("compute and filter the developers with low reliability");
+        logger.info("compute and filter developers with lower reliability");
         List<String> winner = new ArrayList<>();
         List<Map<String, Double>> score = competition.getSameTypeWorkers(neighbors, winners, winner, type);
         Map<String, Integer> total = new HashMap<>();

@@ -68,7 +68,7 @@ public class TaskScores {
      * @return
      */
     public synchronized Map<Integer, Map<String, Double>> getAllWorkerScores() {
-        logger.info("get developers' scores on all tasks");
+        logger.info("get all developers' scores on all tasks");
         if (scores.isEmpty()) {
             List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllChallengeRegistrants();
             Map<String, Double> score;
@@ -148,7 +148,7 @@ public class TaskScores {
     }
 
     public synchronized void update() {
-        logger.info("update cache, get developers' scores");
+        logger.info("update cache, get developers' scores, every week");
         scores.clear();
         winners.clear();
         registerDate.clear();

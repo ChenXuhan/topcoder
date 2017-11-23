@@ -46,7 +46,7 @@ public class ProjectMsg {
      * challenge和project对应关系
      */
     public void challengeProjectMapping() {
-        logger.info("match task and the corresponding project");
+        logger.info("match tasks and the corresponding project,taskIds to projectId");
         List<Map<String, Object>> list = challengeItemDao.getProjectId();
         List<Integer> challengeIds;
         int challengeId, projectId;
@@ -82,7 +82,7 @@ public class ProjectMsg {
     }
 
     public synchronized void update() {
-        logger.info("update the cache,task-project matching");
+        logger.info("update the cache,taskIds-projectId matching, every week");
         projectIdToChallengeIds.clear();
         challengeToProject.clear();
         challengeProjectMapping();

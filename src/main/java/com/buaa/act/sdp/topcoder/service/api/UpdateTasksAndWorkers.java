@@ -51,12 +51,12 @@ public class UpdateTasksAndWorkers {
      * @return
      */
     public int getCompletedChallengeCount() {
-        logger.info("get completed tasks count from topcoder");
+        logger.info("get completed task count from topcoder api");
         String str = null;
         try {
             str = RequestUtil.request(CHALLENGE_COUNT_URL);
         } catch (Exception e) {
-            logger.error("error occurred in getting finished task count", e);
+            logger.error("error occurred in getting finished task's count", e);
         }
         JsonElement jsonElement = JsonUtil.getJsonElement(str, "total");
         if (jsonElement.isJsonPrimitive()) {
@@ -74,12 +74,12 @@ public class UpdateTasksAndWorkers {
      * @return
      */
     public PastChallenge[] getPastChallenges(int pageIndex, int pageSize) {
-        logger.info("get completed tasks from topcoder");
+        logger.info("get completed task id from topcoder api");
         String str = null;
         try {
             str = RequestUtil.request(GET_COMPELETED_TASK_URL + pageIndex + "&pageSize=" + pageSize);
         } catch (Exception e) {
-            logger.error("error occurred in getting finished tasks");
+            logger.error("error occurred in getting finished tasks id");
         }
         if (str != null) {
             JsonElement jsonElement = JsonUtil.getJsonElement(str, "data");
@@ -95,7 +95,7 @@ public class UpdateTasksAndWorkers {
      * 增量保存所有完成的task,更新开发者参与任务数
      */
     public void updateFinishedChallenges() {
-        logger.info("update completed tasks,evey one week");
+        logger.info("update and save completed tasks,evey one week");
         int count = getCompletedChallengeCount();
         int pageSize = Constant.PAGE_SIZE;
         int pages = count / pageSize;
@@ -129,7 +129,7 @@ public class UpdateTasksAndWorkers {
                 }
             }
         }
-        logger.info(count + " new tasks have been saved");
+        logger.info(count + " new tasks have been saved in db");
     }
 
 }

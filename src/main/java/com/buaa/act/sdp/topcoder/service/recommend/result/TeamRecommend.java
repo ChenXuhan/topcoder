@@ -125,6 +125,7 @@ public class TeamRecommend {
      * @return
      */
     public double generateNewTeam(double teamStrength, int[] index, double[][] collaboration, int role, int workerId) {
+        logger.info("generate the new team and compute the team strength by changing a role");
         if (index[role] != workerId) {
             for (int i = 0; i < index.length; i++) {
                 if (i == role) {
@@ -179,7 +180,7 @@ public class TeamRecommend {
      * @return
      */
     public double searchForMaxCollaboration(int[] bestIndex, Map<String, Integer> workerIndex, List<List<String>> workers, double[][] collaboration) {
-        logger.info("recommend a team for a project by finding the best role each step");
+        logger.info("recommend a team for a project by searching the best role each step");
         Random random = new Random();
         int[] index = new int[workers.size()];
         int t, m, position, role;

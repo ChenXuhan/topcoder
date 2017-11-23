@@ -29,7 +29,7 @@ public class UserStatistics {
      * 计算开发者的竞争、提交、获胜数目
      */
     public void updateTaskCount(String userName) {
-        logger.info("update developer finished tasks count, userName=" + userName);
+        logger.info("update developer's registered and submission count, userName=" + userName);
         List<DevelopmentHistory> developmentHistories;
         int count, submission, win;
         User user = userDao.getUserByName(userName);

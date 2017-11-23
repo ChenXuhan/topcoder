@@ -29,7 +29,7 @@ public class Collaboration {
      * @param score       一个项目内每个任务的开发者得分信息
      */
     public void collaborationInProject(Map<String, Integer> workerIndex, int[][] colCount, int[] taskCount, double[][] colScores, List<Map<String, Double>> score) {
-        logger.info("compute the collaboration edges between developers in a project");
+        logger.info("construct the competitive network among developers in a project");
         Set<String> set = new HashSet<>();
         Map<String, Double> map;
         int m, n;
@@ -65,7 +65,7 @@ public class Collaboration {
      * @return
      */
     public double[][] calCollaboration(int[][] colCount, int[] taskCount, double[][] colScores) {
-        logger.info("compute the collaboration between developers");
+        logger.info("compute the collaboration among developers in a project");
         double[][] result = new double[colCount.length][colCount.length];
         int sum;
         for (int i = 0; i < colCount.length; i++) {

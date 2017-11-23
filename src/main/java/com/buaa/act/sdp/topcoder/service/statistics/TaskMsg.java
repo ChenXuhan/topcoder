@@ -189,7 +189,7 @@ public class TaskMsg {
      * @param userScore
      */
     public void getWinnersAndScores(String challengeType, List<ChallengeItem> items, List<String> winners, List<Map<String, Double>> userScore) {
-        logger.info("get a specific type tasks and the winners, developers' scores");
+        logger.info("get a specific type tasks and the winners, developers' scores, taskType=" + challengeType);
         List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeSubmissionMsg();
         Map<String, Integer> map = new HashMap<>();
         Set<Integer> challengeSet = new HashSet<>();
@@ -263,7 +263,7 @@ public class TaskMsg {
     }
 
     public synchronized void update() {
-        logger.info("update get 3 type tasks");
+        logger.info("update 3 type tasks' message, every week");
         codeItems.clear();
         codeWinners.clear();
         codeScore.clear();

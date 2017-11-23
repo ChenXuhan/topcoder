@@ -36,7 +36,7 @@ public class DeveloperMsg {
      * @return
      */
     public Map<String, WorkerDynamicMsg> getDeveloperDynamicMsg(Map<Integer, Map<String, Double>> scores, Map<Integer, String> winners, List<ChallengeItem> list, ChallengeItem challengeItem) {
-        logger.info("get and cache developers' dynamic msg");
+        logger.info("compute developers' dynamic message caches");
         Map<String, WorkerDynamicMsg> map = msgMap.get(challengeItem.getChallengeId());
         if (map == null) {
             map = new HashMap<>();

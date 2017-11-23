@@ -27,7 +27,7 @@ public class Cluster {
     private TcBayes tcBayes;
 
     public SimpleKMeans buildCluster(Instances instances, int position, int clusterNum, Map<Integer, List<Integer>> map) {
-        logger.info("build cluster...");
+        logger.info("building cluster among test data set...");
         SimpleKMeans kMeans = null;
         try {
             kMeans = new SimpleKMeans();
@@ -68,7 +68,7 @@ public class Cluster {
     }
 
     public Map<String, Double> getRecommendResult(double[][] features, double[] feature, int position, int num, List<String> winners, List<Integer> neighbor) {
-        logger.info("recommend developers for new tasks using cluster based classifier");
+        logger.info("recommend developers for new a tasks using cluster based classifier");
         /**
          * 选取聚类的数据集
          */

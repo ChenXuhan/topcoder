@@ -111,7 +111,7 @@ public class FeatureExtract {
     }
 
     public double[] generateVector(Set<String> set, ChallengeItem item) {
-        logger.info("get the task's feature vectors,taskId=" + item.getChallengeId());
+        logger.info("generate the task's feature vector,taskId=" + item.getChallengeId());
         int index = 0;
         double[] feature = new double[set.size() + 5];
         feature[index++] = item.getDetailedRequirements().length();

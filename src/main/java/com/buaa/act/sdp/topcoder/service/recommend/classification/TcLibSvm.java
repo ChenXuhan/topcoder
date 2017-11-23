@@ -20,7 +20,7 @@ public class TcLibSvm extends LibSVM {
     private static final Logger logger= LoggerFactory.getLogger(TcLibSvm.class);
 
     public Map<String, Double> getRecommendResult(double[][] features, int position, List<String> winners) {
-        logger.info("recommend developers for new task using svm");
+        logger.info("recommend developers for new task using SVM");
         Map<Integer, String> winnerIndex = WekaArffUtil.getWinnerIndex(winners);
         Map<String, Double> map = new HashMap<>();
         if (winnerIndex.size() == 0) {

@@ -35,7 +35,7 @@ public class ChallengeStatistics {
      * 任务的注册开发者统计
      */
     public void updateChallenge(ChallengeItem item, int resigterCount, int submissionCount) {
-        logger.info("update the task's registrant and submission count,taskId=" + item.getChallengeId());
+        logger.info("update task's registrant and submission count,taskId=" + item.getChallengeId());
         String[] strings, string;
         int num;
         strings = item.getSubmissionEndDate().substring(0, 10).split("-");

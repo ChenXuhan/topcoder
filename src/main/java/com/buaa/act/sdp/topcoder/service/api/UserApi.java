@@ -47,12 +47,12 @@ public class UserApi {
      * @param userName
      */
     public User getUserByName(String userName) {
-        logger.info("get developer from topcoder,userName=" + userName);
+        logger.info("get developer's profile from topcoder api,userName=" + userName);
         String json = null;
         try {
             json = RequestUtil.request(USER_URL_PREFIX + userName);
         } catch (Exception e) {
-            logger.error("error occurred in getting developer,userName=" + userName, e);
+            logger.error("error occurred in getting developer's profile,userName=" + userName, e);
         }
         if (json != null) {
             User user = JsonUtil.fromJson(json, User.class);
@@ -91,14 +91,14 @@ public class UserApi {
      * @return
      */
     public String[] getUserSkills(String userName) {
-        logger.info("get developer skills from topcoder,userName=" + userName);
+        logger.info("get developer's skills from topcoder api,userName=" + userName);
         String json = null;
         try {
             for (int i = 0; i < Constant.RETRY_TIMES && json == null; i++) {
                 json = HttpUtils.httpGet(SKILL_URL_PREFIX + userName + "/skills");
             }
         } catch (Exception e) {
-            logger.error("error occurred in getting developer skills,userName=" + userName, e);
+            logger.error("error occurred in getting developer's skills,userName=" + userName, e);
         }
         if (json != null) {
             List<JsonElement> list = JsonUtil.getJsonElement(json, new String[]{"result", "content", "skills"});
@@ -196,12 +196,12 @@ public class UserApi {
      * @param userName
      */
     public String getUserDevelopmentStatistics(String userName) {
-        logger.info("get developer development statistics,userName=" + userName);
+        logger.info("get developer's development statistics from topcoder api,userName=" + userName);
         String json = null;
         try {
             json = RequestUtil.request(USER_URL_PREFIX + userName + "/statistics/develop");
         } catch (Exception e) {
-            logger.error("error occurred in getting developer statistics,userName=" + userName, e);
+            logger.error("error occurred in getting developer's statistics,userName=" + userName, e);
         }
         if (json != null) {
             return json;
@@ -216,12 +216,12 @@ public class UserApi {
      * @param challengeType
      */
     public void saveUserRatingHistory(String userName, String challengeType) {
-        logger.info("get developer rating histories,userName=" + userName);
+        logger.info("get developer's rating histories from topcoder api,userName=" + userName);
         String json = null;
         try {
             json = RequestUtil.request(RATING_HISTORIES_URL + userName + "/" + challengeType);
         } catch (Exception e) {
-            logger.error("error occurred in getting developer rating histories,userName=" + userName, e);
+            logger.error("error occurred in getting developer's rating histories,userName=" + userName, e);
         }
         if (json != null) {
             parseAndSaveUserRatingHistory(userName, challengeType, json);
@@ -248,14 +248,14 @@ public class UserApi {
      * @param handle
      */
     public void saveUserMsg(String handle) {
-        logger.info("save developer information,userName=" + handle);
+        logger.info("save developer information into db,userName=" + handle);
         saveUserBasicInformation(handle);
         saveUserDevelopmentMsg(handle);
         saveUserRatingMsg(handle);
     }
 
     public void updateUserMsg(String handle) {
-        logger.info("update developer information,userName=" + handle);
+        logger.info("update developer information into db,userName=" + handle);
         updateUserBasicInformation(handle);
         updateUserDevelopmentMsg(handle);
         saveUserRatingMsg(handle);
