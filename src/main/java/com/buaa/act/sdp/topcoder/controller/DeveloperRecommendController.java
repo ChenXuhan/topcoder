@@ -20,9 +20,9 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/recommend")
-public class TaskRecommendController {
+public class DeveloperRecommendController {
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskRecommendController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeveloperRecommendController.class);
 
     @Autowired
     private TaskService taskService;
@@ -33,13 +33,13 @@ public class TaskRecommendController {
 
     @ResponseBody
     @RequestMapping("/task")
-    public TCResponse<List<String>> recommendDevelopersForTask(@RequestParam("challengeId") int challengeId) {
-        logger.info("recommend developers for a task，taskId" + challengeId);
+    public TCResponse<List<String>> recommendDevelopersForTask(@RequestParam("taskId") int taskId) {
+        logger.info("recommend developers for a single task，taskId=" + taskId);
         TCResponse<List<String>> response = new TCResponse<>();
         try {
-            ChallengeItem item = taskService.getChallengeById(challengeId);
+            ChallengeItem item = taskService.getChallengeById(taskId);
             if (item == null) {
-                logger.info("task taskId=" + challengeId + " does not exist!");
+                logger.info("task taskId=" + taskId + " does not exist!");
                 response.setNotFoundResponse();
                 return response;
             }
@@ -47,7 +47,7 @@ public class TaskRecommendController {
             response.setSuccessResponse(developers);
             response.setData(developers);
         } catch (Exception e) {
-            logger.error("error occurred in task recommendation,taskId=" + challengeId, e);
+            logger.error("error occurred in task recommendation,taskId=" + taskId, e);
             response.setErrorResponse();
         }
         return response;

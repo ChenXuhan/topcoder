@@ -125,7 +125,6 @@ public class TeamRecommend {
      * @return
      */
     public double generateNewTeam(double teamStrength, int[] index, double[][] collaboration, int role, int workerId) {
-        logger.info("generate the new team and compute the team strength by changing a role");
         if (index[role] != workerId) {
             for (int i = 0; i < index.length; i++) {
                 if (i == role) {
@@ -180,7 +179,7 @@ public class TeamRecommend {
      * @return
      */
     public double searchForMaxCollaboration(int[] bestIndex, Map<String, Integer> workerIndex, List<List<String>> workers, double[][] collaboration) {
-        logger.info("recommend a team for a project by searching the best role each step");
+        logger.info("random select a developer for each task");
         Random random = new Random();
         int[] index = new int[workers.size()];
         int t, m, position, role;
@@ -191,6 +190,7 @@ public class TeamRecommend {
         }
         double teamStrength = calTeamCollaboration(index, collaboration), newTeamStrength, currentScore;
         List<String> worker;
+        logger.info("searching the best role each step");
         for (int i = 0; i < Constant.ITERATIONS; i++) {
             role = 0;
             position = index[role];
@@ -252,8 +252,7 @@ public class TeamRecommend {
         Map<String, Integer> workerIndex = getWorkerIndex(workers, allWorkers);
         double[][] collaboration = getCollaborations(taskIds, workerIndex);
         int[] bestIndex = new int[workers.size()];
-        double teamStrength = searchForMaxCollaboration(bestIndex, workerIndex, workers, collaboration);
-        System.out.println(teamStrength);
+        searchForMaxCollaboration(bestIndex, workerIndex, workers, collaboration);
         List<String> bestTeam = new ArrayList<>(bestIndex.length);
         for (int i = 0; i < bestIndex.length; i++) {
             bestTeam.add(allWorkers.get(bestIndex[i]));

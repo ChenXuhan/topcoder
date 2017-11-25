@@ -29,7 +29,7 @@ public class TaskController {
     @ResponseBody
     @RequestMapping("/detail")
     public TCResponse<ChallengeItem> getTaskById(@RequestParam("taskId") int taskId) {
-        logger.info("get task detail,taskId=" + taskId);
+        logger.info("get task detail info,taskId=" + taskId);
         TCResponse<ChallengeItem> response = new TCResponse<>();
         try {
             ChallengeItem item = taskService.getChallengeById(taskId);
@@ -46,29 +46,9 @@ public class TaskController {
     }
 
     @ResponseBody
-    @RequestMapping("/project")
-    public TCResponse<List<Integer>> getProjectTasks(@RequestParam("projectId") int projectId) {
-        logger.info("get tasks in a project,projectId=" + projectId);
-        TCResponse<List<Integer>> response = new TCResponse<>();
-        try {
-            List<Integer> tasks = taskService.getProjectTasks(projectId);
-            if (tasks.size() == 0) {
-                response.setNotFoundResponse();
-                return response;
-            }
-            response.setSuccessResponse(tasks);
-        } catch (Exception e) {
-            logger.error("error occurred when get tasks in a project, projectId=" + projectId);
-            response.setErrorResponse();
-        }
-        return response;
-    }
-
-
-    @ResponseBody
     @RequestMapping("/all")
     public TCResponse<List<Integer>> getAllTasks() {
-        logger.info("get all tasks in db");
+        logger.info("get all tasks");
         TCResponse<List<Integer>> response = new TCResponse<>();
         try {
             List<Integer> data = taskService.getAllTasks();
@@ -82,11 +62,11 @@ public class TaskController {
 
     @RequestMapping("/register")
     @ResponseBody
-    public TCResponse<List<Registrant>> getTaskRegistrant(@RequestParam("challengeId") int challengeId) {
-        logger.info("get a task registrants");
+    public TCResponse<List<Registrant>> getTaskRegistrant(@RequestParam("taskId") int taskId) {
+        logger.info("get a task registrants info");
         TCResponse<List<Registrant>> response = new TCResponse<>();
         try {
-            List<Registrant> data = taskService.getTaskRegistrants(challengeId);
+            List<Registrant> data = taskService.getTaskRegistrants(taskId);
             if (data.isEmpty()) {
                 response.setNotFoundResponse();
                 return response;

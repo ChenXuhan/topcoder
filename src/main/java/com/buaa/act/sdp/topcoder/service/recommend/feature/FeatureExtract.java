@@ -42,7 +42,7 @@ public class FeatureExtract {
     public int getChallengeRequirementSize() {
         return requirementWordSize;
     }
-    
+
     public List<Map<String, Double>> getUserScore(String type) {
         return taskMsg.getUserScore(type);
     }
@@ -111,7 +111,6 @@ public class FeatureExtract {
     }
 
     public double[] generateVector(Set<String> set, ChallengeItem item) {
-        logger.info("generate the task's feature vector,taskId=" + item.getChallengeId());
         int index = 0;
         double[] feature = new double[set.size() + 5];
         feature[index++] = item.getDetailedRequirements().length();
@@ -142,11 +141,18 @@ public class FeatureExtract {
      * @param type
      * @return
      */
-    public double[][] generateVectors(String type) {
+    public double[][] generateVectors(String type, int challengeId) {
         List<ChallengeItem> items = getItems(type);
         Set<String> set = getSkills();
-        double[][] features = new double[items.size()][];
-        for (int i = 0; i < features.length; i++) {
+        int k = 0;
+        for (int i = 0; i < items.size(); i++) {
+            k++;
+            if (challengeId == items.get(i).getChallengeId()) {
+                break;
+            }
+        }
+        double[][] features = new double[k][];
+        for (int i = 0; i < k; i++) {
             features[i] = generateVector(set, items.get(i));
         }
         return features;
@@ -194,8 +200,9 @@ public class FeatureExtract {
         return skills;
     }
 
-    public double[][] getFeatures(String challengeType) {
-        return generateVectors(challengeType);
+    public double[][] getFeatures(String challengeType, int challengeId) {
+        logger.info("generate tasks features vector, taskId=" + challengeId);
+        return generateVectors(challengeType, challengeId);
     }
 
 }

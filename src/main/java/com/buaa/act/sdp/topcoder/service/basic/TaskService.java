@@ -26,7 +26,7 @@ public class TaskService {
     private TaskScores taskScores;
 
     public ChallengeItem getChallengeById(int challengeId) {
-        logger.info("get task's detail from db,taskId=" + challengeId);
+        logger.info("get task's detail msg from db,taskId=" + challengeId);
         return challengeItemDao.getChallengeItemById(challengeId);
     }
 
@@ -39,7 +39,7 @@ public class TaskService {
     }
 
     public List<Integer> getProjectTasks(int projectId) {
-        logger.info("get project's tasks,projectId=" + projectId);
+        logger.info("query tasks in a project in db,projectId=" + projectId);
         if (projectId <= 0) {
             return new ArrayList<>();
         }

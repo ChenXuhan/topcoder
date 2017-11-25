@@ -1,6 +1,5 @@
 package com.buaa.act.sdp.topcoder;
 
-import com.buaa.act.sdp.topcoder.controller.UserController;
 import com.buaa.act.sdp.topcoder.service.api.UserApi;
 import com.buaa.act.sdp.topcoder.service.api.statistics.UserStatistics;
 import org.junit.Test;
@@ -18,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = "classpath:conf/applicationContext.xml")
 public class TestUser {
 
-    private static final Logger logger= LoggerFactory.getLogger(TestUser.class);
+    private static final Logger logger = LoggerFactory.getLogger(TestUser.class);
     @Autowired
     private UserApi userApi;
 
@@ -30,8 +29,4 @@ public class TestUser {
         userApi.getUserByName("iRabbit");
     }
 
-    @Test
-    public void updateUsers() {
-        userStatistics.updateTaskCount();
-    }
 }

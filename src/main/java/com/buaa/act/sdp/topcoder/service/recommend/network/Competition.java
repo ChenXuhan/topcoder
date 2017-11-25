@@ -33,7 +33,6 @@ public class Competition {
      * @return
      */
     public List<Map<String, Double>> getSameTypeWorkers(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
-        logger.info("get the similar tasks' developers' scores");
         Map<Integer, Map<String, Double>> score = taskScores.getAllWorkerScores();
         List<ChallengeItem> items = featureExtract.getItems(type);
         List<Map<String, Double>> list = new ArrayList<>();
@@ -54,7 +53,6 @@ public class Competition {
      * @return
      */
     public List<Map<String, Double>> getSameTypeWorker(List<Integer> neighbors, List<String> winners, List<String> winner, String type) {
-        logger.info("get the similar tasks' developers' scores,score > 80.");
         List<Map<String, Double>> lists = featureExtract.getUserScore(type);
         List<Map<String, Double>> list = new ArrayList<>();
         for (int i = 0; i < neighbors.size(); i++) {
@@ -111,7 +109,6 @@ public class Competition {
      * @return
      */
     public int[][] getRelationEdge(Map<String, Integer> index, List<Map<String, Double>> scores, List<String> winners) {
-        logger.info("compute the win or lose times between developers");
         int[][] attraction = new int[index.size()][index.size()];
         int one, two;
         String winner;
@@ -214,7 +211,7 @@ public class Competition {
      * @return
      */
     public List<String> refine(List<String> worker, List<String> winners, int n, String type) {
-        logger.info("using attraction to refine the init recommended developers");
+        logger.info("using attraction relationship to refine the init recommended developers");
         List<String> winner = new ArrayList<>();
         List<Integer> neighbor = getNeighbors(n);
         List<Map<String, Double>> scores = getSameTypeWorker(neighbor, winners, winner, type);
@@ -325,7 +322,6 @@ public class Competition {
      * @return
      */
     public int[] sortRelation(double[] num) {
-        logger.info("sort developers by using attractive relationship");
         Map<Integer, Double> map = new HashMap<>();
         for (int i = 0; i < num.length; i++) {
             map.put(i, num[i]);

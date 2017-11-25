@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.topcoder.dao;
 
 import com.buaa.act.sdp.topcoder.model.user.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface UserDao {
 
     void updateTask(User user);
 
-    User getUserByName(String userName);
+    User getUserByName(@Param("userName") String userName);
 }

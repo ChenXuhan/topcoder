@@ -45,7 +45,7 @@ public class UserService {
     }
 
     public UserInfo getDeveloperInfo(String userName) {
-        logger.info("get developer's development info,userName=" + userName);
+        logger.info("get developer's info from db,userName=" + userName);
         User user = getUserByName(userName);
         if (user == null) {
             return null;
@@ -56,7 +56,7 @@ public class UserService {
     }
 
     public List<Integer> getUserRegistrantTasks(String userName) {
-        logger.info("get developer's registered tasks,userName=" + userName);
+        logger.info("get developer's registered tasks from db,userName=" + userName);
         return challengeRegistrantDao.getUserRegistrantTasks(userName);
     }
 }

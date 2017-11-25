@@ -1,6 +1,5 @@
 package com.buaa.act.sdp.topcoder;
 
-import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.dao.ChallengeItemDao;
 import com.buaa.act.sdp.topcoder.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.topcoder.dao.ChallengeSubmissionDao;
@@ -8,19 +7,23 @@ import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission;
 import com.buaa.act.sdp.topcoder.service.api.ChallengeApi;
+import com.buaa.act.sdp.topcoder.service.api.statistics.ChallengeStatistics;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
-import com.buaa.act.sdp.topcoder.service.recommend.experiment.TaskRecommend;
 import com.buaa.act.sdp.topcoder.service.recommend.cbm.ContentBase;
+import com.buaa.act.sdp.topcoder.service.recommend.experiment.TaskRecommend;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.topcoder.service.statistics.ProjectMsg;
+import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskScores;
-import com.buaa.act.sdp.topcoder.service.api.statistics.ChallengeStatistics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -64,6 +67,9 @@ public class TestChallenge {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private TaskMsg taskMsg;
+
     @Test
     public void testProjectId() {
         System.out.println(taskService.getProjectTasks(-2).size());
@@ -81,66 +87,22 @@ public class TestChallenge {
     }
 
     @Test
-    public void testChallenge() {
-        featureExtract.getFeatures("Assembly Competition");
-        List<ChallengeItem> items = featureExtract.getItems("Assembly Competition");
-        List<String> winner = featureExtract.getWinners("Assembly Competition");
-        System.out.println(items.size() + "\t" + winner.size());
-        Map<String, List<Integer>> map = new HashMap<>();
-        for (int i = 0; i < winner.size(); i++) {
-            if (map.containsKey(winner.get(i))) {
-                map.get(winner.get(i)).add(i);
-            } else {
-                List<Integer> list = new ArrayList<>();
-                list.add(i);
-                map.put(winner.get(i), list);
+    public void getAllTasksAndWinners() {
+        List<ChallengeItem> items = taskMsg.getItems("Assembly Competition");
+        List<String> winners = taskMsg.getWinners("Assembly Competition");
+        items.addAll(taskMsg.getItems("Code"));
+        winners.addAll(taskMsg.getWinners("Code"));
+        items.addAll(taskMsg.getItems("First2Finish"));
+        winners.addAll(taskMsg.getWinners("First2Finish"));
+        System.out.println(items.size() == winners.size());
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\task.txt"));
+            for (int i = 0; i < items.size(); i++) {
+                writer.write(items.get(i).getChallengeId() + "\t" + items.get(i).getChallengeType() + "\t" + winners.get(i) + "\n");
             }
-        }
-        for (Map.Entry<String, List<Integer>> entry : map.entrySet()) {
-            List<Integer> list = entry.getValue();
-            System.out.println(entry.getKey() + "\t" + list.size());
-            for (int j = 0; j < list.size(); j++) {
-                ChallengeItem item = items.get(list.get(j));
-                System.out.println(item.getChallengeName() + " " + item.getPostingDate() + " " + item.getDuration() + " " + Arrays.toString(item.getPrize()) + "\t" + Arrays.toString(item.getTechnology()) + " " + Arrays.toString(item.getPlatforms()));
-            }
-        }
-    }
-
-    @Test
-    public void testPhrase() {
-    }
-
-    @Test
-    public void updateChallenges() {
-        challengeStatistics.updateChallenges();
-    }
-
-    @Test
-    public void challengeSkill() {
-        Set<String> set = new HashSet<>();
-        List<ChallengeItem> items = challengeItemDao.getAllChallenges();
-        Set<String> sets = new HashSet<>();
-        for (ChallengeItem item : items) {
-            if (item.getTechnology() != null) {
-                for (String s : item.getTechnology()) {
-                    sets.add(s);
-                }
-            }
-        }
-        for (String s : Constant.TECHNOLOGIES) {
-            set.add(s);
-        }
-        for (String s : sets) {
-            boolean flag = false;
-            for (String ss : set) {
-                if (ss.startsWith(s)) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                System.out.println(s);
-            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

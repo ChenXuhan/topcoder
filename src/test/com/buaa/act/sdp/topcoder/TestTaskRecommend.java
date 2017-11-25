@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by yang on 2017/3/7.
@@ -29,16 +31,11 @@ public class TestTaskRecommend {
     private Reliability reliability;
 
     @Test
-    public void testFeatureExtract() {
-        featureExtract.getFeatures("Code");
-    }
-
-    @Test
     public void testRecommend() {
 //        Code
 //        First2Finish
 //        Assembly Competition
-        String challengeType = "Code";
+        String challengeType = "First2Finish";
 //        recommendResult.contentBased(challengeType);
 //        recommendResult.classifier(challengeType);
         recommendResult.clusterClassifier(challengeType, 3);

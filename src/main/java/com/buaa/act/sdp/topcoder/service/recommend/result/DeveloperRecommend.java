@@ -36,20 +36,11 @@ public class DeveloperRecommend {
      * @return
      */
     public List<String> recommendWorkers(ChallengeItem item) {
-        logger.info("recommend developers for a new task,taskId=" + item.getChallengeId());
-        double[][] features = featureExtract.getFeatures(item.getChallengeType());
-        List<ChallengeItem> items = featureExtract.getItems(item.getChallengeType());
         List<String> winners = featureExtract.getWinners(item.getChallengeType());
         int position = 0;
-        for (int i = items.size() - 1; i >= 0; i--) {
-            if (items.get(i).getChallengeId() < item.getChallengeId()) {
-                position = i;
-                break;
-            }
-        }
-        double[] feature = featureExtract.generateVector(featureExtract.getSkills(), item);
+        double[][] features = featureExtract.getFeatures(item.getChallengeType(), item.getChallengeId());
         List<Integer> index = new ArrayList<>();
-        List<String> worker = recommendWorker(cluster.getRecommendResult(features, feature, position + 1, 3, winners, index));
+        List<String> worker = recommendWorker(cluster.getRecommendResult(features, 3, winners, index));
         worker = reliability.filter(worker, index, winners, item.getChallengeType());
         worker = competition.refine(worker, winners, position + 1, item.getChallengeType());
         return worker;

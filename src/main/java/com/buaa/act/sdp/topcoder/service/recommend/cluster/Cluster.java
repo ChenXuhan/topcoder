@@ -67,37 +67,27 @@ public class Cluster {
         return tcBayes.getRecommendResult(data, list.size() - 1, winner);
     }
 
-    public Map<String, Double> getRecommendResult(double[][] features, double[] feature, int position, int num, List<String> winners, List<Integer> neighbor) {
+    public Map<String, Double> getRecommendResult(double[][] features, int num, List<String> winners, List<Integer> neighbor) {
         logger.info("recommend developers for new a tasks using cluster based classifier");
-        /**
-         * 选取聚类的数据集
-         */
-        List<Integer> neighbors = new ArrayList<>(position + 1);
+        int len = features.length;
         Map<Integer, List<Integer>> map = new HashMap<>();
-        for (int i = 0; i < position; i++) {
-            neighbors.add(i);
+        List<String> user = new ArrayList<>(len);
+        for (int i = 0; i < len; i++) {
+            user.add(winners.get(i));
         }
-        double[][] data = new double[position + 1][features[0].length];
-        List<String> user = new ArrayList<>(position + 1);
-        Maths.copy(features, data, winners, user, neighbors);
-        data[position] = feature;
-        user.add(winners.get(position));
-        Instances instances = WekaArffUtil.getClusterInstances(data);
-        SimpleKMeans kMeans = buildCluster(instances, position, num, map);
+        Instances instances = WekaArffUtil.getClusterInstances(features);
+        SimpleKMeans kMeans = buildCluster(instances, len - 1, num, map);
         int k = 0;
         try {
-            k = kMeans.clusterInstance(instances.instance(position));
+            k = kMeans.clusterInstance(instances.instance(len - 1));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        /**
-         * 在聚类中进行分类
-         */
         List<Integer> list = new ArrayList<>();
         list.addAll(map.get(k));
         neighbor.addAll(map.get(k));
-        list.add(position);
-        return getClassifierResult(list, user, data);
+        list.add(len - 1);
+        return getClassifierResult(list, user, features);
     }
 
 }
