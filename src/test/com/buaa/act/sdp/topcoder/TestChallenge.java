@@ -10,7 +10,7 @@ import com.buaa.act.sdp.topcoder.service.api.ChallengeApi;
 import com.buaa.act.sdp.topcoder.service.api.statistics.ChallengeStatistics;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
 import com.buaa.act.sdp.topcoder.service.recommend.cbm.ContentBase;
-import com.buaa.act.sdp.topcoder.service.recommend.experiment.TaskRecommend;
+import com.buaa.act.sdp.topcoder.service.recommend.experiment.TaskRecommendExperiment;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.topcoder.service.statistics.ProjectMsg;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
@@ -49,7 +49,7 @@ public class TestChallenge {
     private ChallengeStatistics challengeStatistics;
 
     @Autowired
-    private TaskRecommend recommendResult;
+    private TaskRecommendExperiment recommendResult;
 
     @Autowired
     private FeatureExtract featureExtract;

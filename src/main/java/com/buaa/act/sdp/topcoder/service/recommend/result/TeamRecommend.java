@@ -221,8 +221,8 @@ public class TeamRecommend {
      * @param projectId
      * @return
      */
-    public List<String> findBestTeamMaxLogit(int projectId) {
-        logger.info("using max-logit to recommend a team for a project,projectId"+projectId);
+    public double findBestTeamMaxLogit(int projectId) {
+        logger.info("using max-logit to recommend a team for a project,projectId" + projectId);
         List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
         List<List<String>> workers = recommendWorkersForEachTask(projectId);
         List<String> allWorkers = new ArrayList<>();
@@ -230,12 +230,12 @@ public class TeamRecommend {
         double[][] collaboration = getCollaborations(taskIds, workerIndex);
         int[] bestIndex = new int[workers.size()];
         double teamStrength = maxLogit(bestIndex, workerIndex, workers, collaboration);
-        System.out.println(teamStrength);
         List<String> bestTeam = new ArrayList<>(bestIndex.length);
         for (int i = 0; i < bestIndex.length; i++) {
             bestTeam.add(allWorkers.get(bestIndex[i]));
         }
-        return bestTeam;
+//        return bestTeam;
+        return teamStrength;
     }
 
     /**
@@ -244,7 +244,7 @@ public class TeamRecommend {
      * @param projectId
      * @return
      */
-    public List<String> teamRecommend(int projectId) {
+    public double teamRecommend(int projectId) {
         logger.info("recommend a team for project using heuristic algorithm");
         List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
         List<List<String>> workers = recommendWorkersForEachTask(projectId);
@@ -252,11 +252,12 @@ public class TeamRecommend {
         Map<String, Integer> workerIndex = getWorkerIndex(workers, allWorkers);
         double[][] collaboration = getCollaborations(taskIds, workerIndex);
         int[] bestIndex = new int[workers.size()];
-        searchForMaxCollaboration(bestIndex, workerIndex, workers, collaboration);
+        double teamStrength = searchForMaxCollaboration(bestIndex, workerIndex, workers, collaboration);
         List<String> bestTeam = new ArrayList<>(bestIndex.length);
         for (int i = 0; i < bestIndex.length; i++) {
             bestTeam.add(allWorkers.get(bestIndex[i]));
         }
-        return bestTeam;
+//        return bestTeam;
+        return teamStrength;
     }
 }

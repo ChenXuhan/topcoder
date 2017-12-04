@@ -1,5 +1,6 @@
 package com.buaa.act.sdp.topcoder;
 
+import com.buaa.act.sdp.topcoder.service.recommend.experiment.TeamRecommendExperiment;
 import com.buaa.act.sdp.topcoder.service.recommend.result.TeamRecommend;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +18,18 @@ import java.util.List;
 public class TestTeamRecommend {
 
     @Autowired
-    public TeamRecommend teamRecommend;
+    private TeamRecommend teamRecommend;
+    @Autowired
+    private TeamRecommendExperiment teamRecommendExperiment;
+
 
     @Test
-    public void testProjectId(){
-        List<String>bestTeam= teamRecommend.findBestTeamMaxLogit(7282);
-        System.out.println(bestTeam.size());
-        System.out.println(bestTeam);
+    public void testProjectToTasks(){
+        teamRecommendExperiment.getTestProjectId();
+    }
+
+    @Test
+    public void testCompareTeamRecommend(){
+        teamRecommendExperiment.compareTeamRecommendResult();
     }
 }

@@ -243,22 +243,25 @@ public class TaskMsg {
     }
 
     /**
-     * 按照task id升序获取所有的任务
+     * 获取三种类型任务
      *
+     * @param order 是否需要排序
      * @return
      */
-    public List<ChallengeItem> getTasks() {
+    public List<ChallengeItem> getTasks(boolean order) {
         logger.info("get all 3 type tasks");
         List<ChallengeItem> list = new ArrayList<>();
         list.addAll(getItems("Code"));
         list.addAll(getItems("First2Finish"));
         list.addAll(getItems("Assembly Competition"));
-        Collections.sort(list, new Comparator<ChallengeItem>() {
-            @Override
-            public int compare(ChallengeItem o1, ChallengeItem o2) {
-                return o1.getChallengeId() - o2.getChallengeId();
-            }
-        });
+        if (order) {
+            Collections.sort(list, new Comparator<ChallengeItem>() {
+                @Override
+                public int compare(ChallengeItem o1, ChallengeItem o2) {
+                    return o1.getChallengeId() - o2.getChallengeId();
+                }
+            });
+        }
         return list;
     }
 

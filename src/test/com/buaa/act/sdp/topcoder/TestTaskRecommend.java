@@ -1,7 +1,7 @@
 package com.buaa.act.sdp.topcoder;
 
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
-import com.buaa.act.sdp.topcoder.service.recommend.experiment.TaskRecommend;
+import com.buaa.act.sdp.topcoder.service.recommend.experiment.TaskRecommendExperiment;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.Reliability;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class TestTaskRecommend {
     private FeatureExtract featureExtract;
 
     @Autowired
-    private TaskRecommend recommendResult;
+    private TaskRecommendExperiment recommendResult;
 
     @Autowired
     private Reliability reliability;

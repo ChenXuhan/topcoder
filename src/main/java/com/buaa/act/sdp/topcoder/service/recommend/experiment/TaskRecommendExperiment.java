@@ -27,7 +27,7 @@ import java.util.Set;
  * Created by yang on 2017/2/24.
  */
 @Service
-public class TaskRecommend {
+public class TaskRecommendExperiment {
 
     @Autowired
     private Bayes bayes;
@@ -221,7 +221,7 @@ public class TaskRecommend {
         System.out.println("DCW_DS");
         int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         double[] mpp = new double[20];
-        List<ChallengeItem> items = taskMsg.getTasks();
+        List<ChallengeItem> items = taskMsg.getTasks(true);
         List<String> winners = taskMsg.getWinners(challengeType);
         List<ChallengeItem> tasks = taskMsg.getItems(challengeType);
         int[] num = getTestDataSet(winners.size());
