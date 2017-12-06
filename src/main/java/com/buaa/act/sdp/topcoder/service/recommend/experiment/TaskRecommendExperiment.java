@@ -221,7 +221,7 @@ public class TaskRecommendExperiment {
         System.out.println("DCW_DS");
         int[] count = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         double[] mpp = new double[20];
-        List<ChallengeItem> items = taskMsg.getTasks(true);
+        List<ChallengeItem> items = taskMsg.getTasks();
         List<String> winners = taskMsg.getWinners(challengeType);
         List<ChallengeItem> tasks = taskMsg.getItems(challengeType);
         int[] num = getTestDataSet(winners.size());

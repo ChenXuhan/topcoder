@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
-
 /**
  * Created by yang on 2017/6/4.
  */
@@ -24,12 +22,21 @@ public class TestTeamRecommend {
 
 
     @Test
-    public void testProjectToTasks(){
-        teamRecommendExperiment.getTestProjectId();
+    public void testProjectToTasks() {
+        System.out.println(teamRecommendExperiment.getTestProjectId());
     }
 
     @Test
-    public void testCompareTeamRecommend(){
-        teamRecommendExperiment.compareTeamRecommendResult();
+    public void testCompareTeamRecommend() {
+        try {
+            teamRecommendExperiment.compareTeamRecommendResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testTeamRecommend() throws Exception {
+        System.out.println(teamRecommend.generateBestTeamUsingHeuristic(9200));
     }
 }

@@ -4,6 +4,7 @@ import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.util.WekaArffUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Instances;
@@ -17,7 +18,7 @@ import java.util.Map;
  * Created by yang on 2017/3/9.
  */
 @Component
-public class TcBayes extends NaiveBayes {
+public class TcBayes{
 
     private static final Logger logger = LoggerFactory.getLogger(TcBayes.class);
 
@@ -41,9 +42,10 @@ public class TcBayes extends NaiveBayes {
             return map;
         }
         try {
+            NaiveBayes bayes = new NaiveBayes();
             Instances instances = WekaArffUtil.getClassifierInstances(features, winners);
-            buildClassifier(new Instances(instances, 0, position));
-            double[] dist = distributionForInstance(instances.instance(position));
+            bayes.buildClassifier(new Instances(instances, 0, position));
+            double[] dist = bayes.distributionForInstance(instances.instance(position));
             if (dist == null) {
                 throw new Exception("Null distribution predicted");
             }
@@ -99,9 +101,10 @@ public class TcBayes extends NaiveBayes {
                 }
                 return result;
             }
-            buildClassifier(new Instances(instances, 0, position));
+            NaiveBayes bayes = new NaiveBayes();
+            bayes.buildClassifier(new Instances(instances, 0, position));
             for (int i = 0; i < features.size() - position; i++) {
-                double[] dist = distributionForInstance(instances.instance(position + i));
+                double[] dist =bayes.distributionForInstance(instances.instance(position + i));
                 if (dist == null) {
                     throw new Exception("Null distribution predicted");
                 }

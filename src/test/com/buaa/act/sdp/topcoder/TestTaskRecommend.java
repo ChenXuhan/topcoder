@@ -1,9 +1,12 @@
 package com.buaa.act.sdp.topcoder;
 
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.topcoder.service.basic.TaskService;
 import com.buaa.act.sdp.topcoder.service.recommend.experiment.TaskRecommendExperiment;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.Reliability;
+import com.buaa.act.sdp.topcoder.service.recommend.result.DeveloperRecommend;
+import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +25,9 @@ import java.util.List;
 public class TestTaskRecommend {
 
     @Autowired
-    private FeatureExtract featureExtract;
-
+    private TaskService taskService;
+    @Autowired
+    private DeveloperRecommend developerRecommend;
     @Autowired
     private TaskRecommendExperiment recommendResult;
 
@@ -35,7 +39,7 @@ public class TestTaskRecommend {
 //        Code
 //        First2Finish
 //        Assembly Competition
-        String challengeType = "First2Finish";
+        String challengeType = "Code";
 //        recommendResult.contentBased(challengeType);
 //        recommendResult.classifier(challengeType);
         recommendResult.clusterClassifier(challengeType, 3);
@@ -49,32 +53,8 @@ public class TestTaskRecommend {
     }
 
     @Test
-    public void taskTime() {
-        List<ChallengeItem> items = featureExtract.getItems("First2Finish");
-        List<String> time = new ArrayList<>(items.size());
-        for (ChallengeItem item : items) {
-            time.add(item.getPostingDate().substring(0, 10));
-        }
-//        Collections.sort(time, new Comparator<String>() {
-//            @Override
-//            public int compare(String o1, String o2) {
-//                String[]a=o1.split("-");
-//                String[]b=o2.split("-");
-//                if(Integer.parseInt(a[0])!=Integer.parseInt(b[0])){
-//                    return Integer.parseInt(a[0])-Integer.parseInt(b[0]);
-//                }
-//                if(Integer.parseInt(a[1])!=Integer.parseInt(b[1])){
-//                    return Integer.parseInt(a[1])-Integer.parseInt(b[1]);
-//                }
-//                return Integer.parseInt(a[2])-Integer.parseInt(b[2]);
-//            }
-//        });
-        int[][] count = new int[12][12];
-        for (String a : time) {
-            count[Integer.parseInt(a.split("-")[0]) - 2006][Integer.parseInt(a.split("-")[1]) - 1]++;
-        }
-        for (int i = 0; i < count.length; i++) {
-            System.out.println(2006 + i + "\t" + Arrays.toString(count[i]));
-        }
+    public void taskMsg() {
+        ChallengeItem item=taskService.getChallengeById(30036600);
+        System.out.println(developerRecommend.recommendWorkers(item));
     }
 }

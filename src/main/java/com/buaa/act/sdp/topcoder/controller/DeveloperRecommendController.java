@@ -65,7 +65,7 @@ public class DeveloperRecommendController {
                 response.setNotFoundResponse();
                 return response;
             }
-            List<String> developers = teamRecommend.teamRecommend(projectId);
+            List<String> developers = teamRecommend.generateBestTeamUsingHeuristic(projectId);
             response.setSuccessResponse(developers);
         } catch (Exception e) {
             logger.error("error occurred in team recommendation,projectId=" + projectId, e);

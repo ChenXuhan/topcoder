@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.topcoder.service.recommend.result;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
+import com.buaa.act.sdp.topcoder.common.RecommendTask;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.service.recommend.network.Collaboration;
 import com.buaa.act.sdp.topcoder.service.statistics.MsgFilter;
@@ -9,9 +10,11 @@ import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.Future;
 
 /**
  * Created by yang on 2017/6/5.
@@ -31,6 +34,8 @@ public class TeamRecommend {
     private DeveloperRecommend developerRecommend;
     @Autowired
     private Collaboration collaboration;
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     /**
      * 候选者下标
@@ -59,17 +64,32 @@ public class TeamRecommend {
      * @param projectId
      * @return
      */
-    public List<List<String>> recommendWorkersForEachTask(int projectId) {
+    public List<List<String>> recommendWorkersForEachTask(int projectId) throws Exception {
         logger.info("recommend developers for each task in a project,proejctId=" + projectId);
         List<Integer> ids = projectMsg.getProjectToChallenges().get(projectId);
         Set<Integer> sets = new HashSet(ids == null ? 0 : ids.size());
         sets.addAll(ids);
         List<List<String>> workers = new ArrayList<>(ids.size());
         List<ChallengeItem> items = taskMsg.getChallenges(sets);
+        List<Future<List<String>>> futureList = new ArrayList<>(items.size());
         for (ChallengeItem item : items) {
-            workers.add(developerRecommend.recommendWorkers(item));
+            futureList.add(recommendWorkersForTask(item));
+        }
+        for (Future<List<String>> future : futureList) {
+            workers.add(future.get());
         }
         return workers;
+    }
+
+    /**
+     * 利用线程池为项目内每个任务推荐
+     *
+     * @param item
+     * @return
+     */
+    public Future<List<String>> recommendWorkersForTask(ChallengeItem item) {
+        RecommendTask recommendTask = new RecommendTask(item, developerRecommend);
+        return threadPoolTaskExecutor.submit(recommendTask);
     }
 
     /**
@@ -104,7 +124,6 @@ public class TeamRecommend {
      * @return
      */
     public double calTeamCollaboration(int[] workerIndex, double[][] collaboration) {
-        logger.info("compute the team strength in a team");
         double result = 0.0;
         for (int i = 0; i < workerIndex.length; i++) {
             for (int j = i + 1; j < workerIndex.length; j++) {
@@ -146,10 +165,11 @@ public class TeamRecommend {
      * @return
      */
     public double maxLogit(int[] bestIndex, Map<String, Integer> workerIndex, List<List<String>> workers, double[][] collaboration) {
-        Random random = new Random();
+        Random random = new Random(System.currentTimeMillis());
         int[] index = new int[workers.size()];
+        int t;
         for (int i = 0; i < index.length; i++) {
-            int t = random.nextInt(workers.get(i).size());
+            t = random.nextInt(workers.get(i).size());
             index[i] = workerIndex.get(workers.get(i).get(t));
             bestIndex[i] = index[i];
         }
@@ -179,27 +199,24 @@ public class TeamRecommend {
      * @return
      */
     public double searchForMaxCollaboration(int[] bestIndex, Map<String, Integer> workerIndex, List<List<String>> workers, double[][] collaboration) {
-        logger.info("random select a developer for each task");
-        Random random = new Random();
-        int[] index = new int[workers.size()];
         int t, m, position, role;
-        for (int i = 0; i < index.length; i++) {
+        Random random = new Random(System.currentTimeMillis());
+        for (int i = 0; i < bestIndex.length; i++) {
             t = random.nextInt(workers.get(i).size());
-            index[i] = workerIndex.get(workers.get(i).get(t));
-            bestIndex[i] = index[i];
+            bestIndex[i] = workerIndex.get(workers.get(i).get(t));
         }
-        double teamStrength = calTeamCollaboration(index, collaboration), newTeamStrength, currentScore;
+        double teamStrength = calTeamCollaboration(bestIndex, collaboration), newTeamStrength, currentScore;
         List<String> worker;
         logger.info("searching the best role each step");
         for (int i = 0; i < Constant.ITERATIONS; i++) {
             role = 0;
-            position = index[role];
+            position = bestIndex[role];
             newTeamStrength = teamStrength;
             for (int j = 0; j < workers.size(); j++) {
                 worker = workers.get(j);
                 for (int k = 0; k < worker.size(); k++) {
                     m = workerIndex.get(worker.get(k));
-                    currentScore = generateNewTeam(teamStrength, index, collaboration, j, m);
+                    currentScore = generateNewTeam(teamStrength, bestIndex, collaboration, j, m);
                     if (currentScore > newTeamStrength) {
                         newTeamStrength = currentScore;
                         role = j;
@@ -209,10 +226,66 @@ public class TeamRecommend {
             }
             if (newTeamStrength > teamStrength) {
                 teamStrength = newTeamStrength;
-                index[role] = position;
+                bestIndex[role] = position;
             }
         }
         return teamStrength;
+    }
+
+    /**
+     * 从每一个任务的Top 5个开发者中选取最佳组合
+     *
+     * @param result        团队协作值最大值
+     * @param index         每一个角色的位置0-5
+     * @param workers       每一个任务的开发者候选集
+     * @param workerIndex
+     * @param collaboration
+     * @param position      确定当前第k个任务的开发者
+     * @param team          项目团队
+     */
+    public void maxCollaboration(double[] result, int[] index, List<List<String>> workers, Map<String, Integer> workerIndex, double[][] collaboration, int position, List<String> team) {
+        if (position == index.length) {
+            int[] bestIndex = new int[index.length];
+            for (int i = 0; i < bestIndex.length; i++) {
+                bestIndex[i] = workerIndex.get(workers.get(i).get(index[i]));
+            }
+            double teamStrength = calTeamCollaboration(bestIndex, collaboration);
+            if (result[0] > teamStrength) {
+                result[0] = teamStrength;
+                for (int i = 0; i < team.size(); i++) {
+                    team.set(i, workers.get(i).get(index[i]));
+                }
+            }
+            return;
+        }
+        int top = 5;
+        for (int i = 0; i < workers.get(position).size() && i < top; i++) {
+            index[position] = i;
+            maxCollaboration(result, index, workers, workerIndex, collaboration, position + 1, team);
+        }
+    }
+
+    /**
+     * 从Top5 developer中选择最佳团队组合
+     *
+     * @param projectId
+     * @return
+     */
+    public List<String> findBestTeamTopKDevelopers(int projectId) throws Exception {
+        logger.info("select a team in top five de developers for a project,projectId" + projectId);
+        List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
+        List<List<String>> workers = recommendWorkersForEachTask(projectId);
+        List<String> allWorkers = new ArrayList<>();
+        Map<String, Integer> workerIndex = getWorkerIndex(workers, allWorkers);
+        double[][] collaboration = getCollaborations(taskIds, workerIndex);
+        int[] index = new int[workers.size()];
+        double[] teamStrength = new double[1];
+        List<String> team = new ArrayList<>(workers.size());
+        for (int i = 0; i < workers.size(); i++) {
+            team.add(workers.get(i).get(0));
+        }
+        maxCollaboration(teamStrength, index, workers, workerIndex, collaboration, 0, team);
+        return team;
     }
 
     /**
@@ -221,7 +294,7 @@ public class TeamRecommend {
      * @param projectId
      * @return
      */
-    public double findBestTeamMaxLogit(int projectId) {
+    public List<String> findBestTeamMaxLogit(int projectId) throws Exception {
         logger.info("using max-logit to recommend a team for a project,projectId" + projectId);
         List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
         List<List<String>> workers = recommendWorkersForEachTask(projectId);
@@ -229,13 +302,12 @@ public class TeamRecommend {
         Map<String, Integer> workerIndex = getWorkerIndex(workers, allWorkers);
         double[][] collaboration = getCollaborations(taskIds, workerIndex);
         int[] bestIndex = new int[workers.size()];
-        double teamStrength = maxLogit(bestIndex, workerIndex, workers, collaboration);
+        maxLogit(bestIndex, workerIndex, workers, collaboration);
         List<String> bestTeam = new ArrayList<>(bestIndex.length);
         for (int i = 0; i < bestIndex.length; i++) {
             bestTeam.add(allWorkers.get(bestIndex[i]));
         }
-//        return bestTeam;
-        return teamStrength;
+        return bestTeam;
     }
 
     /**
@@ -244,7 +316,7 @@ public class TeamRecommend {
      * @param projectId
      * @return
      */
-    public double teamRecommend(int projectId) {
+    public List<String> generateBestTeamUsingHeuristic(int projectId) throws Exception {
         logger.info("recommend a team for project using heuristic algorithm");
         List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
         List<List<String>> workers = recommendWorkersForEachTask(projectId);
@@ -252,12 +324,35 @@ public class TeamRecommend {
         Map<String, Integer> workerIndex = getWorkerIndex(workers, allWorkers);
         double[][] collaboration = getCollaborations(taskIds, workerIndex);
         int[] bestIndex = new int[workers.size()];
-        double teamStrength = searchForMaxCollaboration(bestIndex, workerIndex, workers, collaboration);
+        searchForMaxCollaboration(bestIndex, workerIndex, workers, collaboration);
         List<String> bestTeam = new ArrayList<>(bestIndex.length);
         for (int i = 0; i < bestIndex.length; i++) {
             bestTeam.add(allWorkers.get(bestIndex[i]));
         }
-//        return bestTeam;
+        return bestTeam;
+    }
+
+    public double maxLogitTeam(Map<String, Integer> workerIndex, double[][] collaboration, List<List<String>> workers) {
+        int[] bestIndex = new int[workers.size()];
+        double teamStrength = maxLogit(bestIndex, workerIndex, workers, collaboration);
         return teamStrength;
     }
+
+    public double heuristicTeam(Map<String, Integer> workerIndex, List<List<String>> workers, double[][] collaboration) {
+        int[] bestIndex = new int[workers.size()];
+        double teamStrength = searchForMaxCollaboration(bestIndex, workerIndex, workers, collaboration);
+        return teamStrength;
+    }
+
+    public double topKDeveloperTeam(List<List<String>> workers, Map<String, Integer> workerIndex, double[][] collaboration) {
+        int[] index = new int[workers.size()];
+        double[] teamStrength = new double[1];
+        List<String> team = new ArrayList<>(workers.size());
+        for (int i = 0; i < workers.size(); i++) {
+            team.add(workers.get(i).get(0));
+        }
+        maxCollaboration(teamStrength, index, workers, workerIndex, collaboration, 0, team);
+        return teamStrength[0];
+    }
+
 }

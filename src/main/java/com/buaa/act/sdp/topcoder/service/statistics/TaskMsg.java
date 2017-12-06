@@ -94,30 +94,37 @@ public class TaskMsg {
         }
     }
 
+    /**
+     * 获取项目内的待推荐任务，均分3份，取后2份
+     *
+     * @param set 项目内的任务
+     * @return
+     */
     public List<ChallengeItem> getChallenges(Set<Integer> set) {
         List<ChallengeItem> items = new ArrayList<>(set.size());
+        int start = 3;
         if (codeItems.isEmpty()) {
             initCode();
         }
-        for (ChallengeItem item : codeItems) {
-            if (set.contains(item.getChallengeId())) {
-                items.add(item);
+        for (int i = codeItems.size() / start; i < codeItems.size(); i++) {
+            if (set.contains(codeItems.get(i).getChallengeId())) {
+                items.add(codeItems.get(i));
             }
         }
         if (f2fItems.isEmpty()) {
             initF2f();
         }
-        for (ChallengeItem item : f2fItems) {
-            if (set.contains(item.getChallengeId())) {
-                items.add(item);
+        for (int i = f2fItems.size() / start; i < f2fItems.size(); i++) {
+            if (set.contains(f2fItems.get(i).getChallengeId())) {
+                items.add(f2fItems.get(i));
             }
         }
         if (assemblyItems.isEmpty()) {
             initAssembly();
         }
-        for (ChallengeItem item : assemblyItems) {
-            if (set.contains(item.getChallengeId())) {
-                items.add(item);
+        for (int i = assemblyItems.size() / start; i < assemblyItems.size(); i++) {
+            if (set.contains(assemblyItems.get(i).getChallengeId())) {
+                items.add(assemblyItems.get(i));
             }
         }
         return items;
@@ -245,23 +252,20 @@ public class TaskMsg {
     /**
      * 获取三种类型任务
      *
-     * @param order 是否需要排序
      * @return
      */
-    public List<ChallengeItem> getTasks(boolean order) {
+    public List<ChallengeItem> getTasks() {
         logger.info("get all 3 type tasks");
         List<ChallengeItem> list = new ArrayList<>();
         list.addAll(getItems("Code"));
         list.addAll(getItems("First2Finish"));
         list.addAll(getItems("Assembly Competition"));
-        if (order) {
-            Collections.sort(list, new Comparator<ChallengeItem>() {
-                @Override
-                public int compare(ChallengeItem o1, ChallengeItem o2) {
-                    return o1.getChallengeId() - o2.getChallengeId();
-                }
-            });
-        }
+        Collections.sort(list, new Comparator<ChallengeItem>() {
+            @Override
+            public int compare(ChallengeItem o1, ChallengeItem o2) {
+                return o1.getChallengeId() - o2.getChallengeId();
+            }
+        });
         return list;
     }
 
