@@ -60,15 +60,12 @@ public class TeamRecommendExperiment {
     public void compareTeamRecommendResult() throws Exception {
         List<Integer> projectIdList = getTestProjectId();
         int compareMaxlogit = 0, compareTopK = 0;
-        System.out.println(projectIdList.size());
-        int k = 0;
         for (int projectId : projectIdList) {
             List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
             List<List<String>> workers = teamRecommend.recommendWorkersForEachTask(projectId);
             List<String> allWorkers = new ArrayList<>();
             Map<String, Integer> workerIndex = teamRecommend.getWorkerIndex(workers, allWorkers);
             double[][] collaboration = teamRecommend.getCollaborations(taskIds, workerIndex);
-            System.out.println(++k + "\t" + projectId+"\t"+workers.size());
             double a = teamRecommend.maxLogitTeam(workerIndex, collaboration, workers);
             double b = teamRecommend.heuristicTeam(workerIndex, workers, collaboration);
             double c = teamRecommend.topKDeveloperTeam(workers, workerIndex, collaboration);
