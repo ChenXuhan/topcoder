@@ -88,7 +88,7 @@ public class TaskRecommendExperiment {
         int[] num = getTestDataSet(winners.size());
         System.out.println("CBM");
         for (int i = 0; i < num.length; i++) {
-            double[][] features = featureExtract.getFeatures(challengeType, items.get(num[i]).getChallengeId());
+            double[][] features = featureExtract.getFeatures(challengeType, items.get(num[i]));
             Map<String, Double> cbmResult = contentBase.getRecommendResult(features, num[i], scores, winners);
             worker = developerRecommend.recommendWorker(cbmResult);
             calculateMetircs(winners.get(num[i]), worker, counts, mpp);
@@ -122,7 +122,7 @@ public class TaskRecommendExperiment {
         int[] num = getTestDataSet(winners.size());
         System.out.println("UCL");
         for (int i = 0; i < num.length; i++) {
-            double[][] features = featureExtract.getFeatures(challengeType, items.get(num[i]).getChallengeId());
+            double[][] features = featureExtract.getFeatures(challengeType, items.get(num[i]));
             double[][] data = new double[num[i] + 1][features[0].length];
             List<String> user = new ArrayList<>(num[i] + 1);
             List<Integer> index = new ArrayList<>(num[i] + 1);
@@ -163,7 +163,7 @@ public class TaskRecommendExperiment {
         int[] num = getTestDataSet(winners.size());
         List<String> worker;
         for (int i = 0; i < num.length; i++) {
-            double[][] features = featureExtract.getFeatures(challengeType, items.get(num[i]).getChallengeId());
+            double[][] features = featureExtract.getFeatures(challengeType, items.get(num[i]));
             List<Integer> index = localClassifier.getNeighbor(features, num[i]);
             Map<String, Double> tcResult = localClassifier.getRecommendResult(features, winners, index);
             worker = developerRecommend.recommendWorker(tcResult);
@@ -196,7 +196,7 @@ public class TaskRecommendExperiment {
             int[] num = getTestDataSet(winners.size());
             for (int i = 0; i < num.length; i++) {
                 List<Integer> index = new ArrayList<>();
-                double[][] features = featureExtract.getFeatures(challengeType, items.get(num[i]).getChallengeId());
+                double[][] features = featureExtract.getFeatures(challengeType, items.get(num[i]));
                 Map<String, Double> result = cluster.getRecommendResult(features, n, winners, index);
                 worker = developerRecommend.recommendWorker(result);
                 calculateMetircs(winners.get(num[i]), worker, counts, mpp);

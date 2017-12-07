@@ -92,7 +92,7 @@ public class Reliability {
         avgSubRate /= worker.size();
         List<String> result = new ArrayList<>();
         for (int i = 0; i < worker.size(); i++) {
-            if (winRate.get(i) < avgWinRate && subRate.get(i) < avgSubRate && i > 6) {
+            if (winRate.get(i) < avgWinRate && subRate.get(i) < avgSubRate && i >= 6) {
                 continue;
             }
             result.add(worker.get(i));

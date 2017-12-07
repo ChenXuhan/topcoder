@@ -84,7 +84,7 @@ public class WekaArffUtil {
     public static Map<Integer, String> getWinnerIndex(List<String> winner) {
         Map<Integer, String> map = new HashMap<>();
         Set<String> set = new LinkedHashSet<>();
-        for (int i = 0; i < winner.size(); i++) {
+        for (int i = 0; i < winner.size()-1; i++) {
             set.add(winner.get(i));
         }
         int k = 0;

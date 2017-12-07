@@ -136,25 +136,26 @@ public class FeatureExtract {
     }
 
     /**
-     * 需求和标题使用的长度,没有处理文本
+     * 某一任务前的所任任务特征向量
      *
      * @param type
      * @return
      */
-    public double[][] generateVectors(String type, int challengeId) {
+    public double[][] generateVectors(String type, ChallengeItem item) {
         List<ChallengeItem> items = getItems(type);
         Set<String> set = getSkills();
         int k = 0;
         for (int i = 0; i < items.size(); i++) {
-            k++;
-            if (challengeId == items.get(i).getChallengeId()) {
+            if (item.getChallengeId() <= items.get(i).getChallengeId()) {
                 break;
             }
+            k++;
         }
-        double[][] features = new double[k][];
+        double[][] features = new double[k + 1][];
         for (int i = 0; i < k; i++) {
             features[i] = generateVector(set, items.get(i));
         }
+        features[k] = generateVector(set, item);
         return features;
     }
 
@@ -200,9 +201,9 @@ public class FeatureExtract {
         return skills;
     }
 
-    public double[][] getFeatures(String challengeType, int challengeId) {
-        logger.info("generate tasks features vector, taskId=" + challengeId);
-        return generateVectors(challengeType, challengeId);
+    public double[][] getFeatures(String challengeType, ChallengeItem item) {
+        logger.info("generate tasks features vector, taskId=" + item.getChallengeId());
+        return generateVectors(challengeType, item);
     }
 
 }

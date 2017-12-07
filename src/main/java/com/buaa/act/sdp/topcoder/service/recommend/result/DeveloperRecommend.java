@@ -37,8 +37,11 @@ public class DeveloperRecommend {
      */
     public List<String> recommendWorkers(ChallengeItem item) {
         List<String> winners = featureExtract.getWinners(item.getChallengeType());
+        double[][] features = featureExtract.getFeatures(item.getChallengeType(), item);
+        if (features.length <= 1) {
+            return new ArrayList<>();
+        }
         int position = 0;
-        double[][] features = featureExtract.getFeatures(item.getChallengeType(), item.getChallengeId());
         List<Integer> index = new ArrayList<>();
         List<String> worker = recommendWorker(cluster.getRecommendResult(features, 3, winners, index));
         worker = reliability.filter(worker, index, winners, item.getChallengeType());
@@ -55,6 +58,9 @@ public class DeveloperRecommend {
     public List<String> recommendWorker(Map<String, Double> map) {
         logger.info("sort the developers according their winning probability");
         List<String> workers = new ArrayList<>();
+        if (map == null || map.size() == 0) {
+            return workers;
+        }
         List<Map.Entry<String, Double>> list = new ArrayList<>();
         list.addAll(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {

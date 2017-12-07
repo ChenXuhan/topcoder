@@ -1,5 +1,6 @@
 package com.buaa.act.sdp.topcoder.controller;
 
+import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.common.TCResponse;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
@@ -41,6 +42,11 @@ public class DeveloperRecommendController {
             if (item == null) {
                 logger.info("task taskId=" + taskId + " does not exist!");
                 response.setNotFoundResponse();
+                return response;
+            }
+            if(!Constant.TASK_TYPE.contains(item.getChallengeType())){
+                logger.info("task taskId=" + taskId + " type not support!");
+                response.setNotSupport();
                 return response;
             }
             List<String> developers = developerRecommend.recommendWorkers(item);

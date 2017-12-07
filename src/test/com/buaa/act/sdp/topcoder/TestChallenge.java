@@ -33,30 +33,8 @@ import java.util.*;
 @ContextConfiguration(locations = "classpath:conf/applicationContext.xml")
 public class TestChallenge {
 
-    @Autowired
-    private ChallengeApi challengeApi;
-
     @Autowired(required = false)
     private ChallengeSubmissionDao challengeSubmissionDao;
-
-    @Autowired(required = false)
-    private ContentBase contentBase;
-
-    @Autowired(required = false)
-    private ChallengeItemDao challengeItemDao;
-
-    @Autowired
-    private ChallengeStatistics challengeStatistics;
-
-    @Autowired
-    private TaskRecommendExperiment recommendResult;
-
-    @Autowired
-    private FeatureExtract featureExtract;
-
-    @Autowired
-    private ProjectMsg projectMsg;
-
 
     @Autowired(required = false)
     private ChallengeRegistrantDao challengeRegistrantDao;
@@ -138,5 +116,12 @@ public class TestChallenge {
             regCount += entry.getValue().size();
         }
         System.out.println(subCount + "\t" + regCount + "\t" + 1.0 * subCount / regCount);
+    }
+
+    @Test
+    public void trainningSet(){
+        System.out.println(taskMsg.getItems("Code").get(1).getChallengeId());
+        System.out.println(taskMsg.getItems("First2Finish").get(1).getChallengeId());
+        System.out.println(taskMsg.getItems("Assembly Competition").get(1).getChallengeId());
     }
 }

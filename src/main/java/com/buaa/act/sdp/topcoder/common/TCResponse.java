@@ -49,4 +49,9 @@ public class TCResponse<T> {
         setDes(Constant.TC_INNER_ERROR_DES);
     }
 
+    public void setNotSupport(){
+        setCode(Constant.TC_NOT_SUPPORT);
+        setDes(Constant.TC_NOT_SUPPORT_DES);
+    }
+
 }
