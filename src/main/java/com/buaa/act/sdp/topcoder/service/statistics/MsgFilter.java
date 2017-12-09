@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.topcoder.service.statistics;
 
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.topcoder.service.basic.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class MsgFilter {
     private ProjectMsg projectMsg;
 
     /**
-     * 对challenge进行过滤
+     * 对challenge进行过滤,提取特征
      *
      * @param challengeItem
      * @param challengeType
@@ -49,6 +50,34 @@ public class MsgFilter {
             return false;
         }
         if (challengeItem.getPrize() == null || challengeItem.getPrize().length == 0 || challengeItem.getPrize()[0].isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean filterTask(ChallengeItem challengeItem){
+        if(challengeItem.getProjectId()<=0){
+            return false;
+        }
+        if (challengeItem.getDetailedRequirements() == null || challengeItem.getDetailedRequirements().length() == 0) {
+            return false;
+        }
+        if (challengeItem.getTechnology() == null || challengeItem.getTechnology().length == 0 || challengeItem.getTechnology()[0].isEmpty()) {
+            return false;
+        }
+        if (challengeItem.getChallengeName() == null || challengeItem.getChallengeName().length() == 0) {
+            return false;
+        }
+        if (challengeItem.getPlatforms() == null|| challengeItem.getPlatforms().length==0) {
+            return false;
+        }
+        if (challengeItem.getPrize() == null || challengeItem.getPrize().length == 0 || challengeItem.getPrize()[0].isEmpty()) {
+            return false;
+        }
+        if(challengeItem.getPostingDate()==null||challengeItem.getPostingDate().length()==0){
+            return false;
+        }
+        if(challengeItem.getSubmissionEndDate()==null||challengeItem.getSubmissionEndDate().length()==0){
             return false;
         }
         return true;

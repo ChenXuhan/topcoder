@@ -60,7 +60,6 @@ public class UpdateTasksAndWorkers {
         }
         JsonElement jsonElement = JsonUtil.getJsonElement(str, "total");
         if (jsonElement.isJsonPrimitive()) {
-            System.out.print(jsonElement.getAsInt());
             return jsonElement.getAsInt();
         }
         return 0;

@@ -68,6 +68,13 @@
         select challengeId from challenge_item
     </select>
 
+    <select id="getChallengeSpecificIds" parameterType="java.util.Set" resultType="java.lang.Integer">
+        select challengeId from challenge_item where challengeType in
+        <foreach collection="set" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <select id="getAllChallenges" resultType="com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem">
         select * from challenge_item
     </select>
@@ -89,4 +96,11 @@
         SELECT challengeId from challenge_item where projectId=#{projectId}
     </select>
 
+    <select id="getMaxTaskId" resultType="int">
+        SELECT max(challengeId) from challenge_item;
+    </select>
+
+    <select id="getMaxProjectId" resultType="int">
+         SELECT max(projectId) from challenge_item;
+    </select>
 </mapper>

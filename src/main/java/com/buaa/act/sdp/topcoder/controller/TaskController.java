@@ -1,13 +1,16 @@
 package com.buaa.act.sdp.topcoder.controller;
 
+import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.common.TCResponse;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.user.Registrant;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
+import com.buaa.act.sdp.topcoder.service.statistics.MsgFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +28,8 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private MsgFilter msgFilter;
 
     @ResponseBody
     @RequestMapping("/detail")
@@ -75,6 +80,52 @@ public class TaskController {
         } catch (Exception e) {
             response.setErrorResponse();
             logger.error("error occurred in getting a task registrants");
+        }
+        return response;
+    }
+
+    @RequestMapping("/upload")
+    @ResponseBody
+    public TCResponse<Boolean> uploadTask(@RequestBody ChallengeItem item) {
+        TCResponse<Boolean> response = new TCResponse<>();
+        try {
+            if (!Constant.TASK_TYPE.contains(item.getChallengeType())) {
+                response.setNotSupport();
+                return response;
+            }
+            if (!msgFilter.filterTask(item)) {
+                response.setMsgMiss();
+                return response;
+            }
+            logger.info("upload task,type=" + item.getChallengeType());
+            taskService.uploadTask(item);
+            response.setSuccessResponse(true);
+        } catch (Exception e) {
+            logger.info("error occurred in uploading new task...");
+            response.setErrorResponse();
+        }
+        return response;
+    }
+
+    @RequestMapping("/similar")
+    @ResponseBody
+    public TCResponse<List<Integer>> getSimilarTasks(@RequestParam("taskId") int taskId) {
+        logger.info("get similar tasks,taskId=" + taskId);
+        TCResponse<List<Integer>> response = new TCResponse<>();
+        try {
+            ChallengeItem item = taskService.getChallengeById(taskId);
+            if (item == null) {
+                response.setNotFoundResponse();
+                return response;
+            }
+            if (!Constant.TASK_TYPE.contains(item.getChallengeType())) {
+                response.setNotSupport();
+                return response;
+            }
+            response.setSuccessResponse(taskService.getSimilerTask(item));
+        } catch (Exception e) {
+            logger.info("error occurred in getting similar tasks...");
+            response.setErrorResponse();
         }
         return response;
     }

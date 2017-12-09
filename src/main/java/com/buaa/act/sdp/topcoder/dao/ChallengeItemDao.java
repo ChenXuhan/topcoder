@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by yang on 2016/10/19.
@@ -18,6 +19,8 @@ public interface ChallengeItemDao {
 
     List<Integer> getChallengeIds();
 
+    List<Integer> getChallengeSpecificIds(@Param("set") Set<String> set);
+
     List<ChallengeItem> getAllChallenges();
 
     void update(ChallengeItem item);
@@ -27,4 +30,8 @@ public interface ChallengeItemDao {
     int projectExist(@Param("projectId") int projectId);
 
     List<Integer> getProjectTasks(@Param("projectId") int projectId);
+
+    int getMaxTaskId();
+
+    int getMaxProjectId();
 }

@@ -54,4 +54,9 @@ public class TCResponse<T> {
         setDes(Constant.TC_NOT_SUPPORT_DES);
     }
 
+    public void setMsgMiss(){
+        setCode(Constant.TC_MSG_MISS);
+        setDes(Constant.TC_MSG_MISS_DES);
+    }
+
 }

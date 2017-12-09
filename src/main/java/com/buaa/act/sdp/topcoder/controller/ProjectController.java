@@ -42,4 +42,19 @@ public class ProjectController {
         }
         return response;
     }
+
+    @ResponseBody
+    @RequestMapping("/max/id")
+    public TCResponse<Integer> getMaxProjectId() {
+        logger.info("get max projectId");
+        TCResponse<Integer> response = new TCResponse<>();
+        try {
+            int projectId = taskService.getMaxProjectId();
+            response.setSuccessResponse(projectId);
+        } catch (Exception e) {
+            logger.error("error occurred when getting max projectId");
+            response.setErrorResponse();
+        }
+        return response;
+    }
 }

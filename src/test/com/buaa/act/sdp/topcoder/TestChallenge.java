@@ -1,5 +1,6 @@
 package com.buaa.act.sdp.topcoder;
 
+import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.dao.ChallengeItemDao;
 import com.buaa.act.sdp.topcoder.dao.ChallengeRegistrantDao;
 import com.buaa.act.sdp.topcoder.dao.ChallengeSubmissionDao;
@@ -7,6 +8,7 @@ import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant;
 import com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission;
 import com.buaa.act.sdp.topcoder.service.api.ChallengeApi;
+import com.buaa.act.sdp.topcoder.service.api.UpdateTasksAndWorkers;
 import com.buaa.act.sdp.topcoder.service.api.statistics.ChallengeStatistics;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
 import com.buaa.act.sdp.topcoder.service.recommend.cbm.ContentBase;
@@ -40,17 +42,20 @@ public class TestChallenge {
     private ChallengeRegistrantDao challengeRegistrantDao;
 
     @Autowired
+    private UpdateTasksAndWorkers updateTasksAndWorkers;
+
+    @Autowired
     private TaskScores taskScores;
 
     @Autowired
-    private TaskService taskService;
+    private ChallengeItemDao challengeItemDao;
 
     @Autowired
     private TaskMsg taskMsg;
 
     @Test
-    public void testProjectId() {
-        System.out.println(taskService.getProjectTasks(-2).size());
+    public void testGetChallengeId() {
+        System.out.println(challengeItemDao.getChallengeSpecificIds(Constant.TASK_TYPE).size());
     }
 
     @Test
@@ -123,5 +128,10 @@ public class TestChallenge {
         System.out.println(taskMsg.getItems("Code").get(1).getChallengeId());
         System.out.println(taskMsg.getItems("First2Finish").get(1).getChallengeId());
         System.out.println(taskMsg.getItems("Assembly Competition").get(1).getChallengeId());
+    }
+
+    @Test
+    public void testGetFinishedTaskCount(){
+        System.out.println(updateTasksAndWorkers.getCompletedChallengeCount());
     }
 }

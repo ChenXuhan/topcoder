@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.topcoder.controller;
 
 import com.buaa.act.sdp.topcoder.common.TCResponse;
+import com.buaa.act.sdp.topcoder.model.user.Competitor;
 import com.buaa.act.sdp.topcoder.model.user.UserInfo;
 import com.buaa.act.sdp.topcoder.service.basic.UserService;
 import org.slf4j.Logger;
@@ -63,4 +64,16 @@ public class UserController {
         return response;
     }
 
+    public TCResponse<List<Competitor>> getMostCompetitors(@RequestParam("userName") String userName) {
+        logger.info("get developer's most attractive competitors, userName=" + userName);
+        TCResponse<List<Competitor>> response = new TCResponse<>();
+        try {
+            List<Competitor> data = userService.getUserCompetitors(userName);
+            response.setSuccessResponse(data);
+        } catch (Exception e) {
+            logger.info("error occurred in getting developer's most attractive competitors, userName=" + userName);
+            response.setErrorResponse();
+        }
+        return response;
+    }
 }
