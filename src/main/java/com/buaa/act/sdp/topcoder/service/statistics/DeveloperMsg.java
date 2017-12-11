@@ -1,7 +1,7 @@
 package com.buaa.act.sdp.topcoder.service.statistics;
 
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
-import com.buaa.act.sdp.topcoder.model.user.WorkerDynamicMsg;
+import com.buaa.act.sdp.topcoder.model.developer.WorkerDynamicMsg;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.util.Maths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,17 +32,17 @@ public class DeveloperMsg {
      * @param scores
      * @param winners
      * @param list
-     * @param challengeItem
+     * @param taskItem
      * @return
      */
-    public Map<String, WorkerDynamicMsg> getDeveloperDynamicMsg(Map<Integer, Map<String, Double>> scores, Map<Integer, String> winners, List<ChallengeItem> list, ChallengeItem challengeItem) {
-        Map<String, WorkerDynamicMsg> map = msgMap.get(challengeItem.getChallengeId());
+    public Map<String, WorkerDynamicMsg> getDeveloperDynamicMsg(Map<Integer, Map<String, Double>> scores, Map<Integer, String> winners, List<TaskItem> list, TaskItem taskItem) {
+        Map<String, WorkerDynamicMsg> map = msgMap.get(taskItem.getChallengeId());
         if (map == null) {
             logger.info("compute developers' dynamic message caches");
             map = new HashMap<>();
             WorkerDynamicMsg msg;
-            for (ChallengeItem item : list) {
-                if (item.getChallengeId() >= challengeItem.getChallengeId()) {
+            for (TaskItem item : list) {
+                if (item.getChallengeId() >= taskItem.getChallengeId()) {
                     break;
                 }
                 Map<String, Double> temp = scores.get(item.getChallengeId());
@@ -55,14 +55,14 @@ public class DeveloperMsg {
                     if (entry.getValue() > 0) {
                         msg.addNumsSubTask();
                     }
-                    if (Maths.isSimilar(challengeItem, item)) {
+                    if (Maths.isSimilar(taskItem, item)) {
                         msg.addNumRegTaskSimilar();
                         if (entry.getValue() > 0) {
                             msg.addNumSubTaskSimilar();
                         }
                         msg.addScoreTotal(entry.getValue());
                     }
-                    if (Maths.dataDistance(challengeItem, item) <= 30) {
+                    if (Maths.dataDistance(taskItem, item) <= 30) {
                         msg.addNumRegTaskTDays();
                         if (entry.getValue() > 0) {
                             msg.addNumSubTaskTDays();
@@ -79,7 +79,7 @@ public class DeveloperMsg {
                     map.put(entry.getKey(), msg);
                 }
             }
-            msgMap.put(challengeItem.getChallengeId(), map);
+            msgMap.put(taskItem.getChallengeId(), map);
         }
         return map;
     }

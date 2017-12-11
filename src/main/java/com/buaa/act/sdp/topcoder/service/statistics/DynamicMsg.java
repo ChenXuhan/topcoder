@@ -1,8 +1,8 @@
 package com.buaa.act.sdp.topcoder.service.statistics;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
-import com.buaa.act.sdp.topcoder.model.user.WorkerDynamicMsg;
+import com.buaa.act.sdp.topcoder.model.developer.WorkerDynamicMsg;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,23 +32,23 @@ public class DynamicMsg {
     /**
      * 获取某一个任务中注册开发者的动态特征 ESEM
      *
-     * @param list          当前任务先前的任务
-     * @param challengeItem 当前任务
-     * @param workers       参与的开发者
+     * @param list     当前任务先前的任务
+     * @param taskItem 当前任务
+     * @param workers  参与的开发者
      * @return
      */
-    public List<double[]> getWorkerDynamicFeature(List<ChallengeItem> list, ChallengeItem challengeItem, List<String> workers) {
-        logger.info("get task's registrants' dynamic features,taskId" + challengeItem.getChallengeId());
+    public List<double[]> getDeveloperDynamicFeature(List<TaskItem> list, TaskItem taskItem, List<String> workers) {
+        logger.info("get task's registrants' dynamic features,taskId" + taskItem.getChallengeId());
         List<double[]> feature = new ArrayList<>();
-        Map<Integer, Map<String, Double>> scores = taskScore.getAllWorkerScores();
-        Map<String, Double> score = scores.get(challengeItem.getChallengeId());
+        Map<Integer, Map<String, Double>> scores = taskScore.getDevelopersScores();
+        Map<String, Double> score = scores.get(taskItem.getChallengeId());
         Map<Integer, String> winners = taskScore.getWinners();
-        Map<String, WorkerDynamicMsg> map = developerMsg.getDeveloperDynamicMsg(scores, winners, list, challengeItem);
+        Map<String, WorkerDynamicMsg> map = developerMsg.getDeveloperDynamicMsg(scores, winners, list, taskItem);
         for (Map.Entry<String, Double> entry : score.entrySet()) {
             double[] temp = new double[10];
             if (map.containsKey(entry.getKey())) {
                 generateDynamicFeature(map.get(entry.getKey()), temp);
-                if (winners.get(challengeItem.getChallengeId()).equals(entry.getKey())) {
+                if (winners.get(taskItem.getChallengeId()).equals(entry.getKey())) {
                     temp[9] = Constant.WINNER;
                 } else if (score.get(entry.getKey()) > 0) {
                     temp[9] = Constant.SUBMITTER;
@@ -70,11 +70,11 @@ public class DynamicMsg {
      * @param worker 参与的开发者
      * @return
      */
-    public List<double[]> getDynamicFeatures(List<ChallengeItem> list, ChallengeItem item, List<String> worker) {
+    public List<double[]> getDynamicFeatures(List<TaskItem> list, TaskItem item, List<String> worker) {
         logger.info("get developers' dynamic features before a new task,taskId" + item.getChallengeId());
         Map<String, WorkerDynamicMsg> map = developerMsg.getDeveloperDynamicMsg(item.getChallengeId());
         if (map == null) {
-            getWorkerDynamicFeature(list, item, new ArrayList<>());
+            getDeveloperDynamicFeature(list, item, new ArrayList<>());
             map = developerMsg.getDeveloperDynamicMsg(item.getChallengeId());
         }
         List<double[]> feature = new ArrayList<>(map.size());

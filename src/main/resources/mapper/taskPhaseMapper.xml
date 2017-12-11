@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buaa.act.sdp.topcoder.dao.TaskPhaseDao">
+
+    <insert id="insertBatch" parameterType="com.buaa.act.sdp.topcoder.model.task.TaskPhase"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        insert into
+        challenge_phase(challengeID,type,status,scheduledStartTime,actualStartTime,scheduledEndTime,actualendTime)
+        values
+        <foreach collection="array" item="item" index="index" separator=",">
+            (#{item.challengeID},#{item.type},#{item.status},#{item.scheduledStartTime},#{item.actualStartTime},#{item.scheduledEndTime},#{item.actualendTime})
+        </foreach>
+    </insert>
+
+</mapper>

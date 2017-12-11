@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.act.sdp.topcoder.dao.RatingHistoryDao">
 
-    <insert id="insertBatch" parameterType="com.buaa.act.sdp.topcoder.model.user.RatingHistory" useGeneratedKeys="true"
+    <insert id="insertBatch" parameterType="com.buaa.act.sdp.topcoder.model.developer.RatingHistory" useGeneratedKeys="true"
             keyProperty="id">
         insert into rating_history(handle,developType,challengeId,challengeName,date,rating) values
         <foreach collection="array" item="item" index="index" separator=",">

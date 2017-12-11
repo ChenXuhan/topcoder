@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.topcoder.dao;
 
-import com.buaa.act.sdp.topcoder.model.user.DevelopmentHistory;
+import com.buaa.act.sdp.topcoder.model.developer.DevelopmentHistory;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,5 +14,5 @@ public interface DevelopmentHistoryDao {
 
     void updateBatch(List<DevelopmentHistory> list);
 
-    List<DevelopmentHistory> getDevelopmentHistoryByHandle(@Param("handle") String handle);
+    List<DevelopmentHistory> getDevelopmentHistoryByName(@Param("handle") String handle);
 }

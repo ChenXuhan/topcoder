@@ -50,7 +50,7 @@
         </foreach>
     </update>
 
-    <select id="getDeveloperDevelopment" resultType="com.buaa.act.sdp.topcoder.model.user.Development" parameterType="java.lang.String">
+    <select id="getDeveloperDevelopment" resultType="com.buaa.act.sdp.topcoder.model.developer.Development" parameterType="java.lang.String">
         SELECT * from development where handle=#{userName}
     </select>
 </mapper>

@@ -1,7 +1,6 @@
 package com.buaa.act.sdp.topcoder.service.statistics;
 
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
-import com.buaa.act.sdp.topcoder.service.basic.TaskService;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,59 +24,59 @@ public class MsgFilter {
     /**
      * 对challenge进行过滤,提取特征
      *
-     * @param challengeItem
-     * @param challengeType
+     * @param taskItem
+     * @param taskType
      * @return
      */
-    public boolean filterChallenge(ChallengeItem challengeItem, String challengeType) {
-        if (!challengeItem.getCurrentStatus().equals("Completed")) {
+    public boolean filterTask(TaskItem taskItem, String taskType) {
+        if (!taskItem.getCurrentStatus().equals("Completed")) {
             return false;
         }
-        String str = challengeItem.getChallengeType();
-        if (!str.equals(challengeType)) {
+        String str = taskItem.getChallengeType();
+        if (!str.equals(taskType)) {
             return false;
         }
-        if (challengeItem.getDetailedRequirements() == null || challengeItem.getDetailedRequirements().length() == 0) {
+        if (taskItem.getDetailedRequirements() == null || taskItem.getDetailedRequirements().length() == 0) {
             return false;
         }
-        if (challengeItem.getTechnology() == null || challengeItem.getTechnology().length == 0 || challengeItem.getTechnology()[0].isEmpty()) {
+        if (taskItem.getTechnology() == null || taskItem.getTechnology().length == 0 || taskItem.getTechnology()[0].isEmpty()) {
             return false;
         }
-        if (challengeItem.getChallengeName() == null || challengeItem.getChallengeName().length() == 0) {
+        if (taskItem.getChallengeName() == null || taskItem.getChallengeName().length() == 0) {
             return false;
         }
-        if (challengeItem.getDuration() == 0) {
+        if (taskItem.getDuration() == 0) {
             return false;
         }
-        if (challengeItem.getPrize() == null || challengeItem.getPrize().length == 0 || challengeItem.getPrize()[0].isEmpty()) {
+        if (taskItem.getPrize() == null || taskItem.getPrize().length == 0 || taskItem.getPrize()[0].isEmpty()) {
             return false;
         }
         return true;
     }
 
-    public boolean filterTask(ChallengeItem challengeItem){
-        if(challengeItem.getProjectId()<=0){
+    public boolean filterTask(TaskItem taskItem) {
+        if (taskItem.getProjectId() <= 0) {
             return false;
         }
-        if (challengeItem.getDetailedRequirements() == null || challengeItem.getDetailedRequirements().length() == 0) {
+        if (taskItem.getDetailedRequirements() == null || taskItem.getDetailedRequirements().length() == 0) {
             return false;
         }
-        if (challengeItem.getTechnology() == null || challengeItem.getTechnology().length == 0 || challengeItem.getTechnology()[0].isEmpty()) {
+        if (taskItem.getTechnology() == null || taskItem.getTechnology().length == 0 || taskItem.getTechnology()[0].isEmpty()) {
             return false;
         }
-        if (challengeItem.getChallengeName() == null || challengeItem.getChallengeName().length() == 0) {
+        if (taskItem.getChallengeName() == null || taskItem.getChallengeName().length() == 0) {
             return false;
         }
-        if (challengeItem.getPlatforms() == null|| challengeItem.getPlatforms().length==0) {
+        if (taskItem.getPlatforms() == null || taskItem.getPlatforms().length == 0) {
             return false;
         }
-        if (challengeItem.getPrize() == null || challengeItem.getPrize().length == 0 || challengeItem.getPrize()[0].isEmpty()) {
+        if (taskItem.getPrize() == null || taskItem.getPrize().length == 0 || taskItem.getPrize()[0].isEmpty()) {
             return false;
         }
-        if(challengeItem.getPostingDate()==null||challengeItem.getPostingDate().length()==0){
+        if (taskItem.getPostingDate() == null || taskItem.getPostingDate().length() == 0) {
             return false;
         }
-        if(challengeItem.getSubmissionEndDate()==null||challengeItem.getSubmissionEndDate().length()==0){
+        if (taskItem.getSubmissionEndDate() == null || taskItem.getSubmissionEndDate().length() == 0) {
             return false;
         }
         return true;
@@ -89,10 +88,10 @@ public class MsgFilter {
      * @param projectId
      * @return
      */
-    public List<List<Integer>> getProjectAndChallenges(int projectId) {
+    public List<List<Integer>> getProjectAndTasks(int projectId) {
         logger.info("get all tasks id in projects before new project,projectId=" + projectId);
         List<List<Integer>> list = new ArrayList<>();
-        Map<Integer, List<Integer>> projectIdToChallengeIds = projectMsg.getProjectToChallenges();
+        Map<Integer, List<Integer>> projectIdToChallengeIds = projectMsg.getProjectToTasksMapping();
         for (Map.Entry<Integer, List<Integer>> entry : projectIdToChallengeIds.entrySet()) {
             if (entry.getKey() < projectId) {
                 list.add(entry.getValue());

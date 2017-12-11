@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.topcoder.service.recommend.experiment;
 
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.recommend.result.TeamRecommend;
 import com.buaa.act.sdp.topcoder.service.statistics.MsgFilter;
 import com.buaa.act.sdp.topcoder.service.statistics.ProjectMsg;
@@ -29,17 +29,17 @@ public class TeamRecommendExperiment {
     private MsgFilter msgFilter;
 
     public List<Integer> getTestProjectId() {
-        List<ChallengeItem> code = taskMsg.getItems("Code");
-        List<ChallengeItem> f2f = taskMsg.getItems("First2Finish");
-        List<ChallengeItem> assembly = taskMsg.getItems("Assembly Competition");
-        List<ChallengeItem> items = new ArrayList<>(code.size() * 2 / 3 + f2f.size() * 2 / 3 + assembly.size() * 2 / 3);
+        List<TaskItem> code = taskMsg.getItems("Code");
+        List<TaskItem> f2f = taskMsg.getItems("First2Finish");
+        List<TaskItem> assembly = taskMsg.getItems("Assembly Competition");
+        List<TaskItem> items = new ArrayList<>(code.size() * 2 / 3 + f2f.size() * 2 / 3 + assembly.size() * 2 / 3);
         items.addAll(code.subList(code.size() / 3, code.size()));
         items.addAll(f2f.subList(f2f.size() / 3, f2f.size()));
         items.addAll(assembly.subList(assembly.size() / 3, assembly.size()));
-        Map<Integer, Integer> taskToProject = projectMsg.getChallengeToProject();
+        Map<Integer, Integer> taskToProject = projectMsg.getTaskToProjectMapping();
         Map<Integer, List<Integer>> projectToTask = new HashMap<>();
         int projectId;
-        for (ChallengeItem item : items) {
+        for (TaskItem item : items) {
             projectId = taskToProject.get(item.getChallengeId());
             List<Integer> list = projectToTask.get(projectId);
             if (list == null) {
@@ -61,10 +61,10 @@ public class TeamRecommendExperiment {
         List<Integer> projectIdList = getTestProjectId();
         int compareMaxlogit = 0, compareTopK = 0;
         for (int projectId : projectIdList) {
-            List<List<Integer>> taskIds = msgFilter.getProjectAndChallenges(projectId);
-            List<List<String>> workers = teamRecommend.recommendWorkersForEachTask(projectId);
+            List<List<Integer>> taskIds = msgFilter.getProjectAndTasks(projectId);
+            List<List<String>> workers = teamRecommend.recommendDevelopersForEachTask(projectId);
             List<String> allWorkers = new ArrayList<>();
-            Map<String, Integer> workerIndex = teamRecommend.getWorkerIndex(workers, allWorkers);
+            Map<String, Integer> workerIndex = teamRecommend.getDeveloperIndex(workers, allWorkers);
             double[][] collaboration = teamRecommend.getCollaborations(taskIds, workerIndex);
             double a = teamRecommend.maxLogitTeam(workerIndex, collaboration, workers);
             double b = teamRecommend.heuristicTeam(workerIndex, workers, collaboration);

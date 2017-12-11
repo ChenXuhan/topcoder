@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.topcoder.service.recommend.result;
 
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.recommend.cluster.Cluster;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.Reliability;
@@ -35,18 +35,18 @@ public class DeveloperRecommend {
      * @param item
      * @return
      */
-    public List<String> recommendWorkers(ChallengeItem item) {
+    public List<String> recommendDevelopers(TaskItem item) {
         List<String> winners = featureExtract.getWinners(item.getChallengeType());
-        double[][] features = featureExtract.getFeatures(item.getChallengeType(), item);
+        double[][] features = featureExtract.getTaskFeatures(item.getChallengeType(), item);
         if (features.length <= 1) {
             return new ArrayList<>();
         }
         int position = 0;
         List<Integer> index = new ArrayList<>();
-        List<String> worker = recommendWorker(cluster.getRecommendResult(features, 3, winners, index));
-        worker = reliability.filter(worker, index, winners, item.getChallengeType());
-        worker = competition.refine(worker, winners, position + 1, item.getChallengeType());
-        return worker;
+        List<String> developer = recommendDeveloper(cluster.getRecommendResult(features, 3, winners, index));
+        developer = reliability.filter(developer, index, winners, item.getChallengeType());
+        developer = competition.refine(developer, winners, position + 1, item.getChallengeType());
+        return developer;
     }
 
     /**
@@ -55,11 +55,11 @@ public class DeveloperRecommend {
      * @param map
      * @return
      */
-    public List<String> recommendWorker(Map<String, Double> map) {
+    public List<String> recommendDeveloper(Map<String, Double> map) {
         logger.info("sort the developers according their winning probability");
-        List<String> workers = new ArrayList<>();
+        List<String> developers = new ArrayList<>();
         if (map == null || map.size() == 0) {
-            return workers;
+            return developers;
         }
         List<Map.Entry<String, Double>> list = new ArrayList<>();
         list.addAll(map.entrySet());
@@ -70,23 +70,23 @@ public class DeveloperRecommend {
             }
         });
         for (int i = 0; i < list.size(); i++) {
-            workers.add(list.get(i).getKey());
+            developers.add(list.get(i).getKey());
         }
-        return workers;
+        return developers;
     }
 
     /**
      * 开发者按概率排序
      *
      * @param data
-     * @param workers
+     * @param developers
      * @return
      */
-    public List<String> recommendWorker(List<Double> data, List<String> workers) {
-        Map<String, Double> map = new HashMap<>(workers.size());
-        for (int i = 0; i < workers.size(); i++) {
-            map.put(workers.get(i), data.get(i));
+    public List<String> recommendDeveloper(List<Double> data, List<String> developers) {
+        Map<String, Double> map = new HashMap<>(developers.size());
+        for (int i = 0; i < developers.size(); i++) {
+            map.put(developers.get(i), data.get(i));
         }
-        return recommendWorker(map);
+        return recommendDeveloper(map);
     }
 }

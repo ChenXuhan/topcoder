@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.topcoder.service.recommend.feature;
 
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.recommend.network.Competition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,21 +26,21 @@ public class Reliability {
     /**
      * 计算初步推荐开发者的可靠性
      *
-     * @param worker    候选集
-     * @param neighbors 相似任务
-     * @param winners   获胜者
-     * @param type      任务类型
+     * @param developers 候选集
+     * @param neighbors  相似任务
+     * @param winners    获胜者
+     * @param type       任务类型
      * @return
      */
-    public List<String> filter(List<String> worker, List<Integer> neighbors, List<String> winners, String type) {
+    public List<String> filter(List<String> developers, List<Integer> neighbors, List<String> winners, String type) {
         logger.info("compute and filter developers with lower reliability");
         List<String> winner = new ArrayList<>();
-        List<Map<String, Double>> score = competition.getSameTypeWorkers(neighbors, winners, winner, type);
+        List<Map<String, Double>> score = competition.getSameTypeDevelopersScores(neighbors, winners, winner, type);
         Map<String, Integer> total = new HashMap<>();
         Map<String, Integer> submissionCount = new HashMap<>();
         Map<String, Integer> winCount = new HashMap<>();
         int count;
-        Set<String> set = new HashSet<>(worker);
+        Set<String> set = new HashSet<>(developers);
         for (int i = 0; i < winner.size(); i++) {
             if (!set.contains(winner.get(i))) {
                 continue;
@@ -76,8 +76,8 @@ public class Reliability {
         String developer;
         int a, b, c;
         double num;
-        for (int i = 0; i < worker.size(); i++) {
-            developer = worker.get(i);
+        for (int i = 0; i < developers.size(); i++) {
+            developer = developers.get(i);
             a = winCount.getOrDefault(developer, 0);
             b = submissionCount.getOrDefault(developer, 0);
             c = total.getOrDefault(developer, 0);
@@ -88,14 +88,14 @@ public class Reliability {
             subRate.put(i, num);
             avgSubRate += num;
         }
-        avgWinRate /= worker.size();
-        avgSubRate /= worker.size();
+        avgWinRate /= developers.size();
+        avgSubRate /= developers.size();
         List<String> result = new ArrayList<>();
-        for (int i = 0; i < worker.size(); i++) {
+        for (int i = 0; i < developers.size(); i++) {
             if (winRate.get(i) < avgWinRate && subRate.get(i) < avgSubRate && i >= 6) {
                 continue;
             }
-            result.add(worker.get(i));
+            result.add(developers.get(i));
         }
         return result;
     }
@@ -103,11 +103,11 @@ public class Reliability {
     /**
      * 任务的时间间隔
      *
-     * @param challengeType
+     * @param taskType
      */
-    public void timeInterval(String challengeType) {
-        List<ChallengeItem> items = featureExtract.getItems(challengeType);
-        List<String> winners = featureExtract.getWinners(challengeType);
+    public void timeInterval(String taskType) {
+        List<TaskItem> items = featureExtract.getTaskItems(taskType);
+        List<String> winners = featureExtract.getWinners(taskType);
         Map<String, List<String>> map = new HashMap<>();
         String time;
         for (int i = 0; i < items.size(); i++) {

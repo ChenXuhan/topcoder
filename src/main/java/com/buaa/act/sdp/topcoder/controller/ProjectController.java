@@ -37,14 +37,14 @@ public class ProjectController {
             }
             response.setSuccessResponse(tasks);
         } catch (Exception e) {
-            logger.error("error occurred when get tasks in a project, projectId=" + projectId);
+            logger.error("error occurred when get tasks in a project, projectId=" + projectId, e);
             response.setErrorResponse();
         }
         return response;
     }
 
     @ResponseBody
-    @RequestMapping("/max/id")
+    @RequestMapping("/maxId")
     public TCResponse<Integer> getMaxProjectId() {
         logger.info("get max projectId");
         TCResponse<Integer> response = new TCResponse<>();
@@ -52,7 +52,7 @@ public class ProjectController {
             int projectId = taskService.getMaxProjectId();
             response.setSuccessResponse(projectId);
         } catch (Exception e) {
-            logger.error("error occurred when getting max projectId");
+            logger.error("error occurred when getting max projectId", e);
             response.setErrorResponse();
         }
         return response;

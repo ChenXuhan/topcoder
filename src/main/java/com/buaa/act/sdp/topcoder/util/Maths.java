@@ -1,7 +1,7 @@
 package com.buaa.act.sdp.topcoder.util;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 
 import java.util.*;
 
@@ -34,7 +34,7 @@ public class Maths {
      * @param two
      * @return
      */
-    public static boolean isSimilar(ChallengeItem one, ChallengeItem two) {
+    public static boolean isSimilar(TaskItem one, TaskItem two) {
         if (one.getChallengeType().equals(two.getChallengeType())) {
             return true;
         }
@@ -106,7 +106,7 @@ public class Maths {
      * @param index
      * @return
      */
-    public static List<Integer> getSimilarityChallenges(double[][] features, int index) {
+    public static List<Integer> getSimilarityTasks(double[][] features, int index) {
         Map<Integer, Double> map = new HashMap<>();
         double k, sum1, sum2;
         for (int i = 0; i < index; i++) {
@@ -152,7 +152,7 @@ public class Maths {
      * @param two
      * @return
      */
-    public static int dataDistance(ChallengeItem one, ChallengeItem two) {
+    public static int dataDistance(TaskItem one, TaskItem two) {
         String[] temp;
         int a, b;
         if (one.getPostingDate() != null) {

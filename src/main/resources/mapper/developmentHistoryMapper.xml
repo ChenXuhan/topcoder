@@ -66,7 +66,7 @@
 
     </update>
 
-    <select id="getDevelopmentHistoryByHandle" resultType="com.buaa.act.sdp.topcoder.model.user.DevelopmentHistory">
+    <select id="getDevelopmentHistoryByName" resultType="com.buaa.act.sdp.topcoder.model.developer.DevelopmentHistory">
         SELECT * from development_history where handle=#{handle}
     </select>
 

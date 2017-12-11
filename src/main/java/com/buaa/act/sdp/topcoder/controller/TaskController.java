@@ -2,8 +2,8 @@ package com.buaa.act.sdp.topcoder.controller;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.common.TCResponse;
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
-import com.buaa.act.sdp.topcoder.model.user.Registrant;
+import com.buaa.act.sdp.topcoder.model.developer.Registrant;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
 import com.buaa.act.sdp.topcoder.service.statistics.MsgFilter;
 import org.slf4j.Logger;
@@ -33,11 +33,11 @@ public class TaskController {
 
     @ResponseBody
     @RequestMapping("/detail")
-    public TCResponse<ChallengeItem> getTaskById(@RequestParam("taskId") int taskId) {
+    public TCResponse<TaskItem> getTaskById(@RequestParam("taskId") int taskId) {
         logger.info("get task detail info,taskId=" + taskId);
-        TCResponse<ChallengeItem> response = new TCResponse<>();
+        TCResponse<TaskItem> response = new TCResponse<>();
         try {
-            ChallengeItem item = taskService.getChallengeById(taskId);
+            TaskItem item = taskService.getTaskById(taskId);
             if (item == null) {
                 response.setNotFoundResponse();
                 return response;
@@ -79,14 +79,14 @@ public class TaskController {
             response.setSuccessResponse(data);
         } catch (Exception e) {
             response.setErrorResponse();
-            logger.error("error occurred in getting a task registrants");
+            logger.error("error occurred in getting a task registrants", e);
         }
         return response;
     }
 
     @RequestMapping("/upload")
     @ResponseBody
-    public TCResponse<Boolean> uploadTask(@RequestBody ChallengeItem item) {
+    public TCResponse<Boolean> uploadTask(@RequestBody TaskItem item) {
         TCResponse<Boolean> response = new TCResponse<>();
         try {
             if (!Constant.TASK_TYPE.contains(item.getChallengeType())) {
@@ -101,7 +101,7 @@ public class TaskController {
             taskService.uploadTask(item);
             response.setSuccessResponse(true);
         } catch (Exception e) {
-            logger.info("error occurred in uploading new task...");
+            logger.error("error occurred in uploading new task...", e);
             response.setErrorResponse();
         }
         return response;
@@ -113,7 +113,7 @@ public class TaskController {
         logger.info("get similar tasks,taskId=" + taskId);
         TCResponse<List<Integer>> response = new TCResponse<>();
         try {
-            ChallengeItem item = taskService.getChallengeById(taskId);
+            TaskItem item = taskService.getTaskById(taskId);
             if (item == null) {
                 response.setNotFoundResponse();
                 return response;
@@ -124,7 +124,7 @@ public class TaskController {
             }
             response.setSuccessResponse(taskService.getSimilerTask(item));
         } catch (Exception e) {
-            logger.info("error occurred in getting similar tasks...");
+            logger.error("error occurred in getting similar tasks...", e);
             response.setErrorResponse();
         }
         return response;

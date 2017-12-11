@@ -28,7 +28,7 @@ public class Collaboration {
      * @param colScores   协作开发者得分
      * @param score       一个项目内每个任务的开发者得分信息
      */
-    public void collaborationInProject(Map<String, Integer> workerIndex, int[][] colCount, int[] taskCount, double[][] colScores, List<Map<String, Double>> score) {
+    public void generateCollaborationInProject(Map<String, Integer> workerIndex, int[][] colCount, int[] taskCount, double[][] colScores, List<Map<String, Double>> score) {
         Set<String> set = new HashSet<>();
         Map<String, Double> map;
         int m, n;
@@ -56,14 +56,14 @@ public class Collaboration {
     }
 
     /**
-     * 根据 统计的任务数量及得分情况，计算worker之间协作强度
+     * 根据 统计的任务数量及得分情况，计算developer之间协作强度
      *
      * @param colCount
      * @param taskCount
      * @param colScores
      * @return
      */
-    public double[][] calCollaboration(int[][] colCount, int[] taskCount, double[][] colScores) {
+    public double[][] computeCollaboration(int[][] colCount, int[] taskCount, double[][] colScores) {
         logger.info("compute the collaboration among developers in a project");
         double[][] result = new double[colCount.length][colCount.length];
         int sum;
@@ -86,25 +86,25 @@ public class Collaboration {
      * 根据历史任务，计算开发者之间的协作强度
      *
      * @param workerIndex
-     * @param challenges
+     * @param taskIds
      * @return
      */
-    public double[][] generateCollaboration(Map<String, Integer> workerIndex, List<List<Integer>> challenges) {
+    public double[][] generateCollaboration(Map<String, Integer> workerIndex, List<List<Integer>> taskIds) {
         logger.info("generate the collaboration between developers in a project");
-        Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
+        Map<Integer, Map<String, Double>> scores = taskScores.getDevelopersScores();
         int[][] colCount = new int[workerIndex.size()][workerIndex.size()];
         int[] taskCount = new int[workerIndex.size()];
         double[][] colScores = new double[workerIndex.size()][workerIndex.size()];
         logger.info("construct the competitive network among developers in a project");
-        for (List<Integer> list : challenges) {
+        for (List<Integer> list : taskIds) {
             List<Map<String, Double>> score = new ArrayList<>(list.size());
             for (int taskId : list) {
                 if (scores.containsKey(taskId)) {
                     score.add(scores.get(taskId));
                 }
             }
-            collaborationInProject(workerIndex, colCount, taskCount, colScores, score);
+            generateCollaborationInProject(workerIndex, colCount, taskCount, colScores, score);
         }
-        return calCollaboration(colCount, taskCount, colScores);
+        return computeCollaboration(colCount, taskCount, colScores);
     }
 }

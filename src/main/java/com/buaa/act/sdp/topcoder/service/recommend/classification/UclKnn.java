@@ -96,7 +96,7 @@ public class UclKnn {
         }
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(1.0 * count / length));
         start = start + length;
-        length = featureExtract.getChallengeRequirementSize();
+        length = featureExtract.getTaskRequirementSize();
         bigDecimal = bigDecimal.add(BigDecimal.valueOf(cosSimilarity(vectorOne, vectorTwo, start, start + length)));
         start = start + length;
         length = 0;

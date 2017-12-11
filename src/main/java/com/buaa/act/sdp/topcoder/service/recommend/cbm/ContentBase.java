@@ -67,7 +67,7 @@ public class ContentBase {
     public Map<String, Double> getRecommendResult(double[][] features, int index, List<Map<String, Double>> scores, List<String> winner) {
         logger.info("get the recommended developers for new task using CF");
         Map<String, List<Double>> map = new HashMap<>();
-        List<Integer> neighborIndex = Maths.getSimilarityChallenges(features, index);
+        List<Integer> neighborIndex = Maths.getSimilarityTasks(features, index);
         double[][] similarity = getSimilarityTasks(features, index, neighborIndex);
         Set<String> winnerSet = getWinner(winner, neighborIndex);
         for (int i = 0; i < neighborIndex.size(); i++) {

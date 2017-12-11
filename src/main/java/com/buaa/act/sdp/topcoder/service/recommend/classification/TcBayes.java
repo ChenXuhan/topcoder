@@ -64,25 +64,25 @@ public class TcBayes {
      *
      * @param features
      * @param position
-     * @param workers
+     * @param developers
      * @return
      */
-    public List<Double> getRecommendResultDcwds(List<double[]> features, int position, List<String> workers) {
+    public List<Double> getRecommendResultDcwds(List<double[]> features, int position, List<String> developers) {
         logger.info("recommend developers for new task consider workers' dynamic features using dcw-dw ");
         List<Double> result = new ArrayList<>(features.size() - position);
         try {
             Map<String, Integer> workerIndex = new HashMap<>();
             int index = 0;
-            for (String worker : workers) {
+            for (String worker : developers) {
                 if (!workerIndex.containsKey(worker)) {
                     workerIndex.put(worker, index++);
                 }
             }
             index = features.get(0).length - 2;
-            List<String> winners = new ArrayList<>(workers.size());
+            List<String> winners = new ArrayList<>(developers.size());
             double[][] data = new double[features.size()][];
             for (int i = 0; i < features.size(); i++) {
-                features.get(i)[index] = workerIndex.get(workers.get(i));
+                features.get(i)[index] = workerIndex.get(developers.get(i));
                 winners.add("" + features.get(i)[index + 1]);
                 data[i] = features.get(i);
             }

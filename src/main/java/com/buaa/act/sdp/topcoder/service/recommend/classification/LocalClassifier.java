@@ -30,7 +30,7 @@ public class LocalClassifier {
      */
     public List<Integer> getNeighbor(double[][] features, int position) {
         logger.info("get the similar tasks for a new task");
-        List<Integer> neighborIndex = Maths.getSimilarityChallenges(features, position);
+        List<Integer> neighborIndex = Maths.getSimilarityTasks(features, position);
         neighborIndex.add(position);
         return neighborIndex;
     }

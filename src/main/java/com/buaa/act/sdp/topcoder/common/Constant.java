@@ -243,20 +243,20 @@ public class Constant {
 
     public static final int YEAR = 366;
 
-    public static final int MAX_TASK_ID=80000000;
+    public static final int MAX_TASK_ID = 80000000;
 
     /**
      * 返回码及描述
      */
     public static final int TC_SUCCESS = 200;
-    public static final int TC_MSG_MISS=300;
+    public static final int TC_MSG_MISS = 300;
     public static final int TC_NOT_SUPPORT = 400;
-    public static final int TC_NOTFOUND = 404;
+    public static final int TC_NOT_FOUND = 404;
     public static final int TC_INNER_ERROR = 500;
 
     public static final String TC_SUCCESS_DES = "请求成功";
-    public static final String TC_MSG_MISS_DES="任务信息不完整";
+    public static final String TC_MSG_MISS_DES = "任务信息不完整";
     public static final String TC_NOT_SUPPORT_DES = "不支持该任务类型";
-    public static final String TC_NOTFOUND_DES = "请求资源不存在";
+    public static final String TC_NOT_FOUND_DES = "请求资源不存在";
     public static final String TC_INNER_ERROR_DES = "服务内部错误";
 }

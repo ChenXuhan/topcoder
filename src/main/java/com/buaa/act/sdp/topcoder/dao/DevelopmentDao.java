@@ -1,6 +1,6 @@
 package com.buaa.act.sdp.topcoder.dao;
 
-import com.buaa.act.sdp.topcoder.model.user.Development;
+import com.buaa.act.sdp.topcoder.model.developer.Development;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

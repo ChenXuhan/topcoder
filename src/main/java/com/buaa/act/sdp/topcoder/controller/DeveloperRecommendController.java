@@ -2,7 +2,7 @@ package com.buaa.act.sdp.topcoder.controller;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.common.TCResponse;
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
 import com.buaa.act.sdp.topcoder.service.recommend.result.DeveloperRecommend;
 import com.buaa.act.sdp.topcoder.service.recommend.result.TeamRecommend;
@@ -38,18 +38,18 @@ public class DeveloperRecommendController {
         logger.info("recommend developers for a single task，taskId=" + taskId);
         TCResponse<List<String>> response = new TCResponse<>();
         try {
-            ChallengeItem item = taskService.getChallengeById(taskId);
+            TaskItem item = taskService.getTaskById(taskId);
             if (item == null) {
                 logger.info("task taskId=" + taskId + " does not exist!");
                 response.setNotFoundResponse();
                 return response;
             }
-            if(!Constant.TASK_TYPE.contains(item.getChallengeType())){
+            if (!Constant.TASK_TYPE.contains(item.getChallengeType())) {
                 logger.info("task taskId=" + taskId + " type not support!");
                 response.setNotSupport();
                 return response;
             }
-            List<String> developers = developerRecommend.recommendWorkers(item);
+            List<String> developers = developerRecommend.recommendDevelopers(item);
             response.setSuccessResponse(developers);
             response.setData(developers);
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class DeveloperRecommendController {
 
     @ResponseBody
     @RequestMapping("/team")
-    public TCResponse<List<String>> teamRcommend(@RequestParam("projectId") int projectId) {
+    public TCResponse<List<String>> recommendTeamForProject(@RequestParam("projectId") int projectId) {
         logger.info("recommend team for a project，projectId" + projectId);
         TCResponse<List<String>> response = new TCResponse<>();
         try {

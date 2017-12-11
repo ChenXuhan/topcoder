@@ -1,9 +1,9 @@
 package com.buaa.act.sdp.topcoder.service.statistics;
 
-import com.buaa.act.sdp.topcoder.dao.ChallengeRegistrantDao;
-import com.buaa.act.sdp.topcoder.dao.ChallengeSubmissionDao;
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeRegistrant;
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission;
+import com.buaa.act.sdp.topcoder.dao.TaskRegistrantDao;
+import com.buaa.act.sdp.topcoder.dao.TaskSubmissionDao;
+import com.buaa.act.sdp.topcoder.model.task.TaskRegistrant;
+import com.buaa.act.sdp.topcoder.model.task.TaskSubmission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ public class TaskScores {
     private static final Logger logger = LoggerFactory.getLogger(TaskScores.class);
 
     @Autowired
-    private ChallengeRegistrantDao challengeRegistrantDao;
+    private TaskRegistrantDao taskRegistrantDao;
     @Autowired
-    private ChallengeSubmissionDao challengeSubmissionDao;
+    private TaskSubmissionDao taskSubmissionDao;
 
     /**
      * 任务的开发者得分及获胜者信息
@@ -43,21 +43,21 @@ public class TaskScores {
 
     public Map<Integer, String> getWinners() {
         if (winners.isEmpty()) {
-            getAllWorkerScores();
+            getDevelopersScores();
         }
         return winners;
     }
 
     public Map<Integer, Map<String, String>> getRegisterDate() {
         if (registerDate.isEmpty()) {
-            getAllWorkerScores();
+            getDevelopersScores();
         }
         return registerDate;
     }
 
     public Map<Integer, Map<String, String>> getSubmitDate() {
         if (submitDate.isEmpty()) {
-            getAllWorkerScores();
+            getDevelopersScores();
         }
         return submitDate;
     }
@@ -67,82 +67,82 @@ public class TaskScores {
      *
      * @return
      */
-    public synchronized Map<Integer, Map<String, Double>> getAllWorkerScores() {
+    public synchronized Map<Integer, Map<String, Double>> getDevelopersScores() {
         if (scores.isEmpty()) {
             logger.info("get all developers' scores on all tasks");
-            List<ChallengeRegistrant> challengeRegistrants = challengeRegistrantDao.getAllChallengeRegistrants();
+            List<TaskRegistrant> taskRegistrants = taskRegistrantDao.getAllTaskRegistrants();
             Map<String, Double> score;
             Map<String, String> time;
-            for (ChallengeRegistrant challengeRegistrant : challengeRegistrants) {
-                score = scores.getOrDefault(challengeRegistrant.getChallengeID(), null);
+            for (TaskRegistrant taskRegistrant : taskRegistrants) {
+                score = scores.getOrDefault(taskRegistrant.getChallengeID(), null);
                 if (score != null) {
-                    score.put(challengeRegistrant.getHandle(), 0.0);
+                    score.put(taskRegistrant.getHandle(), 0.0);
                 } else {
                     score = new HashMap<>();
-                    score.put(challengeRegistrant.getHandle(), 0.0);
-                    scores.put(challengeRegistrant.getChallengeID(), score);
+                    score.put(taskRegistrant.getHandle(), 0.0);
+                    scores.put(taskRegistrant.getChallengeID(), score);
                 }
 
                 /**
                  * 记录开发者的注册时间
                  */
-                time = registerDate.getOrDefault(challengeRegistrant.getChallengeID(), null);
+                time = registerDate.getOrDefault(taskRegistrant.getChallengeID(), null);
                 String date = null;
-                if (challengeRegistrant.getRegistrationDate() != null) {
-                    date = challengeRegistrant.getRegistrationDate().substring(0, 10);
+                if (taskRegistrant.getRegistrationDate() != null) {
+                    date = taskRegistrant.getRegistrationDate().substring(0, 10);
                 }
                 if (time == null) {
                     time = new HashMap<>();
-                    time.put(challengeRegistrant.getHandle(), date);
-                    registerDate.put(challengeRegistrant.getChallengeID(), time);
+                    time.put(taskRegistrant.getHandle(), date);
+                    registerDate.put(taskRegistrant.getChallengeID(), time);
                 } else {
-                    time.put(challengeRegistrant.getHandle(), date);
+                    time.put(taskRegistrant.getHandle(), date);
                 }
             }
-            updateWorkerScores();
+            updateDeveloperScores();
         }
         return scores;
     }
 
     /**
-     * 依据submission表更新worker的得分
+     * 依据submission表更新developer的得分
      */
-    private void updateWorkerScores() {
-        List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeSubmissionMsg();
+    private void updateDeveloperScores() {
+        List<TaskSubmission> list = taskSubmissionDao.getTaskSubmissionMsg();
         Map<String, Double> score;
         Map<String, String> date;
-        for (ChallengeSubmission challengeSubmission : list) {
-            if (scores.containsKey(challengeSubmission.getChallengeID())) {
-                score = scores.get(challengeSubmission.getChallengeID());
-                if (score.containsKey(challengeSubmission.getHandle()) && score.get(challengeSubmission.getHandle()) >= Double.parseDouble(challengeSubmission.getFinalScore())) {
+        for (TaskSubmission taskSubmission : list) {
+            if (scores.containsKey(taskSubmission.getChallengeID())) {
+                score = scores.get(taskSubmission.getChallengeID());
+                if (score.containsKey(taskSubmission.getHandle()) && score.get(taskSubmission.getHandle()) >= Double.parseDouble(taskSubmission.getFinalScore())) {
                     continue;
                 } else {
-                    score.put(challengeSubmission.getHandle(), Double.parseDouble(challengeSubmission.getFinalScore()));
+                    score.put(taskSubmission.getHandle(), Double.parseDouble(taskSubmission.getFinalScore()));
                 }
             } else {
                 score = new HashMap<>();
-                score.put(challengeSubmission.getHandle(), Double.parseDouble(challengeSubmission.getFinalScore()));
+                score.put(taskSubmission.getHandle(), Double.parseDouble(taskSubmission.getFinalScore()));
             }
 
-            scores.put(challengeSubmission.getChallengeID(), score);
-            if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
-                winners.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
+            scores.put(taskSubmission.getChallengeID(), score);
+            if (taskSubmission.getPlacement() != null && taskSubmission.getPlacement().equals("1") && Double.parseDouble(taskSubmission.getFinalScore()) >= 80) {
+                winners.put(taskSubmission.getChallengeID(), taskSubmission.getHandle());
             }
 
             /**
              * 记录开发者提交时间
              */
-            date = submitDate.getOrDefault(challengeSubmission.getChallengeID(), null);
+            date = submitDate.getOrDefault(taskSubmission.getChallengeID(), null);
             String time = null;
-            if (challengeSubmission.getSubmissionDate() != null) {
-                time = challengeSubmission.getSubmissionDate().substring(0, 10);
+            if (taskSubmission.getSubmissionDate() != null) {
+                time = taskSubmission.getSubmissionDate().substring(0, 10);
             }
             if (date == null) {
                 date = new HashMap<>();
-                date.put(challengeSubmission.getHandle(), time);
-                submitDate.put(challengeSubmission.getChallengeID(), date);
+                date.put(taskSubmission.getHandle(), time);
+                submitDate.put(taskSubmission.getChallengeID(), date);
             } else {
-                date.put(challengeSubmission.getHandle(), time);
+                date.put(taskSubmission.getHandle(), time);
             }
         }
     }
@@ -153,34 +153,34 @@ public class TaskScores {
         winners.clear();
         registerDate.clear();
         submitDate.clear();
-        getAllWorkerScores();
+        getDevelopersScores();
     }
 
-    public Map<String, Double> getTaskScore(int challengeId) {
+    public Map<String, Double> getTaskScore(int taskId) {
         if (scores.isEmpty()) {
-            getAllWorkerScores();
+            getDevelopersScores();
         }
-        return scores.get(challengeId);
+        return scores.get(taskId);
     }
 
-    public String getWinner(int challengeId) {
+    public String getWinner(int taskId) {
         if (scores.isEmpty()) {
-            getAllWorkerScores();
+            getDevelopersScores();
         }
-        return winners.get(challengeId);
+        return winners.get(taskId);
     }
 
-    public Map<String, String> getRegisterDate(int challengeId) {
+    public Map<String, String> getRegisterDate(int taskId) {
         if (scores.isEmpty()) {
-            getAllWorkerScores();
+            getDevelopersScores();
         }
-        return registerDate.get(challengeId);
+        return registerDate.get(taskId);
     }
 
-    public Map<String, String> getSubmitDate(int challengeId) {
+    public Map<String, String> getSubmitDate(int taskId) {
         if (scores.isEmpty()) {
-            getAllWorkerScores();
+            getDevelopersScores();
         }
-        return submitDate.get(challengeId);
+        return submitDate.get(taskId);
     }
 }

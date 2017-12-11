@@ -5,8 +5,8 @@
 
     <bean id="quartzJobUpdateTasksAndDevelopers"
           class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="updateTasksAndWorkers"></property>
-        <property name="targetMethod" value="updateFinishedChallenges"></property>
+        <property name="targetObject" ref="updateTasksAndDevelopers"></property>
+        <property name="targetMethod" value="updateFinishedTasks"></property>
         <property name="concurrent" value="false"></property>
     </bean>
 

@@ -20,7 +20,7 @@ import java.util.Map;
 @Component
 public class TcJ48 extends J48 {
 
-    private static final Logger logger= LoggerFactory.getLogger(TcJ48.class);
+    private static final Logger logger = LoggerFactory.getLogger(TcJ48.class);
 
     /**
      * 按概率对分类结果排序

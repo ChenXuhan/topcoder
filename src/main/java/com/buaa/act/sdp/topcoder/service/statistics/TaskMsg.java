@@ -1,9 +1,9 @@
 package com.buaa.act.sdp.topcoder.service.statistics;
 
-import com.buaa.act.sdp.topcoder.dao.ChallengeItemDao;
-import com.buaa.act.sdp.topcoder.dao.ChallengeSubmissionDao;
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeSubmission;
+import com.buaa.act.sdp.topcoder.dao.TaskItemDao;
+import com.buaa.act.sdp.topcoder.dao.TaskSubmissionDao;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
+import com.buaa.act.sdp.topcoder.model.task.TaskSubmission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,30 +20,30 @@ public class TaskMsg {
     private static final Logger logger = LoggerFactory.getLogger(TaskMsg.class);
 
     @Autowired
-    private ChallengeSubmissionDao challengeSubmissionDao;
+    private TaskSubmissionDao taskSubmissionDao;
     @Autowired
-    private ChallengeItemDao challengeItemDao;
+    private TaskItemDao taskItemDao;
     @Autowired
     private MsgFilter msgFilter;
     @Autowired
     private TaskScores taskScores;
 
     /**
-     * 3种不同类型的challenges
+     * 3种不同类型的tasks
      */
-    private List<ChallengeItem> codeItems;
-    private List<ChallengeItem> assemblyItems;
-    private List<ChallengeItem> f2fItems;
+    private List<TaskItem> codeItems;
+    private List<TaskItem> assemblyItems;
+    private List<TaskItem> f2fItems;
 
     /**
-     * 不同类型challenge 对应的winner
+     * 不同类型task 对应的winner
      */
     private List<String> codeWinners;
     private List<String> assemblyWinners;
     private List<String> f2fWinners;
 
     /**
-     * 不同类型任务的worker得分情况
+     * 不同类型任务的developer得分情况
      */
     private List<Map<String, Double>> codeScore;
     private List<Map<String, Double>> assemblyScore;
@@ -100,8 +100,8 @@ public class TaskMsg {
      * @param set 项目内的任务
      * @return
      */
-    public List<ChallengeItem> getChallenges(Set<Integer> set) {
-        List<ChallengeItem> items = new ArrayList<>(set.size());
+    public List<TaskItem> getTasks(Set<Integer> set) {
+        List<TaskItem> items = new ArrayList<>(set.size());
         int start = 3;
         if (codeItems.isEmpty()) {
             initCode();
@@ -130,7 +130,7 @@ public class TaskMsg {
         return items;
     }
 
-    public List<ChallengeItem> getItems(String type) {
+    public List<TaskItem> getItems(String type) {
         if (type.equals("Code")) {
             if (codeItems.isEmpty()) {
                 initCode();
@@ -168,7 +168,7 @@ public class TaskMsg {
         }
     }
 
-    public List<Map<String, Double>> getUserScore(String type) {
+    public List<Map<String, Double>> getDeveloperScore(String type) {
         if (type.equals("Assembly Competition")) {
             if (assemblyScore.isEmpty()) {
                 initAssembly();
@@ -190,38 +190,38 @@ public class TaskMsg {
     /**
      * 从所有的任务中进行筛选，过滤出一部分任务，计算winner、tasks，以及开发者所得分数
      *
-     * @param challengeType
+     * @param taskType
      * @param items
      * @param winners
      * @param userScore
      */
-    public void getWinnersAndScores(String challengeType, List<ChallengeItem> items, List<String> winners, List<Map<String, Double>> userScore) {
-        logger.info("get a specific type tasks and the winners, developers' scores, taskType=" + challengeType);
-        List<ChallengeSubmission> list = challengeSubmissionDao.getChallengeSubmissionMsg();
+    public void getWinnersAndScores(String taskType, List<TaskItem> items, List<String> winners, List<Map<String, Double>> userScore) {
+        logger.info("get a specific type tasks and the winners, developers' scores, taskType=" + taskType);
+        List<TaskSubmission> list = taskSubmissionDao.getTaskSubmissionMsg();
         Map<String, Integer> map = new HashMap<>();
         Set<Integer> challengeSet = new HashSet<>();
         Map<Integer, String> user = new HashMap<>();
         Set<Integer> set = new HashSet<>();
-        ChallengeItem challengeItem;
-        List<ChallengeItem> challengeItems = new ArrayList<>();
-        for (ChallengeSubmission challengeSubmission : list) {
-            if (set.contains(challengeSubmission.getChallengeID())) {
+        TaskItem taskItem;
+        List<TaskItem> taskItems = new ArrayList<>();
+        for (TaskSubmission taskSubmission : list) {
+            if (set.contains(taskSubmission.getChallengeID())) {
                 continue;
             }
-            if (challengeSet.contains(challengeSubmission.getChallengeID())) {
-                if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
-                    user.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
+            if (challengeSet.contains(taskSubmission.getChallengeID())) {
+                if (taskSubmission.getPlacement() != null && taskSubmission.getPlacement().equals("1") && Double.parseDouble(taskSubmission.getFinalScore()) >= 80) {
+                    user.put(taskSubmission.getChallengeID(), taskSubmission.getHandle());
                 }
             } else {
-                challengeItem = challengeItemDao.getChallengeItemById(challengeSubmission.getChallengeID());
-                if (msgFilter.filterChallenge(challengeItem, challengeType)) {
-                    challengeSet.add(challengeItem.getChallengeId());
-                    challengeItems.add(challengeItem);
-                    if (challengeSubmission.getPlacement() != null && challengeSubmission.getPlacement().equals("1") && Double.parseDouble(challengeSubmission.getFinalScore()) >= 80) {
-                        user.put(challengeSubmission.getChallengeID(), challengeSubmission.getHandle());
+                taskItem = taskItemDao.getTaskItemById(taskSubmission.getChallengeID());
+                if (msgFilter.filterTask(taskItem, taskType)) {
+                    challengeSet.add(taskItem.getChallengeId());
+                    taskItems.add(taskItem);
+                    if (taskSubmission.getPlacement() != null && taskSubmission.getPlacement().equals("1") && Double.parseDouble(taskSubmission.getFinalScore()) >= 80) {
+                        user.put(taskSubmission.getChallengeID(), taskSubmission.getHandle());
                     }
                 } else {
-                    set.add(challengeSubmission.getChallengeID());
+                    set.add(taskSubmission.getChallengeID());
                 }
             }
         }
@@ -232,19 +232,19 @@ public class TaskMsg {
                 map.put(entry.getValue(), 1);
             }
         }
-        Collections.sort(challengeItems, new Comparator<ChallengeItem>() {
+        Collections.sort(taskItems, new Comparator<TaskItem>() {
             @Override
-            public int compare(ChallengeItem o1, ChallengeItem o2) {
+            public int compare(TaskItem o1, TaskItem o2) {
                 return o1.getChallengeId() - o2.getChallengeId();
             }
         });
-        Map<Integer, Map<String, Double>> scores = taskScores.getAllWorkerScores();
-        for (int i = 0; i < challengeItems.size(); i++) {
-            String win = user.get(challengeItems.get(i).getChallengeId());
+        Map<Integer, Map<String, Double>> scores = taskScores.getDevelopersScores();
+        for (int i = 0; i < taskItems.size(); i++) {
+            String win = user.get(taskItems.get(i).getChallengeId());
             if (map.containsKey(win) && map.get(win) >= 5) {
-                items.add(challengeItems.get(i));
+                items.add(taskItems.get(i));
                 winners.add(win);
-                userScore.add(scores.get(challengeItems.get(i).getChallengeId()));
+                userScore.add(scores.get(taskItems.get(i).getChallengeId()));
             }
         }
     }
@@ -254,15 +254,15 @@ public class TaskMsg {
      *
      * @return
      */
-    public List<ChallengeItem> getTasks() {
+    public List<TaskItem> getTasks() {
         logger.info("get all 3 type tasks");
-        List<ChallengeItem> list = new ArrayList<>();
+        List<TaskItem> list = new ArrayList<>();
         list.addAll(getItems("Code"));
         list.addAll(getItems("First2Finish"));
         list.addAll(getItems("Assembly Competition"));
-        Collections.sort(list, new Comparator<ChallengeItem>() {
+        Collections.sort(list, new Comparator<TaskItem>() {
             @Override
-            public int compare(ChallengeItem o1, ChallengeItem o2) {
+            public int compare(TaskItem o1, TaskItem o2) {
                 return o1.getChallengeId() - o2.getChallengeId();
             }
         });

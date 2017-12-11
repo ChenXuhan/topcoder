@@ -1,7 +1,7 @@
 package com.buaa.act.sdp.topcoder.service.recommend.feature;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
-import com.buaa.act.sdp.topcoder.model.challenge.ChallengeItem;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
 import com.buaa.act.sdp.topcoder.util.Maths;
 import org.slf4j.Logger;
@@ -35,16 +35,16 @@ public class FeatureExtract {
         return taskMsg.getWinners(type);
     }
 
-    public List<ChallengeItem> getItems(String type) {
+    public List<TaskItem> getTaskItems(String type) {
         return taskMsg.getItems(type);
     }
 
-    public int getChallengeRequirementSize() {
+    public int getTaskRequirementSize() {
         return requirementWordSize;
     }
 
-    public List<Map<String, Double>> getUserScore(String type) {
-        return taskMsg.getUserScore(type);
+    public List<Map<String, Double>> getDeveloperScore(String type) {
+        return taskMsg.getDeveloperScore(type);
     }
 
     /**
@@ -56,7 +56,7 @@ public class FeatureExtract {
      */
     public WordCount[] getWordCount(int start, String type) {
         logger.info("get the word vector using tf-idf");
-        List<ChallengeItem> items = getItems(type);
+        List<TaskItem> items = getTaskItems(type);
         String[] requirements = new String[items.size()];
         String[] skills = new String[items.size()];
         String[] titles = new String[items.size()], temp;
@@ -92,13 +92,13 @@ public class FeatureExtract {
     /**
      * 只获取任务的时间和奖金
      *
-     * @param challengeType
+     * @param taskType
      * @return
      */
-    public double[][] getTimesAndAward(String challengeType) {
-        List<ChallengeItem> items = getItems(challengeType);
+    public double[][] getTimesAndAward(String taskType) {
+        List<TaskItem> items = getTaskItems(taskType);
         double[][] features = new double[items.size()][2];
-        ChallengeItem item;
+        TaskItem item;
         int index;
         for (int i = 0; i < features.length; i++) {
             item = items.get(i);
@@ -110,7 +110,7 @@ public class FeatureExtract {
         return features;
     }
 
-    public double[] generateVector(Set<String> set, ChallengeItem item) {
+    public double[] generateVector(Set<String> set, TaskItem item) {
         int index = 0;
         double[] feature = new double[set.size() + 5];
         feature[index++] = item.getDetailedRequirements().length();
@@ -131,7 +131,7 @@ public class FeatureExtract {
         for (String str : item.getPlatforms()) {
             skill.add(str.toLowerCase());
         }
-        setWorkerSkills(index, feature, set, skill);
+        setDeveloperSkills(index, feature, set, skill);
         return feature;
     }
 
@@ -141,8 +141,8 @@ public class FeatureExtract {
      * @param type
      * @return
      */
-    public double[][] generateVectors(String type, ChallengeItem item) {
-        List<ChallengeItem> items = getItems(type);
+    public double[][] generateVectors(String type, TaskItem item) {
+        List<TaskItem> items = getTaskItems(type);
         Set<String> set = getSkills();
         int k = 0;
         for (int i = 0; i < items.size(); i++) {
@@ -167,7 +167,7 @@ public class FeatureExtract {
      * @param set
      * @param skill
      */
-    public void setWorkerSkills(int index, double[] feature, Set<String> set, Set<String> skill) {
+    public void setDeveloperSkills(int index, double[] feature, Set<String> set, Set<String> skill) {
         boolean flag;
         for (String str : set) {
             flag = false;
@@ -201,9 +201,9 @@ public class FeatureExtract {
         return skills;
     }
 
-    public double[][] getFeatures(String challengeType, ChallengeItem item) {
+    public double[][] getTaskFeatures(String taskType, TaskItem item) {
         logger.info("generate tasks features vector, taskId=" + item.getChallengeId());
-        return generateVectors(challengeType, item);
+        return generateVectors(taskType, item);
     }
 
 }

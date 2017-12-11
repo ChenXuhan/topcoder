@@ -145,7 +145,7 @@ public class WordCount {
      * @param index
      * @return
      */
-    public double[] getTf(int index) {
+    public double[] generateTf(int index) {
         logger.info("get the text tf");
         double[] tf = new double[allWords.size()];
         int k = 0;
@@ -166,7 +166,7 @@ public class WordCount {
      *
      * @return
      */
-    public double[] getIdf() {
+    public double[] generateIdf() {
         logger.info("get the text idf");
         double[] idf = new double[allWords.size()];
         int index = 0, num;
@@ -182,12 +182,12 @@ public class WordCount {
      *
      * @return
      */
-    public List<double[]> getTfIdf() {
+    public List<double[]> generateTfIdf() {
         logger.info("get the text tf-idf");
         List<double[]> tfIdf = new ArrayList<>();
-        double[] idf = getIdf();
+        double[] idf = generateIdf();
         for (int i = 0; i < texts.length; i++) {
-            double[] tf = getTf(i);
+            double[] tf = generateTf(i);
             for (int j = 0; j < tf.length; j++) {
                 tf[j] *= idf[j];
             }

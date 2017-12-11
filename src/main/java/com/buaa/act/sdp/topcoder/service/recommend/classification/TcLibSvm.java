@@ -17,7 +17,7 @@ import java.util.Map;
 @Component
 public class TcLibSvm extends LibSVM {
 
-    private static final Logger logger= LoggerFactory.getLogger(TcLibSvm.class);
+    private static final Logger logger = LoggerFactory.getLogger(TcLibSvm.class);
 
     public Map<String, Double> getRecommendResult(double[][] features, int position, List<String> winners) {
         logger.info("recommend developers for new task using SVM");

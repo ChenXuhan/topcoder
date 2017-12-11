@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buaa.act.sdp.topcoder.dao.DeveloperDao">
+    <insert id="insert" parameterType="com.buaa.act.sdp.topcoder.model.developer.Developer" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into user(handle,country,memberSince,quote,photoLink,copilot,skills) values(#{handle},#{country},#{memberSince},#{quote},#{photoLink},#{copilot},#{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateDeveloperBasicInfo" parameterType="com.buaa.act.sdp.topcoder.model.developer.Developer">
+        update user SET country=#{country}, quote=#{quote},photoLink=#{photoLink}, copilot=#{copilot}, skills=#{skills,javaType=[Ljava.lang.String;, jdbcType=VARCHAR} where handle=#{handle}
+    </update>
+
+    <select id="getDistinctDevelopers" resultType="java.lang.String">
+        select DISTINCT handle from user
+    </select>
+
+    <select id="getAllDevelopers" resultType="com.buaa.act.sdp.topcoder.model.developer.Developer">
+        SELECT * from user;
+    </select>
+
+    <update id="updateTask">
+            UPDATE user SET competitionNums=#{competitionNums},submissionNums=#{submissionNums},winNums=#{winNums} where
+            handle=#{handle}
+    </update>
+
+    <select id="getDeveloperByName" parameterType="java.lang.String" resultType="com.buaa.act.sdp.topcoder.model.developer.Developer">
+        SELECT * from user where handle=#{userName}
+    </select>
+</mapper>

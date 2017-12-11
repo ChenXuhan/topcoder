@@ -72,7 +72,7 @@ public class Cluster {
         int len = features.length;
         Map<Integer, List<Integer>> map = new HashMap<>();
         List<String> user = new ArrayList<>(len);
-        for (int i = 0; i < len-1; i++) {
+        for (int i = 0; i < len - 1; i++) {
             user.add(winners.get(i));
         }
         user.add("?");

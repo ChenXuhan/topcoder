@@ -40,8 +40,8 @@ public class TCResponse<T> {
     }
 
     public void setNotFoundResponse() {
-        setCode(Constant.TC_NOTFOUND);
-        setDes(Constant.TC_NOTFOUND_DES);
+        setCode(Constant.TC_NOT_FOUND);
+        setDes(Constant.TC_NOT_FOUND_DES);
     }
 
     public void setErrorResponse() {
@@ -49,12 +49,12 @@ public class TCResponse<T> {
         setDes(Constant.TC_INNER_ERROR_DES);
     }
 
-    public void setNotSupport(){
+    public void setNotSupport() {
         setCode(Constant.TC_NOT_SUPPORT);
         setDes(Constant.TC_NOT_SUPPORT_DES);
     }
 
-    public void setMsgMiss(){
+    public void setMsgMiss() {
         setCode(Constant.TC_MSG_MISS);
         setDes(Constant.TC_MSG_MISS_DES);
     }
