@@ -19,9 +19,9 @@ public interface TaskItemDao {
 
     List<Integer> getTaskIds();
 
-    List<Integer> getTasksIds(@Param("set") Set<String> set);
+    List<TaskItem> getTasksByIds(@Param("taskIds") List<Integer> taskIds, @Param("set") Set<String> set);
 
-    List<TaskItem> getAllTasks();
+    List<TaskItem> getTasks(@Param("offSet") int offSet, @Param("pageSize") int pageSize, @Param("set") Set<String> set);
 
     void update(TaskItem item);
 
@@ -29,7 +29,7 @@ public interface TaskItemDao {
 
     int projectExist(@Param("projectId") int projectId);
 
-    List<Integer> getProjectTasks(@Param("projectId") int projectId);
+    List<TaskItem> getProjectTasks(@Param("projectId") int projectId, @Param("set") Set<String> set);
 
     int getMaxTaskId();
 

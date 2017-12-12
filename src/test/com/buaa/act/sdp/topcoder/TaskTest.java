@@ -48,7 +48,7 @@ public class TaskTest {
 
     @Test
     public void testGetChallengeId() {
-        System.out.println(taskItemDao.getTasksIds(Constant.TASK_TYPE).size());
+        System.out.println(taskItemDao.getTasks(0,10,Constant.TASK_TYPE).size());
     }
 
     @Test

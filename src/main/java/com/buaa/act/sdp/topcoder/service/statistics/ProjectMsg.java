@@ -53,9 +53,9 @@ public class ProjectMsg {
         int taskId, projectId;
         String type;
         for (Map<String, Object> map : list) {
-            taskId = Integer.parseInt(map.get("taskId").toString());
+            taskId = Integer.parseInt(map.get("challengeId").toString());
             projectId = Integer.parseInt(map.get("projectId").toString());
-            type = map.get("taskType").toString();
+            type = map.get("challengeType").toString();
             if (Constant.TASK_TYPE.contains(type)) {
                 taskIds = projectIdToTaskIds.getOrDefault(projectId, null);
                 if (taskIds != null) {
@@ -65,8 +65,8 @@ public class ProjectMsg {
                     taskIds.add(taskId);
                     projectIdToTaskIds.put(projectId, taskIds);
                 }
+                taskToProject.put(taskId, projectId);
             }
-            taskToProject.put(taskId, projectId);
         }
     }
 

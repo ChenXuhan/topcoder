@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yang on 2017/11/17.
@@ -61,9 +62,9 @@ public class DeveloperRecommendController {
 
     @ResponseBody
     @RequestMapping("/team")
-    public TCResponse<List<String>> recommendTeamForProject(@RequestParam("projectId") int projectId) {
+    public TCResponse<Map<Integer, String>> recommendTeamForProject(@RequestParam("projectId") int projectId) {
         logger.info("recommend team for a project，projectId" + projectId);
-        TCResponse<List<String>> response = new TCResponse<>();
+        TCResponse<Map<Integer, String>> response = new TCResponse<>();
         try {
             boolean exist = taskService.projectExist(projectId);
             if (!exist) {
@@ -71,7 +72,7 @@ public class DeveloperRecommendController {
                 response.setNotFoundResponse();
                 return response;
             }
-            List<String> developers = teamRecommend.generateBestTeamUsingHeuristic(projectId);
+            Map<Integer, String> developers = teamRecommend.generateBestTeamUsingHeuristic(projectId);
             response.setSuccessResponse(developers);
         } catch (Exception e) {
             logger.error("error occurred in team recommendation,projectId=" + projectId, e);

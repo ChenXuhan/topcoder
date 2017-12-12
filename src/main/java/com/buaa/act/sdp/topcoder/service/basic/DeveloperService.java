@@ -1,10 +1,9 @@
 package com.buaa.act.sdp.topcoder.service.basic;
 
-import com.buaa.act.sdp.topcoder.dao.DeveloperDao;
-import com.buaa.act.sdp.topcoder.dao.DevelopmentDao;
-import com.buaa.act.sdp.topcoder.dao.DevelopmentHistoryDao;
-import com.buaa.act.sdp.topcoder.dao.TaskRegistrantDao;
+import com.buaa.act.sdp.topcoder.common.Constant;
+import com.buaa.act.sdp.topcoder.dao.*;
 import com.buaa.act.sdp.topcoder.model.developer.*;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskScores;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +30,8 @@ public class DeveloperService {
     private TaskRegistrantDao taskRegistrantDao;
     @Autowired
     private TaskScores taskScores;
+    @Autowired
+    private TaskItemDao taskItemDao;
 
     public Developer getDeveloperByName(String userName) {
         return developerDao.getDeveloperByName(userName);
@@ -55,22 +56,24 @@ public class DeveloperService {
         return new DeveloperInfo(developer, developments, developmentHistories);
     }
 
-    public List<Integer> getDeveloperRegistrantTasks(String userName) {
+    public List<TaskItem> getDeveloperRegistrantTasks(String userName) {
         logger.info("get developer's registered tasks from db,userName=" + userName);
-        return taskRegistrantDao.getDeveloperRegistrantTasks(userName);
+        List<Integer> taskId = taskRegistrantDao.getDeveloperRegistrantTasks(userName);
+        return taskItemDao.getTasksByIds(taskId, Constant.TASK_TYPE);
     }
 
     public List<Competitor> getDeveloperCompetitors(String userName) {
         logger.info("get developer's most attractive competitors from db, userName=" + userName);
-        List<Integer> taskIds = getDeveloperRegistrantTasks(userName);
+        List<TaskItem> tasks = getDeveloperRegistrantTasks(userName);
         Map<Integer, Map<String, Double>> scores = taskScores.getDevelopersScores();
         Map<String, Double> score;
         Map<String, Integer> win = new HashMap<>();
         Map<String, Integer> lose = new HashMap<>();
         Map<String, Integer> total = new HashMap<>();
         double a, b;
-        int count;
-        for (int taskId : taskIds) {
+        int count, taskId;
+        for (TaskItem task : tasks) {
+            taskId = task.getChallengeId();
             score = scores.get(taskId);
             if (score != null && score.containsKey(userName)) {
                 a = score.get(userName);

@@ -5,6 +5,7 @@ import com.buaa.act.sdp.topcoder.dao.TaskItemDao;
 import com.buaa.act.sdp.topcoder.model.developer.Registrant;
 import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
+import com.buaa.act.sdp.topcoder.service.statistics.ProjectMsg;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskScores;
 import com.buaa.act.sdp.topcoder.util.Maths;
@@ -31,6 +32,8 @@ public class TaskService {
     private TaskMsg taskMsg;
     @Autowired
     private FeatureExtract featureExtract;
+    @Autowired
+    private ProjectMsg projectMsg;
 
     public TaskItem getTaskById(int taskId) {
         logger.info("get task's detail msg from db,taskId=" + taskId);
@@ -45,17 +48,18 @@ public class TaskService {
         return num > 0 ? true : false;
     }
 
-    public List<Integer> getProjectTasks(int projectId) {
+    public List<TaskItem> getProjectTasks(int projectId) {
         logger.info("query tasks in a project in db,projectId=" + projectId);
         if (projectId <= 0) {
             return new ArrayList<>();
         }
-        return taskItemDao.getProjectTasks(projectId);
+        return taskItemDao.getProjectTasks(projectId, Constant.TASK_TYPE);
     }
 
-    public List<Integer> getAllTasks() {
+    public List<TaskItem> getAllTasks(int pageNum, int pageSize) {
         logger.info("get all tasks' id from db");
-        return taskItemDao.getTasksIds(Constant.TASK_TYPE);
+        int offSet = (pageNum - 1) * pageSize;
+        return taskItemDao.getTasks(offSet, pageSize, Constant.TASK_TYPE);
     }
 
     public List<Registrant> getTaskRegistrants(int taskId) {
@@ -96,16 +100,17 @@ public class TaskService {
     }
 
     /**
-     * 获取当前任务的相似任务列表
+     * 获取当前任务的相似任务
      *
      * @param item
      * @return
      */
-    public List<Integer> getSimilerTask(TaskItem item) {
+    public List<TaskItem> getSimilerTask(TaskItem item) {
         logger.info("get task's similar tasks from db,type=" + item.getChallengeType() + ",taskId=" + item.getChallengeId());
         List<TaskItem> items = taskMsg.getItems(item.getChallengeType());
-        List<Integer> result = new ArrayList<>(10);
+        List<TaskItem> result = new ArrayList<>(10);
         Map<Integer, Double> similarity = new HashMap<>();
+        Map<Integer, TaskItem> taskMap = new HashMap<>();
         Set<String> skills = featureExtract.getSkills();
         double[] feature = featureExtract.generateVector(skills, item);
         double[] temp;
@@ -113,8 +118,9 @@ public class TaskService {
         for (TaskItem taskItem : items) {
             if (taskItem.getChallengeId() != item.getChallengeId()) {
                 temp = featureExtract.generateVector(skills, taskItem);
-                if ((similar = Maths.taskSimilariry(feature, temp)) >= 0.6) {
+                if ((similar = Maths.taskSimilariry(feature, temp)) >= 0.8) {
                     similarity.put(taskItem.getChallengeId(), similar);
+                    taskMap.put(taskItem.getChallengeId(), taskItem);
                 }
             }
         }
@@ -126,8 +132,26 @@ public class TaskService {
                 return o2.getValue().compareTo(o1.getValue());
             }
         });
-        for (int i = 0; i < list.size() && i < 10; i++) {
-            result.add(list.get(i).getKey());
+        int count = 10;
+        for (int i = 0; i < list.size() && i < count; i++) {
+            result.add(taskMap.get(list.get(i)));
+        }
+        return result;
+    }
+
+    public List<Integer> getAllProjectIds(int pageNum, int pageSize) {
+        Set<Integer> projectIds = projectMsg.getProjectToTasksMapping().keySet();
+        int total = projectIds.size(), begin = (pageNum - 1) * pageSize;
+        if (begin >= total) {
+            return new ArrayList<>();
+        }
+        List<Integer> result = new ArrayList<>(pageSize > total - begin ? total - begin : pageSize);
+        int index = 0;
+        for (int projectId : projectIds) {
+            index++;
+            if (index >= begin && index < begin + pageSize) {
+                result.add(projectId);
+            }
         }
         return result;
     }

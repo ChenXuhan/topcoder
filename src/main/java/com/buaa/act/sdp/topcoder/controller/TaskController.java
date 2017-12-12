@@ -52,11 +52,11 @@ public class TaskController {
 
     @ResponseBody
     @RequestMapping("/all")
-    public TCResponse<List<Integer>> getAllTasks() {
-        logger.info("get all tasks");
-        TCResponse<List<Integer>> response = new TCResponse<>();
+    public TCResponse<List<TaskItem>> getAllTasks(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        logger.info("get tasks list, pageNum=" + pageNum + ", pageSize=" + pageSize);
+        TCResponse<List<TaskItem>> response = new TCResponse<>();
         try {
-            List<Integer> data = taskService.getAllTasks();
+            List<TaskItem> data = taskService.getAllTasks(pageNum, pageSize);
             response.setSuccessResponse(data);
         } catch (Exception e) {
             response.setErrorResponse();
@@ -109,9 +109,9 @@ public class TaskController {
 
     @RequestMapping("/similar")
     @ResponseBody
-    public TCResponse<List<Integer>> getSimilarTasks(@RequestParam("taskId") int taskId) {
+    public TCResponse<List<TaskItem>> getSimilarTasks(@RequestParam("taskId") int taskId) {
         logger.info("get similar tasks,taskId=" + taskId);
-        TCResponse<List<Integer>> response = new TCResponse<>();
+        TCResponse<List<TaskItem>> response = new TCResponse<>();
         try {
             TaskItem item = taskService.getTaskById(taskId);
             if (item == null) {

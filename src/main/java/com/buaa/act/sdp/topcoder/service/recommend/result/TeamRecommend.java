@@ -58,19 +58,30 @@ public class TeamRecommend {
         return developerIndex;
     }
 
+
     /**
-     * 为一个project内单个任务推荐开发者
+     * 获取一个项目内的任务（三种类型）
      *
      * @param projectId
      * @return
      */
-    public List<List<String>> recommendDevelopersForEachTask(int projectId) throws Exception {
-        logger.info("recommend developers for each task in a project,proejctId=" + projectId);
+    public List<TaskItem> getRecommendTasksInProject(int projectId) {
+        logger.info("get recommended tasks in a project,projectId=" + projectId);
         List<Integer> ids = projectMsg.getProjectToTasksMapping().get(projectId);
         Set<Integer> sets = new HashSet(ids == null ? 0 : ids.size());
         sets.addAll(ids);
-        List<List<String>> developers = new ArrayList<>(ids.size());
-        List<TaskItem> items = taskMsg.getTasks(sets);
+        return taskMsg.getTasks(sets);
+    }
+
+    /**
+     * 为一个project内单个任务推荐开发者
+     *
+     * @param items
+     * @return
+     */
+    public List<List<String>> recommendDevelopersForTasksInProject(List<TaskItem> items) throws Exception {
+        logger.info("recommend developers for each task in a project");
+        List<List<String>> developers = new ArrayList<>(items.size());
         List<Future<List<String>>> futureList = new ArrayList<>(items.size());
         for (TaskItem item : items) {
             futureList.add(recommendDevelopersForTask(item));
@@ -271,10 +282,11 @@ public class TeamRecommend {
      * @param projectId
      * @return
      */
-    public List<String> findBestTeamTopKDevelopers(int projectId) throws Exception {
+    public Map<Integer, String> findBestTeamTopKDevelopers(int projectId) throws Exception {
         logger.info("select a team in top five de developers for a project,projectId" + projectId);
         List<List<Integer>> taskIds = msgFilter.getProjectAndTasks(projectId);
-        List<List<String>> workers = recommendDevelopersForEachTask(projectId);
+        List<TaskItem> items = getRecommendTasksInProject(projectId);
+        List<List<String>> workers = recommendDevelopersForTasksInProject(items);
         List<String> allWorkers = new ArrayList<>();
         Map<String, Integer> workerIndex = getDeveloperIndex(workers, allWorkers);
         double[][] collaboration = getCollaborations(taskIds, workerIndex);
@@ -285,7 +297,11 @@ public class TeamRecommend {
             team.add(workers.get(i).get(0));
         }
         maxCollaboration(teamStrength, index, workers, workerIndex, collaboration, 0, team);
-        return team;
+        Map<Integer, String> result = new HashMap<>(team.size());
+        for (int i = 0; i < workers.size(); i++) {
+            result.put(items.get(i).getChallengeId(), team.get(i));
+        }
+        return result;
     }
 
     /**
@@ -294,10 +310,11 @@ public class TeamRecommend {
      * @param projectId
      * @return
      */
-    public List<String> findBestTeamMaxLogit(int projectId) throws Exception {
+    public Map<Integer, String> findBestTeamMaxLogit(int projectId) throws Exception {
         logger.info("using max-logit to recommend a team for a project,projectId" + projectId);
         List<List<Integer>> taskIds = msgFilter.getProjectAndTasks(projectId);
-        List<List<String>> workers = recommendDevelopersForEachTask(projectId);
+        List<TaskItem> items = getRecommendTasksInProject(projectId);
+        List<List<String>> workers = recommendDevelopersForTasksInProject(items);
         List<String> allWorkers = new ArrayList<>();
         Map<String, Integer> workerIndex = getDeveloperIndex(workers, allWorkers);
         double[][] collaboration = getCollaborations(taskIds, workerIndex);
@@ -307,7 +324,11 @@ public class TeamRecommend {
         for (int i = 0; i < bestIndex.length; i++) {
             bestTeam.add(allWorkers.get(bestIndex[i]));
         }
-        return bestTeam;
+        Map<Integer, String> result = new HashMap<>(bestTeam.size());
+        for (int i = 0; i < workers.size(); i++) {
+            result.put(items.get(i).getChallengeId(), bestTeam.get(i));
+        }
+        return result;
     }
 
     /**
@@ -316,10 +337,11 @@ public class TeamRecommend {
      * @param projectId
      * @return
      */
-    public List<String> generateBestTeamUsingHeuristic(int projectId) throws Exception {
+    public Map<Integer, String> generateBestTeamUsingHeuristic(int projectId) throws Exception {
         logger.info("recommend a team for project using heuristic algorithm");
         List<List<Integer>> taskIds = msgFilter.getProjectAndTasks(projectId);
-        List<List<String>> workers = recommendDevelopersForEachTask(projectId);
+        List<TaskItem> items = getRecommendTasksInProject(projectId);
+        List<List<String>> workers = recommendDevelopersForTasksInProject(items);
         List<String> allWorkers = new ArrayList<>();
         Map<String, Integer> workerIndex = getDeveloperIndex(workers, allWorkers);
         double[][] collaboration = getCollaborations(taskIds, workerIndex);
@@ -329,7 +351,11 @@ public class TeamRecommend {
         for (int i = 0; i < bestIndex.length; i++) {
             bestTeam.add(allWorkers.get(bestIndex[i]));
         }
-        return bestTeam;
+        Map<Integer, String> result = new HashMap<>(bestTeam.size());
+        for (int i = 0; i < workers.size(); i++) {
+            result.put(items.get(i).getChallengeId(), bestTeam.get(i));
+        }
+        return result;
     }
 
     public double maxLogitTeam(Map<String, Integer> developerIndex, double[][] collaboration, List<List<String>> developers) {

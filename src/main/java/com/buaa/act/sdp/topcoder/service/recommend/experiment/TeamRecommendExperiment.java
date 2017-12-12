@@ -62,7 +62,8 @@ public class TeamRecommendExperiment {
         int compareMaxlogit = 0, compareTopK = 0;
         for (int projectId : projectIdList) {
             List<List<Integer>> taskIds = msgFilter.getProjectAndTasks(projectId);
-            List<List<String>> workers = teamRecommend.recommendDevelopersForEachTask(projectId);
+            List<TaskItem> items = teamRecommend.getRecommendTasksInProject(projectId);
+            List<List<String>> workers = teamRecommend.recommendDevelopersForTasksInProject(items);
             List<String> allWorkers = new ArrayList<>();
             Map<String, Integer> workerIndex = teamRecommend.getDeveloperIndex(workers, allWorkers);
             double[][] collaboration = teamRecommend.getCollaborations(taskIds, workerIndex);

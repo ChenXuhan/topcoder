@@ -68,15 +68,23 @@
         select challengeId from challenge_item
     </select>
 
-    <select id="getTasksIds" parameterType="java.util.Set" resultType="java.lang.Integer">
-        select challengeId from challenge_item where challengeType in
+    <select id="getTasksByIds" resultType="com.buaa.act.sdp.topcoder.model.task.TaskItem">
+        select * from challenge_item where challengeId in
+        <foreach collection="taskIds" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        AND challengeType in
         <foreach collection="set" index="index" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
     </select>
 
-    <select id="getAllTasks" resultType="com.buaa.act.sdp.topcoder.model.task.TaskItem">
-        select * from challenge_item
+    <select id="getTasks" resultType="com.buaa.act.sdp.topcoder.model.task.TaskItem">
+        select * from challenge_item where challengeType in
+        <foreach collection="set" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        limit #{offSet},#{pageSize}
     </select>
 
     <update id="update" parameterType="com.buaa.act.sdp.topcoder.model.task.TaskItem">
@@ -85,15 +93,18 @@
     </update>
 
     <select id="getProjectId" resultType="java.util.Map">
-        SELECT taskId,projectId,taskType from challenge_item where projectId>0
+        SELECT challengeId,projectId,challengeType from challenge_item where projectId>0
     </select>
 
     <select id="projectExist" resultType="int">
         SELECT count(*) from challenge_item where projectId=#{projectId}
     </select>
 
-    <select id="getProjectTasks" resultType="java.lang.Integer">
-        SELECT challengeId from challenge_item where projectId=#{projectId}
+    <select id="getProjectTasks" resultType="com.buaa.act.sdp.topcoder.model.task.TaskItem">
+        SELECT * from challenge_item where projectId=#{projectId} and challengeType in
+        <foreach collection="set" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
     </select>
 
     <select id="getMaxTaskId" resultType="int">

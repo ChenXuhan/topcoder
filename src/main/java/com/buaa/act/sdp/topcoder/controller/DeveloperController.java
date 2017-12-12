@@ -3,6 +3,7 @@ package com.buaa.act.sdp.topcoder.controller;
 import com.buaa.act.sdp.topcoder.common.TCResponse;
 import com.buaa.act.sdp.topcoder.model.developer.Competitor;
 import com.buaa.act.sdp.topcoder.model.developer.DeveloperInfo;
+import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.basic.DeveloperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,11 +48,11 @@ public class DeveloperController {
 
     @ResponseBody
     @RequestMapping("/tasks")
-    public TCResponse<List<Integer>> getDeveloperRegisterTasks(@RequestParam("userName") String userName) {
+    public TCResponse<List<TaskItem>> getDeveloperRegisterTasks(@RequestParam("userName") String userName) {
         logger.info("get developer's registered tasks, userName=" + userName);
-        TCResponse<List<Integer>> response = new TCResponse<>();
+        TCResponse<List<TaskItem>> response = new TCResponse<>();
         try {
-            List<Integer> data = developerService.getDeveloperRegistrantTasks(userName);
+            List<TaskItem> data = developerService.getDeveloperRegistrantTasks(userName);
             if (data == null || data.isEmpty()) {
                 response.setNotFoundResponse();
                 return response;
