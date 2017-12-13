@@ -113,38 +113,18 @@ public class FeatureExtract {
     public double[] generateVector(Set<String> set, TaskItem item) {
         int index = 0;
         double[] feature = new double[set.size() + 5];
-        if (item.getDetailedRequirements() == null) {
-            feature[index++] = 0;
-        } else {
-            feature[index++] = item.getDetailedRequirements().length();
-        }
-        if (item.getChallengeName() == null) {
-            feature[index++] = 0;
-        } else {
-            feature[index++] = item.getChallengeName().length();
-        }
-        if (item.getPostingDate() == null || item.getPostingDate().length() < 10) {
-            feature[index++] = 0;
-        } else {
-            String[] temp = item.getPostingDate().substring(0, 10).split("-");
-            feature[index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
-        }
+        feature[index++] = item.getDetailedRequirements().length();
+        feature[index++] = item.getChallengeName().length();
+        String[] temp = item.getPostingDate().substring(0, 10).split("-");
+        feature[index++] = Integer.parseInt(temp[0]) * 365 + Integer.parseInt(temp[1]) * 30 + Integer.parseInt(temp[2]);
         feature[index++] = item.getDuration();
-        double award = 0;
-        if (item.getPrize() != null && item.getPrize().length > 0 && !item.getPrize()[0].isEmpty()) {
-            award += Double.parseDouble(item.getPrize()[0]);
-        }
-        feature[index++] = award;
+        feature[index++] = Double.parseDouble(item.getPrize()[0]);
         Set<String> skill = new HashSet<>();
-        if (item.getTechnology() != null && item.getTechnology().length > 0 && !item.getTechnology()[0].isEmpty()) {
-            for (String str : item.getTechnology()) {
-                skill.add(str.toLowerCase());
-            }
+        for (String str : item.getTechnology()) {
+            skill.add(str.toLowerCase());
         }
-        if (item.getPlatforms() != null && item.getPlatforms().length > 0 && !item.getPlatforms()[0].isEmpty()) {
-            for (String str : item.getPlatforms()) {
-                skill.add(str.toLowerCase());
-            }
+        for (String str : item.getPlatforms()) {
+            skill.add(str.toLowerCase());
         }
         setDeveloperSkills(index, feature, set, skill);
         return feature;

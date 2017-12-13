@@ -6,6 +6,7 @@ import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
 import com.buaa.act.sdp.topcoder.service.recommend.result.DeveloperRecommend;
 import com.buaa.act.sdp.topcoder.service.recommend.result.TeamRecommend;
+import com.buaa.act.sdp.topcoder.service.statistics.MsgFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class DeveloperRecommendController {
     private DeveloperRecommend developerRecommend;
     @Autowired
     private TeamRecommend teamRecommend;
+    @Autowired
+    private MsgFilter msgFilter;
 
     @ResponseBody
     @RequestMapping("/task")
@@ -50,9 +53,17 @@ public class DeveloperRecommendController {
                 response.setNotSupport();
                 return response;
             }
+            if (!msgFilter.filterTask(item)) {
+                logger.info("task taskId=" + taskId + " msg incomplete!");
+                response.setMsgMiss();
+                return response;
+            }
             List<String> developers = developerRecommend.recommendDevelopers(item);
-            response.setSuccessResponse(developers);
-            response.setData(developers);
+            if (developers == null || developers.size() == 0) {
+                response.setNotEnoughTrainningSet();
+            } else {
+                response.setSuccessResponse(developers);
+            }
         } catch (Exception e) {
             logger.error("error occurred in task recommendation,taskId=" + taskId, e);
             response.setErrorResponse();
@@ -73,7 +84,11 @@ public class DeveloperRecommendController {
                 return response;
             }
             Map<Integer, String> developers = teamRecommend.generateBestTeamUsingHeuristic(projectId);
-            response.setSuccessResponse(developers);
+            if (developers == null || developers.size() == 0) {
+                response.setNotEnoughTrainningSet();
+            } else {
+                response.setSuccessResponse(developers);
+            }
         } catch (Exception e) {
             logger.error("error occurred in team recommendation,projectId=" + projectId, e);
             response.setErrorResponse();

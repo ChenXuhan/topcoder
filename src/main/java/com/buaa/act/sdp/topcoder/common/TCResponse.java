@@ -59,4 +59,8 @@ public class TCResponse<T> {
         setDes(Constant.TC_MSG_MISS_DES);
     }
 
+    public void setNotEnoughTrainningSet() {
+        setCode(Constant.TC_NOT_ENOUGH_TRAINNING_SET);
+        setDes(Constant.TC_NOT_ENOUGH_TRAINNING_SET_DES);
+    }
 }

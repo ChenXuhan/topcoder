@@ -29,7 +29,9 @@
                         prize,
                         platforms,
                         numSubmissions,
-                        numRegistrants
+                        numRegistrants,
+                        languages,
+                        duration
                         )  values(
                         #{challengeId},
                         #{challengeName},
@@ -56,7 +58,9 @@
                         #{prize,javaType=[Ljava.lang.String;, jdbcType=VARCHAR},
                         #{platforms,javaType=[Ljava.lang.String;, jdbcType=VARCHAR},
                         #{numSubmissions},
-                        #{numRegistrants})
+                        #{numRegistrants},
+                        #{languages,javaType=[Ljava.lang.String;, jdbcType=VARCHAR},
+                        #{duration})
     </insert>
 
     <select id="getTaskItemById" parameterType="int"

@@ -4,6 +4,7 @@ import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.dao.TaskItemDao;
 import com.buaa.act.sdp.topcoder.model.developer.Registrant;
 import com.buaa.act.sdp.topcoder.model.task.TaskItem;
+import com.buaa.act.sdp.topcoder.service.api.statistics.TaskStatistics;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.FeatureExtract;
 import com.buaa.act.sdp.topcoder.service.statistics.ProjectMsg;
 import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
@@ -34,6 +35,8 @@ public class TaskService {
     private FeatureExtract featureExtract;
     @Autowired
     private ProjectMsg projectMsg;
+    @Autowired
+    private TaskStatistics taskStatistics;
 
     public TaskItem getTaskById(int taskId) {
         logger.info("get task's detail msg from db,taskId=" + taskId);
@@ -88,14 +91,7 @@ public class TaskService {
         int taskId = getMaxTaskId();
         item.setChallengeId(taskId);
         logger.info("upload new task into db, taskId=" + taskId);
-        String[] strings, string;
-        int num;
-        strings = item.getSubmissionEndDate().substring(0, 10).split("-");
-        string = item.getPostingDate().substring(0, 10).split("-");
-        if (strings != null && strings.length > 0 && string != null && string.length > 0) {
-            num = (Integer.parseInt(strings[0]) - Integer.parseInt(string[0])) * 365 + (Integer.parseInt(strings[1]) - Integer.parseInt(string[1])) * 30 + (Integer.parseInt(strings[2]) - Integer.parseInt(string[2]));
-            item.setDuration(num);
-        }
+        taskStatistics.updateTask(item, 0, 0);
         taskItemDao.insert(item);
     }
 
@@ -134,7 +130,7 @@ public class TaskService {
         });
         int count = 10;
         for (int i = 0; i < list.size() && i < count; i++) {
-            result.add(taskMap.get(list.get(i)));
+            result.add(taskMap.get(list.get(i).getKey()));
         }
         return result;
     }

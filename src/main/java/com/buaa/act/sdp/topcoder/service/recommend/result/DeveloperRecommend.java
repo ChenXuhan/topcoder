@@ -39,7 +39,7 @@ public class DeveloperRecommend {
         List<String> winners = featureExtract.getWinners(item.getChallengeType());
         double[][] features = featureExtract.getTaskFeatures(item.getChallengeType(), item);
         if (features.length <= 1) {
-            return new ArrayList<>();
+            return null;
         }
         int position = 0;
         List<Integer> index = new ArrayList<>();

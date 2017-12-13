@@ -31,6 +31,8 @@ public class TaskStatistics {
         if (strings != null && strings.length > 0 && string != null && string.length > 0) {
             num = (Integer.parseInt(strings[0]) - Integer.parseInt(string[0])) * 365 + (Integer.parseInt(strings[1]) - Integer.parseInt(string[1])) * 30 + (Integer.parseInt(strings[2]) - Integer.parseInt(string[2]));
             item.setDuration(num);
+        } else {
+            item.setDuration(0);
         }
         item.setNumRegistrants(resigterCount);
         item.setNumSubmissions(submissionCount);

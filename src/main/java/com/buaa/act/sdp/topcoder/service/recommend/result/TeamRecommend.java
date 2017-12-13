@@ -339,8 +339,11 @@ public class TeamRecommend {
      */
     public Map<Integer, String> generateBestTeamUsingHeuristic(int projectId) throws Exception {
         logger.info("recommend a team for project using heuristic algorithm");
-        List<List<Integer>> taskIds = msgFilter.getProjectAndTasks(projectId);
         List<TaskItem> items = getRecommendTasksInProject(projectId);
+        if (items.size() == 0) {
+            return null;
+        }
+        List<List<Integer>> taskIds = msgFilter.getProjectAndTasks(projectId);
         List<List<String>> workers = recommendDevelopersForTasksInProject(items);
         List<String> allWorkers = new ArrayList<>();
         Map<String, Integer> workerIndex = getDeveloperIndex(workers, allWorkers);
