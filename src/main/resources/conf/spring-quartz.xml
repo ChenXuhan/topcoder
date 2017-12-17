@@ -12,8 +12,8 @@
 
     <bean id="quartzJobUpdateDataCache"
           class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="updateData"></property>
-        <property name="targetMethod" value="update"></property>
+        <property name="targetObject" ref="updateCache"></property>
+        <property name="targetMethod" value="updateData"></property>
         <property name="concurrent" value="false"></property>
     </bean>
 

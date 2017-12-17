@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
  * Created by yang on 2017/11/12.
  */
 @Component
-public class UpdateData {
+public class UpdateCache {
 
-    private static final Logger logger = LoggerFactory.getLogger(UpdateData.class);
+    private static final Logger logger = LoggerFactory.getLogger(UpdateCache.class);
 
     @Autowired
     private ProjectMsg projectMsg;
@@ -23,7 +23,7 @@ public class UpdateData {
     /**
      * 更新缓存数据
      */
-    public void update() {
+    public void updateData() {
         logger.info("update all data cache, every week...");
         projectMsg.update();
         taskScores.update();

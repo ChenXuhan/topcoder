@@ -46,7 +46,7 @@
             overallRank=#{item.overallRank},
             overallCountryRank=#{item.overallCountryRank},
             overallSchoolRank=#{item.overallSchoolRank},
-            volatility=#{item.volatility} where handle=#{item.handle} and developType=#{ietm.developType}
+            volatility=#{item.volatility} where handle=#{item.handle} and developType=#{item.developType}
         </foreach>
     </update>
 

@@ -61,7 +61,7 @@
             maximumScore=#{item.maximumScore},
             minimumScore=#{item.minimumScore},
             averageScore=#{item.averageScore},
-            averagePlacement=#{item.averagePlacement} where handle=#{item.handle} and developType=#{ietm.developType}
+            averagePlacement=#{item.averagePlacement} where handle=#{item.handle} and developType=#{item.developType}
         </foreach>
 
     </update>

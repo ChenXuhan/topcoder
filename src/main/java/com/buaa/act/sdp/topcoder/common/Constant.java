@@ -261,4 +261,6 @@ public class Constant {
     public static final String TC_NOT_FOUND_DES = "请求资源不存在";
     public static final String TC_INNER_ERROR_DES = "服务内部错误";
     public static final String TC_NOT_ENOUGH_TRAINNING_SET_DES = "没有足够的训练数据,请选择其他任务";
+
+    public static final int RETRY = 3;
 }

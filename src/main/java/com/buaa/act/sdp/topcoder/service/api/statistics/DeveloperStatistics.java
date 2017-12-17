@@ -33,6 +33,9 @@ public class DeveloperStatistics {
         List<DevelopmentHistory> developmentHistories;
         int count, submission, win;
         Developer developer = developerDao.getDeveloperByName(userName);
+        if (developer == null) {
+            return;
+        }
         developmentHistories = developmentHistoryDao.getDevelopmentHistoryByName(userName);
         count = 0;
         win = 0;

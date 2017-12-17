@@ -2,7 +2,6 @@ package com.buaa.act.sdp.topcoder;
 
 import com.buaa.act.sdp.topcoder.service.api.DeveloperApi;
 import com.buaa.act.sdp.topcoder.service.api.statistics.DeveloperStatistics;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +22,4 @@ public class DeveloperTest {
 
     @Autowired
     private DeveloperStatistics developerStatistics;
-
-    @Test
-    public void testInsertUser() {
-        developerApi.getDeveloperByName("iRabbit");
-    }
-
 }

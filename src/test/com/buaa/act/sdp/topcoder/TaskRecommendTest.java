@@ -1,6 +1,5 @@
 package com.buaa.act.sdp.topcoder;
 
-import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
 import com.buaa.act.sdp.topcoder.service.recommend.experiment.TaskRecommendExperiment;
 import com.buaa.act.sdp.topcoder.service.recommend.feature.Reliability;
@@ -35,19 +34,19 @@ public class TaskRecommendTest {
 //        String challengeType = "Code";
 //        recommendResult.contentBased(challengeType);
 //        recommendResult.classifier(challengeType);
-        recommendResult.clusterClassifier(challengeType, 3);
+//        recommendResult.clusterClassifier(challengeType, 3);
 //        recommendResult.localClassifier(challengeType);
 //        recommendResult.dcw_ds(challengeType);
     }
 
     @Test
     public void testTimeInterval() {
-        reliability.timeInterval("Code");
+      //  reliability.timeInterval("Code");
     }
 
     @Test
     public void taskMsgRecommend() {
-        TaskItem item = taskService.getTaskById(30036613);
-        System.out.println(developerRecommend.recommendDevelopers(item));
+//        TaskItem item = taskService.getTaskById(30036613);
+//        System.out.println(developerRecommend.recommendDevelopers(item));
     }
 }

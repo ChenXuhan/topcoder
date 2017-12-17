@@ -23,13 +23,13 @@ public class TeamRecommendTest {
 
     @Test
     public void testProjectToTasks() {
-        System.out.println(teamRecommendExperiment.getTestProjectId());
+//        System.out.println(teamRecommendExperiment.getTestProjectId());
     }
 
     @Test
     public void testCompareTeamRecommend() {
         try {
-            teamRecommendExperiment.compareTeamRecommendResult();
+//            teamRecommendExperiment.compareTeamRecommendResult();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -37,6 +37,6 @@ public class TeamRecommendTest {
 
     @Test
     public void testTeamRecommend() throws Exception {
-        System.out.println(teamRecommend.generateBestTeamUsingHeuristic(9200));
+      //  System.out.println(teamRecommend.generateBestTeamUsingHeuristic(9200));
     }
 }

@@ -50,9 +50,11 @@ public class UpdateTasksAndDevelopers {
         } catch (Exception e) {
             logger.error("error occurred in getting finished task's count", e);
         }
-        JsonElement jsonElement = JsonUtil.getJsonElement(str, "total");
-        if (jsonElement.isJsonPrimitive()) {
-            return jsonElement.getAsInt();
+        if (str != null) {
+            JsonElement jsonElement = JsonUtil.getJsonElement(str, "total");
+            if (jsonElement.isJsonPrimitive()) {
+                return jsonElement.getAsInt();
+            }
         }
         return 0;
     }
@@ -88,6 +90,10 @@ public class UpdateTasksAndDevelopers {
     public void updateFinishedTasks() {
         logger.info("update and save completed tasks,evey one week");
         int count = getCompletedTaskCount();
+        if (count == 0) {
+            logger.info("zero new tasks have been crawled...");
+            return;
+        }
         int pageSize = Constant.PAGE_SIZE;
         int pages = count / pageSize;
         if (count % pageSize != 0) {

@@ -216,13 +216,7 @@ public class DeveloperApi {
      * @param challengeType
      */
     public void saveDeveloperRatingHistory(String userName, String challengeType) {
-        logger.info("get developer's rating histories from topcoder api,userName=" + userName);
-        String json = null;
-        try {
-            json = RequestUtil.request(RATING_HISTORIES_URL + userName + "/" + challengeType);
-        } catch (Exception e) {
-            logger.error("error occurred in getting developer's rating histories,userName=" + userName, e);
-        }
+        String json = RequestUtil.request(RATING_HISTORIES_URL + userName + "/" + challengeType);
         if (json != null) {
             parseAndSaveDeveloperRatingHistory(userName, challengeType, json);
         }
@@ -267,20 +261,25 @@ public class DeveloperApi {
      * @param handle
      */
     public void saveUserRatingMsg(String handle) {
-        saveDeveloperRatingHistory(handle, "design");
-        saveDeveloperRatingHistory(handle, "development");
-        saveDeveloperRatingHistory(handle, "specification");
-        saveDeveloperRatingHistory(handle, "architecture");
-        saveDeveloperRatingHistory(handle, "bug_hunt");
-        saveDeveloperRatingHistory(handle, "test_suites");
-        saveDeveloperRatingHistory(handle, "ui_prototypes");
-        saveDeveloperRatingHistory(handle, "conceptualization");
-        saveDeveloperRatingHistory(handle, "ria_build");
-        saveDeveloperRatingHistory(handle, "ria_component");
-        saveDeveloperRatingHistory(handle, "test_scenarios");
-        saveDeveloperRatingHistory(handle, "copilot_posting");
-        saveDeveloperRatingHistory(handle, "content_creation");
-        saveDeveloperRatingHistory(handle, "first2finish");
-        saveDeveloperRatingHistory(handle, "code");
+        logger.info("get developer's rating histories from topcoder api,userName=" + handle);
+        try {
+            saveDeveloperRatingHistory(handle, "design");
+            saveDeveloperRatingHistory(handle, "development");
+            saveDeveloperRatingHistory(handle, "specification");
+            saveDeveloperRatingHistory(handle, "architecture");
+            saveDeveloperRatingHistory(handle, "bug_hunt");
+            saveDeveloperRatingHistory(handle, "test_suites");
+            saveDeveloperRatingHistory(handle, "ui_prototypes");
+            saveDeveloperRatingHistory(handle, "conceptualization");
+            saveDeveloperRatingHistory(handle, "ria_build");
+            saveDeveloperRatingHistory(handle, "ria_component");
+            saveDeveloperRatingHistory(handle, "test_scenarios");
+            saveDeveloperRatingHistory(handle, "copilot_posting");
+            saveDeveloperRatingHistory(handle, "content_creation");
+            saveDeveloperRatingHistory(handle, "first2finish");
+            saveDeveloperRatingHistory(handle, "code");
+        } catch (Exception e) {
+            logger.error("error occurred in getting developer's rating histories,userName=" + handle, e);
+        }
     }
 }
