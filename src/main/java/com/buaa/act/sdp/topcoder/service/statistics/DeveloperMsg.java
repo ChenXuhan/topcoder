@@ -2,12 +2,13 @@ package com.buaa.act.sdp.topcoder.service.statistics;
 
 import com.buaa.act.sdp.topcoder.model.developer.WorkerDynamicMsg;
 import com.buaa.act.sdp.topcoder.model.task.TaskItem;
+import com.buaa.act.sdp.topcoder.service.redis.RedisService;
 import com.buaa.act.sdp.topcoder.util.Maths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +20,10 @@ public class DeveloperMsg {
 
     private static final Logger logger = LoggerFactory.getLogger(DeveloperMsg.class);
 
-    private Map<Integer, Map<String, WorkerDynamicMsg>> msgMap;
+    private static final String REDIS_DEVELOPER_MSG="redis_developer_msg";
 
-    public DeveloperMsg() {
-        msgMap = new HashMap<>();
-    }
-
+    @Autowired
+    private RedisService redisService;
 
     /**
      * 计算并保存开发者的动态特征
@@ -36,10 +35,8 @@ public class DeveloperMsg {
      * @return
      */
     public Map<String, WorkerDynamicMsg> getDeveloperDynamicMsg(Map<Integer, Map<String, Double>> scores, Map<Integer, String> winners, List<TaskItem> list, TaskItem taskItem) {
-        Map<String, WorkerDynamicMsg> map = msgMap.get(taskItem.getChallengeId());
-        if (map == null) {
-            logger.info("compute developers' dynamic message caches");
-            map = new HashMap<>();
+        Map<String, WorkerDynamicMsg> map = redisService.getMapCache(REDIS_DEVELOPER_MSG,taskItem.getChallengeId());
+        if (map.isEmpty()) {
             WorkerDynamicMsg msg;
             for (TaskItem item : list) {
                 if (item.getChallengeId() >= taskItem.getChallengeId()) {
@@ -79,13 +76,18 @@ public class DeveloperMsg {
                     map.put(entry.getKey(), msg);
                 }
             }
-            msgMap.put(taskItem.getChallengeId(), map);
+            logger.info("save developers dynamic msg into redis,taskId="+taskItem.getChallengeId());
+            redisService.setMapCache(REDIS_DEVELOPER_MSG,taskItem.getChallengeId(), map);
         }
         return map;
     }
 
     public Map<String, WorkerDynamicMsg> getDeveloperDynamicMsg(int challengeId) {
-        return msgMap.get(challengeId);
+        return redisService.getMapCache(REDIS_DEVELOPER_MSG,challengeId);
+    }
+
+    public void update(){
+        redisService.delete(REDIS_DEVELOPER_MSG);
     }
 
 }

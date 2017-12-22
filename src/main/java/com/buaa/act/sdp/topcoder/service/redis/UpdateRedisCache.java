@@ -1,5 +1,8 @@
-package com.buaa.act.sdp.topcoder.service.statistics;
+package com.buaa.act.sdp.topcoder.service.redis;
 
+import com.buaa.act.sdp.topcoder.service.statistics.ProjectMsg;
+import com.buaa.act.sdp.topcoder.service.statistics.TaskMsg;
+import com.buaa.act.sdp.topcoder.service.statistics.TaskScores;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +12,9 @@ import org.springframework.stereotype.Component;
  * Created by yang on 2017/11/12.
  */
 @Component
-public class UpdateCache {
+public class UpdateRedisCache {
 
-    private static final Logger logger = LoggerFactory.getLogger(UpdateCache.class);
+    private static final Logger logger = LoggerFactory.getLogger(UpdateRedisCache.class);
 
     @Autowired
     private ProjectMsg projectMsg;
@@ -23,7 +26,7 @@ public class UpdateCache {
     /**
      * 更新缓存数据
      */
-    public void updateData() {
+    public void updateCache() {
         logger.info("update all data cache, every week...");
         projectMsg.update();
         taskScores.update();

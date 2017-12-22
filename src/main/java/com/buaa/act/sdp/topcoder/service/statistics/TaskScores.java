@@ -4,6 +4,7 @@ import com.buaa.act.sdp.topcoder.dao.TaskRegistrantDao;
 import com.buaa.act.sdp.topcoder.dao.TaskSubmissionDao;
 import com.buaa.act.sdp.topcoder.model.task.TaskRegistrant;
 import com.buaa.act.sdp.topcoder.model.task.TaskSubmission;
+import com.buaa.act.sdp.topcoder.service.redis.RedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,46 +21,43 @@ import java.util.Map;
 public class TaskScores {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskScores.class);
+    private static final String TASKS_SCORES = "tasks_scores";
+    private static final String TASKS_WINNERS = "tasks_winners";
+    private static final String TASK_REGISTER_DATE = "task_register_date";
+    private static final String TASK_SUBMIT_DATE = "task_submit_date";
 
     @Autowired
     private TaskRegistrantDao taskRegistrantDao;
     @Autowired
     private TaskSubmissionDao taskSubmissionDao;
-
-    /**
-     * 任务的开发者得分及获胜者信息
-     */
-    private Map<Integer, Map<String, Double>> scores;
-    private Map<Integer, String> winners;
-    private Map<Integer, Map<String, String>> registerDate;
-    private Map<Integer, Map<String, String>> submitDate;
-
-    public TaskScores() {
-        scores = new HashMap<>();
-        winners = new HashMap<>();
-        registerDate = new HashMap<>();
-        submitDate = new HashMap<>();
-    }
+    @Autowired
+    private RedisService redisService;
 
     public Map<Integer, String> getWinners() {
-        if (winners.isEmpty()) {
-            getDevelopersScores();
+        Map<Integer, String> winners = redisService.getMapCaches(TASKS_WINNERS);
+        if (!winners.isEmpty()) {
+            return winners;
         }
-        return winners;
+        getDevelopersScores();
+        return redisService.getMapCaches(TASKS_WINNERS);
     }
 
     public Map<Integer, Map<String, String>> getRegisterDate() {
-        if (registerDate.isEmpty()) {
-            getDevelopersScores();
+        Map<Integer, Map<String, String>> registerDate = redisService.getMapCaches(TASK_REGISTER_DATE);
+        if (!registerDate.isEmpty()) {
+            return registerDate;
         }
-        return registerDate;
+        getDevelopersScores();
+        return redisService.getMapCaches(TASK_REGISTER_DATE);
     }
 
     public Map<Integer, Map<String, String>> getSubmitDate() {
-        if (submitDate.isEmpty()) {
-            getDevelopersScores();
+        Map<Integer, Map<String, String>> submitDate = redisService.getMapCaches(TASK_SUBMIT_DATE);
+        if (!submitDate.isEmpty()) {
+            return submitDate;
         }
-        return submitDate;
+        getDevelopersScores();
+        return redisService.getMapCaches(TASK_SUBMIT_DATE);
     }
 
     /**
@@ -67,39 +65,52 @@ public class TaskScores {
      *
      * @return
      */
-    public synchronized Map<Integer, Map<String, Double>> getDevelopersScores() {
+    public Map<Integer, Map<String, Double>> getDevelopersScores() {
+        Map<Integer, Map<String, Double>> scores = redisService.getMapCaches(TASKS_SCORES);
         if (scores.isEmpty()) {
-            logger.info("get all developers' scores on all tasks");
-            List<TaskRegistrant> taskRegistrants = taskRegistrantDao.getAllTaskRegistrants();
-            Map<String, Double> score;
-            Map<String, String> time;
-            for (TaskRegistrant taskRegistrant : taskRegistrants) {
-                score = scores.getOrDefault(taskRegistrant.getChallengeID(), null);
-                if (score != null) {
-                    score.put(taskRegistrant.getHandle(), 0.0);
-                } else {
-                    score = new HashMap<>();
-                    score.put(taskRegistrant.getHandle(), 0.0);
-                    scores.put(taskRegistrant.getChallengeID(), score);
-                }
-
-                /**
-                 * 记录开发者的注册时间
-                 */
-                time = registerDate.getOrDefault(taskRegistrant.getChallengeID(), null);
-                String date = null;
-                if (taskRegistrant.getRegistrationDate() != null) {
-                    date = taskRegistrant.getRegistrationDate().substring(0, 10);
-                }
-                if (time == null) {
-                    time = new HashMap<>();
-                    time.put(taskRegistrant.getHandle(), date);
-                    registerDate.put(taskRegistrant.getChallengeID(), time);
-                } else {
-                    time.put(taskRegistrant.getHandle(), date);
+            synchronized (TASKS_SCORES) {
+                scores = redisService.getMapCaches(TASKS_SCORES);
+                if (scores.isEmpty()) {
+                    logger.info("get all developers' scores on all tasks and save into redis");
+                    scores = new HashMap<>();
+                    Map<Integer, Map<String, String>> submitDate = new HashMap<>();
+                    Map<Integer, Map<String, String>> registerDate = new HashMap<>();
+                    Map<Integer, String> winners = new HashMap<>();
+                    List<TaskRegistrant> taskRegistrants = taskRegistrantDao.getAllTaskRegistrants();
+                    Map<String, Double> score;
+                    Map<String, String> time;
+                    for (TaskRegistrant taskRegistrant : taskRegistrants) {
+                        score = scores.getOrDefault(taskRegistrant.getChallengeID(), null);
+                        if (score != null) {
+                            score.put(taskRegistrant.getHandle(), 0.0);
+                        } else {
+                            score = new HashMap<>();
+                            score.put(taskRegistrant.getHandle(), 0.0);
+                            scores.put(taskRegistrant.getChallengeID(), score);
+                        }
+                        /**
+                         * 记录开发者的注册时间
+                         */
+                        time = registerDate.getOrDefault(taskRegistrant.getChallengeID(), null);
+                        String date = null;
+                        if (taskRegistrant.getRegistrationDate() != null) {
+                            date = taskRegistrant.getRegistrationDate().substring(0, 10);
+                        }
+                        if (time == null) {
+                            time = new HashMap<>();
+                            time.put(taskRegistrant.getHandle(), date);
+                            registerDate.put(taskRegistrant.getChallengeID(), time);
+                        } else {
+                            time.put(taskRegistrant.getHandle(), date);
+                        }
+                    }
+                    updateDeveloperScores(scores, registerDate, submitDate, winners);
+                    redisService.setMapCaches(TASKS_SCORES, scores);
+                    redisService.setMapCaches(TASKS_WINNERS, winners);
+                    redisService.setMapCaches(TASK_REGISTER_DATE, registerDate);
+                    redisService.setMapCaches(TASK_SUBMIT_DATE, submitDate);
                 }
             }
-            updateDeveloperScores();
         }
         return scores;
     }
@@ -107,7 +118,7 @@ public class TaskScores {
     /**
      * 依据submission表更新developer的得分
      */
-    private void updateDeveloperScores() {
+    private void updateDeveloperScores(Map<Integer, Map<String, Double>> scores, Map<Integer, Map<String, String>> registerDate, Map<Integer, Map<String, String>> submitDate, Map<Integer, String> winners) {
         List<TaskSubmission> list = taskSubmissionDao.getTaskSubmissionMsg();
         Map<String, Double> score;
         Map<String, String> date;
@@ -147,40 +158,28 @@ public class TaskScores {
         }
     }
 
-    public synchronized void update() {
-        logger.info("update cache, get developers' scores, every week");
-        scores.clear();
-        winners.clear();
-        registerDate.clear();
-        submitDate.clear();
-        getDevelopersScores();
-    }
-
     public Map<String, Double> getTaskScore(int taskId) {
-        if (scores.isEmpty()) {
-            getDevelopersScores();
-        }
-        return scores.get(taskId);
+        return getDevelopersScores().get(taskId);
     }
 
     public String getWinner(int taskId) {
-        if (scores.isEmpty()) {
-            getDevelopersScores();
-        }
-        return winners.get(taskId);
+        return getWinners().get(taskId);
     }
 
     public Map<String, String> getRegisterDate(int taskId) {
-        if (scores.isEmpty()) {
-            getDevelopersScores();
-        }
-        return registerDate.get(taskId);
+        return getRegisterDate().get(taskId);
     }
 
     public Map<String, String> getSubmitDate(int taskId) {
-        if (scores.isEmpty()) {
-            getDevelopersScores();
-        }
-        return submitDate.get(taskId);
+        return getSubmitDate().get(taskId);
+    }
+
+    public synchronized void update() {
+        logger.info("update cache, get developers scores, every week");
+        redisService.delete(TASKS_SCORES);
+        redisService.delete(TASKS_WINNERS);
+        redisService.delete(TASK_REGISTER_DATE);
+        redisService.delete(TASK_SUBMIT_DATE);
+        getDevelopersScores();
     }
 }

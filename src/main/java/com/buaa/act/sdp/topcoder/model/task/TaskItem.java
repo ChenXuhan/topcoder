@@ -4,10 +4,12 @@ package com.buaa.act.sdp.topcoder.model.task;
  * Created by YLT on 2016/10/17.
  */
 
+import java.io.Serializable;
+
 /**
  * 众包任务极其属性
  */
-public class TaskItem {
+public class TaskItem implements Serializable{
 
     private int challengeId;
     private String challengeName;

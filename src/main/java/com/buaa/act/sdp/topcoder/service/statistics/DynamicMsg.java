@@ -26,9 +26,6 @@ public class DynamicMsg {
     @Autowired
     private DeveloperMsg developerMsg;
 
-    public DynamicMsg() {
-    }
-
     /**
      * 获取某一个任务中注册开发者的动态特征 ESEM
      *
