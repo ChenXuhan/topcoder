@@ -16,6 +16,8 @@
         <property name="minPoolSize" value="${minPoolSize}"/>
         <property name="initialPoolSize" value="${initialPoolSize}"/>
         <property name="acquireIncrement" value="${acquireIncrement}"/>
+        <property name="preferredTestQuery" value="${preferredTestQuery}"/>
+        <property name="idleConnectionTestPeriod" value="${idleConnectionTestPeriod}"/>
     </bean>
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

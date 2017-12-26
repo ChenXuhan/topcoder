@@ -19,6 +19,6 @@ public class RedisServiceTest {
 
     @Test
     public void update() {
-        updateRedisCache.updateCache();
+//        updateRedisCache.updateCache();
     }
 }
