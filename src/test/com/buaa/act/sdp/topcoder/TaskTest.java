@@ -27,8 +27,8 @@ public class TaskTest {
 
     @Test
     public void testTask() {
-        System.out.println(taskMsg.getItems("Code").size());
-        System.out.println(taskMsg.getItems("First2Finish").size());
-        System.out.println(taskMsg.getItems("Assembly Competition").size());
+//        System.out.println(taskMsg.getItems("Code").size());
+//        System.out.println(taskMsg.getItems("First2Finish").size());
+//        System.out.println(taskMsg.getItems("Assembly Competition").size());
     }
 }

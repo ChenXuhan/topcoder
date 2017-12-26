@@ -27,15 +27,6 @@ public class TeamRecommendTest {
     }
 
     @Test
-    public void testCompareTeamRecommend() {
-        try {
-//            teamRecommendExperiment.compareTeamRecommendResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     public void testTeamRecommend() throws Exception {
       //  System.out.println(teamRecommend.generateBestTeamUsingHeuristic(9200));
     }
