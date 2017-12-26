@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.topcoder.controller;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
+import com.buaa.act.sdp.topcoder.common.TCData;
 import com.buaa.act.sdp.topcoder.common.TCResponse;
 import com.buaa.act.sdp.topcoder.model.developer.Registrant;
 import com.buaa.act.sdp.topcoder.model.task.TaskItem;
@@ -49,11 +50,11 @@ public class TaskController {
 
     @ResponseBody
     @RequestMapping("/all")
-    public TCResponse<List<TaskItem>> getAllTasks(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+    public TCResponse<TCData<TaskItem>> getAllTasks(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         logger.info("get tasks list, pageNum=" + pageNum + ", pageSize=" + pageSize);
-        TCResponse<List<TaskItem>> response = new TCResponse<>();
+        TCResponse<TCData<TaskItem>> response = new TCResponse<>();
         try {
-            List<TaskItem> data = taskService.getAllTasks(pageNum, pageSize);
+           TCData<TaskItem> data = taskService.getAllTasks(pageNum, pageSize);
             response.setSuccessResponse(data);
         } catch (Exception e) {
             response.setErrorResponse();
@@ -69,7 +70,7 @@ public class TaskController {
         TCResponse<List<Registrant>> response = new TCResponse<>();
         try {
             List<Registrant> data = taskService.getTaskRegistrants(taskId);
-            if (data.isEmpty()) {
+            if (data==null) {
                 response.setNotFoundResponse();
                 return response;
             }

@@ -68,7 +68,10 @@ public class TeamRecommend {
     public List<TaskItem> getRecommendTasksInProject(int projectId) {
         logger.info("get recommended tasks in a project,projectId=" + projectId);
         List<Integer> ids = projectMsg.getProjectToTasksMapping().get(projectId);
-        Set<Integer> sets = new HashSet(ids == null ? 0 : ids.size());
+        if (ids == null) {
+            return null;
+        }
+        Set<Integer> sets = new HashSet(ids.size());
         sets.addAll(ids);
         return taskMsg.getTasks(sets);
     }
@@ -340,8 +343,11 @@ public class TeamRecommend {
     public Map<Integer, String> generateBestTeamUsingHeuristic(int projectId) throws Exception {
         logger.info("recommend a team for project using heuristic algorithm");
         List<TaskItem> items = getRecommendTasksInProject(projectId);
-        if (items.size() == 0) {
+        if (items == null) {
             return null;
+        }
+        if(items.size()==0){
+            return new HashMap<>();
         }
         List<List<Integer>> taskIds = msgFilter.getProjectAndTasks(projectId);
         List<List<String>> workers = recommendDevelopersForTasksInProject(items);

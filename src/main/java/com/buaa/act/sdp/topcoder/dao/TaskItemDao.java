@@ -34,4 +34,6 @@ public interface TaskItemDao {
     int getMaxTaskId();
 
     int getMaxProjectId();
+
+    int getTasksTotalNum(@Param("set") Set<String> set);
 }

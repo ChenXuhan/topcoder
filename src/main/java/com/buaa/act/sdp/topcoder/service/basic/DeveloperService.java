@@ -59,12 +59,18 @@ public class DeveloperService {
     public List<TaskItem> getDeveloperRegistrantTasks(String userName) {
         logger.info("get developer's registered tasks from db,userName=" + userName);
         List<Integer> taskId = taskRegistrantDao.getDeveloperRegistrantTasks(userName);
+        if(taskId.isEmpty()){
+            return null;
+        }
         return taskItemDao.getTasksByIds(taskId, Constant.TASK_TYPE);
     }
 
     public List<Competitor> getDeveloperCompetitors(String userName) {
         logger.info("get developer's most attractive competitors from db, userName=" + userName);
         List<TaskItem> tasks = getDeveloperRegistrantTasks(userName);
+        if(tasks==null||tasks.isEmpty()){
+            return null;
+        }
         Map<Integer, Map<String, Double>> scores = taskScores.getDevelopersScores();
         Map<String, Double> score;
         Map<String, Integer> win = new HashMap<>();

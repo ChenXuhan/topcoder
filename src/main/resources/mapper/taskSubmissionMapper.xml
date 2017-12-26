@@ -18,7 +18,7 @@
     </select>
 
     <select id="getTaskSubmissionMsg" resultType="com.buaa.act.sdp.topcoder.model.task.TaskSubmission">
-        SELECT handle,challengeId,finalScore,placement,submissionStatus from  challenge_submission ORDER BY challengeID ASC;
+        SELECT handle,challengeId,submissionDate,finalScore,placement,submissionStatus from  challenge_submission ORDER BY challengeID ASC;
     </select>
 
 </mapper>

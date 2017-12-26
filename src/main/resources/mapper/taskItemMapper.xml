@@ -118,4 +118,11 @@
     <select id="getMaxProjectId" resultType="int">
          SELECT max(projectId) from challenge_item;
     </select>
+
+    <select id="getTasksTotalNum" resultType="int">
+        select count(*) from challenge_item where challengeType in
+        <foreach collection="set" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

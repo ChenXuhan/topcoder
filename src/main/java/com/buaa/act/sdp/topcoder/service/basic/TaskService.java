@@ -1,6 +1,7 @@
 package com.buaa.act.sdp.topcoder.service.basic;
 
 import com.buaa.act.sdp.topcoder.common.Constant;
+import com.buaa.act.sdp.topcoder.common.TCData;
 import com.buaa.act.sdp.topcoder.dao.TaskItemDao;
 import com.buaa.act.sdp.topcoder.model.developer.Registrant;
 import com.buaa.act.sdp.topcoder.model.task.TaskItem;
@@ -54,20 +55,29 @@ public class TaskService {
     public List<TaskItem> getProjectTasks(int projectId) {
         logger.info("query tasks in a project in db,projectId=" + projectId);
         if (projectId <= 0) {
-            return new ArrayList<>();
+            return null;
         }
         return taskItemDao.getProjectTasks(projectId, Constant.TASK_TYPE);
     }
 
-    public List<TaskItem> getAllTasks(int pageNum, int pageSize) {
+    public TCData<TaskItem> getAllTasks(int pageNum, int pageSize) {
         logger.info("get all tasks' id from db");
         int offSet = (pageNum - 1) * pageSize;
-        return taskItemDao.getTasks(offSet, pageSize, Constant.TASK_TYPE);
+        TCData<TaskItem> data = new TCData<>();
+        List<TaskItem> items = taskItemDao.getTasks(offSet, pageSize, Constant.TASK_TYPE);
+        data.setData(items);
+        if (pageNum == 1) {
+            data.setTotal(taskItemDao.getTasksTotalNum(Constant.TASK_TYPE));
+        }
+        return data;
     }
 
     public List<Registrant> getTaskRegistrants(int taskId) {
         logger.info("get task's registrants from db,taskId=" + taskId);
         Map<String, Double> score = taskScores.getTaskScore(taskId);
+        if (score == null || score.size() == 0) {
+            return null;
+        }
         Map<String, String> registerTime = taskScores.getRegisterDate(taskId);
         Map<String, String> submitTime = taskScores.getSubmitDate(taskId);
         String winner = taskScores.getWinner(taskId);
@@ -135,20 +145,27 @@ public class TaskService {
         return result;
     }
 
-    public List<Integer> getAllProjectIds(int pageNum, int pageSize) {
+    public TCData<Integer> getAllProjectIds(int pageNum, int pageSize) {
         Set<Integer> projectIds = projectMsg.getProjectToTasksMapping().keySet();
         int total = projectIds.size(), begin = (pageNum - 1) * pageSize;
-        if (begin >= total) {
-            return new ArrayList<>();
-        }
         List<Integer> result = new ArrayList<>(pageSize > total - begin ? total - begin : pageSize);
         int index = 0;
         for (int projectId : projectIds) {
             index++;
-            if (index >= begin && index < begin + pageSize) {
+            if(index<begin){
+                continue;
+            }
+            else if (index >= begin && index < begin + pageSize) {
                 result.add(projectId);
+            }else {
+                break;
             }
         }
-        return result;
+        TCData<Integer>data=new TCData<>();
+        if(pageNum==1){
+            data.setTotal(total);
+        }
+        data.setData(result);
+        return data;
     }
 }

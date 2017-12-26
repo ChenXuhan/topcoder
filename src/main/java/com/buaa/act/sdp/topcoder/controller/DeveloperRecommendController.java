@@ -77,14 +77,16 @@ public class DeveloperRecommendController {
         logger.info("recommend team for a project，projectId" + projectId);
         TCResponse<Map<Integer, String>> response = new TCResponse<>();
         try {
-            boolean exist = taskService.projectExist(projectId);
-            if (!exist) {
+            if (!taskService.projectExist(projectId)) {
                 logger.info("project projectId=" + projectId + " does not exist!");
                 response.setNotFoundResponse();
                 return response;
             }
             Map<Integer, String> developers = teamRecommend.generateBestTeamUsingHeuristic(projectId);
-            if (developers == null || developers.size() == 0) {
+            if (developers == null) {
+                response.setNotSupport();
+
+            } else if (developers.size() == 0) {
                 response.setNotEnoughTrainningSet();
             } else {
                 response.setSuccessResponse(developers);

@@ -72,6 +72,10 @@ public class DeveloperController {
         TCResponse<List<Competitor>> response = new TCResponse<>();
         try {
             List<Competitor> data = developerService.getDeveloperCompetitors(userName);
+            if (data == null) {
+                response.setNotFoundResponse();
+                return response;
+            }
             response.setSuccessResponse(data);
         } catch (Exception e) {
             logger.error("error occurred in getting developer's most attractive competitors, userName=" + userName, e);

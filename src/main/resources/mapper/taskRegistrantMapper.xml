@@ -16,7 +16,7 @@
     </select>
 
     <select id="getAllTaskRegistrants" resultType="com.buaa.act.sdp.topcoder.model.task.TaskRegistrant">
-        SELECT  challengeID ,handle from challenge_registrant;
+        SELECT * from challenge_registrant;
     </select>
 
     <select id="getDeveloperRegistrantTasks" resultType="java.lang.Integer">
