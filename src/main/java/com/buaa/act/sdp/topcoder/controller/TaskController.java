@@ -54,7 +54,7 @@ public class TaskController {
         logger.info("get tasks list, pageNum=" + pageNum + ", pageSize=" + pageSize);
         TCResponse<TCData<TaskItem>> response = new TCResponse<>();
         try {
-           TCData<TaskItem> data = taskService.getAllTasks(pageNum, pageSize);
+            TCData<TaskItem> data = taskService.getAllTasks(pageNum, pageSize);
             response.setSuccessResponse(data);
         } catch (Exception e) {
             response.setErrorResponse();
@@ -70,7 +70,7 @@ public class TaskController {
         TCResponse<List<Registrant>> response = new TCResponse<>();
         try {
             List<Registrant> data = taskService.getTaskRegistrants(taskId);
-            if (data==null) {
+            if (data == null) {
                 response.setNotFoundResponse();
                 return response;
             }
@@ -123,6 +123,62 @@ public class TaskController {
             response.setSuccessResponse(taskService.getSimilerTask(item));
         } catch (Exception e) {
             logger.error("error occurred in getting similar tasks...", e);
+            response.setErrorResponse();
+        }
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping("/type")
+    public TCResponse<String[]> getTaskType() {
+        logger.info("get tasks type...");
+        TCResponse<String[]> response = new TCResponse<>();
+        try {
+            response.setSuccessResponse(taskService.getTaskTypes());
+        } catch (Exception e) {
+            logger.error("error occurred in getting task type...", e);
+            response.setErrorResponse();
+        }
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping("/technology")
+    public TCResponse<String[]> getTaskTechnologies() {
+        logger.info("get tasks technologies...");
+        TCResponse<String[]> response = new TCResponse<>();
+        try {
+            response.setSuccessResponse(taskService.getTaskTechnologies());
+        } catch (Exception e) {
+            logger.error("error occurred in getting task technologies...", e);
+            response.setErrorResponse();
+        }
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping("/platform")
+    public TCResponse<String[]> getTaskPlatforms() {
+        logger.info("get tasks platforms...");
+        TCResponse<String[]> response = new TCResponse<>();
+        try {
+            response.setSuccessResponse(taskService.getTaskPlatforms());
+        } catch (Exception e) {
+            logger.error("error occurred in getting task platforms...", e);
+            response.setErrorResponse();
+        }
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping("/language")
+    public TCResponse<String[]> getTaskLanguages() {
+        logger.info("get tasks languages...");
+        TCResponse<String[]> response = new TCResponse<>();
+        try {
+            response.setSuccessResponse(taskService.getTaskLanguages());
+        } catch (Exception e) {
+            logger.error("error occurred in getting task languages...", e);
             response.setErrorResponse();
         }
         return response;

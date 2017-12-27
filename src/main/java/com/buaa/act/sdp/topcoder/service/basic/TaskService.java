@@ -98,9 +98,7 @@ public class TaskService {
     }
 
     public void uploadTask(TaskItem item) {
-        int taskId = getMaxTaskId();
-        item.setChallengeId(taskId);
-        logger.info("upload new task into db, taskId=" + taskId);
+        item.setChallengeId(getMaxTaskId());
         taskStatistics.updateTask(item, 0, 0);
         taskItemDao.insert(item);
     }
@@ -152,20 +150,41 @@ public class TaskService {
         int index = 0;
         for (int projectId : projectIds) {
             index++;
-            if(index<begin){
+            if (index < begin) {
                 continue;
-            }
-            else if (index >= begin && index < begin + pageSize) {
+            } else if (index >= begin && index < begin + pageSize) {
                 result.add(projectId);
-            }else {
+            } else {
                 break;
             }
         }
-        TCData<Integer>data=new TCData<>();
-        if(pageNum==1){
+        TCData<Integer> data = new TCData<>();
+        if (pageNum == 1) {
             data.setTotal(total);
         }
         data.setData(result);
         return data;
+    }
+
+    public String[] getTaskTypes() {
+        Set<String> taskTypes = Constant.TASK_TYPE;
+        String[] types = new String[taskTypes.size()];
+        int index = 0;
+        for (String type : taskTypes) {
+            types[index++] = type;
+        }
+        return types;
+    }
+
+    public String[] getTaskTechnologies() {
+        return Constant.TECHNOLOGIES;
+    }
+
+    public String[] getTaskPlatforms() {
+        return Constant.PLATFORMS;
+    }
+
+    public String[] getTaskLanguages() {
+        return Constant.LANGUAGES;
     }
 }
