@@ -6,6 +6,7 @@ import com.buaa.act.sdp.topcoder.common.TCResponse;
 import com.buaa.act.sdp.topcoder.model.developer.Registrant;
 import com.buaa.act.sdp.topcoder.model.task.TaskItem;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
+import com.buaa.act.sdp.topcoder.service.recommend.result.DeveloperRecommend;
 import com.buaa.act.sdp.topcoder.service.statistics.MsgFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,8 @@ public class TaskController {
     private TaskService taskService;
     @Autowired
     private MsgFilter msgFilter;
+    @Autowired
+    private DeveloperRecommend developerRecommend;
 
     @ResponseBody
     @RequestMapping("/detail")
@@ -84,8 +87,8 @@ public class TaskController {
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
-    public TCResponse<Boolean> uploadTask(@RequestBody TaskItem item) {
-        TCResponse<Boolean> response = new TCResponse<>();
+    public TCResponse<List<String>> uploadTask(@RequestBody TaskItem item) {
+        TCResponse<List<String>> response = new TCResponse<>();
         try {
             if (!Constant.TASK_TYPE.contains(item.getChallengeType())) {
                 response.setNotSupport();
@@ -97,7 +100,8 @@ public class TaskController {
             }
             logger.info("upload task,type=" + item.getChallengeType());
             taskService.uploadTask(item);
-            response.setSuccessResponse(true);
+            List<String>developers=developerRecommend.recommendDevelopers(item);
+            response.setSuccessResponse(developers);
         } catch (Exception e) {
             logger.error("error occurred in uploading new task...", e);
             response.setErrorResponse();
