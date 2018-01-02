@@ -19,12 +19,12 @@
 
     <bean id="quartzTriggerTask" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="quartzJobUpdateTasksAndDevelopers"></property>
-        <property name="cronExpression" value="0 0 2 ? * 6"></property>
+        <property name="cronExpression" value="0 0 2 ? * 2"></property>
     </bean>
 
     <bean id="quartzTriggerCache" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="quartzJobUpdateDataCache"></property>
-        <property name="cronExpression" value="0 0 2 ? * 7"></property>
+        <property name="cronExpression" value="0 0 2 ? * 3"></property>
     </bean>
 
     <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

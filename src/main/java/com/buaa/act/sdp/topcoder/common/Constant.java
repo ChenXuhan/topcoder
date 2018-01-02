@@ -263,4 +263,6 @@ public class Constant {
     public static final String TC_NOT_ENOUGH_TRAINNING_SET_DES = "没有足够的训练数据,请选择其他任务";
 
     public static final int RETRY = 3;
+
+    public static final String IP = "192.168.7.111";
 }

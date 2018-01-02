@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,6 +90,14 @@ public class UpdateTasksAndDevelopers {
      * 增量保存所有完成的task,更新开发者参与任务数
      */
     public void updateFinishedTasks() {
+        try {
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            if (!ip.equals(Constant.IP)) {
+                return;
+            }
+        } catch (UnknownHostException e) {
+            logger.error("error occurred in getting local ip address...");
+        }
         logger.info("update and save completed tasks,evey one week");
         int count = getCompletedTaskCount();
         if (count == 0) {

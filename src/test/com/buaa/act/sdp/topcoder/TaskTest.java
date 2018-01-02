@@ -22,7 +22,7 @@ public class TaskTest {
 
     @Test
     public void testGetChallengeId() {
-        updateTasksAndDevelopers.updateFinishedTasks();
+//        updateTasksAndDevelopers.updateFinishedTasks();
     }
 
     @Test
