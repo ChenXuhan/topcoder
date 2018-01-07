@@ -5,6 +5,7 @@ import com.buaa.act.sdp.topcoder.dao.DeveloperDao;
 import com.buaa.act.sdp.topcoder.dao.TaskItemDao;
 import com.buaa.act.sdp.topcoder.model.task.PastTask;
 import com.buaa.act.sdp.topcoder.model.task.TaskItem;
+import com.buaa.act.sdp.topcoder.service.api.statistics.DeveloperStatistics;
 import com.buaa.act.sdp.topcoder.util.JsonUtil;
 import com.buaa.act.sdp.topcoder.util.RequestUtil;
 import com.google.gson.JsonElement;
@@ -27,12 +28,14 @@ public class UpdateTasksAndDevelopers {
 
     @Autowired
     private TaskApi taskApi;
-
     @Autowired
     private TaskItemDao taskItemDao;
-
     @Autowired
     private DeveloperDao developerDao;
+    @Autowired
+    private DeveloperApi developerApi;
+    @Autowired
+    private DeveloperStatistics developerStatistics;
 
     private static final Logger logger = LoggerFactory.getLogger(UpdateTasksAndDevelopers.class);
 
@@ -109,6 +112,7 @@ public class UpdateTasksAndDevelopers {
         if (count % pageSize != 0) {
             pages++;
         }
+        int existTasks = 0, maxExistTasks = 250;
         List<String> userList = developerDao.getDistinctDevelopers();
         Set<String> userSet = new HashSet<>();
         userSet.addAll(userList);
@@ -119,6 +123,7 @@ public class UpdateTasksAndDevelopers {
         TaskItem taskItem;
         int challengeId;
         count = 0;
+        Set<String> developers = new HashSet<>();
         for (int i = 1; i <= pages; i++) {
             pastTasks = getPastTasks(i, pageSize);
             if (pastTasks == null || pastTasks.length == 0) {
@@ -127,14 +132,29 @@ public class UpdateTasksAndDevelopers {
             for (int j = 0; j < pastTasks.length; j++) {
                 challengeId = pastTasks[j].getChallengeId();
                 if (!challengeSet.contains(challengeId)) {
+                    challengeSet.add(challengeId);
                     taskItem = taskApi.getTaskById(challengeId);
                     if (taskItem != null) {
                         count++;
                         taskApi.taskItemGenerate(taskItem, pastTasks[j]);
-                        taskApi.saveFinishedTask(taskItem, userSet);
+                        taskApi.saveFinishedTask(taskItem, developers);
                     }
+                    existTasks = 0;
+                } else {
+                    existTasks++;
                 }
             }
+            if (existTasks >= maxExistTasks) {
+                break;
+            }
+        }
+        for (String developer : developers) {
+            if (userSet.contains(developer)) {
+                developerApi.updateDeveloperMsg(developer);
+            } else {
+                developerApi.saveDeveloperMsg(developer);
+            }
+            developerStatistics.updateTaskCount(developer);
         }
         logger.info(count + " new tasks have been saved in db");
     }

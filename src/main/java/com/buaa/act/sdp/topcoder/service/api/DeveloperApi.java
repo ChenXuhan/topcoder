@@ -245,14 +245,12 @@ public class DeveloperApi {
         logger.info("save developer information into db,userName=" + handle);
         saveDeveloperBasicInformation(handle);
         saveDeveloperDevelopmentMsg(handle);
-        saveUserRatingMsg(handle);
     }
 
     public void updateDeveloperMsg(String handle) {
         logger.info("update developer information into db,userName=" + handle);
         updateDeveloperBasicInformation(handle);
         updateDeveloperDevelopmentMsg(handle);
-        saveUserRatingMsg(handle);
     }
 
     /**

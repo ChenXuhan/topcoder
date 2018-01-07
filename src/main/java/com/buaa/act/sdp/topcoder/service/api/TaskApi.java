@@ -9,7 +9,6 @@ import com.buaa.act.sdp.topcoder.dao.TaskPhaseDao;
 import com.buaa.act.sdp.topcoder.dao.TaskRegistrantDao;
 import com.buaa.act.sdp.topcoder.dao.TaskSubmissionDao;
 import com.buaa.act.sdp.topcoder.model.task.*;
-import com.buaa.act.sdp.topcoder.service.api.statistics.DeveloperStatistics;
 import com.buaa.act.sdp.topcoder.service.api.statistics.TaskStatistics;
 import com.buaa.act.sdp.topcoder.util.JsonUtil;
 import com.buaa.act.sdp.topcoder.util.RequestUtil;
@@ -36,11 +35,7 @@ public class TaskApi {
     @Autowired
     private TaskRegistrantDao taskRegistrantDao;
     @Autowired
-    private DeveloperApi developerApi;
-    @Autowired
     private TaskStatistics taskStatistics;
-    @Autowired
-    private DeveloperStatistics developerStatistics;
 
     private static final Logger logger = LoggerFactory.getLogger(TaskApi.class);
 
@@ -139,10 +134,8 @@ public class TaskApi {
      * 获取task及task相关的开发者信息
      *
      * @param taskItem
-     * @param username
      */
-    public void saveFinishedTask(TaskItem taskItem, Set<String> username) {
-        logger.info("save new task and developer's information into db,taskId=" + taskItem.getChallengeId());
+    public void saveFinishedTask(TaskItem taskItem, Set<String> developers) {
         int challengeId = taskItem.getChallengeId();
         int registerCount = 0, submissionCount = 0;
         TaskRegistrant[] taskRegistrant = getTaskRegistrantsById(challengeId);
@@ -151,13 +144,7 @@ public class TaskApi {
             taskRegistrantGenerate(challengeId, taskRegistrant);
             taskRegistrantDao.insertBatch(taskRegistrant);
             for (int i = 0; i < taskRegistrant.length; i++) {
-                if (!username.contains(taskRegistrant[i].getHandle())) {
-                    username.add(taskRegistrant[i].getHandle());
-                    developerApi.saveDeveloperMsg(taskRegistrant[i].getHandle());
-                } else {
-                    developerApi.updateDeveloperMsg(taskRegistrant[i].getHandle());
-                }
-                developerStatistics.updateTaskCount(taskRegistrant[i].getHandle());
+                developers.add(taskRegistrant[i].getHandle());
             }
             registerCount = taskRegistrant.length;
         }
