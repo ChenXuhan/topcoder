@@ -3,6 +3,7 @@ package com.buaa.act.sdp.topcoder.controller;
 import com.buaa.act.sdp.topcoder.common.Constant;
 import com.buaa.act.sdp.topcoder.common.TCResponse;
 import com.buaa.act.sdp.topcoder.model.task.TaskItem;
+import com.buaa.act.sdp.topcoder.service.api.TaskApi;
 import com.buaa.act.sdp.topcoder.service.basic.TaskService;
 import com.buaa.act.sdp.topcoder.service.recommend.result.DeveloperRecommend;
 import com.buaa.act.sdp.topcoder.service.recommend.result.TeamRecommend;
@@ -30,6 +31,8 @@ public class DeveloperRecommendController {
     @Autowired
     private TaskService taskService;
     @Autowired
+    private TaskApi taskApi;
+    @Autowired
     private DeveloperRecommend developerRecommend;
     @Autowired
     private TeamRecommend teamRecommend;
@@ -43,6 +46,9 @@ public class DeveloperRecommendController {
         TCResponse<List<String>> response = new TCResponse<>();
         try {
             TaskItem item = taskService.getTaskById(taskId);
+            if(item==null){
+                item=taskApi.getTaskById(taskId);
+            }
             if (item == null) {
                 logger.info("task taskId=" + taskId + " does not exist!");
                 response.setNotFoundResponse();

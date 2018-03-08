@@ -23,7 +23,7 @@ public class TeamRecommendTest {
 
     @Test
     public void testProjectToTasks() {
-//        System.out.println(teamRecommendExperiment.getTestProjectId());
+        System.out.println(teamRecommendExperiment.getTestProjectId());
     }
 
     @Test

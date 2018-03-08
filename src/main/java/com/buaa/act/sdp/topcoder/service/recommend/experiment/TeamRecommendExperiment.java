@@ -53,6 +53,9 @@ public class TeamRecommendExperiment {
             if (entry.getValue().size() >= 10) {
                 projectIdList.add(entry.getKey());
             }
+            if(entry.getValue().size()==20){
+                System.out.println(entry.getKey());
+            }
         }
         return projectIdList;
     }
