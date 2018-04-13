@@ -123,20 +123,27 @@ public class TaskScores {
         Map<String, Double> score;
         Map<String, String> date;
         for (TaskSubmission taskSubmission : list) {
+            double finalScore = 0;
+            if (taskSubmission.getFinalScore() != null) {
+                finalScore = Double.parseDouble(taskSubmission.getFinalScore());
+            }
             if (scores.containsKey(taskSubmission.getChallengeID())) {
                 score = scores.get(taskSubmission.getChallengeID());
-                if (score.containsKey(taskSubmission.getHandle()) && score.get(taskSubmission.getHandle()) >= Double.parseDouble(taskSubmission.getFinalScore())) {
+                if (score.containsKey(taskSubmission.getHandle()) && score.get(taskSubmission.getHandle()) >= finalScore) {
                     continue;
                 } else {
-                    score.put(taskSubmission.getHandle(), Double.parseDouble(taskSubmission.getFinalScore()));
+                    score.put(taskSubmission.getHandle(), finalScore);
                 }
             } else {
                 score = new HashMap<>();
-                score.put(taskSubmission.getHandle(), Double.parseDouble(taskSubmission.getFinalScore()));
+                if (taskSubmission.getFinalScore() != null) {
+                    score.put(taskSubmission.getHandle(), Double.parseDouble(taskSubmission.getFinalScore()));
+                } else {
+                    score.put(taskSubmission.getHandle(), 0.0);
+                }
             }
-
             scores.put(taskSubmission.getChallengeID(), score);
-            if (taskSubmission.getPlacement() != null && taskSubmission.getPlacement().equals("1") && Double.parseDouble(taskSubmission.getFinalScore()) >= 80) {
+            if (taskSubmission.getPlacement() != null && taskSubmission.getPlacement().equals("1") && finalScore >= 80) {
                 winners.put(taskSubmission.getChallengeID(), taskSubmission.getHandle());
             }
 
